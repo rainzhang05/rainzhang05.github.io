@@ -2,46 +2,72 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 body {
-    background: #f3f4f6;
     color: #333;
     scroll-behavior: smooth;
+    overflow-x: hidden;
 }
 
-.header {
-    background: linear-gradient(135deg, #6a0dad, #8a2be2);
-    color: white;
-    padding: 3rem 1rem;
+.custom-cursor {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #8a2be2;
+    border-radius: 50%;
+    position: absolute;
+    pointer-events: none;
+    transition: transform 0.1s ease, background-color 0.1s ease;
+}
+
+header.sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+    background: rgba(106, 13, 173, 0.9);
+    padding: 1rem 0;
     text-align: center;
-    margin-bottom: 2rem;
 }
 
-.header h1 {
-    font-size: 3rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
+header h1 {
+    font-family: 'Montserrat', sans-serif;
+    color: white;
+    font-weight: 700;
+    font-size: 2rem;
 }
 
-.header p {
-    font-size: 1rem;
-}
-
-nav ul {
+header nav ul {
     list-style: none;
     display: flex;
     justify-content: center;
     gap: 1.5rem;
 }
 
+header nav ul li a {
+    color: #fff;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+header nav ul li a:hover {
+    color: #dcdcdc;
+}
+
 .section {
     padding: 5rem 2rem;
     text-align: center;
+    position: relative;
 }
 
-#skills .skills-grid, #projects .projects {
+.section.parallax {
+    background: linear-gradient(135deg, #6a0dad, #8a2be2);
+    color: white;
+}
+
+.skills-grid, .projects {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 1.5rem;
@@ -50,14 +76,9 @@ nav ul {
 
 .skill, .project-card {
     padding: 1.5rem;
-    background: #e3e4e8;
+    background: rgba(255, 255, 255, 0.8);
     border-radius: 12px;
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-}
-
-.skill:hover, .project-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0px 4px 20px rgba(106, 13, 173, 0.5);
 }
 
 form {
@@ -66,12 +87,6 @@ form {
     gap: 1rem;
     max-width: 500px;
     margin: 2rem auto;
-}
-
-input, textarea {
-    padding: 0.8rem;
-    border-radius: 4px;
-    border: 1px solid #ccc;
 }
 
 .button {
@@ -84,26 +99,14 @@ input, textarea {
     transition: background-color 0.3s, transform 0.3s ease-in-out;
 }
 
-.button:hover {
-    background-color: #6a0dad;
-    transform: scale(1.05);
-}
-
-.animate-header {
-    animation: slideIn 1s ease-in-out forwards;
-}
-
 .animate-section {
     opacity: 0;
-    animation: fadeInUp 1s ease-in-out forwards;
+    transform: translateY(50px);
+    transition: all 0.5s ease;
 }
 
-@keyframes slideIn {
-    from { transform: translateY(-100px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-}
-
-@keyframes fadeInUp {
-    from { transform: translateY(50px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+.sticky.active {
+    position: fixed;
+    top: 0;
+    width: 100%;
 }
