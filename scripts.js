@@ -1,10 +1,25 @@
 document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll(".skill, .project-card").forEach(item => {
-        item.addEventListener("mouseover", () => {
-            item.style.boxShadow = "0px 4px 20px rgba(0, 0, 0, 0.2)";
+    // Add fade-in effect to sections as they come into view
+    const sections = document.querySelectorAll(".animate-section");
+    const options = { threshold: 0.1 };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                observer.unobserve(entry.target);
+            }
         });
-        item.addEventListener("mouseleave", () => {
-            item.style.boxShadow = "none";
+    }, options);
+
+    sections.forEach(section => observer.observe(section));
+
+    document.querySelectorAll(".button").forEach(button => {
+        button.addEventListener("mouseover", () => {
+            button.style.boxShadow = "0px 4px 15px rgba(138, 43, 226, 0.5)";
+        });
+        button.addEventListener("mouseleave", () => {
+            button.style.boxShadow = "none";
         });
     });
 });
