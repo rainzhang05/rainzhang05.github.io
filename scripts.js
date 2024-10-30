@@ -1,228 +1,215 @@
-/* General Styles */
-body {
-    margin: 0;
-    font-family: 'Montserrat', sans-serif;
-    background-color: #f5f0ff;
-    color: #4b0082;
-    overflow-x: hidden;
-}
+// Landing Page Start Button
+document.getElementById('start-button').addEventListener('click', () => {
+    document.getElementById('landing-page').style.display = 'none';
+    document.getElementById('intro-animation').style.display = 'block';
+    startIntroAnimation();
+});
 
-h1, h2, p, ul, li {
-    margin: 0;
-    padding: 0;
-}
+// Intro Animation Text Lines
+const lines = [
+    'Hello there,',
+    "I'm Rain Zhang,",
+    'I turn ideas into seamless, dynamic digital experiences'
+];
 
-a {
-    text-decoration: none;
-    color: inherit;
-}
+let currentLine = 0;
 
-button {
-    border: none;
-    border-radius: 25px;
-    padding: 15px 30px;
-    background-color: #d1c4e9;
-    color: #4b0082;
-    font-size: 16px;
-    cursor: pointer;
-    transition: transform 0.3s;
-}
+function startIntroAnimation() {
+    const lineElements = [
+        document.getElementById('line1'),
+        document.getElementById('line2'),
+        document.getElementById('line3')
+    ];
 
-/* Glowing effect for 'Click to Start' button */
-#start-button {
-    animation: glow 1.5s infinite;
-}
+    function showNextLine() {
+        if (currentLine < lines.length) {
+            const currentElement = lineElements[currentLine];
+            currentElement.textContent = lines[currentLine];
+            currentElement.classList.add('typing');
 
-@keyframes glow {
-    0% {
-        box-shadow: 0 0 5px #d1c4e9;
-    }
-    50% {
-        box-shadow: 0 0 20px #8a2be2;
-    }
-    100% {
-        box-shadow: 0 0 5px #d1c4e9;
-    }
-}
+            // After typing animation completes
+            currentElement.addEventListener('animationend', function handler() {
+                currentElement.classList.remove('typing');
+                currentElement.removeEventListener('animationend', handler);
 
-button:hover {
-    transform: scale(1.05);
-}
+                if (currentLine > 0) {
+                    lineElements[currentLine - 1].classList.add('small');
+                }
 
-/* Landing Page */
-#landing-page {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-
-/* Intro Animation */
-#intro-animation {
-    display: none;
-    text-align: center;
-    margin-top: 20vh;
-}
-
-#intro-animation h1 {
-    font-size: 3em;
-    overflow: hidden;
-    white-space: nowrap;
-    border-right: 0.15em solid #8a2be2;
-    margin: 0 auto;
-    width: 0;
-}
-
-@keyframes typing {
-    from { width: 0; }
-    to { width: 100%; }
-}
-
-@keyframes blink {
-    from, to { border-color: transparent; }
-    50% { border-color: #8a2be2; }
-}
-
-/* Navigation */
-nav {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    background-color: #f5f0ff;
-    padding: 10px 0;
-    z-index: 1000;
-    display: flex;
-    justify-content: center;
-}
-
-nav ul {
-    display: flex;
-    list-style: none;
-}
-
-nav li {
-    margin: 0 15px;
-}
-
-nav a {
-    font-size: 18px;
-    padding: 10px 15px;
-    border-radius: 20px;
-    transition: background-color 0.3s;
-}
-
-nav a:hover {
-    background-color: #d1c4e9;
-}
-
-/* Hero Section */
-#hero {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    position: relative;
-}
-
-#hero h1 {
-    font-size: 4em;
-    text-align: center;
-}
-
-#dynamic-text {
-    color: #8a2be2;
-}
-
-/* Page Sections */
-.page-section {
-    padding: 100px 20px;
-    min-height: 100vh;
-}
-
-.page-section:nth-child(even) {
-    background-color: #e1d7f0;
-}
-
-/* Projects Section */
-.project-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-}
-
-.project-btn {
-    width: 200px;
-}
-
-/* Project Details */
-#project-details {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(245, 240, 255, 0.95);
-    padding: 50px;
-    overflow-y: auto;
-}
-
-#project-details h2 {
-    text-align: center;
-}
-
-#project-details ul {
-    margin-top: 20px;
-}
-
-#project-details .back-button {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    background-color: transparent;
-    font-size: 30px;
-    cursor: pointer;
-}
-
-/* Contact Form */
-#contact-form {
-    display: flex;
-    flex-direction: column;
-    max-width: 500px;
-    margin: 0 auto;
-}
-
-#contact-form input, #contact-form textarea {
-    margin-bottom: 15px;
-    padding: 10px;
-    border-radius: 10px;
-    border: 1px solid #ccc;
-}
-
-#contact-form button {
-    align-self: center;
-}
-
-/* Animations */
-.typing {
-    animation: typing 2s steps(40, end), blink 0.75s step-end infinite;
-    width: 100%;
-}
-
-.small {
-    font-size: 2em;
-    opacity: 0.7;
-    transition: font-size 0.5s, opacity 0.5s;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    #intro-animation h1 {
-        font-size: 2em;
+                currentLine++;
+                setTimeout(showNextLine, 500);
+            });
+        } else {
+            // Transition to main content
+            setTimeout(() => {
+                document.getElementById('intro-animation').style.display = 'none';
+                document.querySelector('nav').style.display = 'flex';
+                document.getElementById('main-content').style.display = 'block';
+            }, 1000);
+        }
     }
 
-    #hero h1 {
-        font-size: 2.5em;
-    }
+    showNextLine();
 }
+
+// Dynamic Text in Hero Section
+const dynamicTexts = ['Rain Zhang', 'a current computing science student'];
+let dynamicIndex = 0;
+const dynamicTextElement = document.getElementById('dynamic-text');
+
+function typeDynamicText() {
+    let charIndex = 0;
+    let currentText = dynamicTexts[dynamicIndex];
+
+    function typeChar() {
+        if (charIndex < currentText.length) {
+            dynamicTextElement.textContent += currentText.charAt(charIndex);
+            charIndex++;
+            setTimeout(typeChar, 100);
+        } else {
+            setTimeout(eraseDynamicText, 2000);
+        }
+    }
+
+    function eraseDynamicText() {
+        if (charIndex > 0) {
+            dynamicTextElement.textContent = currentText.substring(0, charIndex - 1);
+            charIndex--;
+            setTimeout(eraseDynamicText, 50);
+        } else {
+            dynamicIndex = (dynamicIndex + 1) % dynamicTexts.length;
+            currentText = dynamicTexts[dynamicIndex];
+            setTimeout(typeChar, 500);
+        }
+    }
+
+    typeChar();
+}
+
+typeDynamicText();
+
+// Smooth Scrolling
+document.querySelectorAll('nav a').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetSection = document.querySelector(this.getAttribute('href'));
+        targetSection.scrollIntoView({ behavior: 'smooth' });
+    });
+});
+
+// Project Buttons Event Listeners
+document.querySelectorAll('.project-btn').forEach(button => {
+    button.addEventListener('click', () => {
+        showProjectDetails(button.getAttribute('data-project'));
+    });
+});
+
+// Show Project Details
+function showProjectDetails(project) {
+    const projectDetails = {
+        'playlist': {
+            title: 'Play List Generator (C++)',
+            date: 'September 2024',
+            points: [
+                'Developed a class using a singly linked list to store the data of each song.',
+                'Implemented public methods such as insertion, removal, and swapping of songs, enabling manipulations of the play list through user input.',
+                'Incorporated dynamic memory management and error handling, while validating user input to prevent runtime errors.'
+            ]
+        },
+        'coinsorter': {
+            title: 'Coin Sorter (C)',
+            date: 'March 2024',
+            points: [
+                'Implemented a C program that simulates the operations of a terminal-based coin sorting machine, categorizing coin types based on data such as sizes and values.',
+                'Incorporated error handling to validate data input, prevent program crashes, and managing unexpected user inputs.',
+                'Utilized dynamic memory management and handled file input and output, allowing the program to process data from configuration files.'
+            ]
+        },
+        'languageapp': {
+            title: 'Language Learning App (Python)',
+            date: 'December 2023',
+            points: [
+                'Developed a terminal-based application that simulates the functions of an actual application.',
+                'Implemented features that analyze graphics, audio, and text files.',
+                'Created features that mimic app-like behaviors for learning, examining, and playing, maintaining ideal user experience within a terminal environment.'
+            ]
+        }
+    };
+
+    const projectInfo = projectDetails[project];
+
+    const projectDiv = document.getElementById('project-details');
+    projectDiv.innerHTML = `
+        <button class="back-button">&larr;</button>
+        <h2>${projectInfo.title}</h2>
+        <p><em>${projectInfo.date}</em></p>
+        <ul>
+            ${projectInfo.points.map(point => `<li>${point}</li>`).join('')}
+        </ul>
+    `;
+
+    projectDiv.style.display = 'block';
+
+    document.querySelector('.back-button').addEventListener('click', () => {
+        projectDiv.style.display = 'none';
+    });
+}
+
+// Contact Form Submission
+document.getElementById('contact-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    // Collect form data
+    const formData = new FormData(this);
+
+    // Placeholder for sending email (requires backend)
+    alert('Thank you for your message!');
+
+    // Reset form
+    this.reset();
+});
+
+// Background Shapes Animation (Using Canvas)
+const canvas = document.getElementById('background-shapes');
+const ctx = canvas.getContext('2d');
+let width, height, hexagon;
+
+function initCanvas() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+
+    hexagon = {
+        x: width / 2,
+        y: height / 2,
+        size: 100,
+        angle: 0
+    };
+}
+
+function draw() {
+    ctx.clearRect(0, 0, width, height);
+
+    ctx.save();
+    ctx.translate(hexagon.x, hexagon.y);
+    ctx.rotate(hexagon.angle);
+    ctx.beginPath();
+
+    for (let i = 0; i < 6; i++) {
+        ctx.lineTo(hexagon.size * Math.cos(i * Math.PI / 3), hexagon.size * Math.sin(i * Math.PI / 3));
+    }
+
+    ctx.closePath();
+    ctx.strokeStyle = '#8a2be2';
+    ctx.lineWidth = 5;
+    ctx.stroke();
+    ctx.restore();
+
+    hexagon.angle += 0.01;
+
+    requestAnimationFrame(draw);
+}
+
+window.addEventListener('resize', initCanvas);
+
+initCanvas();
+draw();
