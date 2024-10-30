@@ -2,74 +2,90 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rain Zhang's Portfolio</title>
+    <title>Rain Zhang - Personal Website</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header class="header animate-header">
-        <h1>Rain Zhang</h1>
-        <p>tza103@sfu.ca | (236)-333-7191 | Vancouver, BC</p>
-        <p> </p>
-        <nav>
+    <!-- Landing Page -->
+    <div id="landing-page">
+        <button id="start-button">Click to Start</button>
+    </div>
+
+    <!-- Intro Animation -->
+    <div id="intro-animation">
+        <h1 id="line1"></h1>
+        <h1 id="line2"></h1>
+        <h1 id="line3"></h1>
+    </div>
+
+    <!-- Main Content -->
+    <nav>
+        <ul>
+            <li><a href="#skills">Technical Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#education">Education</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section id="main-content">
+        <!-- Hero Section -->
+        <div id="hero">
+            <h1>Hi, I'm <span id="dynamic-text"></span></h1>
+            <canvas id="background-shapes"></canvas>
+        </div>
+
+        <!-- Technical Skills -->
+        <section id="skills" class="page-section">
+            <h2>Technical Skills</h2>
             <ul>
-                <li><a href="#skills">Skills</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#education">Education</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><strong>Programming Languages:</strong> C/C++, Java, Python, HTML, CSS, JavaScript, SQL</li>
+                <li><strong>Operating Systems:</strong> Windows, Macintosh</li>
+                <li><strong>Software:</strong> Visual Studio Code, CLion, PyCharm, IntelliJ IDEA, IDLE, Microsoft Office</li>
+                <li><strong>Transferable Skills:</strong> Problem Solving, Multitasking, Teamwork and Collaboration</li>
             </ul>
-        </nav>
-    </header>
+        </section>
 
-    <section id="skills" class="section animate-section">
-        <h2>Technical Skills</h2>
-        <p>Proficient in a range of programming languages, frameworks, and development tools.</p>
-        <div class="skills-grid">
-            <div class="skill">C/C++</div>
-            <div class="skill">Java</div>
-            <div class="skill">Python</div>
-            <div class="skill">HTML, CSS, JavaScript</div>
-            <div class="skill">Linux, Windows, MacOS</div>
-            <div class="skill">Visual Studio Code</div>
-            <div class="skill">CLion, PyCharm</div>
-            <div class="skill">Teamwork & Collaboration</div>
-        </div>
+        <!-- Projects -->
+        <section id="projects" class="page-section">
+            <h2>Projects</h2>
+            <div class="project-buttons">
+                <button class="project-btn" data-project="playlist">Play List Generator (C++)</button>
+                <button class="project-btn" data-project="coinsorter">Coin Sorter (C)</button>
+                <button class="project-btn" data-project="languageapp">Language Learning App (Python)</button>
+            </div>
+        </section>
+
+        <!-- Education -->
+        <section id="education" class="page-section">
+            <h2>Education</h2>
+            <p>Bachelor of Applied Science, Computing Science Major</p>
+            <p>September 2023 – Present</p>
+            <p>Expected Graduation in April 2027</p>
+            <p>Simon Fraser University, Vancouver, BC</p>
+        </section>
+
+        <!-- Contact -->
+        <section id="contact" class="page-section">
+            <h2>Contact</h2>
+            <p>Email: <a href="mailto:tza103@sfu.ca">tza103@sfu.ca</a></p>
+            <p>Phone: (236)-333-7191</p>
+            <p>Location: Vancouver, BC</p>
+
+            <form id="contact-form">
+                <input type="text" name="name" placeholder="Your Name" required>
+                <input type="email" name="email" placeholder="Your Email" required>
+                <textarea name="message" placeholder="Your Message" required></textarea>
+                <button type="submit">Submit</button>
+            </form>
+        </section>
     </section>
 
-    <section id="projects" class="section animate-section">
-        <h2>Projects</h2>
-        <p>A showcase of my technical projects that demonstrate my skills and dedication.</p>
-        <div class="projects">
-            <div class="project-card">Personal Website Development</div>
-            <div class="project-card">Playlist Generator (C++)</div>
-            <div class="project-card">Coin Sorter (C)</div>
-            <div class="project-card">Language Learning App (Python)</div>
-        </div>
-    </section>
+    <!-- Project Details Modals -->
+    <div id="project-details">
+        <!-- Project content will be injected here -->
+    </div>
 
-    <section id="education" class="section animate-section">
-        <h2>Education</h2>
-        <p>Bachelor of Applied Science, Computing Science Major</p>
-        <p>September 2023 - Present</p>
-        <p>Expected Graduation in April 2027</p>
-        <p>Simon Fraser University, Vancouver, BC.</p>
-    </section>
-
-    <section id="contact" class="section animate-section">
-        <h2>Contact Me</h2>
-        <p>Feel free to reach out for collaboration, inquiries, or just to say hello!</p>
-        <form>
-            <label for="name">Name:</label>
-            <input type="text" id="name" required>
-            <label for="email">Email:</label>
-            <input type="email" id="email" required>
-            <label for="message">Message:</label>
-            <textarea id="message" required></textarea>
-            <button type="submit" class="button">Send Message</button>
-        </form>
-    </section>
-
-    <script src="scripts.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
