@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <title>Rain Zhang - Personal Website</title>
+    <!-- Include Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+    <!-- Link to CSS -->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -20,7 +22,7 @@
     </div>
 
     <!-- Main Content -->
-    <nav>
+    <nav style="display: none;">
         <ul>
             <li><a href="#skills">Technical Skills</a></li>
             <li><a href="#projects">Projects</a></li>
@@ -29,7 +31,7 @@
         </ul>
     </nav>
 
-    <section id="main-content">
+    <section id="main-content" style="display: none;">
         <!-- Hero Section -->
         <div id="hero">
             <h1>Hi, I'm <span id="dynamic-text"></span></h1>
@@ -87,6 +89,7 @@
         <!-- Project content will be injected here -->
     </div>
 
+    <!-- Include JavaScript -->
     <script src="script.js"></script>
 </body>
 </html>
