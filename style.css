@@ -1,0 +1,9 @@
+body{
+    margin: 0;
+    background: lightskyblue;
+    text-align: left;
+    h1{
+        color: mediumpurple;
+        text-align: center;
+    }
+}
