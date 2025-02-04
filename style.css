@@ -107,3 +107,11 @@ body {
     border-radius: 50%;
     background: linear-gradient(to bottom right, #8ff9d0, #6abed3);
 }
+
+/* Section styles */
+.introduction, .skills, .experience, .projects, .education {
+    margin: 150px 150px 40px;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
