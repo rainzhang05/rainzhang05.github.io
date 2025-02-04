@@ -13,3 +13,18 @@ body {
     font-size: 18px;
     line-height: 1.6;
 }
+
+/* Navigation Bar */
+.navigationBar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #ffffff;
+    padding: 10px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+    border-bottom: 1px solid #e0e0e0;
+}
