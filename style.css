@@ -1,4 +1,109 @@
-img{
-    width: 70px;
-    margin: 15px;
+/* Fixing navigation bar line up problem */
+html {
+    scroll-padding-top: 87px;
+}
+
+img {
+    width: 50px;
+    height: 50px;
+}
+
+/* Body */
+body {
+    font-family: 'Futura', Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+/* Navigation Bar */
+.navigationBar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #ffffff;
+    padding: 10px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.navigationBar nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+.navigationBar nav ul li {
+    margin-right: 40px;
+}
+
+.navigationBar nav ul li a {
+    color: #000000;
+    text-decoration: none;
+    transition: color 0.3s;
+    font-size: 18px;
+}
+
+.navigationBar nav ul li a:hover {
+    color: #6e5cf5;
+}
+
+#barHeading {
+    font-family: 'Spantaran', 'Futura', Arial, sans-serif;
+    color: #000000;
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.navigationBar .contactIcons {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.navigationBar a img {
+    width: 30px;
+    height: 30px;
+    margin: 0 10px;
+}
+
+/* Decorations */
+.decorations {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.stripe {
+    position: absolute;
+    width: 50px;
+    height: 300%;
+    background: linear-gradient(to bottom, #8ff9d0, #6abed3, #6dc1ed, #b1a8f5, #6e5cf5);
+    left: 10%;
+    top: -100%;
+    transform: rotate(5deg) translateY(-30%) translateX(-50%) skew(-5deg);
+}
+
+.circle {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(to bottom right, #8ff9d0, #6abed3);
 }
