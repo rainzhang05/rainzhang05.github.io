@@ -1,3 +1,8 @@
+/* Fixing navigation bar line up problem */
+html {
+    scroll-padding-top: 87px;
+}
+
 img {
     width: 50px;
     height: 50px;
@@ -37,14 +42,14 @@ body {
 }
 
 .navigationBar nav ul li {
-    margin-right: 30px;
+    margin-right: 40px;
 }
 
 .navigationBar nav ul li a {
     color: #000000;
     text-decoration: none;
     transition: color 0.3s;
-    font-size: 16px;
+    font-size: 18px;
 }
 
 .navigationBar nav ul li a:hover {
@@ -60,4 +65,45 @@ body {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
+}
+
+.navigationBar .contactIcons {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.navigationBar a img {
+    width: 30px;
+    height: 30px;
+    margin: 0 10px;
+}
+
+/* Decorations */
+.decorations {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.stripe {
+    position: absolute;
+    width: 50px;
+    height: 300%;
+    background: linear-gradient(to bottom, #8ff9d0, #6abed3, #6dc1ed, #b1a8f5, #6e5cf5);
+    left: 10%;
+    top: -100%;
+    transform: rotate(5deg) translateY(-30%) translateX(-50%) skew(-5deg);
+}
+
+.circle {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(to bottom right, #8ff9d0, #6abed3);
 }
