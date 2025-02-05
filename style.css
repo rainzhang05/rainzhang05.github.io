@@ -1,11 +1,6 @@
-/* Fixing navigation bar line up problem */
+/* Fixing Navigation Problems */
 html {
     scroll-padding-top: 87px;
-}
-
-img {
-    width: 50px;
-    height: 50px;
 }
 
 /* Body */
@@ -32,28 +27,34 @@ body {
     align-items: center;
     z-index: 1000;
     border-bottom: 1px solid #e0e0e0;
-}
 
-.navigationBar nav ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-}
+    a img {
+        width: 30px;
+        height: 30px;
+        margin: 0 10px;
+    }
 
-.navigationBar nav ul li {
-    margin-right: 40px;
-}
+    nav ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
 
-.navigationBar nav ul li a {
-    color: #000000;
-    text-decoration: none;
-    transition: color 0.3s;
-    font-size: 18px;
-}
+        li {
+            margin-right: 40px;
 
-.navigationBar nav ul li a:hover {
-    color: #6e5cf5;
+            a {
+                color: #000000;
+                text-decoration: none;
+                transition: color 0.3s;
+                font-size: 18px;
+
+                .hover {
+                    color: #6e5cf5;
+                }
+            }
+        }
+    }
 }
 
 #barHeading {
@@ -70,12 +71,6 @@ body {
 .navigationBar .contactIcons {
     display: flex;
     justify-content: flex-end;
-}
-
-.navigationBar a img {
-    width: 30px;
-    height: 30px;
-    margin: 0 10px;
 }
 
 /* Decorations */
@@ -106,4 +101,99 @@ body {
     height: 60px;
     border-radius: 50%;
     background: linear-gradient(to bottom right, #8ff9d0, #6abed3);
+}
+
+/* Styling for each Section */
+.introduction, .skills, .experience, .projects, .education {
+    margin: 150px 150px 40px;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.skills, .experience, .projects, .education {
+    margin-left: 150px;
+    margin-right: 150px;
+}
+
+.skills h2, .experience h2, .projects h2, .education h2 {
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+.introduction {
+    background-color: transparent;
+    box-shadow: none;
+    color: #000000;
+    margin-top: 170px;
+    margin-left: 200px;
+    margin-right: 200px;
+    p{
+        font-size: 20px;
+    }
+}
+
+#introHeading, #introName {
+    font-size: 4em;
+    margin-bottom: 0;
+}
+
+#introHeading {
+    background: linear-gradient(to bottom, #8ff9d0, #6abed3, #b1a8f5, #6e5cf5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+#introName {
+    color: #000000;
+    margin-top: 0;
+}
+
+.skills {
+    background: linear-gradient(to bottom right, #a3c9e2, #b1a8f5, #6e5cf5);
+    color: #000000;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+    margin-top: 285px;
+
+    img {
+        width: 80px;
+        height: 80px;
+        margin: 20px;
+        vertical-align: middle;
+    }
+    h3 {
+        margin-top: 30px;
+    }
+    div {
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+    }
+}
+
+.experience {
+    background: linear-gradient(to bottom right, #8ff9d0, #1bd7bb,#6abed3, #add8e6);
+    color: #000000;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.projects {
+    background: linear-gradient(to bottom right, #a3c9e2, #b1a8f5, #6e5cf5);
+    color: #000000;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.education {
+    background: linear-gradient(to bottom right, #8ff9d0, #1bd7bb,#6abed3, #add8e6);
+    color: #000000;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Content Styles */
+h1, h3, h4, p, ul {
+    margin-bottom: 15px;
+}
+
+h2 {
+    font-size: 35px;
 }
