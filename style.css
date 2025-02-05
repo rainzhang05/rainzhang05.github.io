@@ -6,7 +6,7 @@ html {
 /* Body */
 body {
     font-family: 'Futura', sans-serif;
-    background-color: #f4f4f4;
+    background-color: #fafafa;
     margin: 0;
     padding: 0;
     color: #333;
@@ -20,7 +20,7 @@ body {
     top: 0;
     left: 0;
     right: 0;
-    background-color: #ffffff;
+    background-color: #fafafa;
     padding: 10px 40px;
     display: flex;
     justify-content: space-between;
@@ -150,9 +150,9 @@ body {
 }
 
 .skills {
-    background: linear-gradient(to bottom right, #a3c9e2, #b1a8f5, #6e5cf5);
+    background-color: transparent;
     color: #000000;
-    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+    box-shadow: none;
     margin-top: 285px;
 
     img {
@@ -172,21 +172,21 @@ body {
 }
 
 .experience {
-    background: linear-gradient(to bottom right, #8ff9d0, #1bd7bb,#6abed3, #add8e6);
+    background-color: transparent;
     color: #000000;
-    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+    box-shadow: none;
 }
 
 .projects {
-    background: linear-gradient(to bottom right, #a3c9e2, #b1a8f5, #6e5cf5);
+    background-color: transparent;
     color: #000000;
-    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+    box-shadow: none;
 }
 
 .education {
-    background: linear-gradient(to bottom right, #8ff9d0, #1bd7bb,#6abed3, #add8e6);
+    background-color: transparent;
     color: #000000;
-    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+    box-shadow: none;
 }
 
 /* Content Styles */
