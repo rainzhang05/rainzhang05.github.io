@@ -172,7 +172,7 @@ body {
 }
 
 .experience {
-    background: linear-gradient(to bottom right, #8ff9d0, #1bd7bb,#6abed3);
+    background: linear-gradient(to bottom right, #8ff9d0, #1bd7bb,#6abed3, #add8e6);
     color: #000000;
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
 }
@@ -184,7 +184,7 @@ body {
 }
 
 .education {
-    background: linear-gradient(to bottom right, #8ff9d0, #1bd7bb,#6abed3);
+    background: linear-gradient(to bottom right, #8ff9d0, #1bd7bb,#6abed3, #add8e6);
     color: #000000;
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
 }
