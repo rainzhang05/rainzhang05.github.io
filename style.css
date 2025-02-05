@@ -6,7 +6,7 @@ html {
 /* Body */
 body {
     font-family: 'Futura', sans-serif;
-    background-color: #f4f4f4;
+    background-color: #f8f8f8;
     margin: 0;
     padding: 0;
     color: #333;
@@ -20,7 +20,7 @@ body {
     top: 0;
     left: 0;
     right: 0;
-    background-color: #ffffff;
+    background-color: #f8f8f8;
     padding: 10px 40px;
     display: flex;
     justify-content: space-between;
@@ -133,11 +133,11 @@ body {
 }
 
 .skills {
-    padding: 30px;
-    border-radius: 20px;
-    background: linear-gradient(to bottom right, #a3c9e2, #b1a8f5, #6e5cf5);
+    padding: 35px;
+    border-radius: 35px;
+    background-color: transparent;
     color: #000000;
-    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+    box-shadow: none;
     margin: 285px 150px 40px;
 
     h2{
@@ -165,11 +165,11 @@ body {
 
 .experience {
     margin: 150px 150px 40px;
-    padding: 30px;
-    border-radius: 20px;
-    background: linear-gradient(to bottom right, #8ff9d0, #1bd7bb,#6abed3, #add8e6);
+    padding: 35px;
+    border-radius: 35px;
+    background-color: transparent;
     color: #000000;
-    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+    box-shadow: none;
 
     h2{
         margin-top: 5px;
@@ -179,11 +179,11 @@ body {
 
 .projects {
     margin: 150px 150px 40px;
-    padding: 30px;
-    border-radius: 20px;
-    background: linear-gradient(to bottom right, #a3c9e2, #b1a8f5, #6e5cf5);
+    padding: 35px;
+    border-radius: 35px;
+    background-color: transparent;
     color: #000000;
-    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+    box-shadow: none;
 
     h2{
         margin-top: 5px;
@@ -193,11 +193,11 @@ body {
 
 .education {
     margin: 150px 150px 40px;
-    padding: 30px;
-    border-radius: 20px;
-    background: linear-gradient(to bottom right, #8ff9d0, #1bd7bb,#6abed3, #add8e6);
+    padding: 35px;
+    border-radius: 35px;
+    background-color: transparent;
     color: #000000;
-    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+    box-shadow: none;
 
     h2{
         margin-top: 5px;
