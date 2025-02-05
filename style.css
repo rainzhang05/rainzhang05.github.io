@@ -6,7 +6,7 @@ html {
 /* Body */
 body {
     font-family: 'Futura', sans-serif;
-    background-color: #f8f8f8;
+    background-color: #fafafa;
     margin: 0;
     padding: 0;
     color: #333;
@@ -20,7 +20,7 @@ body {
     top: 0;
     left: 0;
     right: 0;
-    background-color: #f8f8f8;
+    background-color: #fafafa;
     padding: 10px 40px;
     display: flex;
     justify-content: space-between;
