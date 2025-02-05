@@ -115,3 +115,38 @@ body {
     border-radius: 20px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
+
+.skills h2, .experience h2, .projects h2, .education h2 {
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+.introduction {
+    background-color: transparent;
+    box-shadow: none;
+    color: #000000;
+}
+
+.skills {
+    background: linear-gradient(to bottom right, #a3c9e2, #b1a8f5, #6e5cf5);
+    color: #000000;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.experience {
+    background: linear-gradient(to bottom right, #8ff9d0, #1bd7bb,#6abed3);
+    color: #000000;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.projects {
+    background: linear-gradient(to bottom right, #a3c9e2, #b1a8f5, #6e5cf5);
+    color: #000000;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.education {
+    background: linear-gradient(to bottom right, #8ff9d0, #1bd7bb,#6abed3);
+    color: #000000;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+}
