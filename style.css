@@ -11,13 +11,13 @@ body {
     margin: 0;
     padding: 0;
     color: #333;
-    font-size: 18px;
+    font-size: 19px;
     line-height: 1.6;
 }
 
 /* Navigation Bar */
 .navigationBar {
-    font-weight: 500;
+    font-weight: 700;
     position: fixed;
     top: 0;
     left: 0;
@@ -46,14 +46,16 @@ body {
             margin-right: 40px;
 
             a {
+                display: inline-flex;
                 color: #000000;
                 text-decoration: none;
-                transition: color 0.3s;
                 font-size: 18px;
+                transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
+            }
 
-                .hover {
-                    color: #6e5cf5;
-                }
+            a:hover{
+                color: #6e5cf5;
+                transform: scale(1.08);
             }
         }
     }
@@ -111,7 +113,7 @@ body {
     background-color: transparent;
     box-shadow: none;
     color: #000000;
-    margin-top: 135px;
+    margin-top: 50px;
     margin-left: 200px;
     margin-right: 200px;
     padding: 30px;
@@ -121,6 +123,35 @@ body {
         font-size: 20px;
         margin-top: 50px;
     }
+}
+
+.resumeButton {
+    margin-top: 35px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+    background: linear-gradient(to right, #6e5cf5, #b1a8f5);
+    border: none;
+    border-radius: 25px;
+    text-decoration: none;
+    box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+
+    img {
+        width: 22px;
+        height: 22px;
+        filter: invert(1);
+        transition: transform 0.3s ease-in-out;
+    }
+}
+
+.resumeButton:hover {
+    transform: scale(1.1);
+    box-shadow: 4px 6px 15px rgba(0, 0, 0, 0.3);
 }
 
 #introHeading {
@@ -144,7 +175,7 @@ body {
     background-color: transparent;
     color: #000000;
     box-shadow: none;
-    margin: 285px 170px 40px;
+    margin: 235px 170px 40px;
 
     h2{
         margin-top: 5px;
@@ -170,7 +201,7 @@ body {
 }
 
 .experience {
-    margin: 150px 170px 40px;
+    margin: 50px 170px 40px;
     padding: 35px;
     border-radius: 35px;
     background-color: transparent;
@@ -184,7 +215,7 @@ body {
 }
 
 .projects {
-    margin: 150px 170px 40px;
+    margin: 50px 170px 40px;
     padding: 35px;
     border-radius: 35px;
     background-color: transparent;
@@ -202,7 +233,7 @@ body {
 }
 
 .education {
-    margin: 150px 170px 40px;
+    margin: 50px 170px 200px;
     padding: 35px;
     border-radius: 35px;
     background-color: transparent;
