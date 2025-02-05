@@ -5,7 +5,7 @@ html {
 
 /* Body */
 body {
-    font-family: 'Futura', Arial, sans-serif;
+    font-family: 'Futura', sans-serif;
     background-color: #f4f4f4;
     margin: 0;
     padding: 0;
@@ -68,7 +68,7 @@ body {
     transform: translateX(-50%);
 }
 
-.navigationBar .contactIcons {
+.contactIcons {
     display: flex;
     justify-content: flex-end;
 }
@@ -103,24 +103,6 @@ body {
     background: linear-gradient(to bottom right, #8ff9d0, #6abed3);
 }
 
-/* Styling for each Section */
-.introduction, .skills, .experience, .projects, .education {
-    margin: 150px 150px 40px;
-    padding: 30px;
-    border-radius: 20px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-}
-
-.skills, .experience, .projects, .education {
-    margin-left: 150px;
-    margin-right: 150px;
-}
-
-.skills h2, .experience h2, .projects h2, .education h2 {
-    margin-top: 5px;
-    margin-bottom: 15px;
-}
-
 .introduction {
     background-color: transparent;
     box-shadow: none;
@@ -128,32 +110,40 @@ body {
     margin-top: 170px;
     margin-left: 200px;
     margin-right: 200px;
+    padding: 30px;
+    border-radius: 20px;
     p{
         font-size: 20px;
     }
 }
 
-#introHeading, #introName {
+#introHeading {
     font-size: 4em;
     margin-bottom: 0;
-}
-
-#introHeading {
     background: linear-gradient(to bottom, #8ff9d0, #6abed3, #b1a8f5, #6e5cf5);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 #introName {
+    font-size: 4em;
+    margin-bottom: 0;
     color: #000000;
     margin-top: 0;
 }
 
 .skills {
+    padding: 30px;
+    border-radius: 20px;
     background: linear-gradient(to bottom right, #a3c9e2, #b1a8f5, #6e5cf5);
     color: #000000;
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
-    margin-top: 285px;
+    margin: 285px 150px 40px;
+
+    h2{
+        margin-top: 5px;
+        margin-bottom: 15px;
+    }
 
     img {
         width: 80px;
@@ -161,9 +151,11 @@ body {
         margin: 20px;
         vertical-align: middle;
     }
+
     h3 {
         margin-top: 30px;
     }
+
     div {
         margin-bottom: 15px;
         display: flex;
@@ -172,24 +164,47 @@ body {
 }
 
 .experience {
+    margin: 150px 150px 40px;
+    padding: 30px;
+    border-radius: 20px;
     background: linear-gradient(to bottom right, #8ff9d0, #1bd7bb,#6abed3, #add8e6);
     color: #000000;
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+
+    h2{
+        margin-top: 5px;
+        margin-bottom: 15px;
+    }
 }
 
 .projects {
+    margin: 150px 150px 40px;
+    padding: 30px;
+    border-radius: 20px;
     background: linear-gradient(to bottom right, #a3c9e2, #b1a8f5, #6e5cf5);
     color: #000000;
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+
+    h2{
+        margin-top: 5px;
+        margin-bottom: 15px;
+    }
 }
 
 .education {
+    margin: 150px 150px 40px;
+    padding: 30px;
+    border-radius: 20px;
     background: linear-gradient(to bottom right, #8ff9d0, #1bd7bb,#6abed3, #add8e6);
     color: #000000;
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+
+    h2{
+        margin-top: 5px;
+        margin-bottom: 15px;
+    }
 }
 
-/* Content Styles */
 h1, h3, h4, p, ul {
     margin-bottom: 15px;
 }
