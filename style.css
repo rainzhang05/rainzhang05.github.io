@@ -7,11 +7,6 @@ html, body {
     overflow-x: hidden;
 }
 
-/* Fixing Navigation Problems */
-html {
-    scroll-padding-top: 85px;
-}
-
 /* Body */
 body {
     font-family: 'Montserrat', sans-serif;
@@ -305,6 +300,7 @@ h1, h3, h4, p, ul {
 
 h2 {
     font-size: 35px;
+    scroll-margin: 100px;
 }
 
 /* Type Writer Effect Elements" */
