@@ -1,3 +1,12 @@
+/* Prevents Horizontal Scrolling */
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
 /* Fixing Navigation Problems */
 html {
     scroll-padding-top: 85px;
@@ -262,4 +271,15 @@ h1, h3, h4, p, ul {
 
 h2 {
     font-size: 35px;
+}
+
+/* Type Writer Effect Elements" */
+#introName .txt {
+    border-right: 0.5rem solid #000;
+animation: blink-caret 0.75s step-end infinite;
+}
+
+@keyframes blink-caret {
+    from, to { border-color: #000; }
+    50% { border-color: transparent; }
 }
