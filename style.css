@@ -165,7 +165,7 @@ body {
 }
 
 #introHeading {
-    font-size: 4em;
+    font-size: 75px;
     margin-bottom: 0;
     background: linear-gradient(to bottom, #8ff9d0, #6abed3, #b1a8f5, #6e5cf5);
     -webkit-background-clip: text;
@@ -173,7 +173,7 @@ body {
 }
 
 #introName {
-    font-size: 4em;
+    font-size: 75px;
     margin-bottom: 0;
     color: #000000;
     margin-top: 0;
