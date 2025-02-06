@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Init Typewriter
     function init() {
         const txtElement = document.querySelector("#introName")
-        const words = ["Rain Zhang", "a Computer Science Student", "in Vancouver"]
+        const words = ["Rain Zhang", "a Computer Science Student", "Studying in Vancouver"]
         const wait = 2000
         new TypeWriter(txtElement, words, wait)
     }
