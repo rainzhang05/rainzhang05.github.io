@@ -211,13 +211,6 @@ body {
     color: #000000;
 }
 
-.aurora-text {
-    --aurora-blur: 60px;
-    --aurora-opacity: 0.3;
-    --aurora-speed: 2s;
-    display: inline-block;
-}
-
 /* Skills Section */
 .skills {
     padding: 35px;

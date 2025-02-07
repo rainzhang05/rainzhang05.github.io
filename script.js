@@ -91,10 +91,4 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     init()
-
-    // Initialize Aurora Text effect
-    const auroraTextElements = document.querySelectorAll(".aurora-text")
-    auroraTextElements.forEach((element) => {
-        new AuroraText(element)
-    })
 })
