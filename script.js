@@ -1,12 +1,14 @@
-// Intro Fade in Effect
 document.addEventListener("DOMContentLoaded", () => {
+    // Blur in Effect for Intro Elements
     const introElements = document.querySelectorAll(".navigationBar, .introduction, #introHeading, #introParagraph")
     introElements.forEach((element, index) => {
         element.style.opacity = "0"
+        element.style.filter = "blur(10px)"
         element.style.transform = "translateY(20px)"
         setTimeout(() => {
-            element.style.transition = "opacity 1s ease, transform 1s ease"
+            element.style.transition = "opacity 1s ease, transform 1s ease, filter 1s ease"
             element.style.opacity = "1"
+            element.style.filter = "blur(0)"
             element.style.transform = "translateY(0)"
         }, index * 200)
     })
@@ -89,4 +91,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     init()
+
+    // Initialize Aurora Text effect
+    const auroraTextElements = document.querySelectorAll(".aurora-text")
+    auroraTextElements.forEach((element) => {
+        new AuroraText(element)
+    })
 })
