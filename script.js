@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
             this.words = words
             this.txt = ""
             this.wordIndex = 0
-            this.wait = Number.parseInt(wait, 10)
+            this.wait = wait
             this.type()
             this.isDeleting = false
         }
