@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <title>Rain Zhang</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <script src="script.js"></script>
     <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Montserrat:wght@100..900&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -22,26 +20,6 @@
         </ul>
     </nav>
     <h2 id="barHeading">Rain Zhang</h2>
-    <div class="contactIcons">
-        <a href="https://www.linkedin.com/in/rainzhang05/" target="_blank">
-            <img id="linkedinIcon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/LinkedIn_icon_circle.svg/1200px-LinkedIn_icon_circle.svg.png" alt="LinkedIn Icon"/>
-        </a>
-        <a href="https://github.com/rainzhang05" target="_blank">
-            <img id="githubContact" src="https://www.svgrepo.com/show/360451/github-circle.svg" alt="GitHub Icon"/>
-        </a>
-        <a href="mailto:rainzhang.zty@gmail.com" target="_blank">
-            <img id="mailIcon" src="https://cdn3.iconfinder.com/data/icons/web-ui-3/128/Mail-2-512.png" alt="Email Icon"/>
-        </a>
-        <a href="tel:+12363337191" target="_blank">
-            <img id="phoneIcon" src="https://icons.veryicon.com/png/o/miscellaneous/yunrenui-original-ui-of-fool-cloud/phone-circle.png" alt="Phone Icon"/>
-        </a>
-        <a href="https://discordapp.com/users/rain_79154" target="_blank">
-            <img id="discordIcon" src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/discord-round-color-icon.png" alt="Discord Icon"/>
-        </a>
-        <a href="https://www.instagram.com/rainzhang.zty?igsh=emI1dTNhZzAyY2N6&utm_source=qr" target="_blank">
-            <img id="insIcon" src="https://cdn4.iconfinder.com/data/icons/social-messaging-ui-color-shapes-2-free/128/social-instagram-new-circle-512.png" alt="Instagram Icon"/>
-        </a>
-    </div>
 </div>
 
 <!-- Stripe and Circles -->
@@ -56,19 +34,19 @@
 <!-- Introduction -->
 <div class="introduction">
     <h1 id="introHeading">
-        <span class="aurora-text">Hello, I'm</span>
+        <span>Hello, I'm</span>
     </h1>
     <h1 id="introName">
-        <span class="aurora-text">Rain Zhang</span>
+        <span>Rain Zhang</span>
     </h1>
     <p id="introParagraph">
         I am a current student majoring in SFU Computing Science, with a Bachelor of Applied Science.
         I'm a passionate programmer with a strong interest in software development, web development,
         and data science. As a quick learner, it's always exciting to me when I get to learn new things,
-        improve my skills, and build efficient solutions to solve problems. With experience in programming languages
-        including Python, Java, C++, and web development languages including HTML, CSS, and JavaScript, I strive to
-        build projects that are creative and user-friendly. I am currently seeking a co-op opportunity to further
-        develop my skills in software development.
+        improve my skills, and build efficient solutions to solve problems. With experience in programming
+        languages including Python, Java, C++, and web development languages including HTML, CSS, and JavaScript,
+        I strive to build projects that are creative and user-friendly. I am currently seeking a co-op opportunity
+        to further develop my skills in software development.
     </p>
     <a href="Resume.pdf" target="_blank" class="resumeButton">
         Resume
@@ -77,91 +55,154 @@
 </div>
 
 <!-- Skills -->
-<div class = "skills">
-    <h2 id = "skills">Skills</h2>
+<div class="skills">
+    <h2 id="skills">Skills</h2>
     <h3>Programming Languages</h3>
-    <img id = "pythonIcon" src = "https://cdn3.iconfinder.com/data/icons/logos-and-brands-adobe/512/267_Python-512.png" alt = "Python Icon">
-    <img id = "cIcon" src = "https://upload.wikimedia.org/wikipedia/commons/1/19/C_Logo.png" alt = "C Icon">
-    <img id = "C++ icon" src = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/ISO_C%2B%2B_Logo.svg/683px-ISO_C%2B%2B_Logo.svg.png" alt = "C++ Icon">
-    <img id = "javaIcon" src= "https://static-00.iconduck.com/assets.00/java-icon-1511x2048-6ikx8301.png" alt = "Java Icon">
+    <div class="skill-item">
+        <img id="pythonIcon" src="https://cdn3.iconfinder.com/data/icons/logos-and-brands-adobe/512/267_Python-512.png" alt="Python Icon">
+        <span class="skill-name">Python</span>
+    </div>
+    <div class="skill-item">
+        <img id="cIcon" src="https://upload.wikimedia.org/wikipedia/commons/1/19/C_Logo.png" alt="C Icon">
+        <span class="skill-name">C</span>
+    </div>
+    <div class="skill-item">
+        <img id="C++ icon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/ISO_C%2B%2B_Logo.svg/683px-ISO_C%2B%2B_Logo.svg.png" alt="C++ Icon">
+        <span class="skill-name">C++</span>
+    </div>
+    <div class="skill-item">
+        <img id="javaIcon" src="https://static-00.iconduck.com/assets.00/java-icon-1511x2048-6ikx8301.png" alt="Java Icon">
+        <span class="skill-name">Java</span>
+    </div>
     <h3>Web Development</h3>
-    <img id = "htmlIcon" src = "https://cdn-icons-png.flaticon.com/512/5968/5968267.png" alt = "HTML Icon">
-    <img id = "cssIcon" src = "https://cdn4.iconfinder.com/data/icons/flat-brand-logo-2/512/css3-512.png" alt = "CSS Icon">
-    <img id = "jsIcon" src = "https://static.vecteezy.com/system/resources/previews/027/127/463/non_2x/javascript-logo-javascript-icon-transparent-free-png.png" alt = "JS Icon">
+    <div class="skill-item">
+        <img id="htmlIcon" src="https://icons.iconarchive.com/icons/cornmanthe3rd/plex/512/Other-html-5-icon.png" alt="HTML Icon">
+        <span class="skill-name">HTML</span>
+    </div>
+    <div class="skill-item">
+        <img id="cssIcon" src="https://img.icons8.com/?size=512&id=21278&format=png" alt="CSS Icon">
+        <span class="skill-name">CSS</span>
+    </div>
+    <div class="skill-item">
+        <img id="jsIcon" src="https://static.vecteezy.com/system/resources/previews/027/127/463/non_2x/javascript-logo-javascript-icon-transparent-free-png.png" alt="JS Icon">
+        <span class="skill-name">JavaScript</span>
+    </div>
     <h3>Operating Systems</h3>
-    <img id = "windowsIcon" src = "https://i.redd.it/ne6ukkej06t71.png" alt = "Windows Icon">
-    <img id = "macIcon" src = "https://upload.wikimedia.org/wikipedia/commons/c/c9/Finder_Icon_macOS_Big_Sur.png" alt = "Mac Icon">
-    <img id = "linuxIcon" src = "https://static-00.iconduck.com/assets.00/linux-icon-2048x2048-sy06t4un.png" alt = "Linux Icon">
+    <div class="skill-item">
+        <img id="windowsIcon" src="https://i.redd.it/ne6ukkej06t71.png" alt="Windows Icon">
+        <span class="skill-name">Windows</span>
+    </div>
+    <div class="skill-item">
+        <img id="macIcon" src="https://upload.wikimedia.org/wikipedia/commons/c/c9/Finder_Icon_macOS_Big_Sur.png" alt="Mac Icon">
+        <span class="skill-name">macOS</span>
+    </div>
+    <div class="skill-item">
+        <img id="linuxIcon" src="https://static-00.iconduck.com/assets.00/linux-icon-2048x2048-sy06t4un.png" alt="Linux Icon">
+        <span class="skill-name">Linux</span>
+    </div>
     <h3>Software & Developer Tools</h3>
-    <img id = "vscodeIcon" src = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Visual_Studio_Code_1.35_icon.svg/512px-Visual_Studio_Code_1.35_icon.svg.png" alt = "VS Code Icon">
-    <img id = "githubIcon" src = "https://cdn-icons-png.flaticon.com/512/25/25231.png" alt = "GitHub Icon">
-    <img id = "gitIcon" src = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Git_icon.svg/2048px-Git_icon.svg.png" alt = "Git Icon">
-    <img id = "intellijIcon" src = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/IntelliJ_IDEA_Icon.svg/2048px-IntelliJ_IDEA_Icon.svg.png" alt = "IntelliJ Icon">
-    <img id= "clionIcon" src = "https://static-00.iconduck.com/assets.00/clion-icon-2048x2048-9jybcelh.png" alt = "CLion Icon">
-    <img id = "pycharmIcon" src = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/PyCharm_Icon.svg/1024px-PyCharm_Icon.svg.png" alt = "PyCharm Icon">
-    <img id = "msofficeIcon" src = "https://img.icons8.com/color/512/microsoft-office-2019.png" alt = "MS Office Icon">
+    <div class="skill-item">
+        <img id="vscodeIcon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Visual_Studio_Code_1.35_icon.svg/512px-Visual_Studio_Code_1.35_icon.svg.png" alt="VS Code Icon">
+        <span class="skill-name">VS Code</span>
+    </div>
+    <div class="skill-item">
+        <img id="githubIcon" src="https://cdn-icons-png.freepik.com/512/5968/5968866.png" alt="GitHub Icon">
+        <span class="skill-name">GitHub</span>
+    </div>
+    <div class="skill-item">
+        <img id="gitIcon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Git_icon.svg/2048px-Git_icon.svg.png" alt="Git Icon">
+        <span class="skill-name">Git</span>
+    </div>
+    <div class="skill-item">
+        <img id="intellijIcon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/IntelliJ_IDEA_Icon.svg/2048px-IntelliJ_IDEA_Icon.svg.png" alt="IntelliJ Icon">
+        <span class="skill-name">IntelliJ IDEA</span>
+    </div>
+    <div class="skill-item">
+        <img id="clionIcon" src="https://static-00.iconduck.com/assets.00/clion-icon-2048x2048-9jybcelh.png" alt="CLion Icon">
+        <span class="skill-name">CLion</span>
+    </div>
+    <div class="skill-item">
+        <img id="pycharmIcon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/PyCharm_Icon.svg/1024px-PyCharm_Icon.svg.png" alt="PyCharm Icon">
+        <span class="skill-name">PyCharm</span>
+    </div>
+    <div class="skill-item">
+        <img id="msofficeIcon" src="https://img.icons8.com/color/512/microsoft-office-2019.png" alt="MS Office Icon">
+        <span class="skill-name">MS Office</span>
+    </div>
 </div>
 
 <!-- Experience -->
-<div class = "experience">
-    <h2 id = "experience">Experience</h2>
+<div class="experience">
+    <h2 id="experience">Experience</h2>
     <h3>FEITIAN Technologies Co., Ltd.</h3>
     <h4>Software Engineer Co-op | Beijing, China | September - December 2025 (Expected)</h4>
-    <p id = "feitianParagraph">During my co-op at FEITIAN Technologies Co., Ltd., I will gain hands-on experience in
-        cybersecurity product development. I will learn about authentication and encryption by using secure hardware
-        solutions. I will develop my secure coding skills and vulnerability analysis by contributing to security product
-        development. By the end of the work term, I will strengthen my ability to design secure systems and optimize
-        cybersecurity solutions for applications.</p>
+    <p id="feitianParagraph">
+        During my co-op at FEITIAN Technologies, I will gain hands-on experience
+        in cybersecurity product development. I will learn about authentication and encryption by using
+        secure hardware solutions, and develop my secure coding skills and vulnerability analysis by
+        contributing to security product development. By the end of the work term, I will strengthen my ability
+        to design secure systems and optimize cybersecurity solutions for applications.
+    </p>
 </div>
 
 <!-- Projects -->
-<div class = "projects">
-    <h2 id = "projects">Projects</h2>
+<div class="projects">
+    <h2 id="projects">Projects</h2>
     <h3>Personal Portfolio Website Development | February 2025 | HTML, CSS, JS</h3>
     <ul>
-        <li>Designed and created a personal website to serve as a portfolio of my skills. </li>
-        <li>Used HTML, CSS, and JavaScript to implement a modern and user-friendly interface, with an emphasis on
-            high quality UI/UX design.</li>
-        <li>Gained experience on using dynamic functionalities and interactive elements to enhance user experience.</li>
+        <li>Designed and created a personal website to serve as a portfolio of my skills.</li>
+        <li>Used HTML, CSS, and JavaScript to implement a modern and user-friendly interface,
+            with an emphasis on high quality UI/UX design.
+        </li>
+        <li>Gained experience on using dynamic functionalities and interactive elements
+            to enhance user experience.
+        </li>
     </ul>
     <h3>Snake Survival Game | June 2022 | Java</h3>
     <ul>
-        <li>Designed and implemented a fully interactive grid-based snake survival game using Java, handling both
-            graphics and game logic.</li>
+        <li>Designed and implemented a fully interactive grid-based snake survival game
+            using Java, handling both graphics and game logic.
+        </li>
         <li>Implemented the game features including movement, collision detection, and score tracking.</li>
         <li>Optimized game performance by using arrays and linked lists for snake movement.</li>
-        <li>Enhanced problem-solving skills by debugging and improving game logic for smooth and responsive
-            gameplay.</li>
+        <li>Enhanced problem-solving skills by debugging and improving game logic for smooth and responsive gameplay.
+        </li>
     </ul>
     <h3>Language Learning Application | December 2024 | Python</h3>
     <ul>
         <li>Developed a terminal-based language learning app in python that simulates the functions of actual apps.</li>
         <li>Implemented features that analyze and modify graphics, audio, and text files.</li>
-        <li>Created features that mimic app-like behaviors for learning, quizzing, and playing, maintaining ideal user
-            experience within a terminal environment.</li>
+        <li>Created features that mimic app-like behaviors for learning, quizzing, and playing, maintaining
+            ideal user experience within a terminal environment.
+        </li>
     </ul>
     <h3>Playlist Generator | October 2024 | C++</h3>
     <ul>
-        <li>Developed a class using a singly linked list to store the data of each song. </li>
-        <li>Implemented public methods such as insertion, removal, and swapping of songs, enabling manipulations of the
-            play list through user input. </li>
-        <li>Incorporated dynamic memory management and error handling, while validating user input to prevent runtime
-            errors. </li>
+        <li>Developed a class using a singly linked list to store the data of each song.</li>
+        <li>Implemented public methods such as insertion, removal, and swapping of songs, enabling manipulations
+            of the playlist through user input.
+        </li>
+        <li>Incorporated dynamic memory management and error handling, while validating user input to prevent
+            runtime errors.
+        </li>
     </ul>
     <h3>Coin Sorter | March 2024 | C</h3>
     <ul>
         <li>Implemented a C program that simulates the operations of a terminal-based coin sorting machine,
-            categorizing coin types based on data such as sizes and values. </li>
-        <li>Incorporated error handling to validate data input, prevent program crashes, and managing unexpected user
-            inputs. </li>
-        <li>Utilized dynamic memory management and handled file input and output, allowing the program to process data
-            from configuration files. </li>
+            categorizing coin types based on data such as sizes and values.
+        </li>
+        <li>Incorporated error handling to validate data input, prevent program crashes, and managing unexpected
+            user inputs.
+        </li>
+        <li>Utilized dynamic memory management and handled file input and output, allowing the program to process
+            data from configuration files.
+        </li>
     </ul>
 </div>
 
 <!-- Education -->
-<div class = "education">
-    <h2 id = "education">Education</h2>
+<div class="education">
+    <h2 id="education">Education</h2>
     <h3>Simon Fraser University | Burnaby, BC</h3>
     <ul>
         <li>Computing Science Major</li>
@@ -176,6 +217,35 @@
         <li>Programming Club member since September 2021</li>
     </ul>
 </div>
-<script src = "script.js"></script>
+
+<!-- Dock -->
+<div id="dock">
+    <a class="dock-item" id="homeButton">
+        <img src="https://api.iconify.design/lucide:home.svg" alt="Home">
+    </a>
+    <div class="dock-separator"></div>
+    <a href="https://www.linkedin.com/in/rainzhang05/" target="_blank" class="dock-item">
+        <img src="https://cdn3.iconfinder.com/data/icons/2018-social-media-black-and-white-logos/1000/2018_social_media_popular_app_logo_linkedin-512.png" alt="LinkedIn">
+    </a>
+    <a href="https://github.com/rainzhang05" target="_blank" class="dock-item" id = "githubDock">
+        <img src="https://icons.veryicon.com/png/o/object/material_design_icons/github-circle-1.png" alt="GitHub">
+    </a>
+    <a href="mailto:rainzhang.zty@gmail.com" target="_blank" class="dock-item" id = "emailDock">
+        <img src="https://cdn3.iconfinder.com/data/icons/web-ui-3/128/Mail-2-512.png" alt="Email">
+    </a>
+    <a href="tel:+12363337191" target="_blank" class="dock-item" id = "phoneDock">
+        <img src="https://icons.veryicon.com/png/o/miscellaneous/yunrenui-original-ui-of-fool-cloud/phone-circle.png" alt="Phone">
+    </a>
+    <a href="https://discordapp.com/users/rain_79154" target="_blank" class="dock-item" id = "discordDock">
+        <img src="https://cdn-icons-png.flaticon.com/512/3670/3670325.png" alt="Discord">
+    </a>
+    <a href="https://www.instagram.com/rainzhang.zty?igsh=emI1dTNhZzAyY2N6&utm_source=qr" target="_blank" class="dock-item">
+        <img src="https://cdn3.iconfinder.com/data/icons/social-media-black-white-1/1024/instagram-512.png" alt="Instagram">
+    </a>
+    <div class="dock-separator"></div>
+    <div class="dock-item" id="themeToggle">
+        <img src="https://api.iconify.design/lucide:sun.svg" alt="Theme Toggle" id="themeIcon">
+    </div>
+</div>
 </body>
 </html>
