@@ -23,9 +23,11 @@ function initPage(event) {
     setupThemeToggle()
     setupHomeButton()
     setupHashLinkBehavior()
+    setupContactForm()
+    setupFormAnimations()
 }
 
-// Blur in Effect for Intro Elements
+// Blur in Effect for Intro Elements with improved animation
 function animateIntro() {
     const introElements = document.querySelectorAll(".navigationBar, .introduction, #introHeading, #introParagraph")
 
@@ -35,18 +37,21 @@ function animateIntro() {
         element.style.transform = "translateY(20px)"
 
         setTimeout(() => {
-            element.style.transition = "opacity 1s ease, transform 1s ease, filter 1s ease"
+            element.style.transition =
+                "opacity 1s cubic-bezier(0.34, 1.56, 0.64, 1), transform 1s cubic-bezier(0.34, 1.56, 0.64, 1), filter 1s cubic-bezier(0.34, 1.56, 0.64, 1)"
             element.style.opacity = "1"
             element.style.filter = "blur(0)"
             element.style.transform = "translateY(0)"
         }, index * 200)
     })
 
-    // Fade in Effect for Sections
-    const sections = document.querySelectorAll(".skills, .experience, .projects, .education")
+    // Fade in Effect for Sections with improved animation
+    const sections = document.querySelectorAll(".skills, .experience, .projects, .education, .contact")
     const fadeInSection = (entries, observer) => {
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
+                entry.target.style.transition =
+                    "opacity 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)"
                 entry.target.style.opacity = "1"
                 entry.target.style.transform = "translateY(0)"
                 observer.unobserve(entry.target)
@@ -63,7 +68,6 @@ function animateIntro() {
     sections.forEach((section) => {
         section.style.opacity = "0"
         section.style.transform = "translateY(50px)"
-        section.style.transition = "opacity 0.6s ease-out, transform 0.6s ease-out"
         sectionObserver.observe(section)
     })
 }
@@ -128,64 +132,249 @@ function initTypewriter() {
     new TypeWriter(txtElement, words, wait)
 }
 
-// Dock Hover Effects
+// Enhanced Dock Hover Effects
 function setupDockHoverEffects() {
     const dock = document.getElementById("dock")
     const dockItems = dock.querySelectorAll(".dock-item")
 
+    // Add tooltips to dock items
     dockItems.forEach((item) => {
-        item.addEventListener("mouseover", () => {
-            item.style.transform = "scale(1.1)"
+        if (item.id === "homeButton") {
+            item.setAttribute("data-tooltip", "Home")
+        } else if (item.id === "githubDock") {
+            item.setAttribute("data-tooltip", "GitHub")
+        } else if (item.id === "emailDock") {
+            item.setAttribute("data-tooltip", "Email")
+        } else if (item.id === "phoneDock") {
+            item.setAttribute("data-tooltip", "Phone")
+        } else if (item.id === "discordDock") {
+            item.setAttribute("data-tooltip", "Discord")
+        } else if (item.id === "themeToggle") {
+            item.setAttribute("data-tooltip", "Toggle Theme")
+        } else {
+            // Extract alt text for tooltip
+            const img = item.querySelector("img")
+            if (img && img.alt) {
+                item.setAttribute("data-tooltip", img.alt)
+            }
+        }
+    })
+
+    // Magnification effect for dock
+    dock.addEventListener("mousemove", (e) => {
+        const dockRect = dock.getBoundingClientRect()
+        const mouseX = e.clientX - dockRect.left
+
+        dockItems.forEach((item) => {
+            if (!item.classList.contains("dock-separator")) {
+                const itemRect = item.getBoundingClientRect()
+                const itemX = itemRect.left + itemRect.width / 2 - dockRect.left
+                const distance = Math.abs(mouseX - itemX)
+
+                // Calculate scale based on distance (max scale: 1.2, min scale: 1.0)
+                const maxDistance = 100
+                const scale = distance < maxDistance ? 1 + 0.2 * (1 - distance / maxDistance) : 1
+
+                item.style.transform = `scale(${scale})`
+
+                // Add slight y-axis movement for a more dynamic effect
+                if (scale > 1.05) {
+                    item.style.transform += ` translateY(${(scale - 1) * -10}px)`
+                }
+            }
         })
-        item.addEventListener("mouseout", () => {
-            item.style.transform = "scale(1.0)"
+    })
+
+    // Reset all items when mouse leaves the dock
+    dock.addEventListener("mouseleave", () => {
+        dockItems.forEach((item) => {
+            if (!item.classList.contains("dock-separator")) {
+                item.style.transform = "scale(1)"
+            }
         })
     })
 }
 
-// Light and Dark Mode Toggle
+// Light and Dark Mode Toggle with improved animation
 function setupThemeToggle() {
     const themeToggle = document.getElementById("themeToggle")
     const themeIcon = document.getElementById("themeIcon")
     const body = document.body
 
     themeToggle.addEventListener("click", () => {
-        body.classList.toggle("dark-mode")
-        updateThemeIcon()
-    })
+        // Add transition class for smooth animation
+        body.classList.add("theme-transition")
 
-    function updateThemeIcon() {
+        // Toggle dark mode
+        body.classList.toggle("dark-mode")
+
+        // Update icon with animation
         if (body.classList.contains("dark-mode")) {
-            themeIcon.src = "https://api.iconify.design/lucide:moon.svg"
+            themeIcon.style.transform = "rotate(360deg)"
+            setTimeout(() => {
+                themeIcon.src = "https://api.iconify.design/lucide:moon.svg"
+                themeIcon.style.transform = "rotate(0)"
+            }, 150)
         } else {
-            themeIcon.src = "https://api.iconify.design/lucide:sun.svg"
+            themeIcon.style.transform = "rotate(360deg)"
+            setTimeout(() => {
+                themeIcon.src = "https://api.iconify.design/lucide:sun.svg"
+                themeIcon.style.transform = "rotate(0)"
+            }, 150)
         }
-    }
+
+        // Remove transition class after animation completes
+        setTimeout(() => {
+            body.classList.remove("theme-transition")
+        }, 500)
+    })
 }
 
-// Home Button
+// Home Button with improved animation
 function setupHomeButton() {
     const homeButton = document.getElementById("homeButton")
     homeButton.addEventListener("click", (e) => {
         e.preventDefault()
+
+        // Add animation class
+        homeButton.classList.add("home-button-clicked")
+
+        // Smooth scroll to top with easing
         window.scrollTo({
             top: 0,
             behavior: "smooth",
         })
+
+        // Remove animation class after animation completes
+        setTimeout(() => {
+            homeButton.classList.remove("home-button-clicked")
+        }, 500)
     })
 }
 
-// Smooth Scrolling for Hash Links
+// Smooth Scrolling for Hash Links with improved animation
 function setupHashLinkBehavior() {
     document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
         anchor.addEventListener("click", function (e) {
             e.preventDefault()
             const targetId = this.getAttribute("href").substring(1)
             const targetElement = document.getElementById(targetId)
+
             if (targetElement) {
+                // Highlight the section briefly
+                targetElement.classList.add("section-highlight")
+
+                // Smooth scroll with custom easing
                 targetElement.scrollIntoView({
                     behavior: "smooth",
+                    block: "start",
                 })
+
+                // Remove highlight after animation
+                setTimeout(() => {
+                    targetElement.classList.remove("section-highlight")
+                }, 1000)
+            }
+        })
+    })
+}
+
+// Setup Contact Form
+function setupContactForm() {
+    const contactForm = document.getElementById("contactForm")
+    if (!contactForm) return
+
+    contactForm.addEventListener("submit", (e) => {
+        e.preventDefault()
+
+        // Get form values
+        const name = document.getElementById("name").value
+        const email = document.getElementById("email").value
+        const message = document.getElementById("message").value
+
+        // Simple validation
+        if (!name || !email || !message) {
+            alert("Please fill in all fields")
+            return
+        }
+
+        // Store the original button text
+        const submitBtn = document.getElementById("submitBtn")
+        const originalText = submitBtn.textContent
+
+        // Change button text and disable
+        submitBtn.textContent = "Sending..."
+        submitBtn.disabled = true
+
+        // Get the form data
+        const formData = new FormData(contactForm)
+
+        // Send the form data using fetch
+        fetch(contactForm.action, {
+            method: "POST",
+            body: formData,
+            headers: {
+                Accept: "application/json",
+            },
+        })
+            .then((response) => {
+                if (response.ok) {
+                    return response.json()
+                } else {
+                    throw new Error("Form submission failed")
+                }
+            })
+            .then((data) => {
+                // Show success message
+                const successMessage = document.getElementById("successMessage")
+                successMessage.style.display = "block"
+
+                // Reset form
+                contactForm.reset()
+
+                // Hide success message after 5 seconds
+                setTimeout(() => {
+                    successMessage.style.display = "none"
+                }, 5000)
+            })
+            .catch((error) => {
+                console.error("Error:", error)
+                alert("Failed to send message. Please try again later.")
+            })
+            .finally(() => {
+                // Reset button regardless of success or failure
+                submitBtn.textContent = originalText
+                submitBtn.disabled = false
+            })
+    })
+}
+
+// Setup Form Animations
+function setupFormAnimations() {
+    const formInputs = document.querySelectorAll(".form-group input, .form-group textarea")
+
+    formInputs.forEach((input) => {
+        // Create and append animation element
+        const animationEl = document.createElement("span")
+        animationEl.classList.add("input-animation")
+        input.parentNode.appendChild(animationEl)
+
+        // Focus animation
+        input.addEventListener("focus", () => {
+            input.parentNode.classList.add("input-focused")
+        })
+
+        // Blur animation
+        input.addEventListener("blur", () => {
+            input.parentNode.classList.remove("input-focused")
+        })
+
+        // Add floating label effect
+        input.addEventListener("input", () => {
+            if (input.value.trim() !== "") {
+                input.classList.add("has-content")
+            } else {
+                input.classList.remove("has-content")
             }
         })
     })

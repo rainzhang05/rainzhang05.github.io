@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rain Zhang</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <script src="script.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -17,6 +17,7 @@
             <li><a href="#experience">Experience</a></li>
             <li><a href="#projects">Projects</a></li>
             <li><a href="#education">Education</a></li>
+            <li><a href="#contact">Contact</a></li>
         </ul>
     </nav>
     <h2 id="barHeading">Rain Zhang</h2>
@@ -218,6 +219,38 @@
     </ul>
 </div>
 
+<!-- Contact Section -->
+<div class="contact">
+    <h2 id="contact">Contact Me</h2>
+    <p>Feel free to reach out if you have any questions or would like to connect.</p>
+    <p>I'm always open to new opportunities &  internships 😊</p>
+
+    <div class="contact-form">
+        <form id="contactForm" action="https://formspree.io/f/xoveaaqo" method="POST">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" required></textarea>
+            </div>
+
+            <button type="submit" id="submitBtn" class="submit-btn">Send Message</button>
+        </form>
+
+        <div id="successMessage" class="success-message">
+            <p>Thank you for your message! I'll get back to you as soon as possible.</p>
+        </div>
+    </div>
+</div>
+
 <!-- Dock -->
 <div id="dock">
     <a class="dock-item" id="homeButton">
@@ -227,25 +260,24 @@
     <a href="https://www.linkedin.com/in/rainzhang05/" target="_blank" class="dock-item">
         <img src="https://cdn3.iconfinder.com/data/icons/2018-social-media-black-and-white-logos/1000/2018_social_media_popular_app_logo_linkedin-512.png" alt="LinkedIn">
     </a>
-    <a href="https://github.com/rainzhang05" target="_blank" class="dock-item" id = "githubDock">
+    <a href="https://github.com/rainzhang05" target="_blank" class="dock-item" id="githubDock">
         <img src="https://icons.veryicon.com/png/o/object/material_design_icons/github-circle-1.png" alt="GitHub">
     </a>
-    <a href="mailto:rainzhang.zty@gmail.com" target="_blank" class="dock-item" id = "emailDock">
-        <img src="https://cdn3.iconfinder.com/data/icons/web-ui-3/128/Mail-2-512.png" alt="Email">
-    </a>
-    <a href="tel:+12363337191" target="_blank" class="dock-item" id = "phoneDock">
-        <img src="https://icons.veryicon.com/png/o/miscellaneous/yunrenui-original-ui-of-fool-cloud/phone-circle.png" alt="Phone">
-    </a>
-    <a href="https://discordapp.com/users/rain_79154" target="_blank" class="dock-item" id = "discordDock">
+    <a href="https://discordapp.com/users/rain_79154" target="_blank" class="dock-item" id="discordDock">
         <img src="https://cdn-icons-png.flaticon.com/512/3670/3670325.png" alt="Discord">
     </a>
-    <a href="https://www.instagram.com/rainzhang.zty?igsh=emI1dTNhZzAyY2N6&utm_source=qr" target="_blank" class="dock-item">
-        <img src="https://cdn3.iconfinder.com/data/icons/social-media-black-white-1/1024/instagram-512.png" alt="Instagram">
+    <a href="mailto:rainzhang.zty@gmail.com" class="dock-item" id="emailDock">
+        <img src="https://cdn3.iconfinder.com/data/icons/web-ui-3/128/Mail-2-512.png" alt="Email">
+    </a>
+    <a href="tel:+12363337191" class="dock-item" id="phoneDock">
+        <img src="https://icons.veryicon.com/png/o/miscellaneous/yunrenui-original-ui-of-fool-cloud/phone-circle.png" alt="Phone">
     </a>
     <div class="dock-separator"></div>
     <div class="dock-item" id="themeToggle">
         <img src="https://api.iconify.design/lucide:sun.svg" alt="Theme Toggle" id="themeIcon">
     </div>
 </div>
+
+<script src="script.js"></script>
 </body>
 </html>
