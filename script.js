@@ -77,10 +77,20 @@ class TypeWriter {
         this.wordIndex = 0
         this.wait = wait
         this.isDeleting = false
+
+        // Add a flag to ensure only one instance is running
+        if (window.activeTypewriter) {
+            window.activeTypewriter.txtElement.innerHTML = ""
+        }
+        window.activeTypewriter = this
+
         this.type()
     }
 
     type() {
+        // Check if this instance is still the active one
+        if (window.activeTypewriter !== this) return
+
         const current = this.wordIndex % this.words.length
         const fullTxt = this.words[current]
 
@@ -113,7 +123,7 @@ class TypeWriter {
 // Initialize Typewriter
 function initTypewriter() {
     const txtElement = document.querySelector("#introName")
-    const words = ["Rain Zhang", "a student majoring in CS", "living in vancouver"]
+    const words = ["Rain Zhang", "a CS student", "living in vancouver"]
     const wait = 2000
     new TypeWriter(txtElement, words, wait)
 }
