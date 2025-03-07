@@ -195,11 +195,14 @@ function setupDockHoverEffects() {
     })
 }
 
-// Light and Dark Mode Toggle with improved animation
+// Theme Toggle Functionality
 function setupThemeToggle() {
     const themeToggle = document.getElementById("themeToggle")
     const themeIcon = document.getElementById("themeIcon")
     const body = document.body
+
+    // Force browser to recognize initial transform state
+    themeIcon.style.transform = "rotate(0deg)"
 
     themeToggle.addEventListener("click", () => {
         // Add transition class for smooth animation
@@ -208,20 +211,17 @@ function setupThemeToggle() {
         // Toggle dark mode
         body.classList.toggle("dark-mode")
 
+        // Ensure first-click animation works by forcing a reflow
+        themeIcon.getBoundingClientRect() // Forces the browser to recognize the change
+
         // Update icon with animation
-        if (body.classList.contains("dark-mode")) {
-            themeIcon.style.transform = "rotate(360deg)"
-            setTimeout(() => {
-                themeIcon.src = "https://api.iconify.design/lucide:moon.svg"
-                themeIcon.style.transform = "rotate(0)"
-            }, 150)
-        } else {
-            themeIcon.style.transform = "rotate(360deg)"
-            setTimeout(() => {
-                themeIcon.src = "https://api.iconify.design/lucide:sun.svg"
-                themeIcon.style.transform = "rotate(0)"
-            }, 150)
-        }
+        themeIcon.style.transform = "rotate(360deg)"
+        setTimeout(() => {
+            themeIcon.src = body.classList.contains("dark-mode")
+                ? "https://api.iconify.design/lucide:moon.svg"
+                : "https://api.iconify.design/lucide:sun.svg"
+            themeIcon.style.transform = "rotate(0deg)"
+        }, 150)
 
         // Remove transition class after animation completes
         setTimeout(() => {
@@ -230,26 +230,40 @@ function setupThemeToggle() {
     })
 }
 
-// Home Button with improved animation
+// Fix the home button to make it more reliable
 function setupHomeButton() {
     const homeButton = document.getElementById("homeButton")
-    homeButton.addEventListener("click", (e) => {
-        e.preventDefault()
 
-        // Add animation class
-        homeButton.classList.add("home-button-clicked")
+    if (homeButton) {
+        // Remove any existing event listeners to prevent duplicates
+        homeButton.removeEventListener("click", scrollToTop)
 
-        // Smooth scroll to top with easing
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth",
-        })
+        // Add the event listener
+        homeButton.addEventListener("click", scrollToTop)
 
-        // Remove animation class after animation completes
-        setTimeout(() => {
-            homeButton.classList.remove("home-button-clicked")
-        }, 500)
+        // Make the button more obviously clickable
+        homeButton.style.cursor = "pointer"
+    }
+}
+
+// Separate function for the scroll action to make it easier to debug
+function scrollToTop(e) {
+    e.preventDefault()
+    e.stopPropagation() // Prevent event bubbling
+
+    // Scroll to top with animation
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth",
     })
+
+    // Remove any hash from URL
+    history.pushState("", document.title, window.location.pathname + window.location.search)
+
+    // Debug message
+    console.log("Home button clicked, scrolling to top")
+
+    return false // Ensure the event is fully canceled
 }
 
 // Smooth Scrolling for Hash Links with improved animation

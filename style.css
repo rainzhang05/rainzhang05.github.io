@@ -55,7 +55,7 @@ body {
     right: 0;
     background-color: rgba(250, 250, 250, 0.95);
     backdrop-filter: blur(10px);
-    padding: 10px 40px;
+    padding: 8px 35px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -65,12 +65,21 @@ body {
     transition: background-color 0.5s ease, border-bottom 0.5s ease;
 }
 
-/* Keeps space but no icons */
-.contactIcons {
+/* Navigation layout - split into left and right */
+.left-nav,
+.right-nav {
     display: flex;
-    justify-content: flex-end;
     align-items: center;
-    height: 100%;
+}
+
+.left-nav {
+    flex: 1;
+    justify-content: flex-start;
+}
+
+.right-nav {
+    flex: 1;
+    justify-content: flex-end;
 }
 
 nav ul {
@@ -80,8 +89,25 @@ nav ul {
     display: flex;
 }
 
+/* Change to this to properly increase the gap between each button */
 nav ul li {
-    margin-right: 40px;
+    margin: 0 30px; /* Equal spacing on both sides of each button */
+}
+
+nav .left-nav ul li:first-child {
+    margin-left: 0; /* Remove left margin for first item */
+}
+
+nav .left-nav ul li:last-child {
+    margin-right: 30px; /* Keep consistent spacing */
+}
+
+nav .right-nav ul li:first-child {
+    margin-left: 30px; /* Keep consistent spacing */
+}
+
+nav .right-nav ul li:last-child {
+    margin-right: 0; /* Remove right margin for last item */
 }
 
 nav ul li a {
@@ -187,17 +213,18 @@ body.dark-mode nav ul li a:hover {
     box-shadow: none;
     color: #000000;
     margin-top: 150px;
-    margin-left: 220px;
-    margin-right: 220px;
+    margin-left: max(5%, 220px);
+    margin-right: max(5%, 220px);
     padding: 30px;
     border-radius: 20px;
     transition: color 0.5s ease;
 }
 
 .introduction p {
-    font-size: 20px;
+    font-size: clamp(16px, 1.2vw, 20px);
     margin-top: 20px;
     transition: color 0.5s ease;
+    max-width: 1200px;
 }
 
 .resumeButton {
@@ -206,7 +233,7 @@ body.dark-mode nav ul li a:hover {
     align-items: center;
     gap: 10px;
     padding: 12px 24px;
-    font-size: 18px;
+    font-size: clamp(16px, 1vw, 18px);
     font-weight: 600;
     color: white;
     background: linear-gradient(to right, #6e5cf5, #b1a8f5);
@@ -254,7 +281,7 @@ body.dark-mode nav ul li a:hover {
 #introName {
     font-family: "Montserrat", sans-serif;
     font-weight: 700;
-    font-size: 74px;
+    font-size: clamp(40px, 4vw, 74px);
     margin-bottom: 0;
     margin-top: 0;
     transition: color 0.5s ease;
@@ -277,7 +304,7 @@ body.dark-mode nav ul li a:hover {
     background-color: transparent;
     color: #000000;
     box-shadow: none;
-    margin: 250px 220px 80px;
+    margin: 250px max(5%, 220px) 80px;
     transition: color 0.5s ease;
 }
 
@@ -290,8 +317,8 @@ body.dark-mode nav ul li a:hover {
     display: inline-flex;
     flex-direction: column;
     align-items: center;
-    margin: 20px;
-    width: 100px;
+    margin: clamp(10px, 1.5vw, 20px);
+    width: clamp(80px, 6vw, 100px);
     transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -300,9 +327,9 @@ body.dark-mode nav ul li a:hover {
 }
 
 .skills img {
-    width: 70px;
-    height: 70px;
-    margin: 25px;
+    width: clamp(50px, 4vw, 70px);
+    height: clamp(50px, 4vw, 70px);
+    margin: clamp(15px, 1.5vw, 25px);
     vertical-align: middle;
     user-select: none;
     -webkit-user-drag: none;
@@ -316,24 +343,25 @@ body.dark-mode nav ul li a:hover {
 .skill-name {
     font-family: "Montserrat", sans-serif;
     font-weight: 700;
-    font-size: 15px;
+    font-size: clamp(12px, 0.9vw, 15px);
     margin-top: 10px;
     text-align: center;
     transition: color 0.5s ease;
 }
 
 #macIcon {
-    width: 77px;
-    height: 77px;
+    width: clamp(55px, 4.5vw, 77px);
+    height: clamp(55px, 4.5vw, 77px);
 }
 
 .skills h3 {
     margin-top: 30px;
+    font-size: clamp(18px, 1.3vw, 24px);
 }
 
 /* Experience Section */
 .experience {
-    margin: 50px 220px 80px;
+    margin: 50px max(5%, 220px) 80px;
     padding: 35px;
     border-radius: 35px;
     background-color: transparent;
@@ -347,9 +375,22 @@ body.dark-mode nav ul li a:hover {
     margin-bottom: 15px;
 }
 
+.experience h3 {
+    font-size: clamp(18px, 1.3vw, 24px);
+}
+
+.experience h4 {
+    font-size: clamp(16px, 1.1vw, 20px);
+}
+
+.experience p {
+    font-size: clamp(16px, 1.1vw, 19px);
+    max-width: 1200px;
+}
+
 /* Project Section */
 .projects {
-    margin: 50px 220px 80px;
+    margin: 50px max(5%, 220px) 80px;
     padding: 35px;
     border-radius: 35px;
     background-color: transparent;
@@ -363,13 +404,22 @@ body.dark-mode nav ul li a:hover {
     margin-bottom: 15px;
 }
 
+.projects h3 {
+    font-size: clamp(18px, 1.3vw, 24px);
+}
+
+.projects ul {
+    padding-left: clamp(20px, 2vw, 40px);
+}
+
 .projects ul li {
     margin-bottom: 12px;
+    font-size: clamp(16px, 1.1vw, 19px);
 }
 
 /* Education Section */
 .education {
-    margin: 50px 220px 80px;
+    margin: 50px max(5%, 220px) 80px;
     padding: 35px;
     border-radius: 35px;
     background-color: transparent;
@@ -383,13 +433,22 @@ body.dark-mode nav ul li a:hover {
     margin-bottom: 15px;
 }
 
+.education h3 {
+    font-size: clamp(18px, 1.3vw, 24px);
+}
+
+.education ul {
+    padding-left: clamp(20px, 2vw, 40px);
+}
+
 .education ul li {
     margin-bottom: 12px;
+    font-size: clamp(16px, 1.1vw, 19px);
 }
 
 /* Contact Section */
 .contact {
-    margin: 50px 220px 170px;
+    margin: 50px max(5%, 220px) 170px;
     padding: 35px;
     border-radius: 35px;
     background-color: transparent;
@@ -403,8 +462,13 @@ body.dark-mode nav ul li a:hover {
     margin-bottom: 15px;
 }
 
+.contact p {
+    font-size: clamp(16px, 1.1vw, 19px);
+}
+
 .contact-form {
     margin-top: 30px;
+    max-width: 800px;
 }
 
 .form-group {
@@ -417,6 +481,7 @@ body.dark-mode nav ul li a:hover {
     margin-bottom: 8px;
     font-weight: 500;
     transition: color 0.3s ease;
+    font-size: clamp(14px, 1vw, 16px);
 }
 
 .form-group input,
@@ -426,7 +491,7 @@ body.dark-mode nav ul li a:hover {
     border: 2px solid #e0e0e0;
     border-radius: 8px;
     font-family: "Montserrat", sans-serif;
-    font-size: 16px;
+    font-size: clamp(14px, 1vw, 16px);
     background-color: transparent;
     transition: all 0.3s ease;
 }
@@ -466,7 +531,7 @@ body.dark-mode nav ul li a:hover {
     border-radius: 25px;
     font-family: "Montserrat", sans-serif;
     font-weight: 600;
-    font-size: 18px;
+    font-size: clamp(16px, 1vw, 18px);
     cursor: pointer;
     transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
     box-shadow: 4px 6px 12px rgba(0, 0, 0, 0.2);
@@ -505,7 +570,7 @@ ul {
 }
 
 h2 {
-    font-size: 35px;
+    font-size: clamp(28px, 2vw, 35px);
     scroll-margin-top: 100px;
     transition: color 0.5s ease;
 }
@@ -554,9 +619,9 @@ body.dark-mode #introName .txt {
 }
 
 .dock-item {
-    width: 45px;
-    height: 45px;
-    margin: 0 10px;
+    width: clamp(40px, 2.5vw, 45px);
+    height: clamp(40px, 2.5vw, 45px);
+    margin: 0 clamp(5px, 0.6vw, 10px);
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     display: flex;
     justify-content: center;
@@ -587,8 +652,8 @@ body.dark-mode #introName .txt {
 }
 
 .dock-item img {
-    width: 37px;
-    height: 37px;
+    width: clamp(30px, 2vw, 37px);
+    height: clamp(30px, 2vw, 37px);
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -609,23 +674,23 @@ body.dark-mode #introName .txt {
 }
 
 #githubDock img {
-    width: 45px;
-    height: 45px;
+    width: clamp(35px, 2.5vw, 45px);
+    height: clamp(35px, 2.5vw, 45px);
 }
 
 #emailDock img {
-    width: 38px;
-    height: 38px;
+    width: clamp(30px, 2.2vw, 38px);
+    height: clamp(30px, 2.2vw, 38px);
 }
 
 #phoneDock img {
-    width: 43px;
-    height: 43px;
+    width: clamp(33px, 2.4vw, 43px);
+    height: clamp(33px, 2.4vw, 43px);
 }
 
 #discordDock img {
-    width: 39px;
-    height: 39px;
+    width: clamp(30px, 2.2vw, 39px);
+    height: clamp(30px, 2.2vw, 39px);
 }
 
 /* Success Message */
@@ -701,14 +766,141 @@ body.dark-mode #dock .dock-item img {
     filter: invert(1);
 }
 
+/* Theme toggle animation */
+#themeIcon {
+    transition: transform 0.3s ease;
+}
+
+/* Specific styles for 14-15 inch laptops */
+@media screen and (min-width: 2000px) and (max-width: 2560px) {
+    .introduction,
+    .skills,
+    .experience,
+    .projects,
+    .education,
+    .contact {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 1800px;
+        padding-left: 60px;
+        padding-right: 60px;
+    }
+
+    .introduction {
+        margin-top: 120px;
+    }
+
+    .navigationBar {
+        padding-left: 60px;
+        padding-right: 60px;
+    }
+
+    body {
+        font-size: 20px;
+    }
+
+    .skill-item {
+        margin: 25px;
+    }
+}
+
 /* Responsive Design */
+@media (max-width: 1600px) {
+    .introduction,
+    .skills,
+    .experience,
+    .projects,
+    .education,
+    .contact {
+        margin-left: 180px;
+        margin-right: 180px;
+    }
+
+    .introduction {
+        margin-top: 100px;
+    }
+
+    .contact {
+        margin-bottom: 120px;
+    }
+}
+
+@media (max-width: 1400px) {
+    .introduction,
+    .skills,
+    .experience,
+    .projects,
+    .education,
+    .contact {
+        margin-left: 150px;
+        margin-right: 150px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .introduction,
+    .skills,
+    .experience,
+    .projects,
+    .education,
+    .contact {
+        margin-left: 120px;
+        margin-right: 120px;
+    }
+}
+
+@media (max-width: 992px) {
+    .introduction,
+    .skills,
+    .experience,
+    .projects,
+    .education,
+    .contact {
+        margin-left: 80px;
+        margin-right: 80px;
+    }
+
+    #introHeading,
+    #introName {
+        font-size: 60px;
+    }
+}
+
 @media (max-width: 768px) {
     .navigationBar {
         padding: 10px 20px;
+        height: auto;
+        flex-wrap: wrap;
+    }
+
+    .left-nav,
+    .right-nav {
+        width: 100%;
+        justify-content: center;
+        margin: 5px 0;
+    }
+
+    #barHeading {
+        position: relative;
+        left: 0;
+        transform: none;
+        width: 100%;
+        text-align: center;
+        margin: 10px 0;
+        order: -1;
+    }
+
+    nav ul {
+        justify-content: center;
     }
 
     nav ul li {
         margin-right: 20px;
+        margin-left: 20px;
+    }
+
+    .introduction {
+        margin-top: 200px;
     }
 
     #introHeading,
@@ -730,15 +922,20 @@ body.dark-mode #dock .dock-item img {
     .dock-item {
         margin: 0 5px;
     }
+
+    .skill-item {
+        margin: 15px;
+    }
 }
 
-@media (max-width: 480px) {
-    #barHeading {
-        display: none;
+@media (max-width: 576px) {
+    .navigationBar {
+        padding: 10px;
     }
 
     nav ul li {
-        margin-right: 15px;
+        margin-right: 10px;
+        margin-left: 10px;
     }
 
     nav ul li a {
@@ -750,11 +947,7 @@ body.dark-mode #dock .dock-item img {
         font-size: 40px;
     }
 
-    .introduction {
-        margin-left: 20px;
-        margin-right: 20px;
-    }
-
+    .introduction,
     .skills,
     .experience,
     .projects,
@@ -762,6 +955,11 @@ body.dark-mode #dock .dock-item img {
     .contact {
         margin-left: 20px;
         margin-right: 20px;
+        padding: 15px;
+    }
+
+    .introduction p {
+        font-size: 16px;
     }
 
     .dock-item {
@@ -777,5 +975,48 @@ body.dark-mode #dock .dock-item img {
 
     .dock-separator {
         margin: 0 5px;
+    }
+
+    .skill-item {
+        margin: 10px;
+        width: 80px;
+    }
+
+    .skills img {
+        width: 50px;
+        height: 50px;
+        margin: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    nav ul li {
+        margin-right: 8px;
+        margin-left: 8px;
+    }
+
+    nav ul li a {
+        font-size: 14px;
+    }
+
+    #barHeading {
+        font-size: 20px;
+    }
+
+    #introHeading,
+    #introName {
+        font-size: 32px;
+    }
+
+    h2 {
+        font-size: 28px;
+    }
+
+    h3 {
+        font-size: 20px;
+    }
+
+    .skill-item {
+        width: 70px;
     }
 }
