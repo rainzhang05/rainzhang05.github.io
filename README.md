@@ -54,7 +54,7 @@ As I continue to grow as a developer and gain more experience, I plan to:
 
 ## Setup and Deployment
 
-The website is built with HTML, CSS, and JavaScript, making it easy to deploy on any web hosting service.
+The website is built with HTML, CSS, and JavaScript, deployed to Vercel. 
 
 ## Contact
 
