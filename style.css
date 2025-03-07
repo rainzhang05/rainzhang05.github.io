@@ -80,6 +80,7 @@ body {
 .right-nav {
     flex: 1;
     justify-content: flex-end;
+    margin: 110px;
 }
 
 nav ul {
@@ -89,25 +90,24 @@ nav ul {
     display: flex;
 }
 
-/* Change to this to properly increase the gap between each button */
 nav ul li {
-    margin: 0 30px; /* Equal spacing on both sides of each button */
+    margin: 0 30px;
 }
 
 nav .left-nav ul li:first-child {
-    margin-left: 0; /* Remove left margin for first item */
+    margin-left: 0;
 }
 
 nav .left-nav ul li:last-child {
-    margin-right: 30px; /* Keep consistent spacing */
+    margin-right: 30px;
 }
 
 nav .right-nav ul li:first-child {
-    margin-left: 30px; /* Keep consistent spacing */
+    margin-left: 30px;
 }
 
 nav .right-nav ul li:last-child {
-    margin-right: 0; /* Remove right margin for last item */
+    margin-right: 0;
 }
 
 nav ul li a {
@@ -817,7 +817,7 @@ body.dark-mode #dock .dock-item img {
     }
 
     .introduction {
-        margin-top: 100px;
+        margin-top: 115px;
     }
 
     .contact {
