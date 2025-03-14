@@ -127,7 +127,7 @@ class TypeWriter {
 // Initialize Typewriter
 function initTypewriter() {
     const txtElement = document.querySelector("#introName")
-    const words = ["Rain Zhang", "a CS student", "living in vancouver"]
+    const words = ["Rain Zhang", "a Computer Science Student", "a Software Developer", "Based in Vancouver"]
     const wait = 2000
     new TypeWriter(txtElement, words, wait)
 }
