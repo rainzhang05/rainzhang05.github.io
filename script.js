@@ -24,7 +24,7 @@ function initPage(event) {
     setupHomeButton()
     setupHashLinkBehavior()
     setupContactForm()
-    setupFormAnimations()
+    setupProjectCards() // Updated function for project cards
 }
 
 // Blur in Effect for Intro Elements with improved animation
@@ -45,31 +45,7 @@ function animateIntro() {
         }, index * 200)
     })
 
-    // Fade in Effect for Sections with improved animation
-    const sections = document.querySelectorAll(".skills, .experience, .projects, .education, .contact")
-    const fadeInSection = (entries, observer) => {
-        entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-                entry.target.style.transition =
-                    "opacity 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)"
-                entry.target.style.opacity = "1"
-                entry.target.style.transform = "translateY(0)"
-                observer.unobserve(entry.target)
-            }
-        })
-    }
-
-    const sectionObserver = new IntersectionObserver(fadeInSection, {
-        root: null,
-        threshold: 0.1,
-        rootMargin: "-50px",
-    })
-
-    sections.forEach((section) => {
-        section.style.opacity = "0"
-        section.style.transform = "translateY(50px)"
-        sectionObserver.observe(section)
-    })
+    // We don't use fade-in effect for sections anymore as per user's requirement
 }
 
 // Typewriter Effect
@@ -132,57 +108,23 @@ function initTypewriter() {
     new TypeWriter(txtElement, words, wait)
 }
 
-// Enhanced Dock Hover Effects
+// Enhanced Dock Hover Effects - Updated for more subtle magnification
 function setupDockHoverEffects() {
     const dock = document.getElementById("dock")
     const dockItems = dock.querySelectorAll(".dock-item")
 
-    // Add tooltips to dock items
+    // More subtle magnification effect for dock
     dockItems.forEach((item) => {
-        if (item.id === "homeButton") {
-            item.setAttribute("data-tooltip", "Home")
-        } else if (item.id === "githubDock") {
-            item.setAttribute("data-tooltip", "GitHub")
-        } else if (item.id === "emailDock") {
-            item.setAttribute("data-tooltip", "Email")
-        } else if (item.id === "phoneDock") {
-            item.setAttribute("data-tooltip", "Phone")
-        } else if (item.id === "discordDock") {
-            item.setAttribute("data-tooltip", "Discord")
-        } else if (item.id === "themeToggle") {
-            item.setAttribute("data-tooltip", "Toggle Theme")
-        } else {
-            // Extract alt text for tooltip
-            const img = item.querySelector("img")
-            if (img && img.alt) {
-                item.setAttribute("data-tooltip", img.alt)
-            }
+        if (!item.classList.contains("dock-separator")) {
+            item.addEventListener("mouseenter", () => {
+                // Apply a more subtle scale to the hovered item
+                item.style.transform = "scale(1.08) translateY(-3px)"
+            })
+
+            item.addEventListener("mouseleave", () => {
+                item.style.transform = "scale(1)"
+            })
         }
-    })
-
-    // Magnification effect for dock
-    dock.addEventListener("mousemove", (e) => {
-        const dockRect = dock.getBoundingClientRect()
-        const mouseX = e.clientX - dockRect.left
-
-        dockItems.forEach((item) => {
-            if (!item.classList.contains("dock-separator")) {
-                const itemRect = item.getBoundingClientRect()
-                const itemX = itemRect.left + itemRect.width / 2 - dockRect.left
-                const distance = Math.abs(mouseX - itemX)
-
-                // Calculate scale based on distance (max scale: 1.2, min scale: 1.0)
-                const maxDistance = 100
-                const scale = distance < maxDistance ? 1 + 0.2 * (1 - distance / maxDistance) : 1
-
-                item.style.transform = `scale(${scale})`
-
-                // Add slight y-axis movement for a more dynamic effect
-                if (scale > 1.05) {
-                    item.style.transform += ` translateY(${(scale - 1) * -10}px)`
-                }
-            }
-        })
     })
 
     // Reset all items when mouse leaves the dock
@@ -195,38 +137,13 @@ function setupDockHoverEffects() {
     })
 }
 
-// Theme Toggle Functionality
+// Theme Toggle Functionality - Updated for new theme toggle
 function setupThemeToggle() {
     const themeToggle = document.getElementById("themeToggle")
-    const themeIcon = document.getElementById("themeIcon")
     const body = document.body
 
-    // Force browser to recognize initial transform state
-    themeIcon.style.transform = "rotate(0deg)"
-
     themeToggle.addEventListener("click", () => {
-        // Add transition class for smooth animation
-        body.classList.add("theme-transition")
-
-        // Toggle dark mode
         body.classList.toggle("dark-mode")
-
-        // Ensure first-click animation works by forcing a reflow
-        themeIcon.getBoundingClientRect() // Forces the browser to recognize the change
-
-        // Update icon with animation
-        themeIcon.style.transform = "rotate(360deg)"
-        setTimeout(() => {
-            themeIcon.src = body.classList.contains("dark-mode")
-                ? "https://api.iconify.design/lucide:moon.svg"
-                : "https://api.iconify.design/lucide:sun.svg"
-            themeIcon.style.transform = "rotate(0deg)"
-        }, 150)
-
-        // Remove transition class after animation completes
-        setTimeout(() => {
-            body.classList.remove("theme-transition")
-        }, 500)
     })
 }
 
@@ -363,32 +280,28 @@ function setupContactForm() {
     })
 }
 
-// Setup Form Animations
-function setupFormAnimations() {
-    const formInputs = document.querySelectorAll(".form-group input, .form-group textarea")
+// Setup Project Cards - Simplified to just expand in place
+function setupProjectCards() {
+    const readMoreLinks = document.querySelectorAll(".read-more")
 
-    formInputs.forEach((input) => {
-        // Create and append animation element
-        const animationEl = document.createElement("span")
-        animationEl.classList.add("input-animation")
-        input.parentNode.appendChild(animationEl)
+    readMoreLinks.forEach((link) => {
+        link.addEventListener("click", function (e) {
+            e.preventDefault()
 
-        // Focus animation
-        input.addEventListener("focus", () => {
-            input.parentNode.classList.add("input-focused")
-        })
+            // Find the parent card
+            const card = this.closest(".project-card")
 
-        // Blur animation
-        input.addEventListener("blur", () => {
-            input.parentNode.classList.remove("input-focused")
-        })
+            // Find the description only within this card
+            const description = card.querySelector(".project-description")
 
-        // Add floating label effect
-        input.addEventListener("input", () => {
-            if (input.value.trim() !== "") {
-                input.classList.add("has-content")
+            // Toggle expanded class
+            description.classList.toggle("expanded")
+
+            // Change text based on state
+            if (description.classList.contains("expanded")) {
+                this.textContent = "Read less"
             } else {
-                input.classList.remove("has-content")
+                this.textContent = "Read more"
             }
         })
     })
