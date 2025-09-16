@@ -1,12 +1,6 @@
 # Personal Portfolio Website
 Website URL: https://rainzhang.me/
 
-## Overview
-
-This repository contains the source code for my personal portfolio website. As a Computing Science student at 
-Simon Fraser University, I created this website to showcase my skills, projects, and experiences to potential 
-employers and collaborators. The website serves as a digital resume and a platform to demonstrate my web development abilities.
-
 ## Purpose
 
 As a university student actively seeking internship opportunities and professional experience, this portfolio website aims to:
@@ -25,7 +19,6 @@ As a university student actively seeking internship opportunities and profession
 - **Dock Navigation**: macOS-inspired dock for quick access to social media profiles and contact information.
 - **Contact Form**: Direct messaging capability for visitors to reach out without leaving the site.
 - **Typewriter Effect**: Dynamic text animation in the introduction section.
-- **Smooth Scrolling**: Enhanced navigation with smooth scrolling to different sections.
 
 ## Technologies Used
 
@@ -33,39 +26,11 @@ As a university student actively seeking internship opportunities and profession
 - **CSS3**: For styling and animations
 - **JavaScript**: For interactive elements and dynamic content
 - **Formspree**: For handling contact form submissions
-
-## Sections
-
-1. **Introduction**: Brief overview of who I am and what I do
-2. **Skills**: Technical skills categorized by programming languages, web development, operating systems, and developer tools
-3. **Experience**: Professional experience and internships
-4. **Projects**: Showcase of academic and personal projects
-5. **Education**: Academic background and qualifications
-6. **Contact**: Form for visitors to send me messages directly
-
-## Future Improvements
-
-As I continue to grow as a developer and gain more experience, I plan to:
-
-- Add a dedicated projects page with detailed case studies
-- Implement a blog section to share my learning journey
-- Integrate more interactive elements and animations
-- Add testimonials from professors and collaborators
-- Create a timeline of my academic and professional journey
-
-## Setup and Deployment
-
-The website is built with HTML, CSS, and JavaScript, deployed to Vercel. 
+- **Vercel**: For website deployment
 
 ## Contact
 
-If you're a potential employer or collaborator interested in my work, please feel free to:
+If you're a potential employer or collaborator, please feel free to:
 - Reach out through the contact form on the website
-- Connect with me on LinkedIn
+- Connect with me on [Linkedin](https://www.linkedin.com/in/rainzhang05/)
 - Send me an email at rainzhang.zty@gmail.com
-
-I'm actively seeking internship opportunities and would love to discuss how my skills and enthusiasm could benefit your team!
-
-## License
-
-This project is open source and available under the [MIT License](LICENSE).
