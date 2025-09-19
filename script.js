@@ -3,22 +3,30 @@ function removeHash() {
     history.pushState("", document.title, window.location.pathname + window.location.search)
 }
 
-history.scrollRestoration = "manual"
+document.addEventListener("DOMContentLoaded", function handleDOMContentLoaded() {
+    document.removeEventListener("DOMContentLoaded", handleDOMContentLoaded)
+    initPage()
+})
 
-document.addEventListener("DOMContentLoaded", initPage)
-window.addEventListener("pageshow", initPage)
-window.addEventListener("load", initPage)
+window.addEventListener("pageshow", (event) => {
+    if (event.persisted) {
+        document.body.classList.remove("intro-prep")
+        document.body.classList.add("intro-animate")
+    }
+})
 
-function initPage(event) {
-    if (event && event.persisted) {
-        location.reload()
+let isPageInitialized = false
+let hasIntroAnimated = false
+
+function initPage() {
+    if (isPageInitialized) {
         return
     }
 
+    isPageInitialized = true
     removeHash()
-    window.scrollTo(0, 0)
-    animateIntro()
-    initTypewriter()
+
+    runIntroSequence()
     setupDockHoverEffects()
     setupThemeToggle()
     setupHomeButton()
@@ -31,25 +39,55 @@ let activeProjectModal = null
 let lastFocusedElement = null
 let projectModalIdCounter = 0
 
+function runIntroSequence() {
+    const startIntro = () => {
+        animateIntro()
+        initTypewriter()
+    }
+
+    if (document.fonts && document.fonts.ready && typeof document.fonts.ready.then === "function") {
+        document.fonts.ready.then(
+            () => {
+                startIntro()
+            },
+            () => {
+                startIntro()
+            }
+        )
+    } else {
+        startIntro()
+    }
+}
+
 // Blur in Effect for Intro Elements with improved animation
 function animateIntro() {
-    const introElements = document.querySelectorAll(".navigationBar, .introduction, #introHeading, #introParagraph")
+    if (hasIntroAnimated) {
+        return
+    }
+
+    const selectors = [".navigationBar", "#introHeading", "#introName", "#introParagraph", ".resumeButton"]
+    const introElements = selectors
+        .map((selector) => document.querySelector(selector))
+        .filter((element) => Boolean(element))
+
+    if (!introElements.length) {
+        document.body.classList.remove("intro-prep")
+        document.body.classList.add("intro-animate")
+        hasIntroAnimated = true
+        return
+    }
 
     introElements.forEach((element, index) => {
-        element.style.opacity = "0"
-        element.style.filter = "blur(10px)"
-        element.style.transform = "translateY(20px)"
-
-        setTimeout(() => {
-            element.style.transition =
-                "opacity 1s cubic-bezier(0.34, 1.56, 0.64, 1), transform 1s cubic-bezier(0.34, 1.56, 0.64, 1), filter 1s cubic-bezier(0.34, 1.56, 0.64, 1)"
-            element.style.opacity = "1"
-            element.style.filter = "blur(0)"
-            element.style.transform = "translateY(0)"
-        }, index * 200)
+        element.classList.add("intro-target")
+        element.style.setProperty("--intro-delay", `${index * 0.12}s`)
     })
 
-    // We don't use fade-in effect for sections anymore as per user's requirement
+    requestAnimationFrame(() => {
+        document.body.classList.add("intro-animate")
+        document.body.classList.remove("intro-prep")
+    })
+
+    hasIntroAnimated = true
 }
 
 // Typewriter Effect
@@ -399,35 +437,9 @@ function openProjectModal(card) {
 
     document.body.classList.add("modal-open")
 
-    const cardRect = card.getBoundingClientRect()
-    const cardStyles = window.getComputedStyle(card)
-    const modalRect = modal.getBoundingClientRect()
-    const deltaX = cardRect.left - modalRect.left
-    const deltaY = cardRect.top - modalRect.top
-    const scaleX = modalRect.width === 0 ? 1 : cardRect.width / modalRect.width
-    const scaleY = modalRect.height === 0 ? 1 : cardRect.height / modalRect.height
-    const initialBorderRadius = cardStyles.borderRadius
-
-    modal.classList.add("project-modal-animating")
-    if (initialBorderRadius) {
-        modal.style.borderRadius = initialBorderRadius
-    }
-    modal.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(${scaleX}, ${scaleY})`
-
-    const handleOpenTransitionEnd = (event) => {
-        if (event.target !== modal || event.propertyName !== "transform") return
-        modal.classList.remove("project-modal-animating")
-        modal.removeEventListener("transitionend", handleOpenTransitionEnd)
-    }
-
-    modal.addEventListener("transitionend", handleOpenTransitionEnd)
-
     requestAnimationFrame(() => {
         overlay.classList.add("active")
-        requestAnimationFrame(() => {
-            modal.style.transform = ""
-            modal.style.borderRadius = ""
-        })
+        modal.classList.add("project-modal-open")
     })
 
     const handleKeyDown = (event) => {
@@ -480,8 +492,6 @@ function openProjectModal(card) {
         handleKeyDown,
         modal,
         handleFocusTrap,
-        card,
-        handleOpenTransitionEnd,
         isClosing: false,
     }
 }
@@ -490,7 +500,7 @@ function closeProjectModal(options = {}) {
     if (!activeProjectModal) return
 
     const { immediate = false } = options
-    const { overlay, handleKeyDown, modal, handleFocusTrap, card, handleOpenTransitionEnd } = activeProjectModal
+    const { overlay, handleKeyDown, modal, handleFocusTrap } = activeProjectModal
 
     if (activeProjectModal.isClosing && !immediate) {
         return
@@ -500,10 +510,6 @@ function closeProjectModal(options = {}) {
 
     if (modal && handleFocusTrap) {
         modal.removeEventListener("keydown", handleFocusTrap)
-    }
-
-    if (modal && handleOpenTransitionEnd) {
-        modal.removeEventListener("transitionend", handleOpenTransitionEnd)
     }
 
     let cleanupCalled = false
@@ -530,35 +536,14 @@ function closeProjectModal(options = {}) {
         return
     }
 
-    if (!card || !document.body.contains(card)) {
-        overlay.classList.remove("active")
-        setTimeout(() => {
-            cleanup()
-        }, 300)
-        return
-    }
-
     activeProjectModal.isClosing = true
 
     overlay.classList.remove("active")
-    modal.classList.add("project-modal-animating")
-
-    const modalRect = modal.getBoundingClientRect()
-    const cardRect = card.getBoundingClientRect()
-    const deltaX = cardRect.left - modalRect.left
-    const deltaY = cardRect.top - modalRect.top
-    const scaleX = modalRect.width === 0 ? 1 : cardRect.width / modalRect.width
-    const scaleY = modalRect.height === 0 ? 1 : cardRect.height / modalRect.height
-    const targetBorderRadius = window.getComputedStyle(card).borderRadius
-
-    if (targetBorderRadius) {
-        modal.style.borderRadius = targetBorderRadius
-    }
-
-    modal.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(${scaleX}, ${scaleY})`
+    modal.classList.remove("project-modal-open")
+    modal.classList.add("project-modal-closing")
 
     const handleCloseTransitionEnd = (event) => {
-        if (event.target !== modal || event.propertyName !== "transform") return
+        if (event.target !== modal || event.propertyName !== "opacity") return
         modal.removeEventListener("transitionend", handleCloseTransitionEnd)
         cleanup()
     }
@@ -568,5 +553,5 @@ function closeProjectModal(options = {}) {
     setTimeout(() => {
         modal.removeEventListener("transitionend", handleCloseTransitionEnd)
         cleanup()
-    }, 650)
+    }, 400)
 }
