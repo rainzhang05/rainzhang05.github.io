@@ -27,6 +27,10 @@ function initPage(event) {
     setupProjectCards() // Updated function for project cards
 }
 
+let activeProjectModal = null
+let lastFocusedElement = null
+let projectModalIdCounter = 0
+
 // Blur in Effect for Intro Elements with improved animation
 function animateIntro() {
     const introElements = document.querySelectorAll(".navigationBar, .introduction, #introHeading, #introParagraph")
@@ -280,29 +284,178 @@ function setupContactForm() {
     })
 }
 
-// Setup Project Cards - Simplified to just expand in place
+// Setup Project Cards - open project details in a modal dialog
 function setupProjectCards() {
-    const readMoreLinks = document.querySelectorAll(".read-more")
+    const readMoreButtons = document.querySelectorAll(".read-more")
 
-    readMoreLinks.forEach((link) => {
-        link.addEventListener("click", function (e) {
-            e.preventDefault()
+    readMoreButtons.forEach((button) => {
+        if (button.dataset.modalBound === "true") return
 
-            // Find the parent card
-            const card = this.closest(".project-card")
-
-            // Find the description only within this card
-            const description = card.querySelector(".project-description")
-
-            // Toggle expanded class
-            description.classList.toggle("expanded")
-
-            // Change text based on state
-            if (description.classList.contains("expanded")) {
-                this.textContent = "Read less"
-            } else {
-                this.textContent = "Read more"
+        button.dataset.modalBound = "true"
+        button.addEventListener("click", (event) => {
+            event.preventDefault()
+            const card = button.closest(".project-card")
+            if (card) {
+                openProjectModal(card)
             }
         })
     })
+}
+
+function openProjectModal(card) {
+    if (!card) return
+
+    // Close any existing modal before opening a new one
+    closeProjectModal()
+
+    lastFocusedElement = document.activeElement
+
+    const overlay = document.createElement("div")
+    overlay.className = "project-modal-overlay"
+
+    const modal = document.createElement("div")
+    modal.className = "project-modal"
+    modal.setAttribute("role", "dialog")
+    modal.setAttribute("aria-modal", "true")
+
+    const closeButton = document.createElement("button")
+    closeButton.className = "project-modal-close"
+    closeButton.setAttribute("aria-label", "Close project details")
+    closeButton.innerHTML = "&times;"
+
+    modal.appendChild(closeButton)
+
+    const header = card.querySelector(".project-header")
+    if (header) {
+        const headerClone = header.cloneNode(true)
+        const heading = headerClone.querySelector("h3")
+
+        if (heading) {
+            projectModalIdCounter += 1
+            const titleId = `project-modal-title-${projectModalIdCounter}`
+            heading.id = titleId
+            modal.setAttribute("aria-labelledby", titleId)
+        } else {
+            const fallbackTitle = header.querySelector("h3")
+            if (fallbackTitle) {
+                modal.setAttribute("aria-label", fallbackTitle.textContent.trim())
+            }
+        }
+
+        modal.appendChild(headerClone)
+    } else {
+        const fallbackTitle = card.querySelector(".project-header h3")
+        if (fallbackTitle) {
+            modal.setAttribute("aria-label", fallbackTitle.textContent.trim())
+        }
+    }
+
+    const content = card.querySelector(".project-content")
+    if (content) {
+        const contentClone = content.cloneNode(true)
+        const readMoreButton = contentClone.querySelector(".read-more")
+        if (readMoreButton) {
+            readMoreButton.remove()
+        }
+        modal.appendChild(contentClone)
+    }
+
+    overlay.appendChild(modal)
+    document.body.appendChild(overlay)
+
+    document.body.classList.add("modal-open")
+
+    // Trigger fade-in transition
+    requestAnimationFrame(() => {
+        overlay.classList.add("active")
+    })
+
+    const handleKeyDown = (event) => {
+        if (event.key === "Escape") {
+            event.preventDefault()
+            closeProjectModal()
+        }
+    }
+
+    overlay.addEventListener("click", (event) => {
+        if (event.target === overlay) {
+            closeProjectModal()
+        }
+    })
+
+    closeButton.addEventListener("click", () => {
+        closeProjectModal()
+    })
+
+    document.addEventListener("keydown", handleKeyDown)
+
+    const handleFocusTrap = (event) => {
+        if (event.key !== "Tab") return
+
+        const focusableSelectors =
+            'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
+        const focusable = modal.querySelectorAll(focusableSelectors)
+        if (!focusable.length) return
+
+        const firstElement = focusable[0]
+        const lastElement = focusable[focusable.length - 1]
+
+        if (event.shiftKey) {
+            if (document.activeElement === firstElement) {
+                event.preventDefault()
+                lastElement.focus()
+            }
+        } else if (document.activeElement === lastElement) {
+            event.preventDefault()
+            firstElement.focus()
+        }
+    }
+
+    modal.addEventListener("keydown", handleFocusTrap)
+
+    closeButton.focus()
+
+    activeProjectModal = {
+        overlay,
+        handleKeyDown,
+        modal,
+        handleFocusTrap,
+    }
+}
+
+function closeProjectModal() {
+    if (!activeProjectModal) return
+
+    const { overlay, handleKeyDown, modal, handleFocusTrap } = activeProjectModal
+
+    document.removeEventListener("keydown", handleKeyDown)
+
+    if (modal && handleFocusTrap) {
+        modal.removeEventListener("keydown", handleFocusTrap)
+    }
+
+    overlay.classList.remove("active")
+    overlay.addEventListener(
+        "transitionend",
+        () => {
+            overlay.remove()
+        },
+        { once: true }
+    )
+
+    // Fallback removal in case the transitionend doesn't fire
+    setTimeout(() => {
+        if (overlay.parentElement) {
+            overlay.remove()
+        }
+    }, 400)
+
+    document.body.classList.remove("modal-open")
+
+    if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
+        lastFocusedElement.focus({ preventScroll: true })
+    }
+    lastFocusedElement = null
+
+    activeProjectModal = null
 }
