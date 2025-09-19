@@ -290,11 +290,7 @@ body.dark-mode nav ul li a:hover {
 
 .resumeButton:hover {
     transform: translateY(-5px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-}
-
-.resumeButton:hover svg {
-    transform: translateX(3px);
+    box-shadow: 0 6px 15px rgba(110, 92, 245, 0.4);
 }
 
 .resumeButton::before {
