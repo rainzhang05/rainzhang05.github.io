@@ -5,10 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rain Zhang</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="preload" href="fonts/Montserrat-Regular.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="fonts/Montserrat-Medium.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="fonts/Montserrat-Bold.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="fonts/Audiowide-Regular.ttf" as="font" type="font/ttf" crossorigin>
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
 </head>
-<body>
+<body class="intro-prep">
 
 <!-- Navigation Bar -->
 <div class="navigationBar">
@@ -54,7 +58,11 @@
     </p>
     <a href="Rain Zhang Resume.pdf" target="_blank" class="resumeButton">
         Resume
-        <img src="https://cdn-icons-png.flaticon.com/512/25/25284.png" alt="linkIcon">
+        <svg class="resume-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M14 4h6v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M20 4L10 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M10 8H4v12h12v-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
     </a>
 </div>
 
@@ -63,78 +71,78 @@
     <h2 id="skills">Skills</h2>
     <h3>Programming Languages</h3>
     <div class="skill-item">
-        <img id="pythonIcon" src="https://cdn3.iconfinder.com/data/icons/logos-and-brands-adobe/512/267_Python-512.png" alt="Python Icon">
+        <img id="pythonIcon" src="icons/python-icon.png" alt="Python icon">
         <span class="skill-name">Python</span>
     </div>
     <div class="skill-item">
-        <img id="cIcon" src="https://upload.wikimedia.org/wikipedia/commons/1/19/C_Logo.png" alt="C Icon">
+        <img id="cIcon" src="icons/c-icon.png" alt="C icon">
         <span class="skill-name">C</span>
     </div>
     <div class="skill-item">
-        <img id="C++ icon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/ISO_C%2B%2B_Logo.svg/683px-ISO_C%2B%2B_Logo.svg.png" alt="C++ Icon">
+        <img id="C++ icon" src="icons/cpp-icon.png" alt="C++ icon">
         <span class="skill-name">C++</span>
     </div>
     <div class="skill-item">
-        <img id="javaIcon" src="https://static-00.iconduck.com/assets.00/java-icon-1511x2048-6ikx8301.png" alt="Java Icon">
+        <img id="javaIcon" src="icons/java-icon.png" alt="Java icon">
         <span class="skill-name">Java</span>
     </div>
     <h3>Web Development</h3>
     <div class="skill-item">
-        <img id="htmlIcon" src="https://icons.iconarchive.com/icons/cornmanthe3rd/plex/512/Other-html-5-icon.png" alt="HTML Icon">
+        <img id="htmlIcon" src="icons/html-icon.png" alt="HTML icon">
         <span class="skill-name">HTML</span>
     </div>
     <div class="skill-item">
-        <img id="cssIcon" src="https://img.icons8.com/?size=512&id=21278&format=png" alt="CSS Icon">
+        <img id="cssIcon" src="icons/css-icon.png" alt="CSS icon">
         <span class="skill-name">CSS</span>
     </div>
     <div class="skill-item">
-        <img id="jsIcon" src="https://static.vecteezy.com/system/resources/previews/027/127/463/non_2x/javascript-logo-javascript-icon-transparent-free-png.png" alt="JS Icon">
+        <img id="jsIcon" src="icons/js-icon.png" alt="JavaScript icon">
         <span class="skill-name">JavaScript</span>
     </div>
     <div class="skill-item">
-        <img id="reactIcon" src="https://static-00.iconduck.com/assets.00/react-icon-2048x2048-o8k3ymqa.png" alt="React Icon">
+        <img id="reactIcon" src="icons/react.icon.png" alt="React icon">
         <span class="skill-name">React.js</span>
     </div>
     <h3>Operating Systems</h3>
     <div class="skill-item">
-        <img id="windowsIcon" src="https://i.redd.it/ne6ukkej06t71.png" alt="Windows Icon">
+        <img id="windowsIcon" src="icons/windows-icon.png" alt="Windows icon">
         <span class="skill-name">Windows</span>
     </div>
     <div class="skill-item">
-        <img id="macIcon" src="https://upload.wikimedia.org/wikipedia/commons/c/c9/Finder_Icon_macOS_Big_Sur.png" alt="Mac Icon">
+        <img id="macIcon" src="icons/mac-icon.png" alt="macOS icon">
         <span class="skill-name">macOS</span>
     </div>
     <div class="skill-item">
-        <img id="linuxIcon" src="https://static-00.iconduck.com/assets.00/linux-icon-2048x2048-sy06t4un.png" alt="Linux Icon">
+        <img id="linuxIcon" src="icons/linux-icon.png" alt="Linux icon">
         <span class="skill-name">Linux</span>
     </div>
     <h3>Software & Developer Tools</h3>
     <div class="skill-item">
-        <img id="vscodeIcon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Visual_Studio_Code_1.35_icon.svg/512px-Visual_Studio_Code_1.35_icon.svg.png" alt="VS Code Icon">
+        <img id="vscodeIcon" src="icons/vscode-icon.png" alt="VS Code icon">
         <span class="skill-name">VS Code</span>
     </div>
     <div class="skill-item">
-        <img id="githubIcon" src="https://cdn-icons-png.freepik.com/512/5968/5968866.png" alt="GitHub Icon">
+        <img id="githubIcon" src="icons/github-icon.png" alt="GitHub icon">
         <span class="skill-name">GitHub</span>
     </div>
     <div class="skill-item">
-        <img id="gitIcon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Git_icon.svg/2048px-Git_icon.svg.png" alt="Git Icon">
+        <img id="gitIcon" src="icons/git-icon.png" alt="Git icon">
         <span class="skill-name">Git</span>
     </div>
     <div class="skill-item">
-        <img id="intellijIcon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/IntelliJ_IDEA_Icon.svg/2048px-IntelliJ_IDEA_Icon.svg.png" alt="IntelliJ Icon">
+        <img id="intellijIcon" src="icons/intellij-icon.png" alt="IntelliJ IDEA icon">
         <span class="skill-name">IntelliJ IDEA</span>
     </div>
     <div class="skill-item">
-        <img id="clionIcon" src="https://static-00.iconduck.com/assets.00/clion-icon-2048x2048-9jybcelh.png" alt="CLion Icon">
+        <img id="clionIcon" src="icons/clion-icon.png" alt="CLion icon">
         <span class="skill-name">CLion</span>
     </div>
     <div class="skill-item">
-        <img id="pycharmIcon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/PyCharm_Icon.svg/1024px-PyCharm_Icon.svg.png" alt="PyCharm Icon">
+        <img id="pycharmIcon" src="icons/pycharm-icon.png" alt="PyCharm icon">
         <span class="skill-name">PyCharm</span>
     </div>
     <div class="skill-item">
-        <img id="msofficeIcon" src="https://img.icons8.com/color/512/microsoft-office-2019.png" alt="MS Office Icon">
+        <img id="msofficeIcon" src="icons/ms-icon.png" alt="Microsoft Office icon">
         <span class="skill-name">MS Office</span>
     </div>
 </div>
@@ -154,8 +162,8 @@
                 <h3>Travel Advisor Website</h3>
                 <div class="project-meta">
                     <span class="project-tag date-tag">April 2025</span>
-                    <span class="project-tag tech-tag">React.js <img src="https://static-00.iconduck.com/assets.00/react-icon-2048x2048-o8k3ymqa.png" alt="React.js"></span>
-                    <span class="project-tag tech-tag">Tailwind CSS <img src="https://static-00.iconduck.com/assets.00/tailwind-css-icon-2048x1229-u8dzt4uh.png" alt="Tailwind CSS"></span>
+                    <span class="project-tag tech-tag">React.js <img src="icons/react.icon.png" alt="React.js"></span>
+                    <span class="project-tag tech-tag">Tailwind CSS <img src="icons/tailwind-icon.png" alt="Tailwind CSS"></span>
                 </div>
             </div>
             <div class="project-content">
@@ -175,9 +183,9 @@
                 <h3>Personal Portfolio Website</h3>
                 <div class="project-meta">
                     <span class="project-tag date-tag">February 2025</span>
-                    <span class="project-tag tech-tag">HTML <img src="https://icons.iconarchive.com/icons/cornmanthe3rd/plex/512/Other-html-5-icon.png" alt="HTML"></span>
-                    <span class="project-tag tech-tag">CSS <img src="https://img.icons8.com/?size=512&id=21278&format=png" alt="CSS"></span>
-                    <span class="project-tag tech-tag">JavaScript <img src="https://static.vecteezy.com/system/resources/previews/027/127/463/non_2x/javascript-logo-javascript-icon-transparent-free-png.png" alt="JavaScript"></span>
+                    <span class="project-tag tech-tag">HTML <img src="icons/html-icon.png" alt="HTML"></span>
+                    <span class="project-tag tech-tag">CSS <img src="icons/css-icon.png" alt="CSS"></span>
+                    <span class="project-tag tech-tag">JavaScript <img src="icons/js-icon.png" alt="JavaScript"></span>
                 </div>
             </div>
             <div class="project-content">
@@ -196,7 +204,7 @@
                 <h3>Language Learning Application</h3>
                 <div class="project-meta">
                     <span class="project-tag date-tag">December 2024</span>
-                    <span class="project-tag tech-tag">Python <img src="https://cdn3.iconfinder.com/data/icons/logos-and-brands-adobe/512/267_Python-512.png" alt="Python"></span>
+                    <span class="project-tag tech-tag">Python <img src="icons/python-icon.png" alt="Python"></span>
                 </div>
             </div>
             <div class="project-content">
@@ -214,7 +222,7 @@
                 <h3>Snake Survival Game</h3>
                 <div class="project-meta">
                     <span class="project-tag date-tag">June 2022</span>
-                    <span class="project-tag tech-tag">Java <img src="https://static-00.iconduck.com/assets.00/java-icon-1511x2048-6ikx8301.png" alt="Java"></span>
+                    <span class="project-tag tech-tag">Java <img src="icons/java-icon.png" alt="Java"></span>
                 </div>
             </div>
             <div class="project-content">
@@ -308,23 +316,23 @@
     <div class="dock-separator"></div>
 
     <a href="https://www.linkedin.com/in/rainzhang05/" target="_blank" rel="noopener noreferrer" class="dock-item" aria-label="LinkedIn">
-        <img src="https://cdn3.iconfinder.com/data/icons/2018-social-media-black-and-white-logos/1000/2018_social_media_popular_app_logo_linkedin-512.png" alt="LinkedIn">
+        <img src="icons/linkedin-icon.png" alt="LinkedIn">
     </a>
 
     <a href="https://github.com/rainzhang05" target="_blank" rel="noopener noreferrer" class="dock-item" aria-label="GitHub" id="githubDock">
-        <img src="https://icons.veryicon.com/png/o/object/material_design_icons/github-circle-1.png" alt="GitHub">
+        <img src="icons/github-dock-icon.png" alt="GitHub">
     </a>
 
     <a href="https://discordapp.com/users/rain_79154" target="_blank" rel="noopener noreferrer" class="dock-item" aria-label="Discord" id="discordDock">
-        <img src="https://cdn-icons-png.flaticon.com/512/3670/3670325.png" alt="Discord">
+        <img src="icons/discord-icon.png" alt="Discord">
     </a>
 
     <a href="mailto:rainzhang.zty@gmail.com" class="dock-item" aria-label="Email" id="emailDock">
-        <img src="https://cdn3.iconfinder.com/data/icons/web-ui-3/128/Mail-2-512.png" alt="Email">
+        <img src="icons/email-icon.png" alt="Email">
     </a>
 
     <a href="tel:+12363337191" class="dock-item" aria-label="Phone" id="phoneDock">
-        <img src="https://icons.veryicon.com/png/o/miscellaneous/yunrenui-original-ui-of-fool-cloud/phone-circle.png" alt="Phone">
+        <img src="icons/phone-icon.png" alt="Phone">
     </a>
 
     <div class="dock-separator"></div>
