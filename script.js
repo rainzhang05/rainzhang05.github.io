@@ -286,16 +286,49 @@ function setupContactForm() {
 
 // Setup Project Cards - open project details in a modal dialog
 function setupProjectCards() {
-    const readMoreButtons = document.querySelectorAll(".read-more")
+    const projectCards = document.querySelectorAll(".project-card")
 
-    readMoreButtons.forEach((button) => {
-        if (button.dataset.modalBound === "true") return
+    projectCards.forEach((card) => {
+        if (card.dataset.modalBound === "true") return
 
-        button.dataset.modalBound = "true"
-        button.addEventListener("click", (event) => {
+        card.dataset.modalBound = "true"
+
+        if (!card.hasAttribute("tabindex")) {
+            card.setAttribute("tabindex", "0")
+        }
+
+        if (!card.hasAttribute("role")) {
+            card.setAttribute("role", "button")
+        }
+
+        const title = card.querySelector(".project-header h3")
+        if (title && !card.hasAttribute("aria-label")) {
+            card.setAttribute("aria-label", `Open details for the ${title.textContent.trim()} project`)
+        }
+
+        const cardContent = card.querySelector(".project-content")
+
+        card.addEventListener("click", (event) => {
+            if (cardContent && !cardContent.contains(event.target)) {
+                return
+            }
+
             event.preventDefault()
-            const card = button.closest(".project-card")
-            if (card) {
+            openProjectModal(card)
+        })
+
+        card.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                event.preventDefault()
+                openProjectModal(card)
+            } else if (event.key === " ") {
+                event.preventDefault()
+            }
+        })
+
+        card.addEventListener("keyup", (event) => {
+            if (event.key === " ") {
+                event.preventDefault()
                 openProjectModal(card)
             }
         })
@@ -305,8 +338,8 @@ function setupProjectCards() {
 function openProjectModal(card) {
     if (!card) return
 
-    // Close any existing modal before opening a new one
-    closeProjectModal()
+    // Close any existing modal instantly before opening a new one
+    closeProjectModal({ immediate: true })
 
     lastFocusedElement = document.activeElement
 
@@ -322,6 +355,7 @@ function openProjectModal(card) {
     closeButton.className = "project-modal-close"
     closeButton.setAttribute("aria-label", "Close project details")
     closeButton.innerHTML = "&times;"
+    closeButton.type = "button"
 
     modal.appendChild(closeButton)
 
@@ -365,9 +399,35 @@ function openProjectModal(card) {
 
     document.body.classList.add("modal-open")
 
-    // Trigger fade-in transition
+    const cardRect = card.getBoundingClientRect()
+    const cardStyles = window.getComputedStyle(card)
+    const modalRect = modal.getBoundingClientRect()
+    const deltaX = cardRect.left - modalRect.left
+    const deltaY = cardRect.top - modalRect.top
+    const scaleX = modalRect.width === 0 ? 1 : cardRect.width / modalRect.width
+    const scaleY = modalRect.height === 0 ? 1 : cardRect.height / modalRect.height
+    const initialBorderRadius = cardStyles.borderRadius
+
+    modal.classList.add("project-modal-animating")
+    if (initialBorderRadius) {
+        modal.style.borderRadius = initialBorderRadius
+    }
+    modal.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(${scaleX}, ${scaleY})`
+
+    const handleOpenTransitionEnd = (event) => {
+        if (event.target !== modal || event.propertyName !== "transform") return
+        modal.classList.remove("project-modal-animating")
+        modal.removeEventListener("transitionend", handleOpenTransitionEnd)
+    }
+
+    modal.addEventListener("transitionend", handleOpenTransitionEnd)
+
     requestAnimationFrame(() => {
         overlay.classList.add("active")
+        requestAnimationFrame(() => {
+            modal.style.transform = ""
+            modal.style.borderRadius = ""
+        })
     })
 
     const handleKeyDown = (event) => {
@@ -413,20 +473,28 @@ function openProjectModal(card) {
 
     modal.addEventListener("keydown", handleFocusTrap)
 
-    closeButton.focus()
+    closeButton.focus({ preventScroll: true })
 
     activeProjectModal = {
         overlay,
         handleKeyDown,
         modal,
         handleFocusTrap,
+        card,
+        handleOpenTransitionEnd,
+        isClosing: false,
     }
 }
 
-function closeProjectModal() {
+function closeProjectModal(options = {}) {
     if (!activeProjectModal) return
 
-    const { overlay, handleKeyDown, modal, handleFocusTrap } = activeProjectModal
+    const { immediate = false } = options
+    const { overlay, handleKeyDown, modal, handleFocusTrap, card, handleOpenTransitionEnd } = activeProjectModal
+
+    if (activeProjectModal.isClosing && !immediate) {
+        return
+    }
 
     document.removeEventListener("keydown", handleKeyDown)
 
@@ -434,28 +502,71 @@ function closeProjectModal() {
         modal.removeEventListener("keydown", handleFocusTrap)
     }
 
-    overlay.classList.remove("active")
-    overlay.addEventListener(
-        "transitionend",
-        () => {
-            overlay.remove()
-        },
-        { once: true }
-    )
+    if (modal && handleOpenTransitionEnd) {
+        modal.removeEventListener("transitionend", handleOpenTransitionEnd)
+    }
 
-    // Fallback removal in case the transitionend doesn't fire
-    setTimeout(() => {
-        if (overlay.parentElement) {
+    let cleanupCalled = false
+    const cleanup = () => {
+        if (cleanupCalled) return
+        cleanupCalled = true
+
+        if (overlay && overlay.parentElement) {
             overlay.remove()
         }
-    }, 400)
 
-    document.body.classList.remove("modal-open")
+        document.body.classList.remove("modal-open")
 
-    if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
-        lastFocusedElement.focus({ preventScroll: true })
+        if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
+            lastFocusedElement.focus({ preventScroll: true })
+        }
+        lastFocusedElement = null
+
+        activeProjectModal = null
     }
-    lastFocusedElement = null
 
-    activeProjectModal = null
+    if (immediate) {
+        cleanup()
+        return
+    }
+
+    if (!card || !document.body.contains(card)) {
+        overlay.classList.remove("active")
+        setTimeout(() => {
+            cleanup()
+        }, 300)
+        return
+    }
+
+    activeProjectModal.isClosing = true
+
+    overlay.classList.remove("active")
+    modal.classList.add("project-modal-animating")
+
+    const modalRect = modal.getBoundingClientRect()
+    const cardRect = card.getBoundingClientRect()
+    const deltaX = cardRect.left - modalRect.left
+    const deltaY = cardRect.top - modalRect.top
+    const scaleX = modalRect.width === 0 ? 1 : cardRect.width / modalRect.width
+    const scaleY = modalRect.height === 0 ? 1 : cardRect.height / modalRect.height
+    const targetBorderRadius = window.getComputedStyle(card).borderRadius
+
+    if (targetBorderRadius) {
+        modal.style.borderRadius = targetBorderRadius
+    }
+
+    modal.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(${scaleX}, ${scaleY})`
+
+    const handleCloseTransitionEnd = (event) => {
+        if (event.target !== modal || event.propertyName !== "transform") return
+        modal.removeEventListener("transitionend", handleCloseTransitionEnd)
+        cleanup()
+    }
+
+    modal.addEventListener("transitionend", handleCloseTransitionEnd)
+
+    setTimeout(() => {
+        modal.removeEventListener("transitionend", handleCloseTransitionEnd)
+        cleanup()
+    }, 650)
 }

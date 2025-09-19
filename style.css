@@ -508,48 +508,36 @@ body.dark-mode nav ul li a:hover {
     transition: all 0.3s ease;
 }
 
-.project-description.expanded {
-    -webkit-line-clamp: unset;
-    display: block;
+.project-card {
+    position: relative;
+    outline: none;
 }
 
-.read-more {
-    display: inline-block;
-    color: #6e5cf5;
-    margin-top: 10px;
-    font-size: 16px;
+.project-card:focus {
+    outline: none;
+}
+
+.project-card:focus-visible {
+    outline: 3px solid #6e5cf5;
+    outline-offset: 4px;
+}
+
+.project-card[role="button"] .project-content {
     cursor: pointer;
-    transition: color 0.3s ease;
-    font-weight: 500;
-    background: none;
-    border: none;
-    padding: 0;
-    font-family: inherit;
+    border-radius: 0 0 15px 15px;
+    transition: background-color 0.3s ease;
 }
 
-.read-more:hover {
-    color: #8884ff;
-    text-decoration: underline;
+.project-card:focus-visible .project-content {
+    background-color: rgba(110, 92, 245, 0.06);
 }
 
-.read-more:focus-visible {
-    outline: 2px solid #6e5cf5;
-    outline-offset: 2px;
+.project-card[role="button"] .project-content:hover {
+    background-color: rgba(110, 92, 245, 0.06);
 }
 
-.read-less {
-    display: none;
-    color: #6e5cf5;
-    margin-top: 10px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: color 0.3s ease;
-    font-weight: 500;
-}
-
-.read-less:hover {
-    color: #8884ff;
-    text-decoration: underline;
+.project-card[role="button"] .project-content:active {
+    background-color: rgba(110, 92, 245, 0.12);
 }
 
 body.modal-open {
@@ -586,6 +574,12 @@ body.modal-open {
     flex-direction: column;
     overflow: hidden;
     position: relative;
+    transform-origin: top left;
+    transition: transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1), border-radius 0.35s ease;
+}
+
+.project-modal.project-modal-animating {
+    will-change: transform, border-radius;
 }
 
 .project-modal .project-header {
@@ -997,14 +991,20 @@ body.dark-mode .education-tag {
     color: #b1a8f5;
 }
 
-body.dark-mode .read-more,
-body.dark-mode .read-less {
-    color: #b1a8f5;
+body.dark-mode .project-card:focus-visible {
+    outline-color: #b1a8f5;
 }
 
-body.dark-mode .read-more:hover,
-body.dark-mode .read-less:hover {
-    color: #c4bdf7;
+body.dark-mode .project-card:focus-visible .project-content {
+    background-color: rgba(177, 168, 245, 0.12);
+}
+
+body.dark-mode .project-card[role="button"] .project-content:hover {
+    background-color: rgba(177, 168, 245, 0.08);
+}
+
+body.dark-mode .project-card[role="button"] .project-content:active {
+    background-color: rgba(177, 168, 245, 0.16);
 }
 
 body.dark-mode .project-modal-overlay {
