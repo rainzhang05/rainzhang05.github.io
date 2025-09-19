@@ -2,25 +2,29 @@
 @font-face {
     font-family: "Montserrat";
     font-weight: 400;
-    src: url(/fonts/Montserrat-Regular.ttf);
+    src: url("fonts/Montserrat-Regular.ttf");
+    font-display: block;
 }
 
 @font-face {
     font-family: "Montserrat";
     font-weight: 500;
-    src: url(/fonts/Montserrat-Medium.ttf);
+    src: url("fonts/Montserrat-Medium.ttf");
+    font-display: block;
 }
 
 @font-face {
     font-family: "Montserrat";
     font-weight: 700;
-    src: url(/fonts/Montserrat-Bold.ttf);
+    src: url("fonts/Montserrat-Bold.ttf");
+    font-display: block;
 }
 
 @font-face {
     font-family: "Audiowide";
     font-weight: 400;
-    src: url(/fonts/Audiowide-Regular.ttf);
+    src: url("fonts/Audiowide-Regular.ttf");
+    font-display: block;
 }
 
 /* Preventing Horizontal Scrolling */
@@ -44,6 +48,40 @@ body {
     font-size: 19px;
     line-height: 1.6;
     transition: background-color 0.5s ease;
+}
+
+body.intro-prep .navigationBar,
+body.intro-prep #introHeading,
+body.intro-prep #introName,
+body.intro-prep #introParagraph,
+body.intro-prep .resumeButton {
+    opacity: 0;
+    filter: blur(10px);
+    transform: translateY(20px);
+}
+
+.intro-target {
+    opacity: 0;
+    filter: blur(10px);
+    transform: translateY(20px);
+}
+
+@keyframes introFadeUp {
+    from {
+        opacity: 0;
+        filter: blur(10px);
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateY(0);
+    }
+}
+
+body.intro-animate .intro-target {
+    animation: introFadeUp 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    animation-delay: var(--intro-delay, 0s);
 }
 
 /* Navigation Bar */
@@ -244,20 +282,15 @@ body.dark-mode nav ul li a:hover {
     transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
 }
 
-.resumeButton img {
+.resumeButton svg {
     width: 22px;
     height: 22px;
-    filter: invert(1);
     transition: transform 0.3s ease;
 }
 
 .resumeButton:hover {
     transform: translateY(-5px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-}
-
-.resumeButton:hover img {
-    transform: translateX(3px);
+    box-shadow: 0 6px 15px rgba(110, 92, 245, 0.4);
 }
 
 .resumeButton::before {
@@ -574,12 +607,19 @@ body.modal-open {
     flex-direction: column;
     overflow: hidden;
     position: relative;
-    transform-origin: top left;
-    transition: transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1), border-radius 0.35s ease;
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
+    transition: opacity 0.35s ease, transform 0.35s ease;
 }
 
-.project-modal.project-modal-animating {
-    will-change: transform, border-radius;
+.project-modal.project-modal-open {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.project-modal.project-modal-closing {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
 }
 
 .project-modal .project-header {
