@@ -706,14 +706,27 @@ body.modal-open {
 }
 
 .project-modal .project-summary {
-    margin-bottom: 20px;
+    display: none;
 }
 
 .project-description-rich {
     padding-left: 0;
     display: flex;
     flex-direction: column;
-    gap: clamp(32px, 3vw, 44px);
+}
+
+.project-description-rich > * + * {
+    margin-top: clamp(36px, 3.5vw, 52px);
+}
+
+.project-description-rich .project-intro {
+    font-size: clamp(15px, 1.05vw, 18px);
+    line-height: 1.7;
+    color: inherit;
+}
+
+.project-description-rich .project-intro p {
+    margin: 0;
 }
 
 .project-description-rich .project-section {
