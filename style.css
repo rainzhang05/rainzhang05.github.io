@@ -529,6 +529,71 @@ body.dark-mode nav ul li a:hover {
     font-size: 20px;
 }
 
+.project-title-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.project-title-row h3 {
+    margin: 0;
+}
+
+.project-links {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+    flex-wrap: wrap;
+}
+
+.project-link-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid #8884ff;
+    background-color: rgba(136, 132, 255, 0.06);
+    color: #8884ff;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.2;
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.project-link-button img {
+    width: 16px;
+    height: 16px;
+}
+
+.project-link-button.icon-only {
+    padding: 6px;
+    width: 38px;
+    height: 38px;
+}
+
+.project-link-button:hover,
+.project-link-button:focus-visible {
+    background-color: rgba(136, 132, 255, 0.12);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(17, 12, 65, 0.18);
+}
+
+.project-link-button:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 12px rgba(17, 12, 65, 0.14);
+}
+
+.project-link-button:focus-visible {
+    outline: 2px solid rgba(136, 132, 255, 0.45);
+    outline-offset: 2px;
+}
+
 .project-meta,
 .education-meta {
     display: flex;
@@ -1172,6 +1237,29 @@ body.dark-mode .education-tag {
     color: #b1a8f5;
 }
 
+body.dark-mode .project-link-button {
+    border: 1px solid rgba(207, 202, 255, 0.6);
+    color: rgba(207, 202, 255, 0.95);
+    background-color: rgba(136, 132, 255, 0.18);
+    box-shadow: 0 2px 8px rgba(5, 3, 25, 0.35);
+}
+
+body.dark-mode .project-link-button:hover,
+body.dark-mode .project-link-button:focus-visible {
+    background-color: rgba(136, 132, 255, 0.32);
+    box-shadow: 0 10px 26px rgba(3, 2, 18, 0.55);
+}
+
+body.dark-mode .project-link-button:active {
+    background-color: rgba(136, 132, 255, 0.24);
+    box-shadow: 0 6px 18px rgba(3, 2, 18, 0.45);
+}
+
+body.dark-mode .project-link-button:focus-visible {
+    outline: 2px solid rgba(207, 202, 255, 0.8);
+    outline-offset: 2px;
+}
+
 body.dark-mode .project-card:focus-visible {
     outline-color: #b1a8f5;
 }
@@ -1471,6 +1559,16 @@ body.dark-mode #dock .dock-item img {
         width: 50px;
         height: 50px;
         margin: 15px;
+    }
+
+    .project-title-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .project-links {
+        margin-left: 0;
     }
 }
 
