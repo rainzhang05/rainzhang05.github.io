@@ -479,12 +479,15 @@ body.dark-mode nav ul li a:hover {
     gap: 30px;
     margin-top: 30px;
     grid-auto-flow: row;
-    align-items: start;
+    align-items: stretch;
+}
+
+.projects-grid {
+    grid-auto-rows: 1fr;
 }
 
 .education-grid {
     grid-auto-rows: 1fr;
-    align-items: stretch;
 }
 
 .project-card,
@@ -500,6 +503,12 @@ body.dark-mode nav ul li a:hover {
 .education-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.project-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .education-card {
@@ -566,9 +575,9 @@ body.dark-mode nav ul li a:hover {
 
 .project-summary {
     margin: 0 0 12px;
-    font-size: 16px;
+    font-size: clamp(16px, 1.1vw, 19px);
     line-height: 1.6;
-    color: #464159;
+    color: inherit;
 }
 
 .project-card .project-summary {
@@ -576,6 +585,12 @@ body.dark-mode nav ul li a:hover {
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+}
+
+.project-card .project-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .project-description {
