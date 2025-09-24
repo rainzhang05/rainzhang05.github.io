@@ -486,6 +486,10 @@ function openProjectModal(card) {
     const content = card.querySelector(".project-content")
     if (content) {
         const contentClone = content.cloneNode(true)
+        const summaryInClone = contentClone.querySelector(".project-summary")
+        if (summaryInClone) {
+            summaryInClone.remove()
+        }
         const readMoreButton = contentClone.querySelector(".read-more")
         if (readMoreButton) {
             readMoreButton.remove()
