@@ -642,7 +642,7 @@ body.modal-open {
 .project-modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.45);
+    background: rgba(0, 0, 0, 0.28);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -662,10 +662,9 @@ body.modal-open {
 .project-modal {
     background-color: #ffffff;
     border-radius: 20px;
-    width: 80vw;
-    height: 80vh;
-    max-width: 1100px;
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+    width: 90vw;
+    height: 90vh;
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.18);
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -837,8 +836,8 @@ body.modal-open {
 
 @media (max-width: 900px) {
     .project-modal {
-        width: 90vw;
-        height: 85vh;
+        width: 92vw;
+        height: 90vh;
     }
 
     .project-modal .project-header,
@@ -1190,12 +1189,12 @@ body.dark-mode .project-card[role="button"] .project-content:active {
 }
 
 body.dark-mode .project-modal-overlay {
-    background: rgba(0, 0, 0, 0.75);
+    background: rgba(0, 0, 0, 0.6);
 }
 
 body.dark-mode .project-modal {
     background-color: #1f1f1f;
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.45);
 }
 
 body.dark-mode .project-modal .project-header {
