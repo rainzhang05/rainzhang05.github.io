@@ -37,6 +37,16 @@ body {
     user-select: none;
 }
 
+html {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
 /* Body */
 body {
     font-family: "Montserrat", sans-serif;
@@ -48,6 +58,14 @@ body {
     font-size: 19px;
     line-height: 1.6;
     transition: background-color 0.5s ease;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+body::-webkit-scrollbar {
+    width: 0;
+    height: 0;
 }
 
 body.intro-prep .navigationBar,
