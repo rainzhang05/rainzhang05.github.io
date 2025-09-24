@@ -164,13 +164,169 @@
             </div>
             <div class="project-content">
                 <p class="project-summary">Automated trip planning website integrating OpenAI and Tripadvisor APIs.</p>
-                <ul class="project-description">
-                    <li>Built a React.js and Tailwind CSS website for automated trip planning.</li>
-                    <li>Integrated DeepSeek AI and TripAdvisor APIs for real-time travel assistance and hotel recommendations.</li>
-                    <li>Developed a questionnaire-based itinerary generator for personalized and budget-friendly trips.</li>
-                    <li>Implemented a travel safety index using user reviews.</li>
-                    <li>Collaborated with a team of four using Git and GitHub for version control.</li>
-                </ul>
+                <div class="project-description project-description-rich">
+                    <p class="project-overview">
+                        Travel Advisor is an interactive, AI-enhanced travel planning web application that guides users through
+                        building a trip from scratch. It supports both an assisted (AI recommendation) path and a manual selection
+                        path. Users can (optionally) let the system suggest a destination based on traveler details and dates, or
+                        directly enter a city and country. The app then gathers or infers destination imagery and descriptive
+                        context, calculates trip duration, and presents categorized travel content, all wrapped in a smooth,
+                        animated multi-step experience. A floating AI chat assistant is always available for follow-up questions,
+                        tips, or clarification. The design emphasizes clarity (step-by-step flow), dynamism (Framer Motion
+                        animations), and adaptability (AI fallbacks when data is missing).
+                    </p>
+
+                    <div class="project-section">
+                        <h4>Core Features</h4>
+                        <ul class="project-section-list">
+                            <li>
+                                <span class="feature-title">AI Destination Recommendation</span>
+                                <p>Uses traveler count, passport/visa info, and trip dates to generate a suggested destination via OpenAI, with retry logic to handle transient failures.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Manual Destination Mode</span>
+                                <p>Allows travelers to choose a country and city manually while the system performs basic spelling correction before fetching data.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Traveler Management</span>
+                                <p>Supports adding or removing multiple travelers, tracking passport and visa details that inform context-rich AI prompts.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Intelligent Date Selection</span>
+                                <p>Features custom calendars for departure and return dates with outside-click closing, month navigation, and automatic inclusive trip duration calculation.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Results Page</span>
+                                <p>Retrieves destination imagery via a TripAdvisor-style API with graceful loading, error, and placeholder states; supplies descriptive text from external data with an AI-generated fallback; and assembles a trip summary covering destination, formatted dates, duration, traveler count (AI path), and dynamic category tabs.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Category Tabs (Extensible)</span>
+                                <p>Provides a modular layout for browsing segmented travel resources—such as hotels or activities—tailored to the selected destination.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Floating AI Chat Assistant</span>
+                                <p>Maintains conversation history for continuous Q&amp;A, complete with a typing indicator and robust fallback messaging.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Smooth Animated UX</span>
+                                <p>Delivers step transitions, content fades, and slides using Framer Motion to keep the multi-step flow clear and engaging.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">State Reset &amp; Replanning</span>
+                                <p>Includes a one-click reset that restores the initial configuration for rapid iteration or exploring alternative scenarios.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Data Quality &amp; Resilience</span>
+                                <p>Guards data integrity with spelling verification for manual entries, retry loops for AI calls, and cautious fetch patterns that avoid unnecessary requests.</p>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="project-section">
+                        <h4>Tech Stack</h4>
+                        <ul class="project-section-list">
+                            <li>
+                                <span class="feature-title">Framework &amp; Build</span>
+                                <ul class="feature-detail-list">
+                                    <li>React 18 (functional components + hooks) for UI composition.</li>
+                                    <li>Vite for rapid development server, fast HMR, and optimized production bundles.</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <span class="feature-title">UI &amp; Styling</span>
+                                <ul class="feature-detail-list">
+                                    <li>Tailwind CSS for utility-first, responsive design.</li>
+                                    <li>Lucide React icon set for lightweight, scalable SVG icons.</li>
+                                    <li>Custom component architecture spanning Header, Footer, multi-step forms, Results, and FloatingChat components.</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <span class="feature-title">Animation &amp; Interaction</span>
+                                <p>Framer Motion powers declarative motion, including entrances, layout transitions, and staged fade/slide effects.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Data &amp; Logic Utilities</span>
+                                <ul class="feature-detail-list">
+                                    <li>Axios for structured HTTP requests to backend or external travel services.</li>
+                                    <li>date-fns for date formatting and accurate trip duration calculations.</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <span class="feature-title">AI &amp; Intelligence</span>
+                                <ul class="feature-detail-list">
+                                    <li>Destination recommendation for the assisted path.</li>
+                                    <li>Fallback destination descriptions when external data lacks narrative depth.</li>
+                                    <li>Live conversational assistant powering the FloatingChat experience.</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <span class="feature-title">External / Backend Layer</span>
+                                <p>Express backend (deployed separately) proxies TripAdvisor-style location data and secures AI request handling.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Testing &amp; Quality</span>
+                                <p>Cypress end-to-end suites validate multi-step progression, results rendering, and chat functionality.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Deployment</span>
+                                <p>Vercel hosts both the frontend and serverless backend for fast global distribution.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Architectural Style</span>
+                                <ul class="feature-detail-list">
+                                    <li>Local state management through React hooks keeps complexity manageable without global stores.</li>
+                                    <li>Prop drilling remains intentional for clarity, with room to evolve toward context providers as features deepen.</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="project-section">
+                        <h4>How It Works</h4>
+                        <ul class="project-section-list">
+                            <li>
+                                <span class="feature-title">Initialization</span>
+                                <p>Visitors land on the Home view with the internal step state set to zero as background visuals, the header, and the floating chat initialize.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Mode Selection (AI vs Manual)</span>
+                                <p>Users decide whether to let AI suggest a destination; the choice toggles <code>useAiRecommendation</code> and advances the workflow.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Conditional Data Collection</span>
+                                <p>The AI path captures traveler records—including passport and visa entries—to enrich prompts, while the manual path accepts typed destinations with AI-assisted spell checking.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Date Selection (Two Steps)</span>
+                                <p>Departure and return calendars support month navigation and click-outside dismissal; once both dates are chosen, the trip duration is computed using an inclusive day count.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Destination Resolution &amp; Data Gathering</span>
+                                <p>The AI path builds a structured prompt and retries OpenAI calls up to two times when needed, while the manual path validates spelling before querying backend services for imagery and metadata; missing descriptions trigger a secondary AI summary.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Rendering Results</span>
+                                <p>The results view assembles a contextual title, destination visuals or placeholders, formatted dates with duration, traveler counts for the AI path, descriptive copy, and dynamic category tabs.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Interaction Layer (Parallel)</span>
+                                <p>The floating chat remains available throughout, appending user messages, streaming AI replies asynchronously, and showing a typing indicator until responses arrive.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">User Control &amp; Recovery</span>
+                                <p>Back navigation lets users revisit previous steps without losing progress, and Start Over resets travelers, dates, destinations, categories, and AI mode selections.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Error &amp; Loading Handling</span>
+                                <p>Distinct placeholders communicate loading, error, and empty states for images or descriptions, backed by resilient fallback messaging.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Completion &amp; Iteration</span>
+                                <p>Travelers can explore additional categories, continue the chat, or restart to generate alternate AI recommendations or experiment with manual destinations.</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
 
