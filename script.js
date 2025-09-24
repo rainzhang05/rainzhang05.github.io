@@ -80,6 +80,30 @@ function animateIntro() {
     introElements.forEach((element, index) => {
         element.classList.add("intro-target")
         element.style.setProperty("--intro-delay", `${index * 0.12}s`)
+
+        const clearIntroState = () => {
+            element.classList.remove("intro-target")
+            element.style.removeProperty("--intro-delay")
+        }
+
+        const handleAnimationEnd = (event) => {
+            if (event.target !== element) {
+                return
+            }
+
+            clearIntroState()
+            element.removeEventListener("animationend", handleAnimationEnd)
+            clearTimeout(fallbackTimeout)
+        }
+
+        element.addEventListener("animationend", handleAnimationEnd)
+
+        const fallbackTimeout = setTimeout(() => {
+            if (element.classList.contains("intro-target")) {
+                clearIntroState()
+                element.removeEventListener("animationend", handleAnimationEnd)
+            }
+        }, 1200 + index * 120)
     })
 
     requestAnimationFrame(() => {
