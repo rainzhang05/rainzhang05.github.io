@@ -38,6 +38,43 @@ function initPage() {
 let activeProjectModal = null
 let lastFocusedElement = null
 let projectModalIdCounter = 0
+// Track scroll locking so the page width stays stable when project modals open
+const modalScrollLockState = {
+    locked: false,
+    previousPaddingRight: "",
+}
+
+function applyModalScrollLock() {
+    if (modalScrollLockState.locked) {
+        return
+    }
+
+    const rootElement = document.documentElement
+    const scrollbarWidth = Math.max(0, window.innerWidth - rootElement.clientWidth)
+
+    modalScrollLockState.previousPaddingRight = rootElement.style.paddingRight
+
+    if (scrollbarWidth > 0) {
+        rootElement.style.paddingRight = `${scrollbarWidth}px`
+    }
+
+    rootElement.classList.add("modal-open")
+    document.body.classList.add("modal-open")
+
+    modalScrollLockState.locked = true
+}
+
+function releaseModalScrollLock() {
+    const rootElement = document.documentElement
+
+    rootElement.classList.remove("modal-open")
+    document.body.classList.remove("modal-open")
+
+    rootElement.style.paddingRight = modalScrollLockState.previousPaddingRight
+
+    modalScrollLockState.locked = false
+    modalScrollLockState.previousPaddingRight = ""
+}
 
 function runIntroSequence() {
     const startIntro = () => {
@@ -457,10 +494,9 @@ function openProjectModal(card) {
     }
 
     overlay.appendChild(modal)
-    document.body.appendChild(overlay)
 
-    document.body.classList.add("modal-open")
-    document.documentElement.classList.add("modal-open")
+    applyModalScrollLock()
+    document.body.appendChild(overlay)
 
     requestAnimationFrame(() => {
         overlay.classList.add("active")
@@ -546,8 +582,7 @@ function closeProjectModal(options = {}) {
             overlay.remove()
         }
 
-        document.body.classList.remove("modal-open")
-        document.documentElement.classList.remove("modal-open")
+        releaseModalScrollLock()
 
         if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
             lastFocusedElement.focus({ preventScroll: true })
