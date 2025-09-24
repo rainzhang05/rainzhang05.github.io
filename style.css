@@ -709,6 +709,85 @@ body.modal-open {
     margin-bottom: 20px;
 }
 
+.project-description-rich {
+    padding-left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.project-description-rich .project-overview {
+    margin: 0;
+    font-size: clamp(16px, 1.1vw, 19px);
+    line-height: 1.68;
+}
+
+.project-description-rich .project-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.project-description-rich .project-section h4 {
+    margin: 0;
+    font-size: clamp(18px, 1.2vw, 22px);
+    font-weight: 700;
+    color: #5246f7;
+}
+
+.project-description-rich .project-section-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.project-description-rich .project-section-list > li {
+    background: rgba(110, 92, 245, 0.06);
+    border-radius: 14px;
+    padding: 18px 22px;
+    box-shadow: inset 0 0 0 1px rgba(110, 92, 245, 0.08);
+}
+
+.project-description-rich .project-section-list > li p {
+    margin: 0;
+    line-height: 1.65;
+}
+
+.project-description-rich .feature-title {
+    display: block;
+    font-weight: 600;
+    font-size: clamp(16px, 1.05vw, 19px);
+    margin-bottom: 6px;
+    letter-spacing: 0.01em;
+}
+
+.project-description-rich .feature-detail-list {
+    margin: 12px 0 0 18px;
+    padding: 0;
+    list-style: disc;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.project-description-rich .feature-detail-list li {
+    margin: 0;
+    font-size: clamp(15px, 1.02vw, 18px);
+    line-height: 1.6;
+}
+
+.project-description-rich code {
+    font-family: "Menlo", "Consolas", "Liberation Mono", "Courier New", monospace;
+    background: rgba(110, 92, 245, 0.12);
+    color: #3f2fe0;
+    padding: 2px 6px;
+    border-radius: 6px;
+    font-size: 0.9em;
+}
+
 .project-modal-close {
     position: absolute;
     top: 18px;
@@ -1125,6 +1204,20 @@ body.dark-mode .project-modal-close:hover,
 body.dark-mode .project-modal-close:focus-visible {
     background: rgba(177, 168, 245, 0.2);
     outline: 2px solid #b1a8f5;
+}
+
+body.dark-mode .project-description-rich .project-section h4 {
+    color: #c9c2ff;
+}
+
+body.dark-mode .project-description-rich .project-section-list > li {
+    background: rgba(177, 168, 245, 0.16);
+    box-shadow: inset 0 0 0 1px rgba(177, 168, 245, 0.22);
+}
+
+body.dark-mode .project-description-rich code {
+    background: rgba(177, 168, 245, 0.32);
+    color: #f5f3ff;
 }
 
 /* Override black text in dark mode */
