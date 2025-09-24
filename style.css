@@ -589,6 +589,7 @@ body.dark-mode nav ul li a:hover {
     background-color: rgba(110, 92, 245, 0.12);
 }
 
+html.modal-open,
 body.modal-open {
     overflow: hidden;
 }
@@ -596,7 +597,7 @@ body.modal-open {
 .project-modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.45);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -605,6 +606,7 @@ body.modal-open {
     pointer-events: none;
     transition: opacity 0.3s ease;
     padding: 20px;
+    overscroll-behavior: contain;
 }
 
 .project-modal-overlay.active {
@@ -626,6 +628,7 @@ body.modal-open {
     opacity: 0;
     transform: translateY(24px) scale(0.96);
     transition: opacity 0.35s ease, transform 0.35s ease;
+    overscroll-behavior: contain;
 }
 
 .project-modal.project-modal-open {
@@ -647,6 +650,7 @@ body.modal-open {
     flex: 1;
     overflow-y: auto;
     padding: 30px;
+    overscroll-behavior: contain;
 }
 
 .project-modal .project-description {

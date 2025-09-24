@@ -460,6 +460,7 @@ function openProjectModal(card) {
     document.body.appendChild(overlay)
 
     document.body.classList.add("modal-open")
+    document.documentElement.classList.add("modal-open")
 
     requestAnimationFrame(() => {
         overlay.classList.add("active")
@@ -546,6 +547,7 @@ function closeProjectModal(options = {}) {
         }
 
         document.body.classList.remove("modal-open")
+        document.documentElement.classList.remove("modal-open")
 
         if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
             lastFocusedElement.focus({ preventScroll: true })
