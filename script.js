@@ -38,6 +38,43 @@ function initPage() {
 let activeProjectModal = null
 let lastFocusedElement = null
 let projectModalIdCounter = 0
+// Track scroll locking so the page width stays stable when project modals open
+const modalScrollLockState = {
+    locked: false,
+    previousPaddingRight: "",
+}
+
+function applyModalScrollLock() {
+    if (modalScrollLockState.locked) {
+        return
+    }
+
+    const rootElement = document.documentElement
+    const scrollbarWidth = Math.max(0, window.innerWidth - rootElement.clientWidth)
+
+    modalScrollLockState.previousPaddingRight = rootElement.style.paddingRight
+
+    if (scrollbarWidth > 0) {
+        rootElement.style.paddingRight = `${scrollbarWidth}px`
+    }
+
+    rootElement.classList.add("modal-open")
+    document.body.classList.add("modal-open")
+
+    modalScrollLockState.locked = true
+}
+
+function releaseModalScrollLock() {
+    const rootElement = document.documentElement
+
+    rootElement.classList.remove("modal-open")
+    document.body.classList.remove("modal-open")
+
+    rootElement.style.paddingRight = modalScrollLockState.previousPaddingRight
+
+    modalScrollLockState.locked = false
+    modalScrollLockState.previousPaddingRight = ""
+}
 
 function runIntroSequence() {
     const startIntro = () => {
@@ -80,6 +117,30 @@ function animateIntro() {
     introElements.forEach((element, index) => {
         element.classList.add("intro-target")
         element.style.setProperty("--intro-delay", `${index * 0.12}s`)
+
+        const clearIntroState = () => {
+            element.classList.remove("intro-target")
+            element.style.removeProperty("--intro-delay")
+        }
+
+        const handleAnimationEnd = (event) => {
+            if (event.target !== element) {
+                return
+            }
+
+            clearIntroState()
+            element.removeEventListener("animationend", handleAnimationEnd)
+            clearTimeout(fallbackTimeout)
+        }
+
+        element.addEventListener("animationend", handleAnimationEnd)
+
+        const fallbackTimeout = setTimeout(() => {
+            if (element.classList.contains("intro-target")) {
+                clearIntroState()
+                element.removeEventListener("animationend", handleAnimationEnd)
+            }
+        }, 1200 + index * 120)
     })
 
     requestAnimationFrame(() => {
@@ -425,6 +486,10 @@ function openProjectModal(card) {
     const content = card.querySelector(".project-content")
     if (content) {
         const contentClone = content.cloneNode(true)
+        const summaryInClone = contentClone.querySelector(".project-summary")
+        if (summaryInClone) {
+            summaryInClone.remove()
+        }
         const readMoreButton = contentClone.querySelector(".read-more")
         if (readMoreButton) {
             readMoreButton.remove()
@@ -433,9 +498,9 @@ function openProjectModal(card) {
     }
 
     overlay.appendChild(modal)
-    document.body.appendChild(overlay)
 
-    document.body.classList.add("modal-open")
+    applyModalScrollLock()
+    document.body.appendChild(overlay)
 
     requestAnimationFrame(() => {
         overlay.classList.add("active")
@@ -521,7 +586,7 @@ function closeProjectModal(options = {}) {
             overlay.remove()
         }
 
-        document.body.classList.remove("modal-open")
+        releaseModalScrollLock()
 
         if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
             lastFocusedElement.focus({ preventScroll: true })
