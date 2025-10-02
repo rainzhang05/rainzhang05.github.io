@@ -544,7 +544,7 @@ body.dark-mode nav ul li a:hover {
 .project-links {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
     flex-wrap: wrap;
 }
 
@@ -552,18 +552,22 @@ body.dark-mode nav ul li a:hover {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0;
+    width: 42px;
+    height: 42px;
     border: none;
     background: transparent;
     border-radius: 50%;
     line-height: 0;
     text-decoration: none;
+    flex-shrink: 0;
     transition: transform 0.2s ease, filter 0.2s ease;
 }
 
 .project-link-button img {
-    width: 16px;
-    height: 16px;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: contain;
 }
 
 .project-link-button:hover,
@@ -739,8 +743,26 @@ body.modal-open {
 }
 
 .project-modal .project-header {
-    padding: 30px;
+    padding: 40px;
     border-bottom: 1px solid #f0f0f0;
+}
+
+.project-modal .project-title-row {
+    gap: clamp(16px, 1.6vw, 22px);
+}
+
+.project-modal .project-title-row h3 {
+    font-size: clamp(26px, 2.3vw, 34px);
+}
+
+.project-modal .project-meta {
+    gap: clamp(12px, 1.2vw, 16px);
+}
+
+.project-modal .project-tag {
+    font-size: 16px;
+    padding: 8px 16px;
+    border-radius: 12px;
 }
 
 .project-modal .project-content {
@@ -817,6 +839,25 @@ body.modal-open {
     border-radius: 14px;
     padding: 18px 22px;
     box-shadow: inset 0 0 0 1px rgba(110, 92, 245, 0.08);
+}
+
+.project-description-rich .project-figure {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.project-description-rich .project-figure img {
+    width: 100%;
+    border-radius: 18px;
+    box-shadow: 0 24px 60px rgba(17, 12, 65, 0.14);
+}
+
+.project-description-rich .project-figure figcaption {
+    font-size: 0.92em;
+    color: #4a4a4a;
+    line-height: 1.5;
 }
 
 .project-description-rich .project-section-list > li p {
@@ -1303,6 +1344,14 @@ body.dark-mode .project-description-rich code {
     color: #f5f3ff;
 }
 
+body.dark-mode .project-description-rich .project-figure img {
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+}
+
+body.dark-mode .project-description-rich .project-figure figcaption {
+    color: #dcd9ff;
+}
+
 /* Override black text in dark mode */
 body.dark-mode h1,
 body.dark-mode h2,
@@ -1327,6 +1376,11 @@ body.dark-mode .navigationBar a:hover {
 body.dark-mode #themeIcon,
 body.dark-mode #dock .dock-item img {
     filter: invert(1);
+}
+
+body.dark-mode #macIcon,
+body.dark-mode .project-link-button img {
+    filter: none !important;
 }
 
 @media screen and (min-width: 2000px) and (max-width: 2560px) {

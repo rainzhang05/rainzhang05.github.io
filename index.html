@@ -159,7 +159,7 @@
                     <h3>WebAuthn/FIDO2 Test Application</h3>
                     <div class="project-links">
                         <a href="https://github.com/rainzhang05/python-fido2-webauthn-test" target="_blank" rel="noopener noreferrer" class="project-link-button" aria-label="View WebAuthn/FIDO2 Test Application repository on GitHub">
-                            <img src="icons/github-icon.png" alt="" aria-hidden="true">
+                            <img src="icons/github-dock-icon.png" alt="" aria-hidden="true">
                         </a>
                     </div>
                 </div>
@@ -261,6 +261,10 @@
                             WebAuthn <code>get</code>, and submits the assertion to <code>/api/authenticate/complete</code>, mapping
                             common WebAuthn errors to readable status messages.
                         </p>
+                        <figure class="project-figure">
+                            <img src="images/webauthn-project/simple-authentication.png" alt="Simple authentication tab with register and authenticate controls">
+                            <figcaption>Simple authentication tab showing inline status updates for passkey registration and verification.</figcaption>
+                        </figure>
                     </div>
                     <div class="project-section">
                         <h4>Advanced Authentication</h4>
@@ -284,6 +288,14 @@
                             <code>/api/advanced/authenticate/complete</code>, again surfacing human-friendly outcomes or guidance when
                             no suitable credential is found.
                         </p>
+                        <figure class="project-figure">
+                            <img src="images/webauthn-project/advanced-authentication.png" alt="Advanced authentication tab with expandable panels and configuration options">
+                            <figcaption>Advanced registration view with expandable configuration panels, saved credential summaries, and rich status messaging.</figcaption>
+                        </figure>
+                        <figure class="project-figure">
+                            <img src="images/webauthn-project/advanced-authentication-json-editor.png" alt="Advanced authentication JSON editor synchronized with the configuration form">
+                            <figcaption>JSON editor synced with the advanced configuration panes so hand-edited payloads stay aligned with the UI.</figcaption>
+                        </figure>
                     </div>
                     <div class="project-section">
                         <h4>Saved Credentials and Credential Details</h4>
@@ -307,6 +319,14 @@
                             status updates in the modal, and then closes the modal once the related authenticator entry is
                             highlighted in the MDS table.
                         </p>
+                        <figure class="project-figure">
+                            <img src="images/webauthn-project/credential-details-page-1.png" alt="Saved credentials list with badges highlighting discoverable and PQC traits">
+                            <figcaption>Saved credentials panel with discoverability indicators, keyboard navigation, and quick actions.</figcaption>
+                        </figure>
+                        <figure class="project-figure">
+                            <img src="images/webauthn-project/credential-details-page-2.png" alt="Credential detail modal with attestation summaries and authenticator flags">
+                            <figcaption>Credential detail modal surfaced after registration, summarizing attestation insights and authenticator flags.</figcaption>
+                        </figure>
                     </div>
                     <div class="project-section">
                         <h4>Decoder</h4>
@@ -318,6 +338,10 @@
                             then either render a structured summary with status chips and sectioned data or report parsing errors;
                             users can also toggle a raw JSON textarea view for deeper inspection or hide it to focus on the summary.
                         </p>
+                        <figure class="project-figure">
+                            <img src="images/webauthn-project/decoder.png" alt="Decoder tab showing parsed WebAuthn payloads and raw output toggles">
+                            <figcaption>Decoder view translating WebAuthn payloads into annotated summaries with optional raw data panes.</figcaption>
+                        </figure>
                     </div>
                     <div class="project-section">
                         <h4>FIDO MDS Explorer</h4>
@@ -342,6 +366,10 @@
                             highlight the relevant authenticator; the highlighting routine normalizes AAGUIDs, resets filters,
                             scrolls smoothly to the matching row, and returns whether the focus succeeded.
                         </p>
+                        <figure class="project-figure">
+                            <img src="images/webauthn-project/fido-mds-authenticators-page.png" alt="FIDO MDS explorer with authenticator table and filter controls">
+                            <figcaption>FIDO MDS explorer with update controls, live counters, and a sortable metadata table.</figcaption>
+                        </figure>
                     </div>
                     <div class="project-section">
                         <h4>How Authenticator Detail Parameters Are Retrieved</h4>
@@ -359,6 +387,10 @@
                             extensions, transports, algorithms, and option flags), and tabulate status reports with formatted dates
                             and descriptors&mdash;all derived from the metadata entry returned by the MDS payload.
                         </p>
+                        <figure class="project-figure">
+                            <img src="images/webauthn-project/fido-mds-authenticator-details.png" alt="Authenticator detail modal showing metadata-derived attributes and attestation certificates">
+                            <figcaption>Authenticator detail modal populated from the metadata statement, including certificates, limits, and status reports.</figcaption>
+                        </figure>
                     </div>
                 </div>
             </div>
@@ -371,10 +403,10 @@
                     <h3>Travel Advisor Website</h3>
                     <div class="project-links">
                         <a href="https://travel-advisor-project.vercel.app/" target="_blank" rel="noopener noreferrer" class="project-link-button" aria-label="Open Travel Advisor Website live site">
-                            <img src="icons/link-icon.png" alt="" aria-hidden="true">
+                            <img src="icons/link-icon-round.png" alt="" aria-hidden="true">
                         </a>
                         <a href="https://github.com/f4ncy1zach/travel-advisor" target="_blank" rel="noopener noreferrer" class="project-link-button" aria-label="View Travel Advisor Website repository on GitHub">
-                            <img src="icons/github-icon.png" alt="" aria-hidden="true">
+                            <img src="icons/github-dock-icon.png" alt="" aria-hidden="true">
                         </a>
                     </div>
                 </div>
@@ -558,10 +590,10 @@
                     <h3>Personal Portfolio Website</h3>
                     <div class="project-links">
                         <a href="https://rainzhang.me/" target="_blank" rel="noopener noreferrer" class="project-link-button" aria-label="Open Personal Portfolio Website live site">
-                            <img src="icons/link-icon.png" alt="" aria-hidden="true">
+                            <img src="icons/link-icon-round.png" alt="" aria-hidden="true">
                         </a>
                         <a href="https://github.com/rainzhang05/rainzhang05.github.io" target="_blank" rel="noopener noreferrer" class="project-link-button" aria-label="View Personal Portfolio Website repository on GitHub">
-                            <img src="icons/github-icon.png" alt="" aria-hidden="true">
+                            <img src="icons/github-dock-icon.png" alt="" aria-hidden="true">
                         </a>
                     </div>
                 </div>
@@ -574,12 +606,50 @@
             </div>
             <div class="project-content">
                 <p class="project-summary">Personal portfolio website with creative UI/UX design and interactive elements.</p>
-                <ul class="project-description">
-                    <li>Designed and developed a modern, user-friendly portfolio website using HTML, CSS, and JavaScript, with a strong emphasis on high-quality UI/UX design.</li>
-                    <li>Implemented dynamic functionalities and interactive elements to enhance user experience.</li>
-                    <li>Deployed the website using Vercel, ensuring seamless hosting and fast performance.</li>
-                    <li>Enhanced version control and collaboration skills by utilizing Git and GitHub for managing code, tracking changes, and maintaining a structured development workflow.</li>
-                </ul>
+                <div class="project-description project-description-rich">
+                    <div class="project-intro">
+                        <p>
+                            This site doubles as both the codebase and live experience for Rain&apos;s portfolio, pairing handcrafted HTML with layered CSS styling and JavaScript enhancements to deliver a polished personal brand.
+                        </p>
+                        <p>
+                            The repository organizes assets, typography, animations, and scripts so changes flow cleanly from development to deployment, keeping the portfolio easy to iterate on as new work is added.
+                        </p>
+                    </div>
+                    <div class="project-section">
+                        <h4>Tech Stack &amp; Tooling</h4>
+                        <ul class="project-section-list">
+                            <li>
+                                <span class="feature-title">Handcrafted Frontend</span>
+                                <p>Semantic HTML, custom Montserrat and Audiowide font embeds, and responsive CSS modules shape the layout, grid, and card components without a heavy framework.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Interaction Logic</span>
+                                <p>Vanilla JavaScript powers the intro animation, accessibility-aware project modals, contact form handling, and typewriter headline, keeping dependencies minimal.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Deployment Pipeline</span>
+                                <p>Optimized assets and structured source control make it straightforward to ship updates to GitHub Pages or Vercel while preserving fast load times.</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="project-section">
+                        <h4>Interactive Highlights</h4>
+                        <ul class="project-section-list">
+                            <li>
+                                <span class="feature-title">macOS-inspired Dock</span>
+                                <p>A floating dock replicates macOS hover physics with scaling, glow effects, and shortcuts to social links, all tuned for mouse and keyboard access.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Dark Mode Toggle</span>
+                                <p>The dock&apos;s theme button switches between light and dark palettes, updating typography, cards, and accent colors with smooth transitions.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Project Detail Panels</span>
+                                <p>Each portfolio tile opens into a modal window that enlarges the header, preserves focus, and reveals long-form project narratives.</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
 
