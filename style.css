@@ -544,7 +544,7 @@ body.dark-mode nav ul li a:hover {
 .project-links {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
     flex-wrap: wrap;
 }
 
@@ -552,18 +552,22 @@ body.dark-mode nav ul li a:hover {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0;
+    width: 38px;
+    height: 38px;
     border: none;
     background: transparent;
     border-radius: 50%;
     line-height: 0;
     text-decoration: none;
+    flex-shrink: 0;
     transition: transform 0.2s ease, filter 0.2s ease;
 }
 
 .project-link-button img {
-    width: 16px;
-    height: 16px;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: contain;
 }
 
 .project-link-button:hover,
@@ -739,8 +743,26 @@ body.modal-open {
 }
 
 .project-modal .project-header {
-    padding: 30px;
+    padding: 32px;
     border-bottom: 1px solid #f0f0f0;
+}
+
+.project-modal .project-title-row {
+    gap: clamp(14px, 1.4vw, 20px);
+}
+
+.project-modal .project-title-row h3 {
+    font-size: clamp(24px, 2vw, 32px);
+}
+
+.project-modal .project-meta {
+    gap: clamp(10px, 1vw, 14px);
+}
+
+.project-modal .project-tag {
+    font-size: 15px;
+    padding: 7px 14px;
+    border-radius: 10px;
 }
 
 .project-modal .project-content {
@@ -782,18 +804,23 @@ body.modal-open {
 }
 
 .project-description-rich .project-section {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+    display: block;
+    position: relative;
+}
+
+.project-description-rich .project-section::after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+.project-description-rich .project-section > * + * {
+    margin-top: 14px;
 }
 
 .project-description-rich .project-section > p {
     margin: 0;
     line-height: 1.62;
-}
-
-.project-description-rich .project-section > p + p {
-    margin-top: 12px;
 }
 
 .project-description-rich .project-section h4 {
@@ -817,6 +844,28 @@ body.modal-open {
     border-radius: 14px;
     padding: 18px 22px;
     box-shadow: inset 0 0 0 1px rgba(110, 92, 245, 0.08);
+}
+
+.project-description-rich .project-figure {
+    margin: 0;
+    width: min(50vw, 640px);
+}
+
+.project-description-rich .project-figure img {
+    width: 100%;
+    border-radius: 18px;
+    box-shadow: 0 24px 60px rgba(17, 12, 65, 0.14);
+    display: block;
+}
+
+.project-figure-left {
+    float: left;
+    margin: 6px 32px 22px 0;
+}
+
+.project-figure-right {
+    float: right;
+    margin: 6px 0 22px 32px;
 }
 
 .project-description-rich .project-section-list > li p {
@@ -905,6 +954,20 @@ body.modal-open {
     .project-modal .project-header,
     .project-modal .project-content {
         padding: 24px;
+    }
+
+    .project-description-rich .project-figure {
+        width: 100%;
+    }
+
+    .project-figure-left,
+    .project-figure-right {
+        float: none;
+        margin: 0 0 18px 0;
+    }
+
+    .project-description-rich .project-section > * + * {
+        margin-top: 12px;
     }
 }
 
@@ -1303,6 +1366,10 @@ body.dark-mode .project-description-rich code {
     color: #f5f3ff;
 }
 
+body.dark-mode .project-description-rich .project-figure img {
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+}
+
 /* Override black text in dark mode */
 body.dark-mode h1,
 body.dark-mode h2,
@@ -1327,6 +1394,12 @@ body.dark-mode .navigationBar a:hover {
 body.dark-mode #themeIcon,
 body.dark-mode #dock .dock-item img {
     filter: invert(1);
+}
+
+body.dark-mode #macIcon,
+body.dark-mode .project-link-button img {
+    filter: none !important;
+    mix-blend-mode: normal;
 }
 
 @media screen and (min-width: 2000px) and (max-width: 2560px) {
