@@ -552,8 +552,8 @@ body.dark-mode nav ul li a:hover {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 42px;
-    height: 42px;
+    width: 38px;
+    height: 38px;
     border: none;
     background: transparent;
     border-radius: 50%;
@@ -852,6 +852,19 @@ body.modal-open {
     width: 100%;
     border-radius: 18px;
     box-shadow: 0 24px 60px rgba(17, 12, 65, 0.14);
+}
+
+.project-description-rich .project-figure.webauthn-figure {
+    align-items: center;
+}
+
+.project-description-rich .project-figure.webauthn-figure img {
+    width: min(82%, 720px);
+}
+
+.project-description-rich .project-figure.webauthn-figure figcaption {
+    width: min(88%, 720px);
+    text-align: center;
 }
 
 .project-description-rich .project-figure figcaption {
@@ -1381,6 +1394,7 @@ body.dark-mode #dock .dock-item img {
 body.dark-mode #macIcon,
 body.dark-mode .project-link-button img {
     filter: none !important;
+    mix-blend-mode: normal;
 }
 
 @media screen and (min-width: 2000px) and (max-width: 2560px) {
