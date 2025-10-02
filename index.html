@@ -248,6 +248,9 @@
                     </div>
                     <div class="project-section">
                         <h4>Simple Authentication</h4>
+                        <figure class="project-figure project-figure-left">
+                            <img src="images/webauthn-project/simple-authentication.png" alt="Simple authentication tab with register and authenticate controls">
+                        </figure>
                         <p>
                             The simple tab supplies a minimal form: users enter a username (with a helper button to randomize it),
                             initiate registration or authentication, and watch the inline status and spinner update through each
@@ -261,13 +264,12 @@
                             WebAuthn <code>get</code>, and submits the assertion to <code>/api/authenticate/complete</code>, mapping
                             common WebAuthn errors to readable status messages.
                         </p>
-                        <figure class="project-figure">
-                            <img src="images/webauthn-project/simple-authentication.png" alt="Simple authentication tab with register and authenticate controls">
-                            <figcaption>Simple authentication tab showing inline status updates for passkey registration and verification.</figcaption>
-                        </figure>
                     </div>
                     <div class="project-section">
                         <h4>Advanced Authentication</h4>
+                        <figure class="project-figure project-figure-right">
+                            <img src="images/webauthn-project/advanced-authentication.png" alt="Advanced authentication tab with expandable panels and configuration options">
+                        </figure>
                         <p>
                             The advanced tab splits into registration and authentication sub-tabs, each containing expandable
                             panels for user identity, authenticator selection, other options, and extensions with bilingual tooltips
@@ -283,22 +285,22 @@
                             <code>minPinLength</code> are merged in, WebAuthn <code>create</code> is invoked, and the response is
                             posted to <code>/api/advanced/register/complete</code>; success triggers modal details, status feedback,
                             and a saved credential refresh, while failures surface likely incompatibilities (e.g., unsupported
-                            algorithms or extensions). Advanced authentication mirrors that flow by validating request JSON,
-                            enforcing hint rules, performing WebAuthn <code>get</code>, and submitting the result to
-                            <code>/api/advanced/authenticate/complete</code>, again surfacing human-friendly outcomes or guidance when
-                            no suitable credential is found.
+                            algorithms or extensions).
                         </p>
-                        <figure class="project-figure">
-                            <img src="images/webauthn-project/advanced-authentication.png" alt="Advanced authentication tab with expandable panels and configuration options">
-                            <figcaption>Advanced registration view with expandable configuration panels, saved credential summaries, and rich status messaging.</figcaption>
-                        </figure>
-                        <figure class="project-figure">
+                        <figure class="project-figure project-figure-left">
                             <img src="images/webauthn-project/advanced-authentication-json-editor.png" alt="Advanced authentication JSON editor synchronized with the configuration form">
-                            <figcaption>JSON editor synced with the advanced configuration panes so hand-edited payloads stay aligned with the UI.</figcaption>
                         </figure>
+                        <p>
+                            Advanced authentication mirrors that flow by validating request JSON, enforcing hint rules, performing
+                            WebAuthn <code>get</code>, and submitting the result to <code>/api/advanced/authenticate/complete</code>,
+                            again surfacing human-friendly outcomes or guidance when no suitable credential is found.
+                        </p>
                     </div>
                     <div class="project-section">
                         <h4>Saved Credentials and Credential Details</h4>
+                        <figure class="project-figure project-figure-right">
+                            <img src="images/webauthn-project/credential-details-page-1.png" alt="Saved credentials list with badges highlighting discoverable and PQC traits">
+                        </figure>
                         <p>
                             Saved credentials are fetched from <code>/api/credentials</code>, normalized with derived hex
                             identifiers, and stored in client state before rendering the panel or updating JSON previews. Each list
@@ -313,23 +315,23 @@
                             stored attestation summaries and flags to describe discoverability, large blob support, minPinLength,
                             attestation checks, authenticator data bits, signature counters, and any client extension outputs
                             captured during registration. Public key information is annotated with COSE key type, ML-DSA parameter
-                            sets, and base64/base64url/hex encodings to aid PQC inspection. When present, archived registration
-                            details are embedded for deeper comparison, and an AAGUID "Info" button appears for root-verified
-                            attestations; clicking it triggers an asynchronous lookup that can wait for metadata to load, surfaces
-                            status updates in the modal, and then closes the modal once the related authenticator entry is
-                            highlighted in the MDS table.
+                            sets, and base64/base64url/hex encodings to aid PQC inspection.
                         </p>
-                        <figure class="project-figure">
-                            <img src="images/webauthn-project/credential-details-page-1.png" alt="Saved credentials list with badges highlighting discoverable and PQC traits">
-                            <figcaption>Saved credentials panel with discoverability indicators, keyboard navigation, and quick actions.</figcaption>
-                        </figure>
-                        <figure class="project-figure">
+                        <figure class="project-figure project-figure-left">
                             <img src="images/webauthn-project/credential-details-page-2.png" alt="Credential detail modal with attestation summaries and authenticator flags">
-                            <figcaption>Credential detail modal surfaced after registration, summarizing attestation insights and authenticator flags.</figcaption>
                         </figure>
+                        <p>
+                            When present, archived registration details are embedded for deeper comparison, and an AAGUID "Info"
+                            button appears for root-verified attestations; clicking it triggers an asynchronous lookup that can
+                            wait for metadata to load, surfaces status updates in the modal, and then closes the modal once the
+                            related authenticator entry is highlighted in the MDS table.
+                        </p>
                     </div>
                     <div class="project-section">
                         <h4>Decoder</h4>
+                        <figure class="project-figure project-figure-right">
+                            <img src="images/webauthn-project/decoder.png" alt="Decoder tab showing parsed WebAuthn payloads and raw output toggles">
+                        </figure>
                         <p>
                             The decoder tab enumerates all recognized WebAuthn payload formats&mdash;covering credential JSON, CBOR
                             attestation objects, authenticator data, client data, PEM or DER certificates, general JSON, and CBOR
@@ -338,13 +340,12 @@
                             then either render a structured summary with status chips and sectioned data or report parsing errors;
                             users can also toggle a raw JSON textarea view for deeper inspection or hide it to focus on the summary.
                         </p>
-                        <figure class="project-figure">
-                            <img src="images/webauthn-project/decoder.png" alt="Decoder tab showing parsed WebAuthn payloads and raw output toggles">
-                            <figcaption>Decoder view translating WebAuthn payloads into annotated summaries with optional raw data panes.</figcaption>
-                        </figure>
                     </div>
                     <div class="project-section">
                         <h4>FIDO MDS Explorer</h4>
+                        <figure class="project-figure project-figure-left">
+                            <img src="images/webauthn-project/fido-mds-authenticators-page.png" alt="FIDO MDS explorer with authenticator table and filter controls">
+                        </figure>
                         <p>
                             The MDS tab features an update button, live entry counters, a sortable and filterable table, and modals
                             dedicated to certificate decoding and authenticator detail browsing. When the page loads, any
@@ -366,13 +367,12 @@
                             highlight the relevant authenticator; the highlighting routine normalizes AAGUIDs, resets filters,
                             scrolls smoothly to the matching row, and returns whether the focus succeeded.
                         </p>
-                        <figure class="project-figure webauthn-figure">
-                            <img src="images/webauthn-project/fido-mds-authenticators-page.png" alt="FIDO MDS explorer with authenticator table and filter controls">
-                            <figcaption>FIDO MDS explorer with update controls, live counters, and a sortable metadata table.</figcaption>
-                        </figure>
                     </div>
                     <div class="project-section">
                         <h4>How Authenticator Detail Parameters Are Retrieved</h4>
+                        <figure class="project-figure project-figure-right">
+                            <img src="images/webauthn-project/fido-mds-authenticator-details.png" alt="Authenticator detail modal showing metadata-derived attributes and attestation certificates">
+                        </figure>
                         <p>
                             Clicking an authenticator name stores the active entry (preferring the cached <code>byAaguid</code>
                             map), scrolls the table row into view, and opens the authenticator modal for focused inspection. The
@@ -387,10 +387,6 @@
                             extensions, transports, algorithms, and option flags), and tabulate status reports with formatted dates
                             and descriptors&mdash;all derived from the metadata entry returned by the MDS payload.
                         </p>
-                        <figure class="project-figure webauthn-figure">
-                            <img src="images/webauthn-project/fido-mds-authenticator-details.png" alt="Authenticator detail modal showing metadata-derived attributes and attestation certificates">
-                            <figcaption>Authenticator detail modal populated from the metadata statement, including certificates, limits, and status reports.</figcaption>
-                        </figure>
                     </div>
                 </div>
             </div>
