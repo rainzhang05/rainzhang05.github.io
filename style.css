@@ -1091,9 +1091,14 @@ body.dark-mode #introName .txt {
     height: 30px;
 }
 
+#linkedinDock img {
+    width: clamp(35px, 2.5vw, 36px);
+    height: clamp(35px, 2.5vw, 36px);
+}
+
 #githubDock img {
-    width: clamp(35px, 2.5vw, 45px);
-    height: clamp(35px, 2.5vw, 45px);
+    width: clamp(35px, 2.5vw, 46px);
+    height: clamp(35px, 2.5vw, 46px);
 }
 
 #emailDock img {
