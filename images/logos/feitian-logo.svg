@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 48" role="img" aria-labelledby="title">
+  <title id="title">FEITIAN Technologies emblem</title>
+  <defs>
+    <linearGradient id="feitianGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0d5fd9" />
+      <stop offset="100%" stop-color="#2aa4ff" />
+    </linearGradient>
+  </defs>
+  <rect width="160" height="48" rx="12" fill="url(#feitianGradient)" />
+  <path d="M26 14h18v6H32v4h10v6H32v10h-6V14zm30 0h6v26h-6zm12 0h6l11 14V14h6v26h-6l-11-14v14h-6zm38 0c8.836 0 12 3.418 12 8 0 3.43-1.64 5.747-5.12 6.829L119 30l6 10h-7l-5-9h-2v9h-6V14zm7 12c3.118 0 4-1.03 4-3s-.882-3-4-3h-5v6z" fill="#f4f7ff" />
+  <circle cx="134" cy="14" r="6" fill="#0d5fd9" opacity="0.55" />
+  <circle cx="142" cy="30" r="6" fill="#2aa4ff" opacity="0.45" />
+</svg>
