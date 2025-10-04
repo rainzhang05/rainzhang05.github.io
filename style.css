@@ -583,6 +583,7 @@ body.dark-mode nav ul li a:hover {
     align-items: center;
     gap: 12px;
     flex-wrap: wrap;
+    margin-bottom: 15px;
 }
 
 .education-title-row h3 {
@@ -1487,13 +1488,14 @@ body.dark-mode .project-link-button:focus-visible {
 
 body.dark-mode .related-project-link {
     background: rgba(177, 168, 245, 0.22);
-    color: #000000;
+    color: #ffffff;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
 }
 
 body.dark-mode .related-project-link:hover,
 body.dark-mode .related-project-link:focus-visible {
     background: rgba(177, 168, 245, 0.3);
+    color: #ffffff;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
 }
 
@@ -1584,7 +1586,7 @@ body.dark-mode #dock .dock-item img {
 
 body.dark-mode #macIcon,
 body.dark-mode .project-link-button img {
-    filter: none !important;
+    filter: invert(1);
     mix-blend-mode: normal;
 }
 
