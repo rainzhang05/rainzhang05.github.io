@@ -217,6 +217,13 @@ function setupDockHoverEffects() {
     const dock = document.getElementById("dock")
     const dockItems = dock.querySelectorAll(".dock-item")
 
+    const supportsHover = window.matchMedia("(hover: hover)").matches && window.matchMedia("(pointer: fine)").matches
+
+    if (!supportsHover) {
+        dock.classList.add("dock-touch")
+        return
+    }
+
     // More subtle magnification effect for dock
     dockItems.forEach((item) => {
         if (!item.classList.contains("dock-separator")) {

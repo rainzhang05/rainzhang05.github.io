@@ -1623,26 +1623,6 @@ body.dark-mode .project-link-button img {
 }
 
 /* Responsive Design */
-@media (max-width: 1600px) {
-    .introduction,
-    .skills,
-    .experience,
-    .projects,
-    .education,
-    .contact {
-        margin-left: 180px;
-        margin-right: 180px;
-    }
-
-    .introduction {
-        margin-top: 115px;
-    }
-
-    .contact {
-        margin-bottom: 80px;
-    }
-}
-
 @media (max-width: 1400px) {
     .introduction,
     .skills,
@@ -1650,223 +1630,339 @@ body.dark-mode .project-link-button img {
     .projects,
     .education,
     .contact {
-        margin-left: 150px;
-        margin-right: 150px;
+        margin-left: clamp(48px, 8vw, 160px);
+        margin-right: clamp(48px, 8vw, 160px);
     }
 }
 
 @media (max-width: 1200px) {
-    .introduction,
-    .skills,
+    .introduction {
+        margin: 140px clamp(48px, 6vw, 96px) 72px;
+        padding: clamp(28px, 4vw, 42px);
+        grid-template-columns: minmax(0, 1fr) minmax(220px, 320px);
+    }
+
+    .navigationBar {
+        padding: 14px clamp(32px, 5vw, 48px);
+    }
+
+    .right-nav {
+        margin: 0;
+    }
+
+    .skills {
+        margin: 96px clamp(48px, 6vw, 96px) 64px;
+        padding: clamp(28px, 4vw, 42px);
+    }
+
     .experience,
     .projects,
     .education,
     .contact {
-        margin-left: 120px;
-        margin-right: 120px;
+        margin: 72px clamp(48px, 6vw, 96px);
+        padding: clamp(28px, 4vw, 42px);
+    }
+
+    .projects-grid,
+    .education-grid {
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     }
 }
 
 @media (max-width: 992px) {
-    .introduction,
+    .introduction {
+        grid-template-columns: 1fr;
+        gap: clamp(28px, 6vw, 40px);
+        margin-top: 128px;
+    }
+
+    .intro-text {
+        max-width: none;
+        align-items: center;
+        text-align: center;
+    }
+
+    .resumeButton {
+        align-self: stretch;
+        justify-content: center;
+    }
+
+    .intro-photo {
+        order: -1;
+    }
+
+    .intro-photo img {
+        max-width: 280px;
+    }
+
+    #introHeading,
+    #introName {
+        font-size: clamp(34px, 6vw, 46px);
+    }
+
     .skills,
     .experience,
     .projects,
     .education,
     .contact {
-        margin-left: 80px;
-        margin-right: 80px;
+        margin-left: clamp(32px, 6vw, 72px);
+        margin-right: clamp(32px, 6vw, 72px);
+    }
+}
+
+@media (max-width: 768px) {
+    .decorations {
+        display: none;
+    }
+
+    .navigationBar {
+        padding: 14px clamp(16px, 4vw, 24px);
+        height: auto;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .left-nav,
+    .right-nav {
+        flex: 1 1 100%;
+        justify-content: center;
+        margin: 0;
+    }
+
+    .right-nav {
+        order: 1;
+    }
+
+    #barHeading {
+        order: -1;
+        width: 100%;
+        margin: 0;
+        text-align: center;
+    }
+
+    nav ul {
+        width: 100%;
+        justify-content: center;
+        gap: 14px;
+        flex-wrap: wrap;
+    }
+
+    nav ul li {
+        margin: 0;
+    }
+
+    nav ul li a {
+        font-size: 16px;
     }
 
     .introduction {
-        grid-template-columns: 1fr;
-        gap: 36px;
+        margin: 120px clamp(20px, 6vw, 36px) 56px;
+        padding: clamp(22px, 5vw, 32px);
     }
 
-    .intro-text {
-        max-width: none;
+    .skills,
+    .experience,
+    .projects,
+    .education,
+    .contact {
+        margin: 52px clamp(20px, 6vw, 36px);
+        padding: clamp(22px, 5vw, 32px);
     }
 
-    .intro-photo {
-        justify-content: center;
+    .skill-item {
+        width: clamp(72px, 26vw, 110px);
+        margin: 12px;
     }
 
-    .intro-photo img {
-        max-width: 320px;
-    }
-
-    #introHeading,
-    #introName {
-        font-size: 48px;
+    .skills img {
+        width: clamp(48px, 22vw, 68px);
+        height: clamp(48px, 22vw, 68px);
     }
 
     .projects-grid,
     .education-grid {
         grid-template-columns: 1fr;
     }
-}
 
-@media (max-width: 768px) {
-    .navigationBar {
-        padding: 10px 20px;
-        height: auto;
-        flex-wrap: wrap;
-    }
-
-    .left-nav,
-    .right-nav {
-        width: 100%;
-        justify-content: center;
-        margin: 5px 0;
-    }
-
-    #barHeading {
-        position: relative;
-        left: 0;
-        transform: none;
-        width: 100%;
-        text-align: center;
-        margin: 10px 0;
-        order: -1;
-    }
-
-    nav ul {
-        justify-content: center;
-    }
-
-    nav ul li {
-        margin-right: 20px;
-        margin-left: 20px;
-    }
-
-    .introduction {
-        margin-top: 200px;
-    }
-
-    #introHeading,
-    #introName {
-        font-size: 42px;
-    }
-
-    .introduction,
-    .skills,
-    .experience,
-    .projects,
-    .education,
-    .contact {
-        margin-left: 50px;
-        margin-right: 50px;
-        padding: 20px;
-    }
-
-    .dock-item {
-        margin: 0 5px;
-    }
-
-    .skill-item {
-        margin: 15px;
+    .project-card,
+    .education-card {
+        padding: clamp(20px, 5vw, 28px);
     }
 }
 
-@media (max-width: 576px) {
-    .navigationBar {
-        padding: 10px;
-    }
-
-    nav ul li {
-        margin-right: 10px;
-        margin-left: 10px;
+@media (max-width: 600px) {
+    body {
+        font-size: 17px;
     }
 
     nav ul li a {
-        font-size: 16px;
+        font-size: 15px;
     }
 
     #introHeading,
     #introName {
-        font-size: 34px;
-    }
-
-    .introduction,
-    .skills,
-    .experience,
-    .projects,
-    .education,
-    .contact {
-        margin-left: 20px;
-        margin-right: 20px;
-        padding: 15px;
+        font-size: clamp(30px, 8vw, 38px);
     }
 
     .introduction p {
         font-size: 16px;
     }
 
-    .dock-item {
-        width: 40px;
-        height: 40px;
-        margin: 0 3px;
-    }
-
-    .dock-item img {
-        width: 30px;
-        height: 30px;
-    }
-
-    .dock-separator {
-        margin: 0 5px;
-    }
-
-    .skill-item {
-        margin: 10px;
-        width: 80px;
-    }
-
-    .skills img {
-        width: 50px;
-        height: 50px;
-        margin: 15px;
-    }
-
     .project-title-row {
         flex-direction: column;
         align-items: flex-start;
-        gap: 10px;
+        gap: 12px;
     }
 
     .project-links {
         margin-left: 0;
     }
+
+    #dock {
+        bottom: 24px;
+        padding: 10px 16px;
+        width: calc(100% - 40px);
+        max-width: 360px;
+        gap: 6px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    #dock:hover {
+        transform: translateX(-50%);
+    }
+
+    #dock.dock-touch {
+        transform: translateX(-50%);
+    }
+
+    .dock-item {
+        width: 44px;
+        height: 44px;
+        padding: 6px;
+    }
+
+    .dock-item img {
+        width: 26px;
+        height: 26px;
+    }
+
+    .dock-separator {
+        display: none;
+    }
 }
 
 @media (max-width: 480px) {
-    nav ul li {
-        margin-right: 8px;
-        margin-left: 8px;
+    .navigationBar {
+        padding: 12px 16px;
+    }
+
+    #barHeading {
+        font-size: 22px;
+    }
+
+    nav ul {
+        gap: 10px;
     }
 
     nav ul li a {
         font-size: 14px;
     }
 
-    #barHeading {
-        font-size: 20px;
+    .introduction {
+        margin-top: 112px;
     }
 
     #introHeading,
     #introName {
-        font-size: 28px;
+        font-size: clamp(26px, 8vw, 34px);
     }
 
     h2 {
-        font-size: 28px;
+        font-size: clamp(26px, 7vw, 32px);
     }
 
     h3 {
-        font-size: 20px;
+        font-size: clamp(20px, 6vw, 24px);
     }
 
-    .skill-item {
-        width: 70px;
+    .skills,
+    .experience,
+    .projects,
+    .education,
+    .contact {
+        margin: 40px clamp(16px, 6vw, 28px);
+        padding: clamp(20px, 6vw, 28px);
+    }
+
+    #dock {
+        bottom: 20px;
+        width: calc(100% - 32px);
+        max-width: none;
+    }
+}
+
+@media (hover: none) {
+    nav ul li a:hover,
+    nav ul li a:active {
+        color: inherit;
+        transform: none;
+    }
+
+    nav ul li a:hover::after,
+    nav ul li a:active::after {
+        width: 0;
+    }
+
+    .resumeButton:hover,
+    .submit-btn:hover,
+    .skill-item:hover,
+    .project-card:hover,
+    .education-card:hover,
+    .project-link-button:hover,
+    .related-project-link:hover,
+    .project-card[role="button"]:hover,
+    .project-modal-close:hover,
+    #dock:hover {
+        transform: none;
+    }
+
+    .resumeButton:hover,
+    .submit-btn:hover {
+        box-shadow: 4px 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .resumeButton:hover img {
+        transform: none;
+    }
+
+    .skill-item:hover img {
+        transform: none;
+    }
+
+    .project-card:hover,
+    .education-card:hover,
+    .project-card[role="button"]:hover {
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        background-color: white;
+    }
+
+    .project-link-button:hover {
+        filter: none;
+    }
+
+    .related-project-link:hover {
+        background: rgba(110, 92, 245, 0.12);
+        box-shadow: none;
+    }
+
+    .project-modal-close:hover {
+        background: rgba(0, 0, 0, 0.05);
+        outline: none;
+    }
+
+    #dock:hover {
+        transform: translateX(-50%);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
     }
 }
