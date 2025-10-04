@@ -72,7 +72,8 @@ body.intro-prep .navigationBar,
 body.intro-prep #introHeading,
 body.intro-prep #introName,
 body.intro-prep #introParagraph,
-body.intro-prep .resumeButton {
+body.intro-prep .resumeButton,
+body.intro-prep .intro-photo {
     opacity: 0;
     filter: blur(10px);
     transform: translateY(20px);
@@ -274,13 +275,37 @@ body.dark-mode nav ul li a:hover {
     padding: 30px;
     border-radius: 20px;
     transition: color 0.5s ease;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(240px, 360px);
+    align-items: center;
+    gap: clamp(32px, 5vw, 64px);
+}
+
+.intro-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    max-width: 640px;
 }
 
 .introduction p {
-    font-size: clamp(16px, 1.2vw, 20px);
+    font-size: clamp(16px, 1.1vw, 20px);
     margin-top: 20px;
     transition: color 0.5s ease;
-    max-width: 1200px;
+}
+
+.intro-photo {
+    display: flex;
+    justify-content: center;
+}
+
+.intro-photo img {
+    width: 100%;
+    max-width: 360px;
+    border-radius: 24px;
+    box-shadow: 0 16px 35px rgba(0, 0, 0, 0.12);
+    object-fit: cover;
 }
 
 .resumeButton {
@@ -335,7 +360,7 @@ body.dark-mode nav ul li a:hover {
 #introName {
     font-family: "Montserrat", sans-serif;
     font-weight: 700;
-    font-size: clamp(40px, 4vw, 74px);
+    font-size: clamp(32px, 3vw, 54px);
     margin-bottom: 0;
     margin-top: 0;
     transition: color 0.5s ease;
@@ -668,27 +693,36 @@ body.dark-mode nav ul li a:hover {
     outline: none;
 }
 
-.project-card:focus-visible {
-    outline: 3px solid #6e5cf5;
-    outline-offset: 4px;
-}
-
-.project-card[role="button"] .project-content {
+.project-card[role="button"] {
     cursor: pointer;
-    border-radius: 0 0 15px 15px;
     transition: background-color 0.3s ease;
 }
 
-.project-card:focus-visible .project-content {
+.project-card:focus-visible {
+    outline: 3px solid #6e5cf5;
+    outline-offset: 4px;
     background-color: rgba(110, 92, 245, 0.06);
 }
 
-.project-card[role="button"] .project-content:hover {
+.project-card[role="button"]:hover {
     background-color: rgba(110, 92, 245, 0.06);
 }
 
-.project-card[role="button"] .project-content:active {
+.project-card[role="button"]:active {
     background-color: rgba(110, 92, 245, 0.12);
+}
+
+.project-card[role="button"] .project-content {
+    border-radius: 0 0 15px 15px;
+}
+
+.project-cover {
+    width: 100%;
+    border-radius: 18px;
+    margin: 12px 0 20px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.14);
+    object-fit: cover;
+    aspect-ratio: 16 / 9;
 }
 
 html.modal-open,
@@ -1377,19 +1411,20 @@ body.dark-mode .project-link-button:focus-visible {
     outline-offset: 4px;
 }
 
-body.dark-mode .project-card:focus-visible {
-    outline-color: #b1a8f5;
+body.dark-mode .intro-photo img {
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
 }
 
-body.dark-mode .project-card:focus-visible .project-content {
+body.dark-mode .project-card:focus-visible {
+    outline-color: #b1a8f5;
     background-color: rgba(177, 168, 245, 0.12);
 }
 
-body.dark-mode .project-card[role="button"] .project-content:hover {
+body.dark-mode .project-card[role="button"]:hover {
     background-color: rgba(177, 168, 245, 0.08);
 }
 
-body.dark-mode .project-card[role="button"] .project-content:active {
+body.dark-mode .project-card[role="button"]:active {
     background-color: rgba(177, 168, 245, 0.16);
 }
 
@@ -1551,9 +1586,26 @@ body.dark-mode .project-link-button img {
         margin-right: 80px;
     }
 
+    .introduction {
+        grid-template-columns: 1fr;
+        gap: 36px;
+    }
+
+    .intro-text {
+        max-width: none;
+    }
+
+    .intro-photo {
+        justify-content: center;
+    }
+
+    .intro-photo img {
+        max-width: 320px;
+    }
+
     #introHeading,
     #introName {
-        font-size: 60px;
+        font-size: 48px;
     }
 
     .projects-grid,
@@ -1601,7 +1653,7 @@ body.dark-mode .project-link-button img {
 
     #introHeading,
     #introName {
-        font-size: 50px;
+        font-size: 42px;
     }
 
     .introduction,
@@ -1640,7 +1692,7 @@ body.dark-mode .project-link-button img {
 
     #introHeading,
     #introName {
-        font-size: 40px;
+        font-size: 34px;
     }
 
     .introduction,
@@ -1711,7 +1763,7 @@ body.dark-mode .project-link-button img {
 
     #introHeading,
     #introName {
-        font-size: 32px;
+        font-size: 28px;
     }
 
     h2 {
