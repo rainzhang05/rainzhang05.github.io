@@ -33,6 +33,7 @@ function initPage() {
     setupHashLinkBehavior()
     setupContactForm()
     setupProjectCards() // Updated function for project cards
+    bindOpenProjectLinks()
 }
 
 let activeProjectModal = null
@@ -433,6 +434,48 @@ function setupProjectCards() {
     })
 }
 
+function bindOpenProjectLinks(root = document) {
+    const projectLinkTriggers = root.querySelectorAll("[data-open-project]")
+
+    projectLinkTriggers.forEach((trigger) => {
+        if (trigger.dataset.openProjectBound === "true") {
+            return
+        }
+
+        trigger.dataset.openProjectBound = "true"
+
+        trigger.addEventListener("click", (event) => {
+            const targetId = trigger.getAttribute("data-open-project")
+
+            if (!targetId) {
+                return
+            }
+
+            const projectCard = document.getElementById(targetId)
+
+            if (!projectCard) {
+                return
+            }
+
+            event.preventDefault()
+
+            closeProjectModal({ immediate: true })
+
+            const projectsSection = document.getElementById("projects")
+            if (projectsSection) {
+                projectsSection.scrollIntoView({ behavior: "smooth", block: "start" })
+            }
+
+            setTimeout(() => {
+                if (typeof projectCard.focus === "function") {
+                    projectCard.focus({ preventScroll: true })
+                }
+                openProjectModal(projectCard)
+            }, 260)
+        })
+    })
+}
+
 function openProjectModal(card) {
     if (!card) return
 
@@ -489,10 +532,19 @@ function openProjectModal(card) {
         if (summaryInClone) {
             summaryInClone.remove()
         }
+        const experienceRelated = contentClone.querySelector(".experience-related")
+        if (experienceRelated) {
+            experienceRelated.remove()
+        }
+        const projectCoverInClone = contentClone.querySelector(".project-cover")
+        if (projectCoverInClone) {
+            projectCoverInClone.remove()
+        }
         const readMoreButton = contentClone.querySelector(".read-more")
         if (readMoreButton) {
             readMoreButton.remove()
         }
+        bindOpenProjectLinks(contentClone)
         modal.appendChild(contentClone)
     }
 
