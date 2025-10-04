@@ -532,6 +532,10 @@ function openProjectModal(card) {
         if (summaryInClone) {
             summaryInClone.remove()
         }
+        const experienceRelated = contentClone.querySelector(".experience-related")
+        if (experienceRelated) {
+            experienceRelated.remove()
+        }
         const projectCoverInClone = contentClone.querySelector(".project-cover")
         if (projectCoverInClone) {
             projectCoverInClone.remove()
