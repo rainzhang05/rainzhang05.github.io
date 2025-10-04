@@ -578,20 +578,6 @@ body.dark-mode nav ul li a:hover {
     flex: 1;
 }
 
-.experience-logo-wrapper {
-    margin-left: auto;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.experience-logo {
-    height: 42px;
-    width: auto;
-    max-width: 130px;
-    object-fit: contain;
-}
-
 .education-title-row {
     display: flex;
     align-items: center;
@@ -602,13 +588,6 @@ body.dark-mode nav ul li a:hover {
 .education-title-row h3 {
     margin: 0;
     flex: 1;
-}
-
-.education-logo {
-    height: 36px;
-    width: auto;
-    max-width: 120px;
-    object-fit: contain;
 }
 
 .project-title-row h3 {
@@ -796,7 +775,7 @@ body.dark-mode nav ul li a:hover {
     padding: 10px 18px;
     border-radius: 12px;
     background: rgba(110, 92, 245, 0.12);
-    color: #312975;
+    color: #000000;
     text-decoration: none;
     font-weight: 600;
     letter-spacing: 0.01em;
@@ -1508,7 +1487,7 @@ body.dark-mode .project-link-button:focus-visible {
 
 body.dark-mode .related-project-link {
     background: rgba(177, 168, 245, 0.22);
-    color: #e4e2ff;
+    color: #000000;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
 }
 
