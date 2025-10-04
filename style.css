@@ -808,6 +808,10 @@ body.modal-open {
     position: relative;
 }
 
+.project-description-rich .project-section + .project-section {
+    margin-top: clamp(34px, 4vw, 58px);
+}
+
 .project-description-rich .project-section::after {
     content: "";
     display: block;
@@ -816,6 +820,49 @@ body.modal-open {
 
 .project-description-rich .project-section > * + * {
     margin-top: 14px;
+}
+
+.project-description-rich .project-section.project-section-split {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: clamp(28px, 3.5vw, 56px);
+}
+
+.project-description-rich .project-section.project-section-split > * + * {
+    margin-top: 0;
+}
+
+.project-description-rich .project-section-text {
+    flex: 1 1 340px;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(16px, 2vw, 24px);
+}
+
+.project-description-rich .project-section-text > h4 + * {
+    margin-top: 0;
+}
+
+.project-description-rich .project-section-text p {
+    margin: 0;
+    line-height: 1.65;
+}
+
+.project-description-rich .project-section-media {
+    flex: 0 1 min(46%, 560px);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(18px, 2.2vw, 28px);
+}
+
+.project-description-rich .project-section.project-section-split > .project-figure {
+    flex: 0 1 min(46%, 560px);
+}
+
+.project-description-rich .project-section.project-section-split > .project-figure,
+.project-description-rich .project-section-media .project-figure {
+    margin: 0;
 }
 
 .project-description-rich .project-section > p {
@@ -848,7 +895,7 @@ body.modal-open {
 
 .project-description-rich .project-figure {
     margin: 0;
-    width: min(50vw, 640px);
+    width: min(100%, 640px);
 }
 
 .project-description-rich .project-figure img {
@@ -957,6 +1004,19 @@ body.modal-open {
     }
 
     .project-description-rich .project-figure {
+        width: 100%;
+    }
+
+    .project-description-rich .project-section.project-section-split {
+        flex-direction: column;
+        gap: 22px;
+    }
+
+    .project-description-rich .project-section.project-section-split > * {
+        flex: 1 1 auto;
+    }
+
+    .project-description-rich .project-section-media {
         width: 100%;
     }
 
