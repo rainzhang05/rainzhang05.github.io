@@ -102,7 +102,7 @@ function animateIntro() {
         return
     }
 
-    const selectors = [".navigationBar", "#introHeading", "#introName", "#introParagraph", ".resumeButton"]
+    const selectors = [".navigationBar", "#introHeading", "#introName", "#introParagraph", ".resumeButton", ".intro-photo"]
     const introElements = selectors
         .map((selector) => document.querySelector(selector))
         .filter((element) => Boolean(element))
@@ -405,10 +405,9 @@ function setupProjectCards() {
             card.setAttribute("aria-label", `Open details for the ${title.textContent.trim()} project`)
         }
 
-        const cardContent = card.querySelector(".project-content")
-
         card.addEventListener("click", (event) => {
-            if (cardContent && !cardContent.contains(event.target)) {
+            const interactiveElement = event.target.closest(".project-link-button, a, button")
+            if (interactiveElement) {
                 return
             }
 
