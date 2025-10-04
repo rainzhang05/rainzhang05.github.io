@@ -102,7 +102,7 @@ function animateIntro() {
         return
     }
 
-    const selectors = [".navigationBar", "#introHeading", "#introName", "#introParagraph", ".resumeButton"]
+    const selectors = [".navigationBar", "#introHeading", "#introName", "#introParagraph", ".resumeButton", ".intro-photo"]
     const introElements = selectors
         .map((selector) => document.querySelector(selector))
         .filter((element) => Boolean(element))
@@ -206,7 +206,7 @@ class TypeWriter {
 // Initialize Typewriter
 function initTypewriter() {
     const txtElement = document.querySelector("#introName")
-    const words = ["Rain Zhang", "a Computer Science Student", "a Software Developer", "Based in Vancouver"]
+    const words = ["Rain Zhang", "a Current CS Student", "a Software Developer", "Based in Vancouver"]
     const wait = 2000
     new TypeWriter(txtElement, words, wait)
 }
@@ -405,10 +405,9 @@ function setupProjectCards() {
             card.setAttribute("aria-label", `Open details for the ${title.textContent.trim()} project`)
         }
 
-        const cardContent = card.querySelector(".project-content")
-
         card.addEventListener("click", (event) => {
-            if (cardContent && !cardContent.contains(event.target)) {
+            const interactiveElement = event.target.closest(".project-link-button, a, button")
+            if (interactiveElement) {
                 return
             }
 
