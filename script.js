@@ -195,7 +195,15 @@ function animateIntro() {
         return
     }
 
-    const selectors = [".navigationBar", "#introHeading", "#introName", "#introParagraph", ".resumeButton", ".intro-photo"]
+    const selectors = [
+        ".navigationBar",
+        "#introHeading",
+        "#introName",
+        "#introParagraph",
+        ".resumeButton",
+        ".intro-photo",
+        "#dock",
+    ]
     const introElements = selectors
         .map((selector) => document.querySelector(selector))
         .filter((element) => Boolean(element))
