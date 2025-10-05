@@ -68,12 +68,62 @@ body::-webkit-scrollbar {
     height: 0;
 }
 
+body.is-preloading {
+    overflow: hidden;
+}
+
+#preloader {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    background-color: #fafafa;
+    color: #333;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    z-index: 2000;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+body.preloading-complete #preloader {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.preloader-spinner {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 6px solid rgba(110, 92, 245, 0.2);
+    border-top-color: #6e5cf5;
+    animation: preloaderSpin 0.9s linear infinite;
+}
+
+.preloader-text {
+    margin: 0;
+    font-size: 14px;
+    letter-spacing: 0.12em;
+}
+
+@keyframes preloaderSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
 body.intro-prep .navigationBar,
 body.intro-prep #introHeading,
 body.intro-prep #introName,
 body.intro-prep #introParagraph,
 body.intro-prep .resumeButton,
-body.intro-prep .intro-photo {
+body.intro-prep .intro-photo,
+body.intro-prep #dock {
     opacity: 0;
     filter: blur(10px);
     transform: translateY(20px);
