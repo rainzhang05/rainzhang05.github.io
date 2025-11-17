@@ -704,8 +704,8 @@ body.dark-mode nav ul li a:hover {
     padding: 5px 10px;
     border-radius: 8px;
     font-size: 14px;
-    border: 1px solid #8884ff;
-    color: #8884ff;
+    border: 1px solid #000000;
+    color: #000000;
 }
 
 .project-tag img {
@@ -1275,8 +1275,8 @@ body.modal-open {
 .form-group input:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: #6e5cf5;
-    box-shadow: 0 0 0 3px rgba(110, 92, 245, 0.2);
+    border-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
 }
 
 .form-group textarea {
@@ -1520,8 +1520,8 @@ body.dark-mode .education-header {
 
 body.dark-mode .project-tag,
 body.dark-mode .education-tag {
-    border: 1px solid #b1a8f5;
-    color: #b1a8f5;
+    border: 1px solid #000000;
+    color: #000000;
 }
 
 body.dark-mode .project-link-button:hover,
