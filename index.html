@@ -698,7 +698,310 @@
             </div>
         </div>
 
-        <!-- Project Card 3 -->
+        <!-- Project Card 3: ML-DSA Software FIDO Authenticator -->
+        <div class="project-card" id="project-mldsa-authenticator">
+            <div class="project-header">
+                <div class="project-title-row">
+                    <h3>ML-DSA Software FIDO Authenticator</h3>
+                    <div class="project-links">
+                        <a href="https://github.com/feitiantech/fidosoftwareauthenticator" target="_blank" rel="noopener noreferrer" class="project-link-button" aria-label="View ML-DSA Software FIDO Authenticator repository on GitHub">
+                            <img src="icons/github-dock-icon.png" alt="" aria-hidden="true">
+                        </a>
+                    </div>
+                </div>
+                <div class="project-meta">
+                    <span class="project-tag date-tag">October - November 2025</span>
+                    <span class="project-tag tech-tag">Rust</span>
+                </div>
+            </div>
+            <div class="project-content">
+                <p class="project-summary">FIDO2/CTAP2 software authenticator with post-quantum ML-DSA integration and virtual HID device support.</p>
+
+                <!-- Modern Layout Container -->
+                <div class="project-description project-modern-layout">
+
+                    <!-- Hero Section -->
+                    <div class="modern-hero">
+                        <div class="hero-content">
+                            <h4 class="hero-title">FIDO Software Authenticator with Post-Quantum ML-DSA Integration</h4>
+                            <p class="hero-description">
+                                A software authenticator implementing FIDO2/CTAP2 protocols with post-quantum cryptographic algorithms (ML-DSA 44/65/87). The authenticator exposes a virtual HID device through Linux's UHID interface, enabling browsers and FIDO2 clients to perform WebAuthn operations without physical hardware tokens. Built entirely in Rust with a modular, secure-by-design architecture.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Key Info Grid -->
+                    <div class="modern-info-grid">
+                        <div class="info-card">
+                            <div class="info-icon">🎯</div>
+                            <h5>Goal</h5>
+                            <p>Develop a standards-compliant FIDO2 software authenticator that integrates post-quantum cryptographic algorithms to future-proof authentication against quantum computing threats. The project demonstrates practical implementation of emerging cryptographic standards while maintaining compatibility with existing WebAuthn infrastructure.</p>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-icon">👨‍💻</div>
+                            <h5>Role</h5>
+                            <p><strong>Solo Full-Stack Developer</strong> - Responsible for all aspects of architecture, implementation, testing, and maintenance.</p>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-icon">🚀</div>
+                            <h5>Impact</h5>
+                            <p>Protects against quantum computing threats via NIST-standardized ML-DSA, provides migration path for existing WebAuthn deployments, and enables development & testing without hardware tokens.</p>
+                        </div>
+                    </div>
+
+                    <!-- Tech Stack Section -->
+                    <div class="modern-section">
+                        <h4 class="section-title">Technical Stack</h4>
+
+                        <div class="tech-category">
+                            <h5 class="tech-category-title">Languages & FFI</h5>
+                            <div class="tech-pills">
+                                <span class="tech-pill">Rust (Primary Language)</span>
+                                <span class="tech-pill">C/FFI (liboqs Integration)</span>
+                            </div>
+                        </div>
+
+                        <div class="tech-category">
+                            <h5 class="tech-category-title">Post-Quantum Cryptography</h5>
+                            <div class="tech-pills">
+                                <span class="tech-pill highlight">ML-DSA 44/65/87</span>
+                                <span class="tech-pill highlight">ML-KEM 512/768/1024</span>
+                                <span class="tech-pill">liboqs (Open Quantum Safe)</span>
+                            </div>
+                        </div>
+
+                        <div class="tech-category">
+                            <h5 class="tech-category-title">Cryptographic Framework</h5>
+                            <div class="tech-pills">
+                                <span class="tech-pill">Trussed</span>
+                                <span class="tech-pill">P256 (ECDSA)</span>
+                                <span class="tech-pill">AES-256-GCM/CBC</span>
+                                <span class="tech-pill">HMAC-SHA256</span>
+                                <span class="tech-pill">ChaCha20 PRNG</span>
+                            </div>
+                        </div>
+
+                        <div class="tech-category">
+                            <h5 class="tech-category-title">Transport & Protocols</h5>
+                            <div class="tech-pills">
+                                <span class="tech-pill">FIDO2/CTAP2</span>
+                                <span class="tech-pill">CTAPHID</span>
+                                <span class="tech-pill">UHID (User-space HID)</span>
+                                <span class="tech-pill">CCID (Optional)</span>
+                                <span class="tech-pill">USB/IP (Legacy)</span>
+                            </div>
+                        </div>
+
+                        <div class="tech-category">
+                            <h5 class="tech-category-title">Storage & Serialization</h5>
+                            <div class="tech-pills">
+                                <span class="tech-pill">LittleFS2</span>
+                                <span class="tech-pill">CBOR (ciborium)</span>
+                                <span class="tech-pill">Serde</span>
+                            </div>
+                        </div>
+
+                        <div class="tech-category">
+                            <h5 class="tech-category-title">System Integration</h5>
+                            <div class="tech-pills">
+                                <span class="tech-pill">Linux Kernel (UHID)</span>
+                                <span class="tech-pill">systemd</span>
+                                <span class="tech-pill">udev</span>
+                                <span class="tech-pill">libfido2</span>
+                                <span class="tech-pill">python-fido2</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Key Features -->
+                    <div class="modern-section">
+                        <h4 class="section-title">Key Features</h4>
+                        <div class="feature-grid">
+                            <div class="feature-card">
+                                <div class="feature-icon">🔐</div>
+                                <h5>Post-Quantum Credential Management</h5>
+                                <ul>
+                                    <li>ML-DSA-44, ML-DSA-65, ML-DSA-87 signature schemes</li>
+                                    <li>Hybrid cryptography (PQC + classical ES256)</li>
+                                    <li>COSE key encoding for ML-DSA public keys</li>
+                                    <li>Automatic parameter set negotiation</li>
+                                </ul>
+                            </div>
+
+                            <div class="feature-card">
+                                <div class="feature-icon">💻</div>
+                                <h5>Virtual HID Authenticator</h5>
+                                <ul>
+                                    <li>Creates virtual /dev/hidraw nodes via UHID</li>
+                                    <li>Transparent browser integration (Chrome, Firefox, Edge)</li>
+                                    <li>64-byte CTAPHID frame protocol</li>
+                                    <li>FIDO Alliance-compliant HID descriptors</li>
+                                </ul>
+                            </div>
+
+                            <div class="feature-card">
+                                <div class="feature-icon">🔑</div>
+                                <h5>Advanced PIN/UV Protocols</h5>
+                                <ul>
+                                    <li>Classic protocols: v1/v2 (AES-256-CBC + ECDH)</li>
+                                    <li>PQC Protocol 101: ML-KEM + AES-256-GCM</li>
+                                    <li>HKDF-SHA256 key derivation</li>
+                                    <li>Secure PIN block encryption with AEAD</li>
+                                </ul>
+                            </div>
+
+                            <div class="feature-card">
+                                <div class="feature-icon">💾</div>
+                                <h5>Credential Lifecycle</h5>
+                                <ul>
+                                    <li>Persistent storage using LittleFS filesystem</li>
+                                    <li>Full credential CRUD operations per FIDO2 spec</li>
+                                    <li>User presence (UP) and verification (UV) support</li>
+                                    <li>Configurable attestation policies</li>
+                                </ul>
+                            </div>
+
+                            <div class="feature-card">
+                                <div class="feature-icon">🔄</div>
+                                <h5>Transport Flexibility</h5>
+                                <ul>
+                                    <li>Primary: UHID virtual HID device</li>
+                                    <li>Alternative: USB/IP for legacy environments</li>
+                                    <li>Optional CCID for smartcard applications</li>
+                                    <li>Modular transport layer architecture</li>
+                                </ul>
+                            </div>
+
+                            <div class="feature-card">
+                                <div class="feature-icon">⚙️</div>
+                                <h5>Service & CLI Integration</h5>
+                                <ul>
+                                    <li>Comprehensive CLI (start, stop, status)</li>
+                                    <li>Foreground and daemon modes</li>
+                                    <li>systemd service unit + udev rules</li>
+                                    <li>Graceful shutdown with signal handling</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Architecture -->
+                    <div class="modern-section">
+                        <h4 class="section-title">Architecture Highlights</h4>
+                        <div class="architecture-grid">
+                            <div class="arch-card">
+                                <h5>🏗️ Workspace-Based Modular Design</h5>
+                                <div class="arch-modules">
+                                    <div class="module-item"><strong>authenticator</strong> - Core CTAP2 application logic</div>
+                                    <div class="module-item"><strong>transport-core</strong> - Shared storage, state management, protocol glue</div>
+                                    <div class="module-item"><strong>pc-hid-runner</strong> - Host runner exposing /dev/uhid virtual device</div>
+                                    <div class="module-item"><strong>trussed-mldsa & trussed-mlkem</strong> - Zero-copy FFI wrappers with auto key zeroization</div>
+                                    <div class="module-item"><strong>pc-usbip-runner</strong> - Legacy USB/IP transport for regression testing</div>
+                                </div>
+                            </div>
+
+                            <div class="arch-card">
+                                <h5>🛡️ Security Features</h5>
+                                <ul class="security-list">
+                                    <li>Memory zeroization for all secret keys (zeroize crate)</li>
+                                    <li>Secure credential storage with LittleFS-backed persistence</li>
+                                    <li>Canonical CBOR encoding for deterministic serialization</li>
+                                    <li>Multiple PIN/UV protocol support (classic v1/v2, PQC protocol 101)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Implementation Details -->
+                    <div class="modern-section">
+                        <h4 class="section-title">Critical Implementation Challenges</h4>
+                        <div class="challenge-grid">
+                            <div class="challenge-card">
+                                <div class="challenge-header">
+                                    <span class="challenge-badge">UHID</span>
+                                    <h5>UHID Device Management</h5>
+                                </div>
+                                <ul>
+                                    <li>Low-level UHID ioctl interface using Rust nix crate</li>
+                                    <li>FIDO Alliance-compliant HID report descriptors</li>
+                                    <li>Device lifecycle management with signal cleanup</li>
+                                    <li>Permission handling via udev rules (vendor: 0x096e, product: 0x0858)</li>
+                                </ul>
+                            </div>
+
+                            <div class="challenge-card">
+                                <div class="challenge-header">
+                                    <span class="challenge-badge">FFI</span>
+                                    <h5>FFI Safety with Post-Quantum Crypto</h5>
+                                </div>
+                                <ul>
+                                    <li>Safe Rust wrappers around liboqs C library</li>
+                                    <li>Deterministic key zeroization via Drop trait</li>
+                                    <li>Cross-compiled prebuilt liboqs (x86_64, aarch64)</li>
+                                    <li>Feature flags for conditional parameter sets</li>
+                                </ul>
+                            </div>
+
+                            <div class="challenge-card">
+                                <div class="challenge-header">
+                                    <span class="challenge-badge">CTAP2</span>
+                                    <h5>CTAP2 Protocol Implementation</h5>
+                                </div>
+                                <ul>
+                                    <li>CBOR-encoded command parsing and validation</li>
+                                    <li>Canonical CBOR map ordering for determinism</li>
+                                    <li>Fragmented CTAPHID packet sequencing</li>
+                                    <li>Concurrent operation state management</li>
+                                </ul>
+                            </div>
+
+                            <div class="challenge-card">
+                                <div class="challenge-header">
+                                    <span class="challenge-badge">Crypto</span>
+                                    <h5>Secure Key Derivation</h5>
+                                </div>
+                                <ul>
+                                    <li>HKDF-based key derivation for PIN/UV protocols</li>
+                                    <li>Transcript hash binding for derived keys</li>
+                                    <li>Multi-mode encryption (GCM for PQC, CBC for classic)</li>
+                                    <li>Proper IV/nonce generation and handling</li>
+                                </ul>
+                            </div>
+
+                            <div class="challenge-card">
+                                <div class="challenge-header">
+                                    <span class="challenge-badge">Storage</span>
+                                    <h5>Persistent Storage</h5>
+                                </div>
+                                <ul>
+                                    <li>LittleFS filesystem integration for embedded-style persistence</li>
+                                    <li>Versioned credential storage schema</li>
+                                    <li>Secure deletion with zeroization</li>
+                                    <li>State directory and permission management</li>
+                                </ul>
+                            </div>
+
+                            <div class="challenge-card">
+                                <div class="challenge-header">
+                                    <span class="challenge-badge">Quality</span>
+                                    <h5>Code Quality & Testing</h5>
+                                </div>
+                                <ul>
+                                    <li>Type-safe design preventing common vulnerabilities</li>
+                                    <li>Zero unsafe code in high-level logic</li>
+                                    <li>Unit tests for crypto primitives and protocol flows</li>
+                                    <li>Integration testing with libfido2 and python-fido2</li>
+                                    <li>Multi-browser validation (Chrome, Firefox)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Project Card 4 -->
         <div class="project-card">
             <div class="project-header">
                 <div class="project-title-row">
