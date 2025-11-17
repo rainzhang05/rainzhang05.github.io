@@ -172,22 +172,10 @@ body.intro-animate .intro-target {
     transition: background-color 0.5s ease, border-bottom 0.5s ease;
 }
 
-/* Navigation layout - split into left and right */
-.left-nav,
-.right-nav {
+/* Navigation layout - left aligned */
+.main-nav {
     display: flex;
     align-items: center;
-}
-
-.left-nav {
-    flex: 1;
-    justify-content: flex-start;
-}
-
-.right-nav {
-    flex: 1;
-    justify-content: flex-end;
-    margin: 110px;
 }
 
 nav ul {
@@ -201,20 +189,8 @@ nav ul li {
     margin: 0 30px;
 }
 
-nav .left-nav ul li:first-child {
+nav ul li:first-child {
     margin-left: 0;
-}
-
-nav .left-nav ul li:last-child {
-    margin-right: 30px;
-}
-
-nav .right-nav ul li:first-child {
-    margin-left: 30px;
-}
-
-nav .right-nav ul li:last-child {
-    margin-right: 0;
 }
 
 nav ul li a {
@@ -248,18 +224,6 @@ nav ul li a:hover {
 
 body.dark-mode nav ul li a:hover {
     color: #b1a8f5;
-}
-
-#barHeading {
-    font-family: "Audiowide", sans-serif;
-    font-size: 25px;
-    color: #000000;
-    margin: 0;
-    font-weight: bold;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    transition: color 0.5s ease;
 }
 
 /* Decorations */
@@ -2043,7 +2007,6 @@ body.dark-mode h4,
 body.dark-mode p,
 body.dark-mode li,
 body.dark-mode .navigationBar a,
-body.dark-mode #barHeading,
 body.dark-mode #introName,
 body.dark-mode #introName .txt,
 body.dark-mode .skill-name,
@@ -2190,21 +2153,9 @@ body.dark-mode .project-link-button img {
         flex-wrap: wrap;
     }
 
-    .left-nav,
-    .right-nav {
+    .main-nav {
         width: 100%;
         justify-content: center;
-        margin: 5px 0;
-    }
-
-    #barHeading {
-        position: relative;
-        left: 0;
-        transform: none;
-        width: 100%;
-        text-align: center;
-        margin: 10px 0;
-        order: -1;
     }
 
     nav ul {
@@ -2324,10 +2275,6 @@ body.dark-mode .project-link-button img {
 
     nav ul li a {
         font-size: 14px;
-    }
-
-    #barHeading {
-        font-size: 20px;
     }
 
     #introHeading,
