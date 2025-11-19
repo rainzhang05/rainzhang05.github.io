@@ -24,4 +24,4 @@ As a university student actively seeking internship opportunities and profession
 If you're a potential employer or collaborator, please feel free to:
 - Reach out through the contact form on the website
 - Connect with me on [Linkedin](https://www.linkedin.com/in/rainzhang05/)
-- Send me an email at rainzhang.zty@gmail.com
+- Email me at rainzhang.zty@gmail.com
