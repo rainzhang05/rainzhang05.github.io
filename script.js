@@ -561,17 +561,11 @@ function bindOpenProjectLinks(root = document) {
 
             closeProjectModal({ immediate: true })
 
-            const projectsSection = document.getElementById("projects")
-            if (projectsSection) {
-                projectsSection.scrollIntoView({ behavior: "smooth", block: "start" })
+            // Directly open the modal without scrolling
+            if (typeof projectCard.focus === "function") {
+                projectCard.focus({ preventScroll: true })
             }
-
-            setTimeout(() => {
-                if (typeof projectCard.focus === "function") {
-                    projectCard.focus({ preventScroll: true })
-                }
-                openProjectModal(projectCard)
-            }, 260)
+            openProjectModal(projectCard)
         })
     })
 }
