@@ -543,7 +543,7 @@ body.dark-mode nav ul li a:hover {
     border-radius: 15px;
     overflow: hidden;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.5s ease;
+    transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.7s ease;
 }
 
 .project-card:hover,
@@ -869,26 +869,26 @@ body.modal-open {
 }
 
 .project-modal .project-header {
-    padding: 32px;
+    padding: 20px 24px;
     border-bottom: 1px solid #f0f0f0;
 }
 
 .project-modal .project-title-row {
-    gap: clamp(14px, 1.4vw, 20px);
+    gap: clamp(10px, 1.2vw, 16px);
 }
 
 .project-modal .project-title-row h3 {
-    font-size: clamp(24px, 2vw, 32px);
+    font-size: clamp(20px, 1.7vw, 26px);
 }
 
 .project-modal .project-meta {
-    gap: clamp(10px, 1vw, 14px);
+    gap: clamp(8px, 0.9vw, 12px);
 }
 
 .project-modal .project-tag {
-    font-size: 15px;
-    padding: 7px 14px;
-    border-radius: 10px;
+    font-size: 13px;
+    padding: 5px 10px;
+    border-radius: 8px;
 }
 
 .project-modal .project-content {
@@ -1667,8 +1667,6 @@ body.dark-mode .challenge-card ul li {
 .form-group input:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: #ffffff;
-    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
 }
 
 .form-group textarea {
@@ -1731,15 +1729,17 @@ body.dark-mode #introName .txt {
     --intro-transform-start: translateX(-50%) translateY(20px);
     --intro-transform-end: translateX(-50%) translateY(0);
     transform: translateX(-50%);
-    background-color: rgba(255, 255, 255, 0.3);
-    backdrop-filter: blur(10px);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.1) 100%);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     padding: 4px 16px;
     display: flex;
     align-items: center;
     gap: 8px;
     z-index: 2000;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.3);
     transition: all 0.5s ease;
 }
 
@@ -1764,33 +1764,9 @@ body.dark-mode #introName .txt {
 }
 
 .dock-item img {
-    width: 30px;
-    height: 30px;
-}
-
-#linkedinDock img {
-    width: clamp(35px, 2.5vw, 36px);
-    height: clamp(35px, 2.5vw, 36px);
-}
-
-#githubDock img {
-    width: clamp(35px, 2.5vw, 46px);
-    height: clamp(35px, 2.5vw, 46px);
-}
-
-#emailDock img {
-    width: clamp(30px, 2.2vw, 38px);
-    height: clamp(30px, 2.2vw, 38px);
-}
-
-#phoneDock img {
-    width: clamp(33px, 2.4vw, 43px);
-    height: clamp(33px, 2.4vw, 43px);
-}
-
-#discordDock img {
-    width: clamp(30px, 2.2vw, 39px);
-    height: clamp(30px, 2.2vw, 39px);
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
 }
 
 .theme-icon-container {
@@ -1872,7 +1848,9 @@ body.dark-mode {
 }
 
 body.dark-mode #dock {
-    background-color: rgba(30, 30, 30, 0.3);
+    background: linear-gradient(135deg, rgba(30, 30, 30, 0.2) 0%, rgba(20, 20, 20, 0.15) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 body.dark-mode .navigationBar {
@@ -1912,8 +1890,9 @@ body.dark-mode .education-header {
 
 body.dark-mode .project-tag,
 body.dark-mode .education-tag {
-    border: 1px solid #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
     color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 body.dark-mode .project-link-button:hover,
