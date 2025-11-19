@@ -845,9 +845,9 @@ body.modal-open {
 .project-modal {
     background-color: #ffffff;
     border-radius: 20px;
-    width: 90vw;
-    height: 90vh;
-    box-shadow: 0 40px 140px rgba(0, 0, 0, 0.32);
+    width: 80vw;
+    height: 85vh;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -1947,7 +1947,7 @@ body.dark-mode .project-card[role="button"]:active {
 
 body.dark-mode .project-modal {
     background-color: #1f1f1f;
-    box-shadow: 0 48px 160px rgba(0, 0, 0, 0.7);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 body.dark-mode .project-modal .project-header {
