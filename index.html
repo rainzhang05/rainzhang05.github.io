@@ -172,9 +172,15 @@
                     actionable software fixes and personal learning milestones.
                 </p>
                 <div class="experience-related">
-                    <h4>Related Project</h4>
-                    <a href="#projects" class="related-project-link" data-open-project="project-post-quantum-webauthn">
-                        Post-Quantum WebAuthn Test Platform
+                    <h4>Related Projects</h4>
+                    <a href="#projects" class="related-project-link" data-open-project="project-webauthn-platform">
+                        Post-Quantum FIDO2/WebAuthn Platform
+                    </a>
+                    <a href="#projects" class="related-project-link" data-open-project="project-mldsa-authenticator">
+                        ML-DSA Software FIDO Authenticator
+                    </a>
+                    <a href="#projects" class="related-project-link" data-open-project="project-security-demo">
+                        Security Product Demo Web Service
                     </a>
                 </div>
                 <div class="project-description project-description-rich">
@@ -251,7 +257,288 @@
 <div class="projects">
     <h2 id="projects">Projects</h2>
     <div class="projects-grid">
-        <!-- Project Card 1: ML-DSA Software FIDO Authenticator -->
+        <!-- Project Card 1: Security Product Demo Web Service -->
+        <div class="project-card" id="project-security-demo">
+            <div class="project-header">
+                <div class="project-title-row">
+                    <h3>Security Product Demo Web Service</h3>
+                    <div class="project-links">
+                        <a href="https://demo.ftsafe.com" target="_blank" rel="noopener noreferrer" class="project-link-button" aria-label="Open Security Product Demo Web Service live site">
+                            <img src="icons/link-icon-round.png" alt="" aria-hidden="true">
+                        </a>
+                    </div>
+                </div>
+                <div class="project-meta">
+                    <span class="project-tag date-tag">November 2025</span>
+                    <span class="project-tag tech-tag">Python <img src="icons/python-icon.png" alt="Python"></span>
+                    <span class="project-tag tech-tag">React.js <img src="icons/react.icon.png" alt="React.js"></span>
+                    <span class="project-tag tech-tag">TypeScript</span>
+                    <span class="project-tag tech-tag">Tailwind CSS <img src="icons/tailwind-icon.png" alt="Tailwind CSS"></span>
+                </div>
+            </div>
+            <div class="project-content">
+                <p class="project-summary">A comprehensive authentication platform demonstrating passwordless authentication with post-quantum cryptography support for Feitian Technologies.</p>
+
+                <!-- Modern Layout Container -->
+                <div class="project-description project-modern-layout">
+
+                    <!-- Hero Section -->
+                    <div class="modern-hero">
+                        <div class="hero-content">
+                            <h4 class="hero-title">Comprehensive Authentication Platform with Post-Quantum Cryptography</h4>
+                            <p class="hero-description">
+                                A full-featured demonstration platform for Feitian Technologies showcasing modern authentication methods including WebAuthn, FIDO2, Passkeys, and post-quantum cryptography (PQC) integration. The platform serves as both an educational tool and functional testing ground, allowing customers to learn about, register, and test physical security keys and biometric authenticators in a real-world environment.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Key Info Grid -->
+                    <div class="modern-info-grid">
+                        <div class="info-card">
+                            <div class="info-icon">🎯</div>
+                            <h5>Goal</h5>
+                            <p>Bridge the gap between complex authentication technology and user understanding by providing a unified platform for end-users to experience, manage, and learn about Feitian's authentication products. While the company had robust developer tools and SDKs, there was no user-facing platform that would allow customers to learn about modern authentication technologies, register and test their security keys, and explore post-quantum cryptography integration.</p>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-icon">👨‍💻</div>
+                            <h5>Role</h5>
+                            <p><strong>Solo Full-Stack Developer</strong> - End-to-end responsibility for architecture, design, development, testing, deployment, and maintenance including system architecture, full-stack development, WebAuthn/FIDO2 protocol implementation with PQC integration, cloud infrastructure setup, CI/CD pipeline configuration, security hardening, DevOps and containerization, UI/UX design, internationalization, and documentation.</p>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-icon">🚀</div>
+                            <h5>Impact</h5>
+                            <p>Democratized authentication by enabling non-technical users to understand and test passwordless authentication. Reduced support burden through self-service platform. First commercial platform demonstrating post-quantum WebAuthn integration, establishing market differentiation. Hardware testing platform allows customers to validate Feitian security keys before purchase/deployment.</p>
+                        </div>
+                    </div>
+
+                    <!-- Tech Stack Section -->
+                    <div class="modern-section">
+                        <h4 class="section-title">Technical Stack</h4>
+
+                        <div class="tech-category">
+                            <h5 class="tech-category-title">Frontend</h5>
+                            <div class="tech-pills">
+                                <span class="tech-pill">React 19</span>
+                                <span class="tech-pill">TypeScript 5.9</span>
+                                <span class="tech-pill">Vite 7</span>
+                                <span class="tech-pill">React Router 7</span>
+                                <span class="tech-pill">Framer Motion 12</span>
+                                <span class="tech-pill">i18next 25</span>
+                                <span class="tech-pill">CSS Modules</span>
+                            </div>
+                        </div>
+
+                        <div class="tech-category">
+                            <h5 class="tech-category-title">Backend</h5>
+                            <div class="tech-pills">
+                                <span class="tech-pill">Python 3.11+</span>
+                                <span class="tech-pill">Flask 3.x</span>
+                                <span class="tech-pill">python-fido2 1.2</span>
+                                <span class="tech-pill">cryptography 42.x</span>
+                                <span class="tech-pill">pyotp 2.9</span>
+                                <span class="tech-pill">bcrypt 4.x</span>
+                                <span class="tech-pill highlight">liboqs 0.14 (ML-DSA/ML-KEM)</span>
+                                <span class="tech-pill">gunicorn 21</span>
+                            </div>
+                        </div>
+
+                        <div class="tech-category">
+                            <h5 class="tech-category-title">Infrastructure & DevOps</h5>
+                            <div class="tech-pills">
+                                <span class="tech-pill">Docker</span>
+                                <span class="tech-pill">Docker Compose</span>
+                                <span class="tech-pill">Google Cloud Run</span>
+                                <span class="tech-pill">Google Cloud Storage</span>
+                                <span class="tech-pill">Nginx</span>
+                                <span class="tech-pill">Supervisor</span>
+                                <span class="tech-pill">GitHub Actions</span>
+                                <span class="tech-pill">Dependabot</span>
+                            </div>
+                        </div>
+
+                        <div class="tech-category">
+                            <h5 class="tech-category-title">Notable Architectural Choices</h5>
+                            <div class="tech-pills">
+                                <span class="tech-pill">Prebuilt liboqs (zero-compilation PQC)</span>
+                                <span class="tech-pill">Repository pattern</span>
+                                <span class="tech-pill">Modular Flask blueprints</span>
+                                <span class="tech-pill">Air-gapped Docker builds</span>
+                                <span class="tech-pill">Storage abstraction layer</span>
+                                <span class="tech-pill">Challenge store with TTL</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Key Features -->
+                    <div class="modern-section">
+                        <h4 class="section-title">Key Features & Components</h4>
+                        <div class="feature-grid">
+                            <div class="feature-card">
+                                <div class="feature-icon">🔐</div>
+                                <h5>Multiple Authentication Methods</h5>
+                                <ul>
+                                    <li>Traditional password (Bcrypt-hashed)</li>
+                                    <li>Time-Based OTP (TOTP) - RFC 6238 compliant</li>
+                                    <li>Counter-Based OTP (HOTP) - RFC 4226</li>
+                                    <li>WebAuthn/Passkeys (platform authenticators)</li>
+                                    <li>Security Keys (cross-platform FIDO2)</li>
+                                    <li>Post-Quantum Cryptography (ML-DSA-44/65/87)</li>
+                                </ul>
+                            </div>
+
+                            <div class="feature-card">
+                                <div class="feature-icon">🌐</div>
+                                <h5>WebAuthn Implementation</h5>
+                                <ul>
+                                    <li>Attestation verification (packed, fido-u2f, tpm, android-key, apple, android-safetynet)</li>
+                                    <li>AAGUID-based device recognition (57,000+ authenticator mappings from FIDO MDS)</li>
+                                    <li>Proper resident key behavior enforcement</li>
+                                    <li>Conditional mediation support (passkey autofill)</li>
+                                    <li>User verification policies</li>
+                                </ul>
+                            </div>
+
+                            <div class="feature-card">
+                                <div class="feature-icon">🔑</div>
+                                <h5>OTP System</h5>
+                                <ul>
+                                    <li>QR code generation for authenticator app enrollment</li>
+                                    <li>AES-256-GCM encrypted seed storage</li>
+                                    <li>Configurable time windows (30s/60s)</li>
+                                    <li>Configurable code lengths (6/8 digits)</li>
+                                    <li>Drift window tolerance for TOTP validation</li>
+                                </ul>
+                            </div>
+
+                            <div class="feature-card">
+                                <div class="feature-icon">🛡️</div>
+                                <h5>Security Features</h5>
+                                <ul>
+                                    <li>HTTPOnly, Secure, SameSite cookies</li>
+                                    <li>CORS configuration with origin whitelisting</li>
+                                    <li>Rate limiting on authentication endpoints</li>
+                                    <li>Session encryption with AES-256-GCM</li>
+                                    <li>Security headers (CSP, X-Frame-Options, HSTS)</li>
+                                </ul>
+                            </div>
+
+                            <div class="feature-card">
+                                <div class="feature-icon">💾</div>
+                                <h5>Storage Architecture</h5>
+                                <ul>
+                                    <li>Production: Google Cloud Storage with Workload Identity</li>
+                                    <li>Development: Local filesystem fallback</li>
+                                    <li>Namespaced object keys for data organization</li>
+                                    <li>AES-256-GCM encryption for sensitive data</li>
+                                </ul>
+                            </div>
+
+                            <div class="feature-card">
+                                <div class="feature-icon">🎨</div>
+                                <h5>User Experience</h5>
+                                <ul>
+                                    <li>Login Simulator for risk-free testing</li>
+                                    <li>Light/Dark theme with persistent preference</li>
+                                    <li>Bilingual support (English and Simplified Chinese)</li>
+                                    <li>Device Detection using User-Agent Client Hints API</li>
+                                    <li>Responsive mobile-first design</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Implementation Details -->
+                    <div class="modern-section">
+                        <h4 class="section-title">Implementation Highlights</h4>
+                        <div class="challenge-grid">
+                            <div class="challenge-card">
+                                <div class="challenge-header">
+                                    <span class="challenge-badge">WebAuthn</span>
+                                    <h5>WebAuthn Protocol Implementation</h5>
+                                </div>
+                                <ul>
+                                    <li>Resident key semantics: "discouraged" for username mode, "required" for usernameless</li>
+                                    <li>Cryptographically secure random challenge generation (32 bytes)</li>
+                                    <li>TTL-based expiration (5 minutes default) with one-time use enforcement</li>
+                                    <li>User-session binding with verification</li>
+                                </ul>
+                            </div>
+
+                            <div class="challenge-card">
+                                <div class="challenge-header">
+                                    <span class="challenge-badge">PQC</span>
+                                    <h5>Post-Quantum Cryptography Integration</h5>
+                                </div>
+                                <ul>
+                                    <li>Zero-compilation approach with prebuilt liboqs libraries</li>
+                                    <li>LD_LIBRARY_PATH runtime linking configuration</li>
+                                    <li>ML-DSA support with FIPS 204 standardized algorithms</li>
+                                    <li>Future-proof architecture for ML-KEM integration</li>
+                                </ul>
+                            </div>
+
+                            <div class="challenge-card">
+                                <div class="challenge-header">
+                                    <span class="challenge-badge">CI/CD</span>
+                                    <h5>Comprehensive CI/CD Pipeline</h5>
+                                </div>
+                                <ul>
+                                    <li>7 parallel check categories in GitHub Actions</li>
+                                    <li>Python backend checks (imports, bytecode, pytest)</li>
+                                    <li>Frontend checks (TypeScript, ESLint, build validation)</li>
+                                    <li>Docker build and Compose validation</li>
+                                    <li>Quality checks (TODOs, console.logs, secrets)</li>
+                                    <li>Weekly automated dependency updates via Dependabot</li>
+                                </ul>
+                            </div>
+
+                            <div class="challenge-card">
+                                <div class="challenge-header">
+                                    <span class="challenge-badge">Detection</span>
+                                    <h5>Enhanced Device Detection</h5>
+                                </div>
+                                <ul>
+                                    <li>User-Agent Client Hints API for accurate version detection</li>
+                                    <li>Multiple fallback patterns for iOS/iPadOS</li>
+                                    <li>macOS friendly version names (Big Sur, Monterey, Ventura, Sonoma, Sequoia)</li>
+                                    <li>Windows 10/11 distinction and Android full version parsing</li>
+                                    <li>Conditional mediation support detection</li>
+                                </ul>
+                            </div>
+
+                            <div class="challenge-card">
+                                <div class="challenge-header">
+                                    <span class="challenge-badge">Docker</span>
+                                    <h5>Container Architecture</h5>
+                                </div>
+                                <ul>
+                                    <li>Multi-stage builds with air-gapped base images</li>
+                                    <li>Prebuilt liboqs copied into containers</li>
+                                    <li>Fully offline-capable container builds</li>
+                                    <li>Supervisor for production process management</li>
+                                </ul>
+                            </div>
+
+                            <div class="challenge-card">
+                                <div class="challenge-header">
+                                    <span class="challenge-badge">Results</span>
+                                    <h5>Impact & Business Value</h5>
+                                </div>
+                                <ul>
+                                    <li>Reduced support burden via self-service testing</li>
+                                    <li>Increased product adoption through hands-on demos</li>
+                                    <li>Market differentiation as first PQC-enabled WebAuthn demo platform</li>
+                                    <li>Developer time savings from clean architecture</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Project Card 2: ML-DSA Software FIDO Authenticator -->
         <div class="project-card" id="project-mldsa-authenticator">
             <div class="project-header">
                 <div class="project-title-row">
@@ -552,27 +839,31 @@
             </div>
         </div>
 
-        <!-- Project Card 2: Security Product Demo Web Service -->
-        <div class="project-card" id="project-security-demo">
+
+        <!-- Project Card 3: Post-Quantum FIDO2/WebAuthn Platform -->
+        <div class="project-card" id="project-webauthn-platform">
             <div class="project-header">
                 <div class="project-title-row">
-                    <h3>Security Product Demo Web Service</h3>
+                    <h3>Post-Quantum FIDO2/WebAuthn Platform</h3>
                     <div class="project-links">
-                        <a href="https://demo.ftsafe.com" target="_blank" rel="noopener noreferrer" class="project-link-button" aria-label="Open Security Product Demo Web Service live site">
+                        <a href="https://webauthnlab.tech" target="_blank" rel="noopener noreferrer" class="project-link-button" aria-label="Open Post-Quantum WebAuthn Platform live site">
                             <img src="icons/link-icon-round.png" alt="" aria-hidden="true">
+                        </a>
+                        <a href="https://github.com/feitiantech/postquantum-webauthn-platform" target="_blank" rel="noopener noreferrer" class="project-link-button" aria-label="View Post-Quantum WebAuthn Platform repository on GitHub">
+                            <img src="icons/github-dock-icon.png" alt="" aria-hidden="true">
                         </a>
                     </div>
                 </div>
                 <div class="project-meta">
-                    <span class="project-tag date-tag">November 2025</span>
+                    <span class="project-tag date-tag">September - October 2025</span>
                     <span class="project-tag tech-tag">Python <img src="icons/python-icon.png" alt="Python"></span>
-                    <span class="project-tag tech-tag">React.js <img src="icons/react.icon.png" alt="React.js"></span>
-                    <span class="project-tag tech-tag">TypeScript</span>
-                    <span class="project-tag tech-tag">Tailwind CSS <img src="icons/tailwind-icon.png" alt="Tailwind CSS"></span>
+                    <span class="project-tag tech-tag">JavaScript <img src="icons/js-icon.png" alt="JavaScript"></span>
+                    <span class="project-tag tech-tag">HTML <img src="icons/html-icon.png" alt="HTML"></span>
+                    <span class="project-tag tech-tag">CSS <img src="icons/css-icon.png" alt="CSS"></span>
                 </div>
             </div>
             <div class="project-content">
-                <p class="project-summary">A comprehensive authentication platform demonstrating passwordless authentication with post-quantum cryptography support for Feitian Technologies.</p>
+                <p class="project-summary">A comprehensive FIDO2/WebAuthn testing and development platform that integrates quantum-resistant cryptography.</p>
 
                 <!-- Modern Layout Container -->
                 <div class="project-description project-modern-layout">
@@ -580,9 +871,9 @@
                     <!-- Hero Section -->
                     <div class="modern-hero">
                         <div class="hero-content">
-                            <h4 class="hero-title">Comprehensive Authentication Platform with Post-Quantum Cryptography</h4>
+                            <h4 class="hero-title">Most Feature-Complete Public WebAuthn Developer Toolkit</h4>
                             <p class="hero-description">
-                                A full-featured demonstration platform for Feitian Technologies showcasing modern authentication methods including WebAuthn, FIDO2, Passkeys, and post-quantum cryptography (PQC) integration. The platform serves as both an educational tool and functional testing ground, allowing customers to learn about, register, and test physical security keys and biometric authenticators in a real-world environment.
+                                The most comprehensive FIDO2/WebAuthn testing and development platform integrating quantum-resistant cryptography. Serves as the industry's most feature-complete public developer toolkit for exploring WebAuthn authentication flows secured by NIST-standardized ML-DSA (Module-Lattice-Based Digital Signature Algorithm) variants, while providing extensive tools for testing, debugging, and understanding WebAuthn implementations.
                             </p>
                         </div>
                     </div>
@@ -592,17 +883,17 @@
                         <div class="info-card">
                             <div class="info-icon">🎯</div>
                             <h5>Goal</h5>
-                            <p>Bridge the gap between complex authentication technology and user understanding by providing a unified platform for end-users to experience, manage, and learn about Feitian's authentication products. While the company had robust developer tools and SDKs, there was no user-facing platform that would allow customers to learn about modern authentication technologies, register and test their security keys, and explore post-quantum cryptography integration.</p>
+                            <p>Create a production-grade platform that enables developers, security researchers, and organizations to test and implement WebAuthn authentication with both classical and post-quantum cryptographic algorithms, explore and debug FIDO2/WebAuthn flows with comprehensive developer tools, prepare for the quantum computing era by experimenting with NIST-standardized quantum-resistant signatures, access FIDO Metadata Service with 3,600+ authenticator entries, and decode/analyze WebAuthn payloads in real-time.</p>
                         </div>
                         <div class="info-card">
                             <div class="info-icon">👨‍💻</div>
                             <h5>Role</h5>
-                            <p><strong>Solo Full-Stack Developer</strong> - End-to-end responsibility for architecture, design, development, testing, deployment, and maintenance including system architecture, full-stack development, WebAuthn/FIDO2 protocol implementation with PQC integration, cloud infrastructure setup, CI/CD pipeline configuration, security hardening, DevOps and containerization, UI/UX design, internationalization, and documentation.</p>
+                            <p><strong>Solo Full-Stack Developer</strong> - Complete project ownership including architecture design, backend development, frontend implementation, cryptographic integration, DevOps, testing infrastructure, and multi-cloud deployment.</p>
                         </div>
                         <div class="info-card">
                             <div class="info-icon">🚀</div>
                             <h5>Impact</h5>
-                            <p>Democratized authentication by enabling non-technical users to understand and test passwordless authentication. Reduced support burden through self-service platform. First commercial platform demonstrating post-quantum WebAuthn integration, establishing market differentiation. Hardware testing platform allows customers to validate Feitian security keys before purchase/deployment.</p>
+                            <p>One of the first public ML-DSA WebAuthn platforms combining FIDO2/WebAuthn with NIST-standardized quantum-resistant algorithms. Live platform at webauthnlab.tech actively serving developers globally with daily automated MDS updates. Enables developers to test authenticators against 20+ COSE algorithms including 3 PQC variants, preparing organizations for post-quantum cryptography migration.</p>
                         </div>
                     </div>
 
@@ -611,55 +902,71 @@
                         <h4 class="section-title">Technical Stack</h4>
 
                         <div class="tech-category">
-                            <h5 class="tech-category-title">Frontend</h5>
+                            <h5 class="tech-category-title">Backend Technologies</h5>
                             <div class="tech-pills">
-                                <span class="tech-pill">React 19</span>
-                                <span class="tech-pill">TypeScript 5.9</span>
-                                <span class="tech-pill">Vite 7</span>
-                                <span class="tech-pill">React Router 7</span>
-                                <span class="tech-pill">Framer Motion 12</span>
-                                <span class="tech-pill">i18next 25</span>
-                                <span class="tech-pill">CSS Modules</span>
+                                <span class="tech-pill">Python 3.12+</span>
+                                <span class="tech-pill">Flask</span>
+                                <span class="tech-pill">Gunicorn</span>
+                                <span class="tech-pill">python-fido2 (Enhanced Fork)</span>
+                                <span class="tech-pill">cryptography</span>
+                                <span class="tech-pill">cbor2</span>
+                                <span class="tech-pill">pycose</span>
                             </div>
                         </div>
 
                         <div class="tech-category">
-                            <h5 class="tech-category-title">Backend</h5>
+                            <h5 class="tech-category-title">Post-Quantum Cryptography</h5>
                             <div class="tech-pills">
-                                <span class="tech-pill">Python 3.11+</span>
-                                <span class="tech-pill">Flask 3.x</span>
-                                <span class="tech-pill">python-fido2 1.2</span>
-                                <span class="tech-pill">cryptography 42.x</span>
-                                <span class="tech-pill">pyotp 2.9</span>
-                                <span class="tech-pill">bcrypt 4.x</span>
-                                <span class="tech-pill highlight">liboqs 0.14 (ML-DSA/ML-KEM)</span>
-                                <span class="tech-pill">gunicorn 21</span>
+                                <span class="tech-pill highlight">liboqs (Open Quantum Safe)</span>
+                                <span class="tech-pill highlight">ML-DSA-44/65/87</span>
+                                <span class="tech-pill">Custom COSE key handling</span>
+                                <span class="tech-pill">X.509 certificate chain validation</span>
+                                <span class="tech-pill">COSE algorithm mapping (-48/-49/-50)</span>
                             </div>
                         </div>
 
                         <div class="tech-category">
-                            <h5 class="tech-category-title">Infrastructure & DevOps</h5>
+                            <h5 class="tech-category-title">Frontend Technologies</h5>
                             <div class="tech-pills">
-                                <span class="tech-pill">Docker</span>
-                                <span class="tech-pill">Docker Compose</span>
-                                <span class="tech-pill">Google Cloud Run</span>
-                                <span class="tech-pill">Google Cloud Storage</span>
-                                <span class="tech-pill">Nginx</span>
-                                <span class="tech-pill">Supervisor</span>
-                                <span class="tech-pill">GitHub Actions</span>
-                                <span class="tech-pill">Dependabot</span>
+                                <span class="tech-pill">Pure JavaScript (ES6+)</span>
+                                <span class="tech-pill">~22,500 lines vanilla JS</span>
+                                <span class="tech-pill">Zero framework dependencies</span>
+                                <span class="tech-pill">Custom UI components</span>
+                                <span class="tech-pill">Real-time validation</span>
                             </div>
                         </div>
 
                         <div class="tech-category">
-                            <h5 class="tech-category-title">Notable Architectural Choices</h5>
+                            <h5 class="tech-category-title">Classical Cryptography Support</h5>
                             <div class="tech-pills">
-                                <span class="tech-pill">Prebuilt liboqs (zero-compilation PQC)</span>
-                                <span class="tech-pill">Repository pattern</span>
-                                <span class="tech-pill">Modular Flask blueprints</span>
-                                <span class="tech-pill">Air-gapped Docker builds</span>
-                                <span class="tech-pill">Storage abstraction layer</span>
-                                <span class="tech-pill">Challenge store with TTL</span>
+                                <span class="tech-pill">ECDSA (ES256/384/512/256K)</span>
+                                <span class="tech-pill">EdDSA (Ed25519/448)</span>
+                                <span class="tech-pill">RSA (RS256/384/512, PS256/384/512)</span>
+                                <span class="tech-pill">40+ COSE algorithms</span>
+                            </div>
+                        </div>
+
+                        <div class="tech-category">
+                            <h5 class="tech-category-title">Cloud Infrastructure</h5>
+                            <div class="tech-pills">
+                                <span class="tech-pill">Google Cloud Platform (Primary)</span>
+                                <span class="tech-pill">Cloud Storage</span>
+                                <span class="tech-pill">Cloud Run</span>
+                                <span class="tech-pill">Artifact Registry</span>
+                                <span class="tech-pill">Render.com (Backup)</span>
+                                <span class="tech-pill">Docker multi-stage builds</span>
+                                <span class="tech-pill">GitHub Actions CI/CD</span>
+                            </div>
+                        </div>
+
+                        <div class="tech-category">
+                            <h5 class="tech-category-title">Architectural Innovations</h5>
+                            <div class="tech-pills">
+                                <span class="tech-pill">Pluggable storage backend</span>
+                                <span class="tech-pill">Session-based isolation</span>
+                                <span class="tech-pill">Prebuilt liboqs binaries</span>
+                                <span class="tech-pill">Lazy-loaded MDS</span>
+                                <span class="tech-pill">GitHub-backed logging</span>
                             </div>
                         </div>
                     </div>
@@ -670,73 +977,69 @@
                         <div class="feature-grid">
                             <div class="feature-card">
                                 <div class="feature-icon">🔐</div>
-                                <h5>Multiple Authentication Methods</h5>
+                                <h5>Dual-Mode WebAuthn Interface</h5>
                                 <ul>
-                                    <li>Traditional password (Bcrypt-hashed)</li>
-                                    <li>Time-Based OTP (TOTP) - RFC 6238 compliant</li>
-                                    <li>Counter-Based OTP (HOTP) - RFC 4226</li>
-                                    <li>WebAuthn/Passkeys (platform authenticators)</li>
-                                    <li>Security Keys (cross-platform FIDO2)</li>
-                                    <li>Post-Quantum Cryptography (ML-DSA-44/65/87)</li>
+                                    <li><strong>Simple Mode:</strong> Streamlined registration/authentication with pre-configured algorithm selection (ML-DSA-44/65/87, EdDSA, ES256, RS256, ES384)</li>
+                                    <li><strong>Advanced Mode:</strong> Full JSON editor for granular WebAuthn options control with 40+ COSE algorithm support</li>
+                                    <li>Fine-tuned authenticator selection criteria and attestation preferences</li>
+                                    <li>Extension support (credProps, largeBlob, minPinLength)</li>
                                 </ul>
                             </div>
 
                             <div class="feature-card">
                                 <div class="feature-icon">🌐</div>
-                                <h5>WebAuthn Implementation</h5>
+                                <h5>Post-Quantum Cryptography Integration</h5>
                                 <ul>
-                                    <li>Attestation verification (packed, fido-u2f, tpm, android-key, apple, android-safetynet)</li>
-                                    <li>AAGUID-based device recognition (57,000+ authenticator mappings from FIDO MDS)</li>
-                                    <li>Proper resident key behavior enforcement</li>
-                                    <li>Conditional mediation support (passkey autofill)</li>
-                                    <li>User verification policies</li>
+                                    <li>Complete ML-DSA implementation (NIST-standardized Module-Lattice-Based Digital Signature Algorithm variants)</li>
+                                    <li>44, 65, 87 bit security levels with dynamic algorithm detection</li>
+                                    <li>Custom COSE integration for quantum-resistant signature verification</li>
+                                    <li>X.509 certificate parsing with PQC OID extraction</li>
+                                    <li>Algorithm comparison tools (classical vs post-quantum)</li>
                                 </ul>
                             </div>
 
                             <div class="feature-card">
-                                <div class="feature-icon">🔑</div>
-                                <h5>OTP System</h5>
+                                <div class="feature-icon">📊</div>
+                                <h5>FIDO Metadata Service Explorer</h5>
                                 <ul>
-                                    <li>QR code generation for authenticator app enrollment</li>
-                                    <li>AES-256-GCM encrypted seed storage</li>
-                                    <li>Configurable time windows (30s/60s)</li>
-                                    <li>Configurable code lengths (6/8 digits)</li>
-                                    <li>Drift window tolerance for TOTP validation</li>
+                                    <li>5.2MB verified MDS3 blob with 400+ authenticator entries from FIDO Alliance</li>
+                                    <li>JWT signature validation against GlobalSign trust root</li>
+                                    <li>Session-based management with custom metadata upload</li>
+                                    <li>Real-time search and filter capabilities</li>
+                                    <li>Auto-refresh cache with GitHub-backed metadata storage</li>
                                 </ul>
                             </div>
 
                             <div class="feature-card">
-                                <div class="feature-icon">🛡️</div>
-                                <h5>Security Features</h5>
+                                <div class="feature-icon">🔍</div>
+                                <h5>Advanced CBOR/WebAuthn Decoder</h5>
                                 <ul>
-                                    <li>HTTPOnly, Secure, SameSite cookies</li>
-                                    <li>CORS configuration with origin whitelisting</li>
-                                    <li>Rate limiting on authentication endpoints</li>
-                                    <li>Session encryption with AES-256-GCM</li>
-                                    <li>Security headers (CSP, X-Frame-Options, HSTS)</li>
+                                    <li>Comprehensive decoding for attestation objects, authenticator data, client data JSON, CTAP2 requests/responses</li>
+                                    <li>X.509 certificates (including PQC) and COSE keys</li>
+                                    <li>Multiple input formats: Base64, Base64URL, Hex, raw binary</li>
+                                    <li>Essential tool for debugging WebAuthn implementations</li>
+                                </ul>
+                            </div>
+
+                            <div class="feature-card">
+                                <div class="feature-icon">✅</div>
+                                <h5>Attestation Verification Engine</h5>
+                                <ul>
+                                    <li>Multiple attestation formats: Packed (including PQC certificates), TPM, Android SafetyNet/Key, Apple Anonymous, U2F, None</li>
+                                    <li>ML-DSA certificate signature verification</li>
+                                    <li>Custom trust path evaluation for quantum-resistant certificate chains</li>
+                                    <li>OID parsing for ML-DSA-44/65/87</li>
                                 </ul>
                             </div>
 
                             <div class="feature-card">
                                 <div class="feature-icon">💾</div>
-                                <h5>Storage Architecture</h5>
+                                <h5>Credential & Session Management</h5>
                                 <ul>
-                                    <li>Production: Google Cloud Storage with Workload Identity</li>
-                                    <li>Development: Local filesystem fallback</li>
-                                    <li>Namespaced object keys for data organization</li>
-                                    <li>AES-256-GCM encryption for sensitive data</li>
-                                </ul>
-                            </div>
-
-                            <div class="feature-card">
-                                <div class="feature-icon">🎨</div>
-                                <h5>User Experience</h5>
-                                <ul>
-                                    <li>Login Simulator for risk-free testing</li>
-                                    <li>Light/Dark theme with persistent preference</li>
-                                    <li>Bilingual support (English and Simplified Chinese)</li>
-                                    <li>Device Detection using User-Agent Client Hints API</li>
-                                    <li>Responsive mobile-first design</li>
+                                    <li>Pluggable storage architecture (local filesystem / Google Cloud Storage)</li>
+                                    <li>Session isolation with per-session credential storage</li>
+                                    <li>1-year cookie lifetime with 14-day inactive cleanup</li>
+                                    <li>Pickle serialization for efficient credential persistence</li>
                                 </ul>
                             </div>
                         </div>
@@ -748,82 +1051,79 @@
                         <div class="challenge-grid">
                             <div class="challenge-card">
                                 <div class="challenge-header">
-                                    <span class="challenge-badge">WebAuthn</span>
-                                    <h5>WebAuthn Protocol Implementation</h5>
+                                    <span class="challenge-badge">FIDO2</span>
+                                    <h5>Core FIDO2 Library Enhancement</h5>
                                 </div>
                                 <ul>
-                                    <li>Resident key semantics: "discouraged" for username mode, "required" for usernameless</li>
-                                    <li>Cryptographically secure random challenge generation (32 bytes)</li>
-                                    <li>TTL-based expiration (5 minutes default) with one-time use enforcement</li>
-                                    <li>User-session binding with verification</li>
+                                    <li>Enhanced fork of Yubico's python-fido2 (v1.2.1-dev.0) with extensive PQC additions</li>
+                                    <li>Custom CoseKey class hierarchy with ML-DSA support and PQC signature verification</li>
+                                    <li>X.509 certificate public key extraction for quantum-resistant algorithms</li>
+                                    <li>Complete W3C WebAuthn specification implementation</li>
                                 </ul>
                             </div>
 
                             <div class="challenge-card">
                                 <div class="challenge-header">
                                     <span class="challenge-badge">PQC</span>
-                                    <h5>Post-Quantum Cryptography Integration</h5>
+                                    <h5>PQC Integration Implementation</h5>
                                 </div>
                                 <ul>
-                                    <li>Zero-compilation approach with prebuilt liboqs libraries</li>
-                                    <li>LD_LIBRARY_PATH runtime linking configuration</li>
-                                    <li>ML-DSA support with FIPS 204 standardized algorithms</li>
-                                    <li>Future-proof architecture for ML-KEM integration</li>
+                                    <li>Prebuilt liboqs binaries at /prebuilt_liboqs/linux-x86_64/</li>
+                                    <li>Dynamic loading with availability detection and graceful degradation</li>
+                                    <li>liboqs.so shared library and liboqs-python wheel</li>
+                                    <li>Eliminates complex build dependencies (CMake/Ninja)</li>
                                 </ul>
                             </div>
 
                             <div class="challenge-card">
                                 <div class="challenge-header">
-                                    <span class="challenge-badge">CI/CD</span>
-                                    <h5>Comprehensive CI/CD Pipeline</h5>
+                                    <span class="challenge-badge">Frontend</span>
+                                    <h5>Frontend Architecture</h5>
                                 </div>
                                 <ul>
-                                    <li>7 parallel check categories in GitHub Actions</li>
-                                    <li>Python backend checks (imports, bytecode, pytest)</li>
-                                    <li>Frontend checks (TypeScript, ESLint, build validation)</li>
-                                    <li>Docker build and Compose validation</li>
-                                    <li>Quality checks (TODOs, console.logs, secrets)</li>
-                                    <li>Weekly automated dependency updates via Dependabot</li>
+                                    <li>Event-driven architecture with custom event handlers</li>
+                                    <li>Modal-based UI for JSON editing with syntax highlighting</li>
+                                    <li>Real-time WebAuthn API interaction and dynamic algorithm selection</li>
+                                    <li>Comprehensive error handling with user-friendly messages</li>
                                 </ul>
                             </div>
 
                             <div class="challenge-card">
                                 <div class="challenge-header">
-                                    <span class="challenge-badge">Detection</span>
-                                    <h5>Enhanced Device Detection</h5>
+                                    <span class="challenge-badge">Testing</span>
+                                    <h5>Comprehensive Test Suite</h5>
                                 </div>
                                 <ul>
-                                    <li>User-Agent Client Hints API for accurate version detection</li>
-                                    <li>Multiple fallback patterns for iOS/iPadOS</li>
-                                    <li>macOS friendly version names (Big Sur, Monterey, Ventura, Sonoma, Sequoia)</li>
-                                    <li>Windows 10/11 distinction and Android full version parsing</li>
-                                    <li>Conditional mediation support detection</li>
+                                    <li>31 test files with 500+ lines of COSE key handling tests</li>
+                                    <li>Integration tests for PQC registration/authentication flows</li>
+                                    <li>Full coverage on 5 core modules: fido2/cose.py, server/pqc.py, server/config.py, server/features.py, server/payment.py</li>
+                                    <li>Mock-based testing for external dependencies</li>
                                 </ul>
                             </div>
 
                             <div class="challenge-card">
                                 <div class="challenge-header">
-                                    <span class="challenge-badge">Docker</span>
-                                    <h5>Container Architecture</h5>
+                                    <span class="challenge-badge">DevOps</span>
+                                    <h5>Deployment Pipeline</h5>
                                 </div>
                                 <ul>
-                                    <li>Multi-stage builds with air-gapped base images</li>
-                                    <li>Prebuilt liboqs copied into containers</li>
-                                    <li>Fully offline-capable container builds</li>
-                                    <li>Supervisor for production process management</li>
+                                    <li>Docker multi-stage build with builder and runtime stages</li>
+                                    <li>GitHub Actions CI/CD with pytest suite</li>
+                                    <li>Automated Docker image push to Google Artifact Registry</li>
+                                    <li>Cloud Run deployment with health validation</li>
                                 </ul>
                             </div>
 
                             <div class="challenge-card">
                                 <div class="challenge-header">
-                                    <span class="challenge-badge">Results</span>
-                                    <h5>Impact & Business Value</h5>
+                                    <span class="challenge-badge">Impact</span>
+                                    <h5>Results & Industry Leadership</h5>
                                 </div>
                                 <ul>
-                                    <li>Reduced support burden via self-service testing</li>
-                                    <li>Increased product adoption through hands-on demos</li>
-                                    <li>Market differentiation as first PQC-enabled WebAuthn demo platform</li>
-                                    <li>Developer time savings from clean architecture</li>
+                                    <li>Most comprehensive public WebAuthn developer tools platform</li>
+                                    <li>Production-ready post-quantum cryptography integration</li>
+                                    <li>Enables testing of authenticators against 20+ COSE algorithms</li>
+                                    <li>Future-proofing organizations for post-quantum migration</li>
                                 </ul>
                             </div>
                         </div>
@@ -833,7 +1133,7 @@
             </div>
         </div>
 
-        <!-- Project Card 3 -->
+        <!-- Project Card 4 -->
         <div class="project-card">
             <div class="project-header">
                 <div class="project-title-row">
@@ -1020,7 +1320,7 @@
             </div>
         </div>
 
-        <!-- Project Card 4 -->
+        <!-- Project Card 5 -->
         <div class="project-card">
             <div class="project-header">
                 <div class="project-title-row">
@@ -1090,7 +1390,7 @@
             </div>
         </div>
 
-        <!-- Project Card 5 -->
+        <!-- Project Card 6 -->
         <div class="project-card">
             <div class="project-header">
                 <div class="project-title-row">
@@ -1111,7 +1411,7 @@
             </div>
         </div>
 
-        <!-- Project Card 6 -->
+        <!-- Project Card 7 -->
         <div class="project-card">
             <div class="project-header">
                 <div class="project-title-row">
