@@ -251,449 +251,7 @@
 <div class="projects">
     <h2 id="projects">Projects</h2>
     <div class="projects-grid">
-        <!-- Project Card 1 -->
-        <div class="project-card" id="project-post-quantum-webauthn">
-            <div class="project-header">
-                <div class="project-title-row">
-                    <h3>Post-Quantum WebAuthn Test Platform</h3>
-                    <div class="project-links">
-                        <a href="https://github.com/rainzhang05/python-fido2-webauthn-test" target="_blank" rel="noopener noreferrer" class="project-link-button" aria-label="View WebAuthn/FIDO2 Test Application repository on GitHub">
-                            <img src="icons/github-dock-icon.png" alt="" aria-hidden="true">
-                        </a>
-                    </div>
-                </div>
-                <div class="project-meta">
-                    <span class="project-tag date-tag">September 2025</span>
-                    <span class="project-tag tech-tag">Python <img src="icons/python-icon.png" alt="Python"></span>
-                    <span class="project-tag tech-tag">HTML <img src="icons/html-icon.png" alt="HTML"></span>
-                    <span class="project-tag tech-tag">CSS <img src="icons/css-icon.png" alt="CSS"></span>
-                    <span class="project-tag tech-tag">JavaScript <img src="icons/js-icon.png" alt="JavaScript"></span>
-                </div>
-            </div>
-            <div class="project-content">
-                <p class="project-summary">WebAuthn/FIDO2 server + web app with PQC support for testing security keys.</p>
-                <div class="project-description project-description-rich">
-                    <div class="project-intro">
-                        <p>
-                            The test platform provides Post-Quantum Cryptography (PQC) and WebAuthn/FIDO2 servers and web UI that showcases authenticator algorithms,
-                            flags, counters, and extension outputs, and bringing post-quantum algorithms alongside classical algorithms.
-                        </p>
-                    </div>
-                    <div class="project-section">
-                        <h4>Tech Stack</h4>
-                        <ul class="project-section-list">
-                            <li>
-                                <span class="feature-title">Backend Foundation</span>
-                                <p>
-                                    The backend is a Flask application written for Python 3.8+ that wires <code>Fido2Server</code>
-                                    helpers from the <code>python-fido2</code> library to REST endpoints and WebAuthn ceremonies,
-                                    while persisting state with lightweight on-disk storage so demonstrations can run without
-                                    external infrastructure.
-                                </p>
-                            </li>
-                            <li>
-                                <span class="feature-title">Metadata &amp; Attestation Handling</span>
-                                <p>
-                                    Metadata and attestation handling lean on companion libraries&mdash;<code>cbor2</code> parses
-                                    authenticator CBOR objects, <code>pycose</code> and <code>pyjwt</code> validate COSE keys and JWS
-                                    signatures, and <code>requests</code> fetches fresh FIDO Alliance metadata BLOBs&mdash;with
-                                    optional PQC extras (<code>oqs</code>, <code>pqcrypto</code>) available when experimenting with
-                                    post-quantum authenticators.
-                                </p>
-                            </li>
-                            <li>
-                                <span class="feature-title">Frontend Experience</span>
-                                <p>
-                                    The frontend is composed of vanilla JavaScript modules, structured CSS bundles, and HTML
-                                    templates served directly by Flask; these assets drive the tabbed interface, JSON editor, modal
-                                    windows, and interactive tables without requiring a separate build pipeline.
-                                </p>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="project-section">
-                        <h4>Main Sections at a Glance</h4>
-                        <ul class="project-section-list">
-                            <li>
-                                <span class="feature-title">Simple Authentication</span>
-                                <p>
-                                    Presents a quick username field with register and authenticate buttons plus inline status and
-                                    progress feedback for rapid passkey trials.
-                                </p>
-                            </li>
-                            <li>
-                                <span class="feature-title">Advanced Authentication</span>
-                                <p>
-                                    Layers extensive configuration panels, a live JSON editor, and a saved credential list so you
-                                    can craft bespoke ceremonies and review stored passkeys in one place.
-                                </p>
-                            </li>
-                            <li>
-                                <span class="feature-title">Decoder</span>
-                                <p>
-                                    Accepts pasted payloads, explains which WebAuthn structures it understands, and displays parsed
-                                    and raw views of decoded responses.
-                                </p>
-                            </li>
-                            <li>
-                                <span class="feature-title">FIDO MDS Authenticators</span>
-                                <p>
-                                    Loads a sortable, filterable table with metadata entries, update controls, and modals for
-                                    certificates and authenticator details.
-                                </p>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="project-section project-section-split">
-                        <div class="project-section-text">
-                            <h4>Simple Authentication</h4>
-                            <p>
-                                The simple tab supplies a minimal form: users enter a username (with a helper button to randomize it),
-                                initiate registration or authentication, and watch the inline status and spinner update through each
-                                step.
-                            </p>
-                            <p>
-                                Behind the scenes, <code>simpleRegister</code> calls the server for credential creation options,
-                                normalizes requested extensions, invokes WebAuthn <code>create</code>, and posts the resulting credential
-                                back to <code>/api/register/complete</code>, reporting success, randomizing the username, and refreshing
-                                the saved credential cache. Similarly, <code>simpleAuthenticate</code> fetches assertion options, calls
-                                WebAuthn <code>get</code>, and submits the assertion to <code>/api/authenticate/complete</code>, mapping
-                                common WebAuthn errors to readable status messages.
-                            </p>
-                        </div>
-                        <figure class="project-figure">
-                            <img src="images/webauthn-project/simple-authentication.png" alt="Simple authentication tab with register and authenticate controls">
-                        </figure>
-                    </div>
-                    <div class="project-section project-section-split">
-                        <div class="project-section-text">
-                            <h4>Advanced Authentication</h4>
-                            <p>
-                                The advanced tab splits into registration and authentication sub-tabs, each containing expandable
-                                panels for user identity, authenticator selection, other options, and extensions with bilingual tooltips
-                                that explain every parameter choice. A dedicated JSON editor column mirrors the form state, offers
-                                expand, save, and reset controls, and keeps the textarea optimized for manual edits. On the right, a
-                                binary-format selector and saved credential panel provide quick format conversions and bulk deletion
-                                capabilities. When the page loads, helper scripts randomize IDs and challenges, seed large-blob and PRF
-                                fields, pull saved credentials, and wire input events so that any change updates the JSON representation
-                                automatically.
-                            </p>
-                            <p>
-                                During advanced registration, the JSON editor’s payload is validated, optional extensions such as
-                                <code>minPinLength</code> are merged in, WebAuthn <code>create</code> is invoked, and the response is
-                                posted to <code>/api/advanced/register/complete</code>; success triggers modal details, status feedback,
-                                and a saved credential refresh, while failures surface likely incompatibilities (e.g., unsupported
-                                algorithms or extensions).
-                            </p>
-                            <p>
-                                Advanced authentication mirrors that flow by validating request JSON, enforcing hint rules, performing
-                                WebAuthn <code>get</code>, and submitting the result to <code>/api/advanced/authenticate/complete</code>,
-                                again surfacing human-friendly outcomes or guidance when no suitable credential is found.
-                            </p>
-                        </div>
-                        <div class="project-section-media">
-                            <figure class="project-figure">
-                                <img src="images/webauthn-project/advanced-authentication.png" alt="Advanced authentication tab with expandable panels and configuration options">
-                            </figure>
-                            <figure class="project-figure">
-                                <img src="images/webauthn-project/advanced-authentication-json-editor.png" alt="Advanced authentication JSON editor synchronized with the configuration form">
-                            </figure>
-                        </div>
-                    </div>
-                    <div class="project-section project-section-split">
-                        <div class="project-section-text">
-                            <h4>Saved Credentials and Credential Details</h4>
-                            <p>
-                                Saved credentials are fetched from <code>/api/credentials</code>, normalized with derived hex
-                                identifiers, and stored in client state before rendering the panel or updating JSON previews. Each list
-                                entry highlights discoverable, large-blob, or PQC traits, supports keyboard activation of the detail
-                                modal, and exposes a delete shortcut that targets the correct server record. Server-backed delete and
-                                clear-all handlers confirm intent, post to <code>/api/deletepub</code> or <code>/api/credentials</code>,
-                                and update both UI and status messaging when the operations complete.
-                            </p>
-                            <p>
-                                The credential detail modal itself is defined in HTML but populated entirely by JavaScript at runtime.
-                                The renderer gathers user information, user handle encodings, and credential ID encodings; it evaluates
-                                stored attestation summaries and flags to describe discoverability, large blob support, minPinLength,
-                                attestation checks, authenticator data bits, signature counters, and any client extension outputs
-                                captured during registration. Public key information is annotated with COSE key type, ML-DSA parameter
-                                sets, and base64/base64url/hex encodings to aid PQC inspection.
-                            </p>
-                            <p>
-                                When present, archived registration details are embedded for deeper comparison, and an AAGUID "Info"
-                                button appears for root-verified attestations; clicking it triggers an asynchronous lookup that can
-                                wait for metadata to load, surfaces status updates in the modal, and then closes the modal once the
-                                related authenticator entry is highlighted in the MDS table.
-                            </p>
-                        </div>
-                        <div class="project-section-media">
-                            <figure class="project-figure">
-                                <img src="images/webauthn-project/credential-details-page-1.png" alt="Saved credentials list with badges highlighting discoverable and PQC traits">
-                            </figure>
-                            <figure class="project-figure">
-                                <img src="images/webauthn-project/credential-details-page-2.png" alt="Credential detail modal with attestation summaries and authenticator flags">
-                            </figure>
-                        </div>
-                    </div>
-                    <div class="project-section project-section-split">
-                        <div class="project-section-text">
-                            <h4>Decoder</h4>
-                            <p>
-                                The decoder tab enumerates all recognized WebAuthn payload formats&mdash;covering credential JSON, CBOR
-                                attestation objects, authenticator data, client data, PEM or DER certificates, general JSON, and CBOR
-                                blobs&mdash;and notes that binary inputs may be base64, base64url, or hex (with colon tolerance for hex).
-                                Submissions post the pasted payload to <code>/api/decode</code>, clear prior output, display progress, and
-                                then either render a structured summary with status chips and sectioned data or report parsing errors;
-                                users can also toggle a raw JSON textarea view for deeper inspection or hide it to focus on the summary.
-                            </p>
-                        </div>
-                        <figure class="project-figure">
-                            <img src="images/webauthn-project/decoder.png" alt="Decoder tab showing parsed WebAuthn payloads and raw output toggles">
-                        </figure>
-                    </div>
-                    <div class="project-section project-section-split">
-                        <div class="project-section-text">
-                            <h4>FIDO MDS Explorer</h4>
-                            <p>
-                                The MDS tab features an update button, live entry counters, a sortable and filterable table, and modals
-                                dedicated to certificate decoding and authenticator detail browsing. When the page loads, any
-                                server-provided metadata snapshot is exposed through a hidden bootstrap element so the client can
-                                initialize without an extra network call.
-                            </p>
-                            <p>
-                                The <code>loadMdsData</code> routine checks for forced reloads, applies bootstrap or cached payloads when
-                                available, and otherwise fetches the metadata BLOB with cache-aware options while handling missing files,
-                                clearing caches, and resetting UI state appropriately. Once metadata entries arrive, they are
-                                transformed, indexed by AAGUID, used to populate filter dropdowns, annotated with next-update deadlines,
-                                and reported through the status banner before column resizing is re-enabled.
-                            </p>
-                            <p>
-                                Update requests toggle button states, post to <code>/api/mds/update</code>, interpret whether a reload is
-                                required, and either re-fetch the BLOB or inform the user when data is already current (highlighting
-                                overdue deadlines when necessary). When a credential detail’s AAGUID info button is pressed, the helper
-                                switches to the MDS tab, waits for metadata to load if needed, and then asks the explorer to locate and
-                                highlight the relevant authenticator; the highlighting routine normalizes AAGUIDs, resets filters,
-                                scrolls smoothly to the matching row, and returns whether the focus succeeded.
-                            </p>
-                        </div>
-                        <figure class="project-figure">
-                            <img src="images/webauthn-project/fido-mds-authenticators-page.png" alt="FIDO MDS explorer with authenticator table and filter controls">
-                        </figure>
-                    </div>
-                    <div class="project-section project-section-split">
-                        <div class="project-section-text">
-                            <h4>How Authenticator Detail Parameters Are Retrieved</h4>
-                            <p>
-                                Clicking an authenticator name stores the active entry (preferring the cached <code>byAaguid</code>
-                                map), scrolls the table row into view, and opens the authenticator modal for focused inspection. The
-                                modal content is generated by <code>buildDetailContent</code>, which reads the metadata statement to
-                                populate overview grids, description and legal headers, schema information, cryptographic strength,
-                                attestation key IDs, UPV values, algorithm families, attachment and matcher hints, display modes, and
-                                user-verification combinations, each rendered as labeled grids or chip lists for clarity.
-                            </p>
-                            <p>
-                                Additional helpers append attestation certificate buttons that launch the certificate decoder modal,
-                                render <code>authenticatorGetInfo</code> fields (including numeric limits, supported versions,
-                                extensions, transports, algorithms, and option flags), and tabulate status reports with formatted dates
-                                and descriptors&mdash;all derived from the metadata entry returned by the MDS payload.
-                            </p>
-                        </div>
-                        <figure class="project-figure">
-                            <img src="images/webauthn-project/fido-mds-authenticator-details.png" alt="Authenticator detail modal showing metadata-derived attributes and attestation certificates">
-                        </figure>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Project Card 2 -->
-        <div class="project-card">
-            <div class="project-header">
-                <div class="project-title-row">
-                    <h3>Travel Advisor Website</h3>
-                    <div class="project-links">
-                        <a href="https://travel-advisor-project.vercel.app/" target="_blank" rel="noopener noreferrer" class="project-link-button" aria-label="Open Travel Advisor Website live site">
-                            <img src="icons/link-icon-round.png" alt="" aria-hidden="true">
-                        </a>
-                        <a href="https://github.com/f4ncy1zach/travel-advisor" target="_blank" rel="noopener noreferrer" class="project-link-button" aria-label="View Travel Advisor Website repository on GitHub">
-                            <img src="icons/github-dock-icon.png" alt="" aria-hidden="true">
-                        </a>
-                    </div>
-                </div>
-                <div class="project-meta">
-                    <span class="project-tag date-tag">April 2025</span>
-                    <span class="project-tag tech-tag">React.js <img src="icons/react.icon.png" alt="React.js"></span>
-                    <span class="project-tag tech-tag">Tailwind CSS <img src="icons/tailwind-icon.png" alt="Tailwind CSS"></span>
-                </div>
-            </div>
-            <div class="project-content">
-                <p class="project-summary">Automated trip planning website integrating OpenAI and Tripadvisor APIs.</p>
-                <div class="project-description project-description-rich">
-                    <div class="project-intro">
-                        <p>
-                            Travel Advisor is an interactive, AI-enhanced travel planning web application that guides users through building a trip from scratch.
-                            It supports both an assisted (AI recommendation) path and a manual selection path.
-                            Users can (optionally) let the system suggest a destination based on traveler details and dates, or directly enter a city and country.
-                            The app then gathers or infers destination imagery and descriptive context, calculates trip duration, and presents categorized travel content, all wrapped in a smooth, animated multi-step experience.
-                            A floating AI chat assistant is always available for follow-up questions, tips, or clarification.
-                            The design emphasizes clarity (step-by-step flow), dynamism (Framer Motion animations), and adaptability (AI fallbacks when data is missing).
-                        </p>
-                    </div>
-                    <div class="project-section">
-                        <h4>Core Features</h4>
-                        <ul class="project-section-list">
-                            <li>
-                                <span class="feature-title">AI Destination Recommendation</span>
-                                <p>Uses traveler count, passport/visa info, and trip dates to generate a suggested destination via OpenAI, with retry logic to handle transient failures.</p>
-                            </li>
-                            <li>
-                                <span class="feature-title">Manual Destination Mode</span>
-                                <p>Allows travelers to choose a country and city manually while the system performs basic spelling correction before fetching data.</p>
-                            </li>
-                            <li>
-                                <span class="feature-title">Traveler Management</span>
-                                <p>Supports adding or removing multiple travelers, tracking passport and visa details that inform context-rich AI prompts.</p>
-                            </li>
-                            <li>
-                                <span class="feature-title">Intelligent Date Selection</span>
-                                <p>Features custom calendars for departure and return dates with outside-click closing, month navigation, and automatic inclusive trip duration calculation.</p>
-                            </li>
-                            <li>
-                                <span class="feature-title">Results Page</span>
-                                <p>Retrieves destination imagery via a TripAdvisor-style API with graceful loading, error, and placeholder states; supplies descriptive text from external data with an AI-generated fallback; and assembles a trip summary covering destination, formatted dates, duration, traveler count (AI path), and dynamic category tabs.</p>
-                            </li>
-                            <li>
-                                <span class="feature-title">Category Tabs (Extensible)</span>
-                                <p>Provides a modular layout for browsing segmented travel resources—such as hotels or activities—tailored to the selected destination.</p>
-                            </li>
-                            <li>
-                                <span class="feature-title">Floating AI Chat Assistant</span>
-                                <p>Maintains conversation history for continuous Q&amp;A, complete with a typing indicator and robust fallback messaging.</p>
-                            </li>
-                            <li>
-                                <span class="feature-title">Smooth Animated UX</span>
-                                <p>Delivers step transitions, content fades, and slides using Framer Motion to keep the multi-step flow clear and engaging.</p>
-                            </li>
-                            <li>
-                                <span class="feature-title">State Reset &amp; Replanning</span>
-                                <p>Includes a one-click reset that restores the initial configuration for rapid iteration or exploring alternative scenarios.</p>
-                            </li>
-                            <li>
-                                <span class="feature-title">Data Quality &amp; Resilience</span>
-                                <p>Guards data integrity with spelling verification for manual entries, retry loops for AI calls, and cautious fetch patterns that avoid unnecessary requests.</p>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="project-section">
-                        <h4>Tech Stack</h4>
-                        <ul class="project-section-list">
-                            <li>
-                                <span class="feature-title">Framework &amp; Build</span>
-                                <ul class="feature-detail-list">
-                                    <li>React 18 (functional components + hooks) for UI composition.</li>
-                                    <li>Vite for rapid development server, fast HMR, and optimized production bundles.</li>
-                                </ul>
-                            </li>
-                            <li>
-                                <span class="feature-title">UI &amp; Styling</span>
-                                <ul class="feature-detail-list">
-                                    <li>Tailwind CSS for utility-first, responsive design.</li>
-                                    <li>Lucide React icon set for lightweight, scalable SVG icons.</li>
-                                    <li>Custom component architecture spanning Header, Footer, multi-step forms, Results, and FloatingChat components.</li>
-                                </ul>
-                            </li>
-                            <li>
-                                <span class="feature-title">Animation &amp; Interaction</span>
-                                <p>Framer Motion powers declarative motion, including entrances, layout transitions, and staged fade/slide effects.</p>
-                            </li>
-                            <li>
-                                <span class="feature-title">Data &amp; Logic Utilities</span>
-                                <ul class="feature-detail-list">
-                                    <li>Axios for structured HTTP requests to backend or external travel services.</li>
-                                    <li>date-fns for date formatting and accurate trip duration calculations.</li>
-                                </ul>
-                            </li>
-                            <li>
-                                <span class="feature-title">AI &amp; Intelligence</span>
-                                <ul class="feature-detail-list">
-                                    <li>Destination recommendation for the assisted path.</li>
-                                    <li>Fallback destination descriptions when external data lacks narrative depth.</li>
-                                    <li>Live conversational assistant powering the FloatingChat experience.</li>
-                                </ul>
-                            </li>
-                            <li>
-                                <span class="feature-title">External / Backend Layer</span>
-                                <p>Express backend (deployed separately) proxies TripAdvisor-style location data and secures AI request handling.</p>
-                            </li>
-                            <li>
-                                <span class="feature-title">Testing &amp; Quality</span>
-                                <p>Cypress end-to-end suites validate multi-step progression, results rendering, and chat functionality.</p>
-                            </li>
-                            <li>
-                                <span class="feature-title">Deployment</span>
-                                <p>Vercel hosts both the frontend and serverless backend for fast global distribution.</p>
-                            </li>
-                            <li>
-                                <span class="feature-title">Architectural Style</span>
-                                <ul class="feature-detail-list">
-                                    <li>Local state management through React hooks keeps complexity manageable without global stores.</li>
-                                    <li>Prop drilling remains intentional for clarity, with room to evolve toward context providers as features deepen.</li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="project-section">
-                        <h4>How It Works</h4>
-                        <ul class="project-section-list">
-                            <li>
-                                <span class="feature-title">Initialization</span>
-                                <p>Visitors land on the Home view with the internal step state set to zero as background visuals, the header, and the floating chat initialize.</p>
-                            </li>
-                            <li>
-                                <span class="feature-title">Mode Selection (AI vs Manual)</span>
-                                <p>Users decide whether to let AI suggest a destination; the choice toggles <code>useAiRecommendation</code> and advances the workflow.</p>
-                            </li>
-                            <li>
-                                <span class="feature-title">Conditional Data Collection</span>
-                                <p>The AI path captures traveler records—including passport and visa entries—to enrich prompts, while the manual path accepts typed destinations with AI-assisted spell checking.</p>
-                            </li>
-                            <li>
-                                <span class="feature-title">Date Selection (Two Steps)</span>
-                                <p>Departure and return calendars support month navigation and click-outside dismissal; once both dates are chosen, the trip duration is computed using an inclusive day count.</p>
-                            </li>
-                            <li>
-                                <span class="feature-title">Destination Resolution &amp; Data Gathering</span>
-                                <p>The AI path builds a structured prompt and retries OpenAI calls up to two times when needed, while the manual path validates spelling before querying backend services for imagery and metadata; missing descriptions trigger a secondary AI summary.</p>
-                            </li>
-                            <li>
-                                <span class="feature-title">Rendering Results</span>
-                                <p>The results view assembles a contextual title, destination visuals or placeholders, formatted dates with duration, traveler counts for the AI path, descriptive copy, and dynamic category tabs.</p>
-                            </li>
-                            <li>
-                                <span class="feature-title">Interaction Layer (Parallel)</span>
-                                <p>The floating chat remains available throughout, appending user messages, streaming AI replies asynchronously, and showing a typing indicator until responses arrive.</p>
-                            </li>
-                            <li>
-                                <span class="feature-title">User Control &amp; Recovery</span>
-                                <p>Back navigation lets users revisit previous steps without losing progress, and Start Over resets travelers, dates, destinations, categories, and AI mode selections.</p>
-                            </li>
-                            <li>
-                                <span class="feature-title">Error &amp; Loading Handling</span>
-                                <p>Distinct placeholders communicate loading, error, and empty states for images or descriptions, backed by resilient fallback messaging.</p>
-                            </li>
-                            <li>
-                                <span class="feature-title">Completion &amp; Iteration</span>
-                                <p>Travelers can explore additional categories, continue the chat, or restart to generate alternate AI recommendations or experiment with manual destinations.</p>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Project Card 3: ML-DSA Software FIDO Authenticator -->
+        <!-- Project Card 1: ML-DSA Software FIDO Authenticator -->
         <div class="project-card" id="project-mldsa-authenticator">
             <div class="project-header">
                 <div class="project-title-row">
@@ -743,7 +301,6 @@
                             <p>Protects against quantum computing threats via NIST-standardized ML-DSA, provides migration path for existing WebAuthn deployments, and enables development & testing without hardware tokens.</p>
                         </div>
                     </div>
-
                     <!-- Tech Stack Section -->
                     <div class="modern-section">
                         <h4 class="section-title">Technical Stack</h4>
@@ -807,7 +364,6 @@
                             </div>
                         </div>
                     </div>
-
                     <!-- Key Features -->
                     <div class="modern-section">
                         <h4 class="section-title">Key Features</h4>
@@ -996,6 +552,474 @@
             </div>
         </div>
 
+        <!-- Project Card 2: Security Product Demo Web Service -->
+        <div class="project-card" id="project-security-demo">
+            <div class="project-header">
+                <div class="project-title-row">
+                    <h3>Security Product Demo Web Service</h3>
+                    <div class="project-links">
+                        <a href="https://demo.ftsafe.com" target="_blank" rel="noopener noreferrer" class="project-link-button" aria-label="Open Security Product Demo Web Service live site">
+                            <img src="icons/link-icon-round.png" alt="" aria-hidden="true">
+                        </a>
+                    </div>
+                </div>
+                <div class="project-meta">
+                    <span class="project-tag date-tag">November 2025</span>
+                    <span class="project-tag tech-tag">Python <img src="icons/python-icon.png" alt="Python"></span>
+                    <span class="project-tag tech-tag">React.js <img src="icons/react.icon.png" alt="React.js"></span>
+                    <span class="project-tag tech-tag">TypeScript</span>
+                    <span class="project-tag tech-tag">Tailwind CSS <img src="icons/tailwind-icon.png" alt="Tailwind CSS"></span>
+                </div>
+            </div>
+            <div class="project-content">
+                <p class="project-summary">A comprehensive authentication platform demonstrating passwordless authentication with post-quantum cryptography support for Feitian Technologies.</p>
+
+                <!-- Modern Layout Container -->
+                <div class="project-description project-modern-layout">
+
+                    <!-- Hero Section -->
+                    <div class="modern-hero">
+                        <div class="hero-content">
+                            <h4 class="hero-title">Comprehensive Authentication Platform with Post-Quantum Cryptography</h4>
+                            <p class="hero-description">
+                                A full-featured demonstration platform for Feitian Technologies showcasing modern authentication methods including WebAuthn, FIDO2, Passkeys, and post-quantum cryptography (PQC) integration. The platform serves as both an educational tool and functional testing ground, allowing customers to learn about, register, and test physical security keys and biometric authenticators in a real-world environment.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Key Info Grid -->
+                    <div class="modern-info-grid">
+                        <div class="info-card">
+                            <div class="info-icon">🎯</div>
+                            <h5>Goal</h5>
+                            <p>Bridge the gap between complex authentication technology and user understanding by providing a unified platform for end-users to experience, manage, and learn about Feitian's authentication products. While the company had robust developer tools and SDKs, there was no user-facing platform that would allow customers to learn about modern authentication technologies, register and test their security keys, and explore post-quantum cryptography integration.</p>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-icon">👨‍💻</div>
+                            <h5>Role</h5>
+                            <p><strong>Solo Full-Stack Developer</strong> - End-to-end responsibility for architecture, design, development, testing, deployment, and maintenance including system architecture, full-stack development, WebAuthn/FIDO2 protocol implementation with PQC integration, cloud infrastructure setup, CI/CD pipeline configuration, security hardening, DevOps and containerization, UI/UX design, internationalization, and documentation.</p>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-icon">🚀</div>
+                            <h5>Impact</h5>
+                            <p>Democratized authentication by enabling non-technical users to understand and test passwordless authentication. Reduced support burden through self-service platform. First commercial platform demonstrating post-quantum WebAuthn integration, establishing market differentiation. Hardware testing platform allows customers to validate Feitian security keys before purchase/deployment.</p>
+                        </div>
+                    </div>
+
+                    <!-- Tech Stack Section -->
+                    <div class="modern-section">
+                        <h4 class="section-title">Technical Stack</h4>
+
+                        <div class="tech-category">
+                            <h5 class="tech-category-title">Frontend</h5>
+                            <div class="tech-pills">
+                                <span class="tech-pill">React 19</span>
+                                <span class="tech-pill">TypeScript 5.9</span>
+                                <span class="tech-pill">Vite 7</span>
+                                <span class="tech-pill">React Router 7</span>
+                                <span class="tech-pill">Framer Motion 12</span>
+                                <span class="tech-pill">i18next 25</span>
+                                <span class="tech-pill">CSS Modules</span>
+                            </div>
+                        </div>
+
+                        <div class="tech-category">
+                            <h5 class="tech-category-title">Backend</h5>
+                            <div class="tech-pills">
+                                <span class="tech-pill">Python 3.11+</span>
+                                <span class="tech-pill">Flask 3.x</span>
+                                <span class="tech-pill">python-fido2 1.2</span>
+                                <span class="tech-pill">cryptography 42.x</span>
+                                <span class="tech-pill">pyotp 2.9</span>
+                                <span class="tech-pill">bcrypt 4.x</span>
+                                <span class="tech-pill highlight">liboqs 0.14 (ML-DSA/ML-KEM)</span>
+                                <span class="tech-pill">gunicorn 21</span>
+                            </div>
+                        </div>
+
+                        <div class="tech-category">
+                            <h5 class="tech-category-title">Infrastructure & DevOps</h5>
+                            <div class="tech-pills">
+                                <span class="tech-pill">Docker</span>
+                                <span class="tech-pill">Docker Compose</span>
+                                <span class="tech-pill">Google Cloud Run</span>
+                                <span class="tech-pill">Google Cloud Storage</span>
+                                <span class="tech-pill">Nginx</span>
+                                <span class="tech-pill">Supervisor</span>
+                                <span class="tech-pill">GitHub Actions</span>
+                                <span class="tech-pill">Dependabot</span>
+                            </div>
+                        </div>
+
+                        <div class="tech-category">
+                            <h5 class="tech-category-title">Notable Architectural Choices</h5>
+                            <div class="tech-pills">
+                                <span class="tech-pill">Prebuilt liboqs (zero-compilation PQC)</span>
+                                <span class="tech-pill">Repository pattern</span>
+                                <span class="tech-pill">Modular Flask blueprints</span>
+                                <span class="tech-pill">Air-gapped Docker builds</span>
+                                <span class="tech-pill">Storage abstraction layer</span>
+                                <span class="tech-pill">Challenge store with TTL</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Key Features -->
+                    <div class="modern-section">
+                        <h4 class="section-title">Key Features & Components</h4>
+                        <div class="feature-grid">
+                            <div class="feature-card">
+                                <div class="feature-icon">🔐</div>
+                                <h5>Multiple Authentication Methods</h5>
+                                <ul>
+                                    <li>Traditional password (Bcrypt-hashed)</li>
+                                    <li>Time-Based OTP (TOTP) - RFC 6238 compliant</li>
+                                    <li>Counter-Based OTP (HOTP) - RFC 4226</li>
+                                    <li>WebAuthn/Passkeys (platform authenticators)</li>
+                                    <li>Security Keys (cross-platform FIDO2)</li>
+                                    <li>Post-Quantum Cryptography (ML-DSA-44/65/87)</li>
+                                </ul>
+                            </div>
+
+                            <div class="feature-card">
+                                <div class="feature-icon">🌐</div>
+                                <h5>WebAuthn Implementation</h5>
+                                <ul>
+                                    <li>Attestation verification (packed, fido-u2f, tpm, android-key, apple, android-safetynet)</li>
+                                    <li>AAGUID-based device recognition (57,000+ authenticator mappings from FIDO MDS)</li>
+                                    <li>Proper resident key behavior enforcement</li>
+                                    <li>Conditional mediation support (passkey autofill)</li>
+                                    <li>User verification policies</li>
+                                </ul>
+                            </div>
+
+                            <div class="feature-card">
+                                <div class="feature-icon">🔑</div>
+                                <h5>OTP System</h5>
+                                <ul>
+                                    <li>QR code generation for authenticator app enrollment</li>
+                                    <li>AES-256-GCM encrypted seed storage</li>
+                                    <li>Configurable time windows (30s/60s)</li>
+                                    <li>Configurable code lengths (6/8 digits)</li>
+                                    <li>Drift window tolerance for TOTP validation</li>
+                                </ul>
+                            </div>
+
+                            <div class="feature-card">
+                                <div class="feature-icon">🛡️</div>
+                                <h5>Security Features</h5>
+                                <ul>
+                                    <li>HTTPOnly, Secure, SameSite cookies</li>
+                                    <li>CORS configuration with origin whitelisting</li>
+                                    <li>Rate limiting on authentication endpoints</li>
+                                    <li>Session encryption with AES-256-GCM</li>
+                                    <li>Security headers (CSP, X-Frame-Options, HSTS)</li>
+                                </ul>
+                            </div>
+
+                            <div class="feature-card">
+                                <div class="feature-icon">💾</div>
+                                <h5>Storage Architecture</h5>
+                                <ul>
+                                    <li>Production: Google Cloud Storage with Workload Identity</li>
+                                    <li>Development: Local filesystem fallback</li>
+                                    <li>Namespaced object keys for data organization</li>
+                                    <li>AES-256-GCM encryption for sensitive data</li>
+                                </ul>
+                            </div>
+
+                            <div class="feature-card">
+                                <div class="feature-icon">🎨</div>
+                                <h5>User Experience</h5>
+                                <ul>
+                                    <li>Login Simulator for risk-free testing</li>
+                                    <li>Light/Dark theme with persistent preference</li>
+                                    <li>Bilingual support (English and Simplified Chinese)</li>
+                                    <li>Device Detection using User-Agent Client Hints API</li>
+                                    <li>Responsive mobile-first design</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Implementation Details -->
+                    <div class="modern-section">
+                        <h4 class="section-title">Implementation Highlights</h4>
+                        <div class="challenge-grid">
+                            <div class="challenge-card">
+                                <div class="challenge-header">
+                                    <span class="challenge-badge">WebAuthn</span>
+                                    <h5>WebAuthn Protocol Implementation</h5>
+                                </div>
+                                <ul>
+                                    <li>Resident key semantics: "discouraged" for username mode, "required" for usernameless</li>
+                                    <li>Cryptographically secure random challenge generation (32 bytes)</li>
+                                    <li>TTL-based expiration (5 minutes default) with one-time use enforcement</li>
+                                    <li>User-session binding with verification</li>
+                                </ul>
+                            </div>
+
+                            <div class="challenge-card">
+                                <div class="challenge-header">
+                                    <span class="challenge-badge">PQC</span>
+                                    <h5>Post-Quantum Cryptography Integration</h5>
+                                </div>
+                                <ul>
+                                    <li>Zero-compilation approach with prebuilt liboqs libraries</li>
+                                    <li>LD_LIBRARY_PATH runtime linking configuration</li>
+                                    <li>ML-DSA support with FIPS 204 standardized algorithms</li>
+                                    <li>Future-proof architecture for ML-KEM integration</li>
+                                </ul>
+                            </div>
+
+                            <div class="challenge-card">
+                                <div class="challenge-header">
+                                    <span class="challenge-badge">CI/CD</span>
+                                    <h5>Comprehensive CI/CD Pipeline</h5>
+                                </div>
+                                <ul>
+                                    <li>7 parallel check categories in GitHub Actions</li>
+                                    <li>Python backend checks (imports, bytecode, pytest)</li>
+                                    <li>Frontend checks (TypeScript, ESLint, build validation)</li>
+                                    <li>Docker build and Compose validation</li>
+                                    <li>Quality checks (TODOs, console.logs, secrets)</li>
+                                    <li>Weekly automated dependency updates via Dependabot</li>
+                                </ul>
+                            </div>
+
+                            <div class="challenge-card">
+                                <div class="challenge-header">
+                                    <span class="challenge-badge">Detection</span>
+                                    <h5>Enhanced Device Detection</h5>
+                                </div>
+                                <ul>
+                                    <li>User-Agent Client Hints API for accurate version detection</li>
+                                    <li>Multiple fallback patterns for iOS/iPadOS</li>
+                                    <li>macOS friendly version names (Big Sur, Monterey, Ventura, Sonoma, Sequoia)</li>
+                                    <li>Windows 10/11 distinction and Android full version parsing</li>
+                                    <li>Conditional mediation support detection</li>
+                                </ul>
+                            </div>
+
+                            <div class="challenge-card">
+                                <div class="challenge-header">
+                                    <span class="challenge-badge">Docker</span>
+                                    <h5>Container Architecture</h5>
+                                </div>
+                                <ul>
+                                    <li>Multi-stage builds with air-gapped base images</li>
+                                    <li>Prebuilt liboqs copied into containers</li>
+                                    <li>Fully offline-capable container builds</li>
+                                    <li>Supervisor for production process management</li>
+                                </ul>
+                            </div>
+
+                            <div class="challenge-card">
+                                <div class="challenge-header">
+                                    <span class="challenge-badge">Results</span>
+                                    <h5>Impact & Business Value</h5>
+                                </div>
+                                <ul>
+                                    <li>Reduced support burden via self-service testing</li>
+                                    <li>Increased product adoption through hands-on demos</li>
+                                    <li>Market differentiation as first PQC-enabled WebAuthn demo platform</li>
+                                    <li>Developer time savings from clean architecture</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Project Card 3 -->
+        <div class="project-card">
+            <div class="project-header">
+                <div class="project-title-row">
+                    <h3>Travel Advisor Website</h3>
+                    <div class="project-links">
+                        <a href="https://travel-advisor-project.vercel.app/" target="_blank" rel="noopener noreferrer" class="project-link-button" aria-label="Open Travel Advisor Website live site">
+                            <img src="icons/link-icon-round.png" alt="" aria-hidden="true">
+                        </a>
+                        <a href="https://github.com/f4ncy1zach/travel-advisor" target="_blank" rel="noopener noreferrer" class="project-link-button" aria-label="View Travel Advisor Website repository on GitHub">
+                            <img src="icons/github-dock-icon.png" alt="" aria-hidden="true">
+                        </a>
+                    </div>
+                </div>
+                <div class="project-meta">
+                    <span class="project-tag date-tag">April 2025</span>
+                    <span class="project-tag tech-tag">React.js <img src="icons/react.icon.png" alt="React.js"></span>
+                    <span class="project-tag tech-tag">Tailwind CSS <img src="icons/tailwind-icon.png" alt="Tailwind CSS"></span>
+                </div>
+            </div>
+            <div class="project-content">
+                <p class="project-summary">Automated trip planning website integrating OpenAI and Tripadvisor APIs.</p>
+                <div class="project-description project-description-rich">
+                    <div class="project-intro">
+                        <p>
+                            Travel Advisor is an interactive, AI-enhanced travel planning web application that guides users through building a trip from scratch.
+                            It supports both an assisted (AI recommendation) path and a manual selection path.
+                            Users can (optionally) let the system suggest a destination based on traveler details and dates, or directly enter a city and country.
+                            The app then gathers or infers destination imagery and descriptive context, calculates trip duration, and presents categorized travel content, all wrapped in a smooth, animated multi-step experience.
+                            A floating AI chat assistant is always available for follow-up questions, tips, or clarification.
+                            The design emphasizes clarity (step-by-step flow), dynamism (Framer Motion animations), and adaptability (AI fallbacks when data is missing).
+                        </p>
+                    </div>
+                    <div class="project-section">
+                        <h4>Core Features</h4>
+                        <ul class="project-section-list">
+                            <li>
+                                <span class="feature-title">AI Destination Recommendation</span>
+                                <p>Uses traveler count, passport/visa info, and trip dates to generate a suggested destination via OpenAI, with retry logic to handle transient failures.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Manual Destination Mode</span>
+                                <p>Allows travelers to choose a country and city manually while the system performs basic spelling correction before fetching data.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Traveler Management</span>
+                                <p>Supports adding or removing multiple travelers, tracking passport and visa details that inform context-rich AI prompts.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Intelligent Date Selection</span>
+                                <p>Features custom calendars for departure and return dates with outside-click closing, month navigation, and automatic inclusive trip duration calculation.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Results Page</span>
+                                <p>Retrieves destination imagery via a TripAdvisor-style API with graceful loading, error, and placeholder states; supplies descriptive text from external data with an AI-generated fallback; and assembles a trip summary covering destination, formatted dates, duration, traveler count (AI path), and dynamic category tabs.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Category Tabs (Extensible)</span>
+                                <p>Provides a modular layout for browsing segmented travel resources—such as hotels or activities—tailored to the selected destination.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Floating AI Chat Assistant</span>
+                                <p>Maintains conversation history for continuous Q&amp;A, complete with a typing indicator and robust fallback messaging.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Smooth Animated UX</span>
+                                <p>Delivers step transitions, content fades, and slides using Framer Motion to keep the multi-step flow clear and engaging.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">State Reset &amp; Replanning</span>
+                                <p>Includes a one-click reset that restores the initial configuration for rapid iteration or exploring alternative scenarios.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Data Quality &amp; Resilience</span>
+                                <p>Guards data integrity with spelling verification for manual entries, retry loops for AI calls, and cautious fetch patterns that avoid unnecessary requests.</p>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="project-section">
+                        <h4>Tech Stack</h4>
+                        <ul class="project-section-list">
+                            <li>
+                                <span class="feature-title">Framework &amp; Build</span>
+                                <ul class="feature-detail-list">
+                                    <li>React 18 (functional components + hooks) for UI composition.</li>
+                                    <li>Vite for rapid development server, fast HMR, and optimized production bundles.</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <span class="feature-title">UI &amp; Styling</span>
+                                <ul class="feature-detail-list">
+                                    <li>Tailwind CSS for utility-first, responsive design.</li>
+                                    <li>Lucide React icon set for lightweight, scalable SVG icons.</li>
+                                    <li>Custom component architecture spanning Header, Footer, multi-step forms, Results, and FloatingChat components.</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <span class="feature-title">Animation &amp; Interaction</span>
+                                <p>Framer Motion powers declarative motion, including entrances, layout transitions, and staged fade/slide effects.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Data &amp; Logic Utilities</span>
+                                <ul class="feature-detail-list">
+                                    <li>Axios for structured HTTP requests to backend or external travel services.</li>
+                                    <li>date-fns for date formatting and accurate trip duration calculations.</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <span class="feature-title">AI &amp; Intelligence</span>
+                                <ul class="feature-detail-list">
+                                    <li>Destination recommendation for the assisted path.</li>
+                                    <li>Fallback destination descriptions when external data lacks narrative depth.</li>
+                                    <li>Live conversational assistant powering the FloatingChat experience.</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <span class="feature-title">External / Backend Layer</span>
+                                <p>Express backend (deployed separately) proxies TripAdvisor-style location data and secures AI request handling.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Testing &amp; Quality</span>
+                                <p>Cypress end-to-end suites validate multi-step progression, results rendering, and chat functionality.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Deployment</span>
+                                <p>Vercel hosts both the frontend and serverless backend for fast global distribution.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Architectural Style</span>
+                                <ul class="feature-detail-list">
+                                    <li>Local state management through React hooks keeps complexity manageable without global stores.</li>
+                                    <li>Prop drilling remains intentional for clarity, with room to evolve toward context providers as features deepen.</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="project-section">
+                        <h4>How It Works</h4>
+                        <ul class="project-section-list">
+                            <li>
+                                <span class="feature-title">Initialization</span>
+                                <p>Visitors land on the Home view with the internal step state set to zero as background visuals, the header, and the floating chat initialize.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Mode Selection (AI vs Manual)</span>
+                                <p>Users decide whether to let AI suggest a destination; the choice toggles <code>useAiRecommendation</code> and advances the workflow.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Conditional Data Collection</span>
+                                <p>The AI path captures traveler records—including passport and visa entries—to enrich prompts, while the manual path accepts typed destinations with AI-assisted spell checking.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Date Selection (Two Steps)</span>
+                                <p>Departure and return calendars support month navigation and click-outside dismissal; once both dates are chosen, the trip duration is computed using an inclusive day count.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Destination Resolution &amp; Data Gathering</span>
+                                <p>The AI path builds a structured prompt and retries OpenAI calls up to two times when needed, while the manual path validates spelling before querying backend services for imagery and metadata; missing descriptions trigger a secondary AI summary.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Rendering Results</span>
+                                <p>The results view assembles a contextual title, destination visuals or placeholders, formatted dates with duration, traveler counts for the AI path, descriptive copy, and dynamic category tabs.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Interaction Layer (Parallel)</span>
+                                <p>The floating chat remains available throughout, appending user messages, streaming AI replies asynchronously, and showing a typing indicator until responses arrive.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">User Control &amp; Recovery</span>
+                                <p>Back navigation lets users revisit previous steps without losing progress, and Start Over resets travelers, dates, destinations, categories, and AI mode selections.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Error &amp; Loading Handling</span>
+                                <p>Distinct placeholders communicate loading, error, and empty states for images or descriptions, backed by resilient fallback messaging.</p>
+                            </li>
+                            <li>
+                                <span class="feature-title">Completion &amp; Iteration</span>
+                                <p>Travelers can explore additional categories, continue the chat, or restart to generate alternate AI recommendations or experiment with manual destinations.</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Project Card 4 -->
         <div class="project-card">
             <div class="project-header">
@@ -1066,7 +1090,7 @@
             </div>
         </div>
 
-        <!-- Project Card 4 -->
+        <!-- Project Card 5 -->
         <div class="project-card">
             <div class="project-header">
                 <div class="project-title-row">
@@ -1087,7 +1111,7 @@
             </div>
         </div>
 
-        <!-- Project Card 5 -->
+        <!-- Project Card 6 -->
         <div class="project-card">
             <div class="project-header">
                 <div class="project-title-row">
