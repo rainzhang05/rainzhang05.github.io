@@ -1118,6 +1118,33 @@ body.modal-open {
     height: 18px;
 }
 
+/* Compact modals for projects with shorter content */
+.project-modal[data-project-id="project-language-learning"],
+.project-modal[data-project-id="project-snake-game"] {
+    height: auto;
+    max-height: 85vh;
+    width: 60vw;
+}
+
+.project-modal[data-project-id="project-language-learning"] .project-content,
+.project-modal[data-project-id="project-snake-game"] .project-content {
+    overflow-y: auto;
+}
+
+@media (max-width: 1200px) {
+    .project-modal[data-project-id="project-language-learning"],
+    .project-modal[data-project-id="project-snake-game"] {
+        width: 70vw;
+    }
+}
+
+@media (max-width: 900px) {
+    .project-modal[data-project-id="project-language-learning"],
+    .project-modal[data-project-id="project-snake-game"] {
+        width: 92vw;
+    }
+}
+
 @media (max-width: 900px) {
     .project-modal {
         width: 92vw;
@@ -1294,6 +1321,10 @@ body.dark-mode .info-card p {
     border: 1px solid #e8e8e8;
     border-radius: 14px;
     padding: 32px;
+}
+
+.modern-section + .modern-section {
+    margin-top: 24px;
 }
 
 body.dark-mode .modern-section {

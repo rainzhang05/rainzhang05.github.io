@@ -586,6 +586,11 @@ function openProjectModal(card) {
     modal.setAttribute("role", "dialog")
     modal.setAttribute("aria-modal", "true")
 
+    // Set project ID for CSS targeting (e.g., compact modals)
+    if (card.id) {
+        modal.setAttribute("data-project-id", card.id)
+    }
+
     const closeButton = document.createElement("button")
     closeButton.className = "project-modal-close"
     closeButton.setAttribute("aria-label", "Close project details")
