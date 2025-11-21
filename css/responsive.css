@@ -1,0 +1,264 @@
+@media screen and (min-width: 2000px) and (max-width: 2560px) {
+    .introduction,
+    .skills,
+    .experience,
+    .projects,
+    .education,
+    .contact {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 1800px;
+        padding-left: 60px;
+        padding-right: 60px;
+    }
+
+    .introduction {
+        margin-top: 120px;
+    }
+
+    .navigationBar {
+        padding-left: 60px;
+        padding-right: 60px;
+    }
+
+    body {
+        font-size: 20px;
+    }
+
+    .skill-item {
+        margin: 25px;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 1600px) {
+    .introduction,
+    .skills,
+    .experience,
+    .projects,
+    .education,
+    .contact {
+        margin-left: 180px;
+        margin-right: 180px;
+    }
+
+    .introduction {
+        margin-top: 115px;
+    }
+
+    .contact {
+        margin-bottom: 80px;
+    }
+}
+
+@media (max-width: 1400px) {
+    .introduction,
+    .skills,
+    .experience,
+    .projects,
+    .education,
+    .contact {
+        margin-left: 150px;
+        margin-right: 150px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .introduction,
+    .skills,
+    .experience,
+    .projects,
+    .education,
+    .contact {
+        margin-left: 120px;
+        margin-right: 120px;
+    }
+}
+
+@media (max-width: 992px) {
+    .introduction,
+    .skills,
+    .experience,
+    .projects,
+    .education,
+    .contact {
+        margin-left: 80px;
+        margin-right: 80px;
+    }
+
+    .introduction {
+        grid-template-columns: 1fr;
+        gap: 36px;
+    }
+
+    .intro-text {
+        max-width: none;
+    }
+
+    .intro-photo {
+        justify-content: center;
+    }
+
+    .intro-photo img {
+        max-width: 320px;
+    }
+
+    #introHeading,
+    #introName {
+        font-size: 48px;
+    }
+
+    .projects-grid,
+    .education-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .navigationBar {
+        padding: 10px 20px;
+        height: auto;
+        flex-wrap: wrap;
+    }
+
+    .main-nav {
+        width: 100%;
+        justify-content: center;
+    }
+
+    nav ul {
+        justify-content: center;
+    }
+
+    nav ul li {
+        margin-right: 20px;
+        margin-left: 20px;
+    }
+
+    .introduction {
+        margin-top: 200px;
+    }
+
+    #introHeading,
+    #introName {
+        font-size: 42px;
+    }
+
+    .introduction,
+    .skills,
+    .experience,
+    .projects,
+    .education,
+    .contact {
+        margin-left: 50px;
+        margin-right: 50px;
+        padding: 20px;
+    }
+
+    .dock-item {
+        margin: 0 5px;
+    }
+
+    .skill-item {
+        margin: 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    .navigationBar {
+        padding: 10px;
+    }
+
+    nav ul li {
+        margin-right: 10px;
+        margin-left: 10px;
+    }
+
+    nav ul li a {
+        font-size: 16px;
+    }
+
+    #introHeading,
+    #introName {
+        font-size: 34px;
+    }
+
+    .introduction,
+    .skills,
+    .experience,
+    .projects,
+    .education,
+    .contact {
+        margin-left: 20px;
+        margin-right: 20px;
+        padding: 15px;
+    }
+
+    .introduction p {
+        font-size: 16px;
+    }
+
+    .dock-item {
+        width: 40px;
+        height: 40px;
+        margin: 0 3px;
+    }
+
+    .dock-item img {
+        width: 30px;
+        height: 30px;
+    }
+
+    .dock-separator {
+        margin: 0 5px;
+    }
+
+    .skill-item {
+        margin: 10px;
+        width: 80px;
+    }
+
+    .skills img {
+        width: 50px;
+        height: 50px;
+        margin: 15px;
+    }
+
+    .project-title-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .project-links {
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    nav ul li {
+        margin-right: 8px;
+        margin-left: 8px;
+    }
+
+    nav ul li a {
+        font-size: 14px;
+    }
+
+    #introHeading,
+    #introName {
+        font-size: 28px;
+    }
+
+    h2 {
+        font-size: 28px;
+    }
+
+    h3 {
+        font-size: 20px;
+    }
+
+    .skill-item {
+        width: 70px;
+    }
+}

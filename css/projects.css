@@ -1,0 +1,702 @@
+/* Project Section */
+.projects {
+    margin: 50px max(5%, 220px) 80px;
+    padding: 35px;
+    border-radius: 40px;
+    background-color: transparent;
+    color: #000000;
+    box-shadow: none;
+    transition: color 0.5s ease;
+}
+
+.projects h2 {
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+.projects h3 {
+    font-size: clamp(18px, 1.3vw, 24px);
+}
+
+.projects ul {
+    padding-left: clamp(20px, 2vw, 40px);
+}
+
+.projects ul li {
+    margin-bottom: 12px;
+    font-size: clamp(16px, 1.1vw, 19px);
+}
+
+/* Project and Education Cards Styles */
+.projects-grid,
+.education-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+    grid-auto-flow: row;
+    align-items: stretch;
+}
+
+.experience-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.projects-grid {
+    grid-auto-rows: auto;
+}
+
+.education-grid {
+    grid-auto-rows: 1fr;
+}
+
+.project-card,
+.education-card {
+    background-color: white;
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.7s ease;
+}
+
+.project-card:hover,
+.education-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.project-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.education-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.project-header,
+.education-header {
+    padding: 20px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.project-header h3,
+.education-header h3 {
+    margin: 0 0 15px 0;
+    font-size: 20px;
+}
+
+.project-title-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.experience-title-row {
+    width: 100%;
+}
+
+.experience-title-row h3 {
+    flex: 1;
+}
+
+.education-title-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.education-title-row h3 {
+    margin: 0;
+    flex: 1;
+}
+
+.project-title-row h3 {
+    margin: 0;
+}
+
+.project-links {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.project-link-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border: none;
+    background: transparent;
+    border-radius: 50%;
+    line-height: 0;
+    text-decoration: none;
+    flex-shrink: 0;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.project-link-button img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: contain;
+}
+
+.project-link-button:hover,
+.project-link-button:focus-visible {
+    transform: translateY(-2px);
+    filter: drop-shadow(0 6px 12px rgba(17, 12, 65, 0.26));
+}
+
+.project-link-button:active {
+    transform: translateY(0);
+    filter: drop-shadow(0 3px 6px rgba(17, 12, 65, 0.18));
+}
+
+.project-link-button:focus-visible {
+    outline: 2px solid rgba(136, 132, 255, 0.55);
+    outline-offset: 4px;
+}
+
+.project-meta,
+.education-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.project-tag,
+.education-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 10px;
+    border-radius: 16px;
+    font-size: 14px;
+    border: 1px solid #000000;
+    color: #000000;
+}
+
+.project-tag img {
+    width: 16px;
+    height: 16px;
+    margin-left: 5px;
+}
+
+.project-content,
+.education-content {
+    padding: 20px;
+}
+
+.education-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+/* Project Card Styles */
+.project-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: left;
+}
+
+.project-summary {
+    margin: 0 0 12px;
+    font-size: clamp(16px, 1.1vw, 19px);
+    line-height: 1.6;
+    color: inherit;
+}
+
+.project-card .project-summary {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.project-card .project-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.project-description {
+    margin: 20px 0 0;
+    padding-left: 20px;
+}
+
+.project-card .project-description {
+    display: none;
+}
+
+.project-card {
+    position: relative;
+    outline: none;
+}
+
+.project-card:focus {
+    outline: none;
+}
+
+.project-card[role="button"] {
+    cursor: pointer;
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+        box-shadow 0.5s ease,
+        background-color 0.5s ease;
+}
+
+.project-card:focus-visible {
+    outline: 3px solid #6e5cf5;
+    outline-offset: 4px;
+    background-color: rgba(110, 92, 245, 0.06);
+}
+
+.project-card[role="button"]:hover {
+    background-color: rgba(110, 92, 245, 0.06);
+}
+
+.project-card[role="button"]:active {
+    background-color: rgba(110, 92, 245, 0.12);
+}
+
+.project-card[role="button"] .project-content {
+    border-radius: 0 0 28px 28px;
+}
+
+.project-cover {
+    width: 100%;
+    border-radius: 24px;
+    margin: 12px 0 20px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.14);
+    object-fit: cover;
+    aspect-ratio: 16 / 9;
+}
+
+.experience-related {
+    margin-top: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.experience-related h4 {
+    margin: 0;
+    font-size: clamp(16px, 1.1vw, 19px);
+}
+
+.related-project-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    padding: 10px 18px;
+    border-radius: 20px;
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: #000000;
+    text-decoration: none;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.related-project-link:hover,
+.related-project-link:focus-visible {
+    background: #f8f9fa;
+    border-color: rgba(0, 0, 0, 0.15);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    transform: translateY(-1px);
+}
+
+.related-project-link:focus-visible {
+    outline: 3px solid rgba(0, 0, 0, 0.2);
+    outline-offset: 3px;
+}
+
+.related-project-link:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+html.modal-open,
+body.modal-open {
+    overflow: hidden;
+}
+
+.project-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    padding: 20px;
+    overscroll-behavior: contain;
+}
+
+.project-modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.project-modal {
+    background-color: #ffffff;
+    border-radius: 36px;
+    width: 80vw;
+    height: 85vh;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+    overscroll-behavior: contain;
+}
+
+.project-modal.project-modal-open {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.project-modal.project-modal-closing {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+}
+
+.project-modal .project-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.project-modal .project-title-row {
+    gap: clamp(10px, 1.2vw, 16px);
+}
+
+.project-modal .project-title-row h3 {
+    font-size: clamp(20px, 1.7vw, 26px);
+}
+
+.project-modal .project-meta {
+    gap: clamp(8px, 0.9vw, 12px);
+}
+
+.project-modal .project-tag {
+    font-size: 13px;
+    padding: 5px 10px;
+    border-radius: 16px;
+}
+
+.project-modal .project-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 30px;
+    overscroll-behavior: contain;
+}
+
+.project-modal .project-description {
+    display: block;
+    -webkit-line-clamp: unset;
+    -webkit-box-orient: vertical;
+    margin-top: 0;
+}
+
+.project-modal .project-summary {
+    display: none;
+}
+
+.project-description-rich {
+    padding-left: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.project-description-rich > * + * {
+    margin-top: clamp(36px, 3.5vw, 52px);
+}
+
+.project-description-rich .project-intro {
+    font-size: clamp(15px, 1.05vw, 18px);
+    line-height: 1.7;
+    color: inherit;
+}
+
+.project-description-rich .project-intro p {
+    margin: 0;
+}
+
+.project-description-rich .project-section {
+    display: block;
+    position: relative;
+}
+
+.project-description-rich .project-section + .project-section {
+    margin-top: clamp(34px, 4vw, 58px);
+}
+
+.project-description-rich .project-section::after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+.project-description-rich .project-section > * + * {
+    margin-top: 14px;
+}
+
+.project-description-rich .project-section.project-section-split {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: clamp(28px, 3.5vw, 56px);
+}
+
+.project-description-rich .project-section.project-section-split > * + * {
+    margin-top: 0;
+}
+
+.project-description-rich .project-section-text {
+    flex: 1 1 340px;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(16px, 2vw, 24px);
+}
+
+.project-description-rich .project-section-text > h4 + * {
+    margin-top: 0;
+}
+
+.project-description-rich .project-section-text p {
+    margin: 0;
+    line-height: 1.65;
+}
+
+.project-description-rich .project-section-media {
+    flex: 0 1 min(50%, 620px);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(18px, 2.2vw, 28px);
+}
+
+.project-description-rich .project-section.project-section-split > .project-figure {
+    flex: 0 1 min(50%, 620px);
+}
+
+.project-description-rich .project-section.project-section-split > .project-figure,
+.project-description-rich .project-section-media .project-figure {
+    margin: 0;
+}
+
+.project-description-rich .project-section > p {
+    margin: 0;
+    line-height: 1.62;
+}
+
+.project-description-rich .project-section h4 {
+    margin: 0;
+    font-size: clamp(18px, 1.2vw, 22px);
+    font-weight: 700;
+    color: #000000;
+}
+
+.project-description-rich .project-section-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.project-description-rich .project-section-list > li {
+    background: rgba(110, 92, 245, 0.06);
+    border-radius: 20px;
+    padding: 18px 22px;
+    box-shadow: inset 0 0 0 1px rgba(110, 92, 245, 0.08);
+}
+
+.project-description-rich .project-figure {
+    margin: 0;
+    width: min(100%, 680px);
+}
+
+.project-description-rich .project-figure img {
+    width: 100%;
+    border-radius: 24px;
+    box-shadow: 0 24px 60px rgba(17, 12, 65, 0.14);
+    display: block;
+}
+
+.project-figure-left {
+    float: left;
+    margin: 6px 32px 22px 0;
+}
+
+.project-figure-right {
+    float: right;
+    margin: 6px 0 22px 32px;
+}
+
+.project-description-rich .project-section-list > li p {
+    margin: 0;
+    line-height: 1.65;
+}
+
+.project-description-rich .feature-title {
+    display: block;
+    font-weight: 600;
+    font-size: clamp(16px, 1.05vw, 19px);
+    margin-bottom: 6px;
+    letter-spacing: 0.01em;
+}
+
+.project-description-rich .feature-detail-list {
+    margin: 12px 0 0 18px;
+    padding: 0;
+    list-style: disc;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.project-description-rich .feature-detail-list li {
+    margin: 0;
+    font-size: clamp(15px, 1.02vw, 18px);
+    line-height: 1.6;
+}
+
+.project-description-rich code {
+    font-family: "Menlo", "Consolas", "Liberation Mono", "Courier New", monospace;
+    background: rgba(110, 92, 245, 0.12);
+    color: #3f2fe0;
+    padding: 2px 6px;
+    border-radius: 12px;
+    font-size: 0.9em;
+}
+
+.project-modal-close {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0, 0, 0, 0.05);
+    color: #333333;
+    font-size: 26px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.project-modal-close:hover,
+.project-modal-close:focus-visible {
+    background: rgba(110, 92, 245, 0.15);
+    transform: translateY(-1px);
+    outline: 2px solid #6e5cf5;
+    outline-offset: 2px;
+}
+
+.project-modal-close:active {
+    transform: scale(0.95);
+}
+
+.project-modal .project-tag {
+    gap: 6px;
+}
+
+.project-modal .project-tag img {
+    width: 18px;
+    height: 18px;
+}
+
+/* Compact modals for projects with shorter content */
+.project-modal[data-project-id="project-language-learning"],
+.project-modal[data-project-id="project-snake-game"] {
+    height: auto;
+    max-height: 85vh;
+    width: 60vw;
+}
+
+.project-modal[data-project-id="project-language-learning"] .project-content,
+.project-modal[data-project-id="project-snake-game"] .project-content {
+    overflow-y: auto;
+}
+
+@media (max-width: 1200px) {
+    .project-modal[data-project-id="project-language-learning"],
+    .project-modal[data-project-id="project-snake-game"] {
+        width: 70vw;
+    }
+}
+
+@media (max-width: 900px) {
+    .project-modal[data-project-id="project-language-learning"],
+    .project-modal[data-project-id="project-snake-game"] {
+        width: 92vw;
+    }
+}
+
+@media (max-width: 900px) {
+    .project-modal {
+        width: 92vw;
+        height: 90vh;
+    }
+
+    .project-modal .project-header,
+    .project-modal .project-content {
+        padding: 24px;
+    }
+
+    .project-description-rich .project-figure {
+        width: 100%;
+    }
+
+    .project-description-rich .project-section.project-section-split {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 22px;
+    }
+
+    .project-description-rich .project-section.project-section-split > * {
+        flex: 1 1 auto;
+    }
+
+    .project-description-rich .project-section-media {
+        width: 100%;
+    }
+
+    .project-figure-left,
+    .project-figure-right {
+        float: none;
+        margin: 0 0 18px 0;
+    }
+
+    .project-description-rich .project-section > * + * {
+        margin-top: 12px;
+    }
+}

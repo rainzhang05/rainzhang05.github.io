@@ -4,13 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rain Zhang</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link rel="preload" href="fonts/Montserrat-Regular.ttf" as="font" type="font/ttf" crossorigin>
-    <link rel="preload" href="fonts/Montserrat-Medium.ttf" as="font" type="font/ttf" crossorigin>
-    <link rel="preload" href="fonts/Montserrat-Bold.ttf" as="font" type="font/ttf" crossorigin>
-    <link rel="preload" href="fonts/Audiowide-Regular.ttf" as="font" type="font/ttf" crossorigin>
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
+    <link rel="icon" href="../favicon.ico" type="image/x-icon">
+    <link rel="preload" href="../fonts/Montserrat-Regular.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="../fonts/Montserrat-Medium.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="../fonts/Montserrat-Bold.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="../fonts/Audiowide-Regular.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="stylesheet" href="../css/main.css">
+    <!-- JavaScript modules loaded in dependency order -->
+    <script src="../js/globals.js"></script>
+    <script src="../js/modal.js"></script>
+    <script src="../js/preloader.js"></script>
+    <script src="../js/intro.js"></script>
+    <script src="../js/typewriter.js"></script>
+    <script src="../js/dock.js"></script>
+    <script src="../js/theme.js"></script>
+    <script src="../js/navigation.js"></script>
+    <script src="../js/contact.js"></script>
+    <script src="../js/projects.js"></script>
+    <script src="../js/main.js"></script>
 </head>
 <body class="intro-prep is-preloading">
 
@@ -50,14 +61,14 @@
     document.addEventListener('DOMContentLoaded', async () => {
         // Load sections in order
         await Promise.all([
-            loadSection('layout-container', 'sections/layout.html'),
-            loadSection('introduction-container', 'sections/introduction.html'),
-            loadSection('skills-container', 'sections/skills.html'),
-            loadSection('experience-container', 'sections/experience.html'),
-            loadSection('projects-container', 'sections/projects.html'),
-            loadSection('education-container', 'sections/education.html'),
-            loadSection('contact-container', 'sections/contact.html'),
-            loadSection('dock-container', 'sections/dock.html')
+            loadSection('layout-container', 'layout.html'),
+            loadSection('introduction-container', 'introduction.html'),
+            loadSection('skills-container', 'skills.html'),
+            loadSection('experience-container', 'experience.html'),
+            loadSection('projects-container', 'projects.html'),
+            loadSection('education-container', 'education.html'),
+            loadSection('contact-container', 'contact.html'),
+            loadSection('dock-container', 'dock.html')
         ]);
 
         // Dispatch event to notify that all sections are loaded
