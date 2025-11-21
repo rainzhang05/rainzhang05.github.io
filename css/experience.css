@@ -27,3 +27,52 @@
     max-width: 1200px;
 }
 
+/* Experience Role Header with Logo */
+.experience-role-header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+}
+
+.experience-logo-container {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.experience-logo {
+    width: 120px;
+    height: auto;
+    opacity: 0.9;
+}
+
+.experience-role-text {
+    text-align: left;
+}
+
+.experience-role-text .role-title {
+    margin: 0 0 8px 0;
+}
+
+.experience-role-text .role-meta {
+    margin: 0;
+}
+
+/* Responsive - stack on smaller screens */
+@media (max-width: 576px) {
+    .experience-role-header-content {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .experience-role-text {
+        text-align: center;
+    }
+
+    .experience-logo {
+        width: 70px;
+    }
+}
+
