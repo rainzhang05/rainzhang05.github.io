@@ -3,8 +3,9 @@ function removeHash() {
     history.pushState("", document.title, window.location.pathname + window.location.search)
 }
 
-document.addEventListener("DOMContentLoaded", function handleDOMContentLoaded() {
-    document.removeEventListener("DOMContentLoaded", handleDOMContentLoaded)
+// Wait for sections to be loaded dynamically before initializing
+document.addEventListener("sectionsLoaded", function handleSectionsLoaded() {
+    document.removeEventListener("sectionsLoaded", handleSectionsLoaded)
     beginPreloadingSequence()
 })
 
