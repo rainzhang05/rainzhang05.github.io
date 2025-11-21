@@ -1,0 +1,40 @@
+/* Main CSS file - imports all component styles */
+
+/* Base styles, fonts, reset, preloader */
+@import url('base.css');
+
+/* Navigation bar */
+@import url('navigation.css');
+
+/* Decorative elements (stripe, circles) */
+@import url('decorations.css');
+
+/* Introduction section */
+@import url('introduction.css');
+
+/* Skills section */
+@import url('skills.css');
+
+/* Experience section */
+@import url('experience.css');
+
+/* Projects section and cards */
+@import url('projects.css');
+
+/* Education section */
+@import url('education.css');
+
+/* Modal and modern layout styles */
+@import url('modal.css');
+
+/* Contact section */
+@import url('contact.css');
+
+/* Common components (headings, typewriter, dock, etc.) */
+@import url('components.css');
+
+/* Dark mode styles */
+@import url('dark-mode.css');
+
+/* Responsive design / media queries */
+@import url('responsive.css');

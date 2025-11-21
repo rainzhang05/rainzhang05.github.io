@@ -1,0 +1,29 @@
+/* Experience Section */
+.experience {
+    margin: 50px max(5%, 220px) 80px;
+    padding: 35px;
+    border-radius: 40px;
+    background-color: transparent;
+    color: #000000;
+    box-shadow: none;
+    transition: color 0.5s ease;
+}
+
+.experience h2 {
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+.experience h3 {
+    font-size: clamp(18px, 1.3vw, 24px);
+}
+
+.experience h4 {
+    font-size: clamp(16px, 1.1vw, 20px);
+}
+
+.experience p {
+    font-size: clamp(16px, 1.1vw, 19px);
+    max-width: 1200px;
+}
+

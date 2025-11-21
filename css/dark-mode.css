@@ -1,0 +1,172 @@
+/* Dark Mode */
+body.dark-mode {
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
+
+body.dark-mode #dock {
+    background: linear-gradient(135deg, rgba(30, 30, 30, 0.2) 0%, rgba(20, 20, 20, 0.15) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .navigationBar {
+    background-color: rgba(26, 26, 26, 0.95);
+    border-bottom: 1px solid rgba(51, 51, 51, 0.5);
+}
+
+body.dark-mode .dock-separator {
+    background-color: #444;
+}
+
+body.dark-mode .form-group input,
+body.dark-mode .form-group textarea {
+    border-color: #444;
+    color: #ffffff;
+}
+
+/* Dark mode styles for project and education cards */
+body.dark-mode .project-card,
+body.dark-mode .education-card {
+    background-color: #2a2a2a;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .project-card-front {
+    background-color: #2a2a2a;
+}
+
+body.dark-mode .project-card-back {
+    background-color: #2a2a2a;
+}
+
+body.dark-mode .project-header,
+body.dark-mode .education-header {
+    border-bottom: 1px solid #3a3a3a;
+}
+
+body.dark-mode .project-tag,
+body.dark-mode .education-tag {
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .project-link-button:hover,
+body.dark-mode .project-link-button:focus-visible {
+    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.6));
+}
+
+body.dark-mode .project-link-button:active {
+    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.45));
+}
+
+body.dark-mode .project-link-button:focus-visible {
+    outline: 2px solid rgba(207, 202, 255, 0.75);
+    outline-offset: 4px;
+}
+
+body.dark-mode .related-project-link {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .related-project-link:hover,
+body.dark-mode .related-project-link:focus-visible {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.18);
+    color: #ffffff;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .related-project-link:active {
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
+}
+
+body.dark-mode .intro-photo img {
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+}
+
+body.dark-mode .project-card:focus-visible {
+    outline-color: #b1a8f5;
+    background-color: rgba(177, 168, 245, 0.12);
+}
+
+body.dark-mode .project-card[role="button"]:hover {
+    background-color: rgba(177, 168, 245, 0.08);
+}
+
+body.dark-mode .project-card[role="button"]:active {
+    background-color: rgba(177, 168, 245, 0.16);
+}
+
+body.dark-mode .project-modal {
+    background-color: #1f1f1f;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .project-modal .project-header {
+    border-bottom: 1px solid #333333;
+}
+
+body.dark-mode .project-modal-close {
+    background: rgba(255, 255, 255, 0.08);
+    color: #f5f5f5;
+}
+
+body.dark-mode .project-modal-close:hover,
+body.dark-mode .project-modal-close:focus-visible {
+    background: rgba(177, 168, 245, 0.2);
+    outline: 2px solid #b1a8f5;
+}
+
+body.dark-mode .project-description-rich .project-section h4 {
+    color: #ffffff;
+}
+
+body.dark-mode .project-description-rich .project-section-list > li {
+    background: rgba(177, 168, 245, 0.16);
+    box-shadow: inset 0 0 0 1px rgba(177, 168, 245, 0.22);
+}
+
+body.dark-mode .project-description-rich code {
+    background: rgba(177, 168, 245, 0.32);
+    color: #f5f3ff;
+}
+
+body.dark-mode .project-description-rich .project-figure img {
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+}
+
+/* Override black text in dark mode */
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode p,
+body.dark-mode li,
+body.dark-mode .navigationBar a,
+body.dark-mode #introName,
+body.dark-mode #introName .txt,
+body.dark-mode .skill-name,
+body.dark-mode label {
+    color: #ffffff !important;
+}
+
+body.dark-mode .navigationBar a:hover {
+    color: #b1a8f5 !important;
+}
+
+/* Invert icons for dark mode */
+body.dark-mode #themeIcon,
+body.dark-mode #dock .dock-item img {
+    filter: invert(1);
+}
+
+body.dark-mode #macIcon,
+body.dark-mode .project-link-button img {
+    filter: invert(1);
+    mix-blend-mode: normal;
+}

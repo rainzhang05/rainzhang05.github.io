@@ -1,0 +1,49 @@
+/* Decorations */
+.decorations {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.stripe {
+    position: absolute;
+    width: 50px;
+    height: 300%;
+    background: linear-gradient(to bottom, #8ff9d0, #6abed3, #6dc1ed, #b1a8f5, #6e5cf5);
+    left: 10%;
+    top: -100%;
+    transform: rotate(5deg) translateY(-30%) translateX(-50%) skew(-5deg);
+    animation: stripeFloat 15s ease-in-out infinite alternate;
+}
+
+@keyframes stripeFloat {
+    0% {
+        transform: rotate(5deg) translateY(-30%) translateX(-50%) skew(-5deg);
+    }
+    100% {
+        transform: rotate(5deg) translateY(-25%) translateX(-48%) skew(-4deg);
+    }
+}
+
+.circle {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(to bottom right, #8ff9d0, #6abed3);
+    animation: circleFloat 10s ease-in-out infinite alternate;
+}
+
+@keyframes circleFloat {
+    0% {
+        transform: translateY(0) scale(1);
+    }
+    100% {
+        transform: translateY(-15px) scale(1.05);
+    }
+}

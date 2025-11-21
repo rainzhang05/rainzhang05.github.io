@@ -1,0 +1,29 @@
+/* Education Section */
+.education {
+    margin: 50px max(5%, 220px) 80px;
+    padding: 35px;
+    border-radius: 40px;
+    background-color: transparent;
+    color: #000000;
+    box-shadow: none;
+    transition: color 0.5s ease;
+}
+
+.education h2 {
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+.education h3 {
+    font-size: clamp(18px, 1.3vw, 24px);
+}
+
+.education ul {
+    padding-left: clamp(20px, 2vw, 40px);
+    margin-top: 10px;
+}
+
+.education ul li {
+    margin-bottom: 12px;
+    font-size: clamp(16px, 1.1vw, 19px);
+}
