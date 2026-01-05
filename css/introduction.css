@@ -33,12 +33,13 @@
 
 .intro-photo {
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
+    padding-right: 16px;
 }
 
 .intro-photo img {
     width: 100%;
-    max-width: 360px;
+    max-width: 320px;
     border-radius: 50%;
     aspect-ratio: 1 / 1;
     box-shadow: 0 16px 35px rgba(0, 0, 0, 0.12);
