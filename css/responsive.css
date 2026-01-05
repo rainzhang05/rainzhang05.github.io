@@ -204,9 +204,8 @@
         margin: 0 3px;
     }
 
-    .dock-item img {
-        width: 30px;
-        height: 30px;
+    #dock {
+        --dock-icon-size: 30px;
     }
 
     .dock-separator {

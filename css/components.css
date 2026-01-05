@@ -41,6 +41,7 @@ body.dark-mode #introName .txt {
     position: fixed;
     bottom: 58px;
     left: 50%;
+    --dock-icon-size: 36px;
     --intro-transform-start: translateX(-50%) translateY(20px);
     --intro-transform-end: translateX(-50%) translateY(0);
     transform: translateX(-50%);
@@ -78,16 +79,20 @@ body.dark-mode #introName .txt {
     will-change: transform;
 }
 
-.dock-item img {
-    width: 36px;
-    height: 36px;
+.dock-item img:not(.theme-icon) {
+    width: var(--dock-icon-size);
+    height: var(--dock-icon-size);
     object-fit: contain;
+    display: block;
 }
 
 .theme-icon-container {
     position: relative;
-    width: 32px;
-    height: 32px;
+    width: var(--dock-icon-size);
+    height: var(--dock-icon-size);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .dock-separator {
@@ -129,10 +134,10 @@ body.dark-mode #introName .txt {
 
 .theme-icon {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 30px;
-    height: 30px;
+    inset: 0;
+    margin: auto;
+    width: var(--dock-icon-size);
+    height: var(--dock-icon-size);
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
