@@ -604,13 +604,33 @@ body.modal-open {
     border: none;
     background: rgba(0, 0, 0, 0.05);
     color: #333333;
-    font-size: 26px;
-    line-height: 1;
+    font-size: 0;
+    line-height: 0;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: block;
     transition: background 0.2s ease, transform 0.2s ease;
+    padding: 0;
+}
+
+.project-modal-close::before,
+.project-modal-close::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 18px;
+    height: 2px;
+    background: currentColor;
+    border-radius: 2px;
+    transform-origin: center;
+}
+
+.project-modal-close::before {
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.project-modal-close::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
 }
 
 .project-modal-close:hover,
