@@ -6,7 +6,7 @@ Website URL: https://rainzhang.me/
 As a university student actively seeking internship opportunities and professional experience, this portfolio website aims to:
 
 - Present my technical skills and programming knowledge
-- Showcase projects I've completed during my academic journey
+- Showcase academic, personal, and internship projects I've completed
 - Provide information about my educational background
 - Offer an easy way for recruiters and potential employers to contact me
 - Demonstrate my web development capabilities through the website itself
