@@ -407,7 +407,7 @@ body.dark-mode .challenge-card ul li {
 
 /* Experience Role Header */
 .experience-role-header {
-    text-align: left;
+    text-align: center;
     padding: 32px 40px;
     background: transparent;
 }

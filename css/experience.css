@@ -31,7 +31,7 @@
 .experience-role-header-content {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     gap: 40px;
 }
 
@@ -39,7 +39,7 @@
     flex-shrink: 0;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
 }
 
 .experience-logo {
@@ -65,11 +65,10 @@
     .experience-role-header-content {
         flex-direction: column;
         gap: 16px;
-        align-items: flex-start;
     }
 
     .experience-role-text {
-        text-align: left;
+        text-align: center;
     }
 
     .experience-logo {
