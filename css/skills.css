@@ -34,6 +34,8 @@
     vertical-align: middle;
     user-select: none;
     -webkit-user-drag: none;
+    object-fit: contain;
+    background-color: transparent;
     transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -53,6 +55,11 @@
 #macIcon {
     width: clamp(55px, 4.5vw, 77px);
     height: clamp(55px, 4.5vw, 77px);
+}
+
+#tsIcon {
+    width: clamp(44px, 3.6vw, 62px);
+    height: clamp(44px, 3.6vw, 62px);
 }
 
 .skills h3 {
