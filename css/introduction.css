@@ -60,33 +60,34 @@
 .resumeButton img {
     width: 22px;
     height: 22px;
-    filter: invert(1);
+    filter: none;
     transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .resumeButton,
 .submit-btn {
-    background: linear-gradient(to right, #6e5cf5, #b1a8f5);
-    color: white;
+    background-color: #ffffff;
+    color: #000000;
     border: none;
     border-radius: 28px;
     font-weight: 600;
-    box-shadow: 4px 6px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     cursor: pointer;
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
 .resumeButton:hover,
 .resumeButton:focus-visible,
 .submit-btn:hover,
 .submit-btn:focus-visible {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 25px rgba(110, 92, 245, 0.35), 0 0 18px rgba(177, 168, 245, 0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    background-color: rgba(110, 92, 245, 0.06);
 }
 
-.resumeButton:hover img,
-.resumeButton:focus-visible img {
-    transform: translateX(2px);
+.resumeButton:active,
+.submit-btn:active {
+    background-color: rgba(110, 92, 245, 0.12);
 }
 
 .resumeButton::before,
