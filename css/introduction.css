@@ -105,9 +105,9 @@
 }
 
 #introHeading {
-    background: linear-gradient(to bottom, #8ff9d0, #6abed3, #b1a8f5, #6e5cf5);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: #000000;
+    background: none;
+    -webkit-text-fill-color: #000000;
 }
 
 #introName {
