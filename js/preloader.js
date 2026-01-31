@@ -1,3 +1,61 @@
+// Interaction lock while preloading
+let preloaderInteractionsLocked = false
+const preloaderInteractionEvents = [
+    "click",
+    "mousedown",
+    "mouseup",
+    "pointerdown",
+    "pointerup",
+    "touchstart",
+    "touchmove",
+    "wheel",
+    "keydown",
+]
+const preloaderInteractionOptions = { passive: false, capture: true }
+
+function preventPreloaderInteraction(event) {
+    if (!document.documentElement.classList.contains("is-preloading")) {
+        return
+    }
+
+    if (event.cancelable) {
+        event.preventDefault()
+    }
+
+    event.stopPropagation()
+}
+
+function lockPreloaderInteractions() {
+    if (preloaderInteractionsLocked) {
+        return
+    }
+
+    preloaderInteractionsLocked = true
+    preloaderInteractionEvents.forEach((eventName) => {
+        document.addEventListener(eventName, preventPreloaderInteraction, preloaderInteractionOptions)
+    })
+
+    document.documentElement.classList.add("is-preloading")
+    if (document.body) {
+        document.body.classList.add("is-preloading")
+    }
+}
+
+function unlockPreloaderInteractions() {
+    if (!preloaderInteractionsLocked) {
+        return
+    }
+
+    preloaderInteractionsLocked = false
+    preloaderInteractionEvents.forEach((eventName) => {
+        document.removeEventListener(eventName, preventPreloaderInteraction, preloaderInteractionOptions)
+    })
+
+    document.documentElement.classList.remove("is-preloading")
+}
+
+lockPreloaderInteractions()
+
 // Clearing up the URL after refreshing the page
 function removeHash() {
     history.pushState("", document.title, window.location.pathname + window.location.search)
@@ -55,6 +113,7 @@ function waitForImages() {
 }
 
 function beginPreloadingSequence() {
+    lockPreloaderInteractions()
     const preloaderElement = document.getElementById("preloader")
 
     const completePreloading = () => {
@@ -63,7 +122,6 @@ function beginPreloadingSequence() {
         }
 
         document.body.classList.add("preloading-complete")
-        document.body.classList.remove("is-preloading")
 
         if (preloaderElement) {
             const removePreloader = () => {
@@ -71,11 +129,17 @@ function beginPreloadingSequence() {
                 if (preloaderElement.parentNode) {
                     preloaderElement.parentNode.removeChild(preloaderElement)
                 }
+
+                document.body.classList.remove("is-preloading")
+                unlockPreloaderInteractions()
             }
 
             preloaderElement.addEventListener("transitionend", removePreloader)
             // Ensure the transition runs even if the browser does not trigger transitionend.
             setTimeout(removePreloader, 800)
+        } else {
+            document.body.classList.remove("is-preloading")
+            unlockPreloaderInteractions()
         }
 
         initPage()
