@@ -148,11 +148,16 @@ body.dark-mode h4,
 body.dark-mode p,
 body.dark-mode li,
 body.dark-mode .navigationBar a,
+body.dark-mode #introHeading,
 body.dark-mode #introName,
 body.dark-mode #introName .txt,
 body.dark-mode .skill-name,
 body.dark-mode label {
     color: #ffffff !important;
+}
+
+body.dark-mode #introHeading {
+    -webkit-text-fill-color: #ffffff !important;
 }
 
 body.dark-mode .navigationBar a:hover {
