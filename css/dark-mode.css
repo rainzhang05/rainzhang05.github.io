@@ -175,3 +175,8 @@ body.dark-mode .project-link-button img {
     filter: invert(1);
     mix-blend-mode: normal;
 }
+
+body.dark-mode #rustIcon,
+body.dark-mode .project-tag img[alt="Rust"] {
+    filter: invert(1);
+}
