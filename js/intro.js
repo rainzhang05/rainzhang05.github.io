@@ -20,7 +20,7 @@ function runIntroSequence() {
     }
 }
 
-// Blur in Effect for Intro Elements with improved animation
+// Reveal in Effect for Intro Elements with improved animation
 function animateIntro() {
     if (hasIntroAnimated) {
         return
