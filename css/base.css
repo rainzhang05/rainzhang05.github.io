@@ -118,31 +118,32 @@ body.intro-prep .resumeButton,
 body.intro-prep .intro-photo,
 body.intro-prep #dock {
     opacity: 0;
-    filter: blur(10px);
-    transform: var(--intro-transform-start, translateY(20px));
+    filter: blur(4px);
+    transform: var(--intro-transform-start, translateY(14px)) scale(0.98);
 }
 
 .intro-target {
     opacity: 0;
-    filter: blur(10px);
-    transform: var(--intro-transform-start, translateY(20px));
+    filter: blur(4px);
+    transform: var(--intro-transform-start, translateY(14px)) scale(0.98);
+    transform-origin: center;
+    will-change: transform, opacity, filter;
 }
 
-@keyframes introFadeUp {
+@keyframes introLift {
     from {
         opacity: 0;
-        filter: blur(10px);
-        transform: var(--intro-transform-start, translateY(20px));
+        filter: blur(4px);
+        transform: var(--intro-transform-start, translateY(14px)) scale(0.98);
     }
     to {
         opacity: 1;
         filter: blur(0);
-        transform: var(--intro-transform-end, translateY(0));
+        transform: var(--intro-transform-end, translateY(0)) scale(1);
     }
 }
 
 body.intro-animate .intro-target {
-    animation: introFadeUp 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    animation: introLift 0.75s cubic-bezier(0.22, 0.9, 0.2, 1) forwards;
     animation-delay: var(--intro-delay, 0s);
 }
-
