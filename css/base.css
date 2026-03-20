@@ -27,7 +27,23 @@ body {
     padding: 0;
     scroll-behavior: smooth;
     overflow-x: hidden;
+    -webkit-user-select: none;
     user-select: none;
+    overscroll-behavior: none;
+    overscroll-behavior-y: none;
+}
+
+/* Safari / WebKit: confine scroll to body so viewport rubber-band overscroll is avoided (Chrome-like) */
+html.safari-like {
+    height: 100%;
+    overflow: hidden;
+}
+
+html.safari-like body {
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 html {
@@ -42,9 +58,11 @@ html::-webkit-scrollbar {
 
 /* Body */
 body {
+    --page-bg: #fafafa;
+    --card-surface-bg: #ffffff;
     font-family: "Montserrat", sans-serif;
     font-weight: 400;
-    background-color: #fafafa;
+    background-color: var(--page-bg);
     margin: 0;
     padding: 0;
     color: #333;
@@ -58,6 +76,24 @@ body {
 body::-webkit-scrollbar {
     width: 0;
     height: 0;
+}
+
+/* Safari respects -webkit-*; keep form fields selectable */
+input:not([disabled]),
+textarea:not([disabled]),
+select:not([disabled]) {
+    -webkit-user-select: text;
+    user-select: text;
+}
+
+img,
+picture,
+svg,
+video {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    -webkit-touch-callout: none;
 }
 
 html.is-preloading,
@@ -116,7 +152,6 @@ body.preloading-complete #preloader {
     }
 }
 
-body.intro-prep .navigationBar,
 body.intro-prep #introHeading,
 body.intro-prep #introName,
 body.intro-prep #introParagraph,
