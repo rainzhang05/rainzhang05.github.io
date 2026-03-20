@@ -1,0 +1,58 @@
+/* Flat minimalist palette (light / dark) — OpenAI-inspired monochrome */
+:root {
+    --color-page: #ffffff;
+    --color-surface: #ffffff;
+    --color-surface-muted: #f4f4f5;
+    --color-surface-hover: #ebebec;
+    --color-border: rgba(0, 0, 0, 0.1);
+    --color-border-strong: rgba(0, 0, 0, 0.16);
+    --color-text: #0d0d0d;
+    --color-text-muted: #5c5c5c;
+    --color-text-subtle: #8e8e8e;
+    --color-accent: #0d0d0d;
+    --color-accent-hover: #2e2e2e;
+    --color-accent-muted: rgba(13, 13, 13, 0.08);
+    --color-on-accent: #ffffff;
+    --color-nav-active-bg: #ebebec;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    --radius-pill: 999px;
+    --radius-section: 28px;
+    /* Main content column — wider than legacy side margins */
+    --content-max-width: min(1180px, calc(100vw - 48px));
+    --section-gap: clamp(24px, 3.5vw, 40px);
+    --ease-out: cubic-bezier(0.33, 1, 0.68, 1);
+    --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+    --dur-fast: 0.18s;
+    --dur-med: 0.32s;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.08);
+}
+
+body.dark-mode {
+    --color-page: #0a0a0a;
+    --color-surface: #141414;
+    --color-surface-muted: #1a1a1a;
+    --color-surface-hover: #222222;
+    --color-border: rgba(255, 255, 255, 0.12);
+    --color-border-strong: rgba(255, 255, 255, 0.2);
+    --color-text: #f5f5f5;
+    --color-text-muted: #a3a3a3;
+    --color-text-subtle: #737373;
+    --color-accent: #fafafa;
+    --color-accent-hover: #ffffff;
+    --color-accent-muted: rgba(255, 255, 255, 0.1);
+    --color-on-accent: #0a0a0a;
+    --color-nav-active-bg: #262626;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+    --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.35);
+    --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.45);
+}
+
+body {
+    --page-bg: var(--color-page);
+    --card-surface-bg: var(--color-surface);
+}
