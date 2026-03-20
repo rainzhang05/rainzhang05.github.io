@@ -1,4 +1,4 @@
-// Setup Project Cards - open project details in a modal dialog
+// Setup Project Cards - open project details from the card title only
 function setupProjectCards() {
     const projectCards = document.querySelectorAll(".project-card")
 
@@ -7,40 +7,22 @@ function setupProjectCards() {
 
         card.dataset.modalBound = "true"
 
-        if (!card.hasAttribute("tabindex")) {
-            card.setAttribute("tabindex", "0")
-        }
-
-        if (!card.hasAttribute("role")) {
-            card.setAttribute("role", "button")
-        }
-
         const title = card.querySelector(".project-header h3")
-        if (title && !card.hasAttribute("aria-label")) {
-            card.setAttribute("aria-label", `Open details for the ${title.textContent.trim()} project`)
-        }
+        if (!title) return
 
-        card.addEventListener("click", (event) => {
-            const interactiveElement = event.target.closest(".project-link-button, a, button")
-            if (interactiveElement) {
-                return
-            }
+        title.classList.add("project-card-title-trigger")
+        title.setAttribute("role", "button")
+        title.setAttribute("tabindex", "0")
+        title.setAttribute("aria-label", `Open details: ${title.textContent.trim()}`)
 
+        title.addEventListener("click", (event) => {
             event.preventDefault()
+            event.stopPropagation()
             openProjectModal(card)
         })
 
-        card.addEventListener("keydown", (event) => {
-            if (event.key === "Enter") {
-                event.preventDefault()
-                openProjectModal(card)
-            } else if (event.key === " ") {
-                event.preventDefault()
-            }
-        })
-
-        card.addEventListener("keyup", (event) => {
-            if (event.key === " ") {
+        title.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") {
                 event.preventDefault()
                 openProjectModal(card)
             }
@@ -75,9 +57,11 @@ function bindOpenProjectLinks(root = document) {
 
             closeProjectModal({ immediate: true })
 
-            // Directly open the modal without scrolling
-            if (typeof projectCard.focus === "function") {
-                projectCard.focus({ preventScroll: true })
+            const titleTrigger =
+                projectCard.querySelector(".project-card-title-trigger") ||
+                projectCard.querySelector(".project-header h3")
+            if (titleTrigger && typeof titleTrigger.focus === "function") {
+                titleTrigger.focus({ preventScroll: true })
             }
             openProjectModal(projectCard)
         })
@@ -119,6 +103,10 @@ function openProjectModal(card) {
         const heading = headerClone.querySelector("h3")
 
         if (heading) {
+            heading.removeAttribute("role")
+            heading.removeAttribute("tabindex")
+            heading.removeAttribute("aria-label")
+            heading.classList.remove("project-card-title-trigger")
             projectModalIdCounter += 1
             const titleId = `project-modal-title-${projectModalIdCounter}`
             heading.id = titleId
