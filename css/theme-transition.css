@@ -1,0 +1,14 @@
+/* Root view transition when toggling dark mode (see js/theme.js) */
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation-duration: 0.22s;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+        animation-duration: 0.001ms !important;
+        animation-timing-function: linear !important;
+    }
+}
