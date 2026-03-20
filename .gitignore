@@ -28,3 +28,7 @@ replay_pid*
 
 .claude
 .qoder
+
+# macOS folder metadata
+.DS_Store
+**/.DS_Store
