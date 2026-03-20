@@ -10,7 +10,6 @@
     margin-right: max(5%, 220px);
     padding: 30px;
     border-radius: 40px;
-    transition: color 0.5s ease;
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(240px, 360px);
     align-items: center;
@@ -28,7 +27,6 @@
 .introduction p {
     font-size: clamp(16px, 1.1vw, 20px);
     margin-top: 20px;
-    transition: color 0.5s ease;
 }
 
 .intro-photo {
@@ -102,7 +100,6 @@
     font-size: clamp(32px, 3vw, 54px);
     margin-bottom: 0;
     margin-top: 0;
-    transition: color 0.5s ease;
 }
 
 #introHeading {

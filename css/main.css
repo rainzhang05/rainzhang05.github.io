@@ -2,6 +2,7 @@
 
 /* Base styles, fonts, reset, preloader */
 @import url('base.css');
+@import url('theme-transition.css');
 
 /* Navigation bar */
 @import url('navigation.css');
