@@ -27,13 +27,12 @@ function animateIntro() {
     }
 
     const selectors = [
-        ".navigationBar",
+        "#dock",
         "#introHeading",
         "#introName",
         "#introParagraph",
         ".resumeButton",
         ".intro-photo",
-        "#dock",
     ]
     const introElements = selectors
         .map((selector) => document.querySelector(selector))
