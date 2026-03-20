@@ -43,5 +43,5 @@
 
 ## External Integrations
 - Contact form submits to Formspree endpoint in `html/contact.html` (`action="https://formspree.io/f/xoveaaqo"`).
-- Dock uses external Iconify SVG URLs for Home/Theme icons (`html/dock.html`); other assets are local (`icons/`, `images/`, `fonts/`).
+- Top bar (`#dock` in `html/layout.html`) uses `--card-surface-bg` (same fill as project/education cards): section nav, social links, and a segmented light/dark/system theme control (`js/theme.js`, `localStorage` key `portfolio-color-scheme`). Theme segment icons use external Iconify SVG URLs; other assets are local (`icons/`, `images/`, `fonts/`).
 
