@@ -6,7 +6,7 @@
 
 ## Architecture (Read First)
 - `index.html` is the shell: it loads CSS (`css/main.css`) and JS files in strict dependency order.
-- Section HTML is fetched at runtime into containers (`#layout-container`, `#projects-container`, etc.) via `loadSection(...)` in `index.html`.
+- Section HTML is fetched at runtime into containers (`#layout-container`, `#projects-container`, `#footer-container`, etc.) via `loadSection(...)` in `index.html`.
 - After all fragments load, `index.html` dispatches `sectionsLoaded`; `js/main.js` listens and starts `beginPreloadingSequence()`.
 - `js/preloader.js` gates user interaction, waits for window load/fonts/images, then calls `initPage()` once.
 - `initPage()` wires all features in order: intro/typewriter, dock, theme, navigation, contact form, project cards/modal links.
@@ -28,7 +28,9 @@
 - Modal content is derived from `.project-card` DOM in `html/projects.html` and `html/experience.html`.
 - Keep card structure: `.project-card` -> `.project-header` + `.project-content` + `.project-summary` + `.project-description`.
 - `openProjectModal()` removes `.project-summary`, `.experience-related`, `.project-cover`, and `.read-more` from cloned content; account for this when editing card markup.
+- Project/experience modals open from **`.project-header h3`** only (`role="button"` + `.project-card-title-trigger` in `js/projects.js`); the card shell is not clickable.
 - Cross-links use `data-open-project="<project-card-id>"` (see `html/experience.html`).
+- Rich modal content in `html/projects.html` uses Iconify Lucide line icons (`.line-icon` / `.feature-icon.line-icon` / `.info-icon.line-icon`); `css/dark-mode.css` inverts `.line-icon img` for dark mode.
 
 ## CSS Organization
 - `css/main.css` is the single import hub; add new stylesheet imports there.
@@ -43,5 +45,7 @@
 
 ## External Integrations
 - Contact form submits to Formspree endpoint in `html/contact.html` (`action="https://formspree.io/f/xoveaaqo"`).
-- Top bar (`#dock` in `html/layout.html`) uses `--card-surface-bg` (same fill as project/education cards): section nav, social links, and a segmented light/dark/system theme control (`js/theme.js`, `localStorage` key `portfolio-color-scheme`). Theme segment icons use external Iconify SVG URLs; other assets are local (`icons/`, `images/`, `fonts/`).
+- Top bar (`#dock` in `html/layout.html`) uses `--card-surface-bg` (same fill as project/education cards): section nav, social links, and a segmented light/dark/system theme control (`js/theme.js`, `localStorage` key `portfolio-color-scheme`). Theme segment icons use external Iconify SVG URLs; other assets are local (`icons/`, `images/`, `fonts/`). Keep `#dock` stacked **above** `.project-modal-overlay` in `css/projects.css` (e.g. z-index 2100 vs 2000): the overlay is full-viewport and transparent, so equal stacking would steal pointer events over the dock.
+- Skills (`html/skills.html`, `#skills-section`) starts with `.skills--await-scroll` and fades in when the user scrolls down (`scrollTop` ≥ ~28px from combined scroll sources, or `wheel` with `deltaY > 0`). No `IntersectionObserver` (the skills block can intersect the viewport while still below the intro). `initPage()` captures `location.hash` **before** `removeHash()` so `#skills` still unlocks the section. While waiting: `inert`, `visibility: hidden`, and `opacity: 0`.
+- Site footer: `html/footer.html` loaded into `#footer-container` in `index.html` (after contact). Styles in `css/footer.css`.
 
