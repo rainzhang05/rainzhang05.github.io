@@ -7,6 +7,10 @@ function setupHashLinkBehavior() {
             const targetElement = document.getElementById(targetId)
 
             if (targetElement) {
+                if (targetId === "skills" && typeof revealSkillsSection === "function") {
+                    revealSkillsSection()
+                }
+
                 targetElement.classList.add("section-highlight")
 
                 targetElement.scrollIntoView({
