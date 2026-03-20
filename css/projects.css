@@ -62,8 +62,7 @@
     transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.7s ease;
 }
 
-.project-card:hover,
-.education-card:hover {
+.project-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
