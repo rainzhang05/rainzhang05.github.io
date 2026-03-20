@@ -20,11 +20,15 @@
     align-items: center;
     margin: clamp(10px, 1.5vw, 20px);
     width: clamp(80px, 6vw, 100px);
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    cursor: default;
+    transition: none;
 }
 
-.skill-item:hover {
-    transform: translateY(-10px);
+/* No motion/scaling — skill tiles are not interactive */
+.skills .skill-item,
+.skills .skill-item img,
+.skills .skill-item .skill-name {
+    transform: none !important;
 }
 
 .skills img {
@@ -36,11 +40,8 @@
     -webkit-user-drag: none;
     object-fit: contain;
     background-color: transparent;
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.skill-item:hover img {
-    transform: scale(1.1);
+    transition: none;
+    pointer-events: none;
 }
 
 .skill-name {
@@ -50,16 +51,6 @@
     margin-top: 10px;
     text-align: center;
     transition: color 0.5s ease;
-}
-
-#macIcon {
-    width: clamp(55px, 4.5vw, 77px);
-    height: clamp(55px, 4.5vw, 77px);
-}
-
-#tsIcon {
-    width: clamp(44px, 3.6vw, 62px);
-    height: clamp(44px, 3.6vw, 62px);
 }
 
 .skills h3 {
