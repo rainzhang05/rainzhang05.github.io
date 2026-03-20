@@ -1,18 +1,18 @@
 /* Dark Mode */
 body.dark-mode {
-    background-color: #1a1a1a;
+    --page-bg: #1a1a1a;
+    --card-surface-bg: #2a2a2a;
+    background-color: var(--page-bg);
     color: #ffffff;
 }
 
 body.dark-mode #dock {
-    background: linear-gradient(135deg, rgba(30, 30, 30, 0.2) 0%, rgba(20, 20, 20, 0.15) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    box-shadow: none;
 }
 
-body.dark-mode .navigationBar {
-    background-color: rgba(26, 26, 26, 0.95);
-    border-bottom: 1px solid rgba(51, 51, 51, 0.5);
+body.dark-mode #dock .dock-bar-divider {
+    color: rgba(255, 255, 255, 0.35);
 }
 
 body.dark-mode .dock-separator {
@@ -28,16 +28,16 @@ body.dark-mode .form-group textarea {
 /* Dark mode styles for project and education cards */
 body.dark-mode .project-card,
 body.dark-mode .education-card {
-    background-color: #2a2a2a;
+    background-color: var(--card-surface-bg);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 body.dark-mode .project-card-front {
-    background-color: #2a2a2a;
+    background-color: var(--card-surface-bg);
 }
 
 body.dark-mode .project-card-back {
-    background-color: #2a2a2a;
+    background-color: var(--card-surface-bg);
 }
 
 body.dark-mode .project-header,
@@ -147,7 +147,7 @@ body.dark-mode h3,
 body.dark-mode h4,
 body.dark-mode p,
 body.dark-mode li,
-body.dark-mode .navigationBar a,
+body.dark-mode #dock .main-nav a,
 body.dark-mode #introHeading,
 body.dark-mode #introName,
 body.dark-mode #introName .txt,
@@ -160,14 +160,33 @@ body.dark-mode #introHeading {
     -webkit-text-fill-color: #ffffff !important;
 }
 
-body.dark-mode .navigationBar a:hover {
+body.dark-mode #dock .main-nav a:hover,
+body.dark-mode #dock .main-nav a:focus-visible {
     color: #b1a8f5 !important;
 }
 
-/* Invert icons for dark mode */
-body.dark-mode #themeIcon,
+/* Invert social icons on dark dock (theme switcher uses its own light pill + contrast) */
 body.dark-mode #dock .dock-item img {
     filter: invert(1);
+}
+
+body.dark-mode .theme-segmented__track {
+    background-color: var(--card-surface-bg);
+    border-color: rgba(255, 255, 255, 0.24);
+    box-shadow: none;
+}
+
+body.dark-mode .theme-segmented__thumb {
+    background: rgba(255, 255, 255, 0.18);
+}
+
+body.dark-mode .theme-segmented__icon {
+    filter: invert(1);
+    opacity: 0.38;
+}
+
+body.dark-mode .theme-segmented__btn.is-active .theme-segmented__icon {
+    opacity: 0.95;
 }
 
 body.dark-mode #macIcon,
