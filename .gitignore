@@ -32,3 +32,10 @@ replay_pid*
 # macOS folder metadata
 .DS_Store
 **/.DS_Store
+
+# Node / tests
+node_modules/
+coverage/
+playwright-report/
+test-results/
+.playwright/
