@@ -2,14 +2,7 @@
 .introduction {
     font-family: "Montserrat", sans-serif;
     font-weight: 500;
-    background-color: transparent;
-    box-shadow: none;
-    color: #000000;
-    margin-top: 176px;
-    margin-left: max(5%, 220px);
-    margin-right: max(5%, 220px);
-    padding: 30px;
-    border-radius: 40px;
+    color: var(--color-text-muted);
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(240px, 360px);
     align-items: center;
@@ -21,7 +14,7 @@
     flex-direction: column;
     align-items: flex-start;
     text-align: left;
-    max-width: 640px;
+    max-width: min(720px, 100%);
 }
 
 .introduction p {
@@ -40,8 +33,15 @@
     max-width: 320px;
     border-radius: 50%;
     aspect-ratio: 1 / 1;
-    box-shadow: 0 16px 35px rgba(0, 0, 0, 0.12);
+    box-shadow: var(--shadow-md);
     object-fit: cover;
+    border: 1px solid var(--color-border);
+    transition: box-shadow var(--dur-med) var(--ease-out), border-color var(--dur-med) var(--ease-out);
+}
+
+.intro-photo img:hover {
+    border-color: var(--color-border-strong);
+    box-shadow: var(--shadow-sm);
 }
 
 .resumeButton {
@@ -55,37 +55,47 @@
     cursor: pointer;
 }
 
-.resumeButton img {
-    width: 22px;
-    height: 22px;
+.resumeButton__icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    object-fit: contain;
+    display: block;
+    transition: opacity var(--dur-med) var(--ease-out);
+    /* Dark button (light mode): white line icon */
+    filter: brightness(0) invert(1);
+}
+
+body.dark-mode .resumeButton__icon {
+    /* Light button (dark mode): default dark strokes */
     filter: none;
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .resumeButton,
 .submit-btn {
-    background-color: #ffffff;
-    color: #000000;
-    border: none;
-    border-radius: 28px;
+    background-color: var(--color-accent);
+    color: var(--color-on-accent);
+    border: 1px solid var(--color-accent);
+    border-radius: var(--radius-pill);
     font-weight: 600;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-sm);
     cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    transition: box-shadow var(--dur-med) var(--ease-out), background-color var(--dur-med) var(--ease-out),
+        border-color var(--dur-med) var(--ease-out);
 }
 
 .resumeButton:hover,
 .resumeButton:focus-visible,
 .submit-btn:hover,
 .submit-btn:focus-visible {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    background-color: rgba(110, 92, 245, 0.06);
+    box-shadow: var(--shadow-md);
+    background-color: var(--color-accent-hover);
+    border-color: var(--color-accent-hover);
 }
 
 .resumeButton:active,
 .submit-btn:active {
-    background-color: rgba(110, 92, 245, 0.12);
+    box-shadow: var(--shadow-sm);
 }
 
 .resumeButton::before,
@@ -103,11 +113,11 @@
 }
 
 #introHeading {
-    color: #000000;
+    color: var(--color-text-muted);
     background: none;
-    -webkit-text-fill-color: #000000;
+    -webkit-text-fill-color: var(--color-text-muted);
 }
 
 #introName {
-    color: #000000;
+    color: var(--color-text);
 }
