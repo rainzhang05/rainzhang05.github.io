@@ -1,32 +1,9 @@
-// Enhanced Dock Hover Effects - Updated for more subtle magnification
+// Dock: icon normalization only (hover is flat CSS background on .dock-item)
 function setupDockHoverEffects() {
     const dock = document.getElementById("dock")
     if (!dock) {
         return
     }
-    const dockItems = dock.querySelectorAll(".dock-item")
-
-    // More subtle magnification effect for dock
-    dockItems.forEach((item) => {
-        if (!item.classList.contains("dock-separator")) {
-            item.addEventListener("mouseenter", () => {
-                item.style.transform = "scale(1.04) translateY(-1px)"
-            })
-
-            item.addEventListener("mouseleave", () => {
-                item.style.transform = "scale(1)"
-            })
-        }
-    })
-
-    // Reset all items when mouse leaves the dock
-    dock.addEventListener("mouseleave", () => {
-        dockItems.forEach((item) => {
-            if (!item.classList.contains("dock-separator")) {
-                item.style.transform = "scale(1)"
-            }
-        })
-    })
 
     normalizeDockIcons(dock)
 }

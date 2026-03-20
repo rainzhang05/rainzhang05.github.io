@@ -10,6 +10,9 @@ ul {
 h2 {
     font-size: clamp(28px, 2vw, 35px);
     scroll-margin-top: 104px;
+    color: var(--color-text);
+    font-weight: 600;
+    letter-spacing: -0.02em;
 }
 
 /* Type Writer Effect Elements */
@@ -31,10 +34,12 @@ h2 {
 /* Ensure the introName text color changes in dark mode */
 body.dark-mode #introName,
 body.dark-mode #introName .txt {
-    color: #ffffff;
+    color: var(--color-text);
 }
 
 /* Top dock bar (section nav + actions) */
+/* Above .project-modal-overlay (z-index 2000): overlay is transparent but was stacking on top
+   of the dock at equal z-index, so hovers hit the overlay first and the bar felt dead / delayed. */
 #dock {
     position: fixed;
     left: 50%;
@@ -42,14 +47,14 @@ body.dark-mode #introName .txt {
     transform: translateX(-50%);
     background-color: var(--card-surface-bg, #ffffff);
     border-radius: 32px;
-    border: 1px solid rgba(0, 0, 0, 0.14);
+    border: 1px solid var(--color-border-strong);
     padding: 4px 16px;
     display: flex;
     align-items: center;
     gap: 8px;
-    z-index: 2000;
+    z-index: 2100;
     box-shadow: none;
-    transition: transform 0.22s ease, background 0.2s ease, border-color 0.2s ease;
+    transition: none;
 }
 
 #dock.dock--top {
@@ -69,12 +74,11 @@ body.dark-mode #introName .txt {
     gap: 7px;
     padding: 3px 14px 3px 22px;
     border-radius: 28px;
-    border: 1px solid rgba(0, 0, 0, 0.14);
+    border: 1px solid var(--color-border-strong);
     box-shadow: none;
-    overflow-x: auto;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+    /* Avoid a scrollport on desktop: it can defer hover hit-testing next to card icons (overflow auto). */
+    overflow-x: visible;
+    overflow-y: visible;
 }
 
 #dock.dock--top::-webkit-scrollbar {
@@ -90,7 +94,7 @@ body.dark-mode #introName .txt {
 
 #dock .dock-bar-divider {
     flex-shrink: 0;
-    color: rgba(0, 0, 0, 0.32);
+    color: var(--color-text-subtle);
     font-weight: 300;
     font-size: 1.05rem;
     line-height: 1;
@@ -114,9 +118,16 @@ body.dark-mode #introName .txt {
     justify-content: center;
     align-items: center;
     position: relative;
-    transition: transform 0.2s ease, background-color 0.2s ease;
-    transform-origin: center center;
-    will-change: transform;
+}
+
+.dock-item:hover,
+.dock-item:focus-visible {
+    background: transparent;
+}
+
+.dock-item:focus-visible {
+    outline: 2px solid var(--color-text-subtle);
+    outline-offset: 2px;
 }
 
 .dock-item img {
@@ -124,6 +135,13 @@ body.dark-mode #introName .txt {
     height: var(--dock-icon-size);
     object-fit: contain;
     display: block;
+    opacity: 1;
+    transition: opacity 0.16s var(--ease-out);
+}
+
+.dock-item:hover img,
+.dock-item:focus-visible img {
+    opacity: 0.48;
 }
 
 /* Light / dark / system theme switcher (pill + sliding thumb) */
@@ -141,7 +159,7 @@ body.dark-mode #introName .txt {
     box-sizing: border-box;
     border-radius: 999px;
     background-color: var(--card-surface-bg, #ffffff);
-    border: 1px solid rgba(0, 0, 0, 0.14);
+    border: 1px solid var(--color-border-strong);
     box-shadow: none;
 }
 
@@ -178,11 +196,11 @@ body.dark-mode #introName .txt {
     align-items: center;
     justify-content: center;
     border-radius: 999px;
-    color: #1a1a1a;
+    color: var(--color-text);
 }
 
 .theme-segmented__btn:focus-visible {
-    outline: 2px solid #6e5cf5;
+    outline: 2px solid var(--color-text);
     outline-offset: 2px;
 }
 
@@ -191,7 +209,7 @@ body.dark-mode #introName .txt {
     height: 15px;
     display: block;
     opacity: 0.4;
-    transition: opacity 0.22s ease, filter 0.2s ease;
+    transition: opacity 0.16s var(--ease-out), filter 0.2s ease;
 }
 
 .theme-segmented__btn.is-active .theme-segmented__icon {
@@ -211,7 +229,7 @@ body.dark-mode #introName .txt {
 .dock-separator {
     width: 1px;
     height: 24px;
-    background-color: #ccc;
+    background-color: var(--color-border-strong);
     margin: 0 4px;
     transition: background-color 0.2s ease;
 }
@@ -219,12 +237,44 @@ body.dark-mode #introName .txt {
 /* Success Message */
 .success-message {
     display: none;
-    background-color: rgba(110, 92, 245, 0.1);
-    border-left: 4px solid #6e5cf5;
+    background-color: var(--color-surface-muted);
+    border: 1px solid var(--color-border);
+    border-left-width: 4px;
+    border-left-color: var(--color-text);
     padding: 15px;
     margin-top: 20px;
-    border-radius: 20px;
-    animation: fadeIn 0.5s ease;
+    border-radius: var(--radius-lg);
+    animation: fadeIn 0.45s var(--ease-out);
+}
+
+/* Line icons (Iconify Lucide) — replaces emoji in modals / rich project content */
+.line-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    background: var(--color-surface-muted);
+    flex-shrink: 0;
+    transition: background-color var(--dur-med) var(--ease-out), transform var(--dur-med) var(--ease-out);
+}
+
+.line-icon img {
+    width: 22px;
+    height: 22px;
+    display: block;
+}
+
+.line-icon--inline {
+    width: 36px;
+    height: 36px;
+    margin-bottom: 0;
+}
+
+.line-icon--inline img {
+    width: 20px;
+    height: 20px;
 }
 
 @keyframes fadeIn {
