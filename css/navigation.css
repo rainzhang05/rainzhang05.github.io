@@ -30,38 +30,36 @@
 
 #dock nav ul li a {
     display: inline-flex;
-    color: #000000;
+    align-items: center;
+    color: var(--color-text-muted);
     text-decoration: none;
     font-size: 16px;
     font-weight: 500;
-    transition: color 0.2s ease;
+    transition: color 0.12s var(--ease-out);
     position: relative;
-    padding: 4px 0;
+    padding: 6px 10px;
+    border-radius: 0;
+    background: transparent;
     white-space: nowrap;
-}
-
-#dock nav ul li a::after {
-    content: "";
-    position: absolute;
-    width: 0;
-    height: 1.5px;
-    bottom: 0;
-    left: 0;
-    background: linear-gradient(to right, #6e5cf5, #b1a8f5);
-    transition: width 0.2s ease;
-}
-
-#dock nav ul li a:hover::after,
-#dock nav ul li a:focus-visible::after {
-    width: 100%;
 }
 
 #dock nav ul li a:hover,
 #dock nav ul li a:focus-visible {
-    color: #6e5cf5;
+    color: var(--color-text);
+    background: transparent;
+}
+
+#dock nav ul li a:focus-visible {
+    outline: 2px solid var(--color-text-subtle);
+    outline-offset: 3px;
+}
+
+body.dark-mode #dock nav ul li a {
+    color: var(--color-text-muted);
 }
 
 body.dark-mode #dock nav ul li a:hover,
 body.dark-mode #dock nav ul li a:focus-visible {
-    color: #b1a8f5;
+    color: var(--color-text);
+    background: transparent;
 }
