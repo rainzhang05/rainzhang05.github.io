@@ -41,7 +41,7 @@
 - Use a local HTTP server (fragments are fetched; opening `index.html` directly can break section loading).
 - Quick run from repo root: `python3 -m http.server 8000` then open `http://localhost:8000`.
 - If UI hooks fail, first confirm fragment IDs/classes exist after `sectionsLoaded` (many setup functions query DOM once).
-- No automated tests or lint config are present in this repo; validate changes by manual browser checks.
+- Automated tests: `npm test` (Vitest + Playwright); see `README.md` → Testing. Validate visual changes with manual browser checks when needed.
 
 ## External Integrations
 - Contact form submits to Formspree endpoint in `html/contact.html` (`action="https://formspree.io/f/xoveaaqo"`).

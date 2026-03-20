@@ -19,6 +19,18 @@ As a university student actively seeking internship opportunities and profession
 - **Formspree**: For handling contact form submissions
 - **Vercel**: For website deployment
 
+## Testing
+
+From the repository root (requires [Node.js](https://nodejs.org/) 20+):
+
+```bash
+npm ci
+npm test
+```
+
+- **Unit / DOM tests**: [Vitest](https://vitest.dev/) with [happy-dom](https://github.com/capricorn86/happy-dom) (`npm run test:unit`). Optional V8 report: `npm run test:coverage` (production `js/*` runs inside happy-dom classic scripts, so line-level coverage is not attributed to those files).
+- **End-to-end tests**: [Playwright](https://playwright.dev/) serves the static site with `serve` and drives a real browser (`npm run test:e2e`). Install browsers once with `npx playwright install chromium`.
+
 ## Contact
 
 If you're a potential employer or collaborator, please feel free to:
