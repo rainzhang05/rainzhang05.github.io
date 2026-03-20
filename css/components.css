@@ -9,7 +9,7 @@ ul {
 
 h2 {
     font-size: clamp(28px, 2vw, 35px);
-    scroll-margin-top: 100px;
+    scroll-margin-top: 104px;
 }
 
 /* Type Writer Effect Elements */
@@ -34,34 +34,72 @@ body.dark-mode #introName .txt {
     color: #ffffff;
 }
 
-/* Dock */
+/* Top dock bar (section nav + actions) */
 #dock {
     position: fixed;
-    bottom: 58px;
     left: 50%;
     --dock-icon-size: 36px;
-    --intro-transform-start: translateX(-50%) translateY(20px);
-    --intro-transform-end: translateX(-50%) translateY(0);
     transform: translateX(-50%);
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.1) 100%);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    background-color: var(--card-surface-bg, #ffffff);
     border-radius: 32px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(0, 0, 0, 0.14);
     padding: 4px 16px;
     display: flex;
     align-items: center;
     gap: 8px;
     z-index: 2000;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
-        background 0.2s ease,
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
+    box-shadow: none;
+    transition: transform 0.22s ease, background 0.2s ease, border-color 0.2s ease;
 }
 
-#dock:hover {
-    transform: translateX(-50%) translateY(-5px);
+#dock.dock--top {
+    top: 15px;
+    bottom: auto;
+    /* Slightly slimmer than base #dock: small trim on padding, radius, icon size */
+    --dock-icon-size: 26px;
+    --intro-transform-start: translateX(-50%) translateY(-14px);
+    --intro-transform-end: translateX(-50%) translateY(0);
+    /* One row; hug content so divider + icons sit near the nav (no spacer to the far right) */
+    width: max-content;
+    max-width: calc(100vw - 16px);
+    box-sizing: border-box;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 7px;
+    padding: 3px 14px 3px 22px;
+    border-radius: 28px;
+    border: 1px solid rgba(0, 0, 0, 0.14);
+    box-shadow: none;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+#dock.dock--top::-webkit-scrollbar {
+    display: none;
+}
+
+#dock.dock--top .dock-item {
+    width: 34px;
+    height: 34px;
+    padding: 4px;
+    flex-shrink: 0;
+}
+
+#dock .dock-bar-divider {
+    flex-shrink: 0;
+    color: rgba(0, 0, 0, 0.32);
+    font-weight: 300;
+    font-size: 1.05rem;
+    line-height: 1;
+    align-self: center;
+    -webkit-user-select: none;
+    user-select: none;
+    /* Extra inset after Contact so Contact–| better matches |–icon (7px flex gap looked tight) */
+    margin-left: 6px;
+    padding: 0 2px;
 }
 
 .dock-item {
@@ -76,31 +114,98 @@ body.dark-mode #introName .txt {
     justify-content: center;
     align-items: center;
     position: relative;
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform 0.2s ease, background-color 0.2s ease;
     transform-origin: center center;
     will-change: transform;
 }
 
-.dock-item img:not(.theme-icon) {
+.dock-item img {
     width: var(--dock-icon-size);
     height: var(--dock-icon-size);
     object-fit: contain;
     display: block;
 }
 
-#homeButton img {
-    position: absolute;
-    inset: 0;
-    margin: auto;
+/* Light / dark / system theme switcher (pill + sliding thumb) */
+.theme-segmented {
+    flex-shrink: 0;
+    align-self: center;
 }
 
-.theme-icon-container {
+.theme-segmented__track {
+    --theme-pad: 4px;
     position: relative;
-    width: var(--dock-icon-size);
-    height: var(--dock-icon-size);
+    display: flex;
+    width: 114px;
+    padding: var(--theme-pad);
+    box-sizing: border-box;
+    border-radius: 999px;
+    background-color: var(--card-surface-bg, #ffffff);
+    border: 1px solid rgba(0, 0, 0, 0.14);
+    box-shadow: none;
+}
+
+.theme-segmented__thumb {
+    position: absolute;
+    top: var(--theme-pad);
+    bottom: var(--theme-pad);
+    width: calc((100% - 2 * var(--theme-pad)) / 3);
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.09);
+    left: var(--theme-pad);
+    transition: left 0.32s cubic-bezier(0.25, 0.9, 0.32, 1), background-color 0.2s ease;
+    pointer-events: none;
+}
+
+.theme-segmented__track[data-active="dark"] .theme-segmented__thumb {
+    left: calc(var(--theme-pad) + (100% - 2 * var(--theme-pad)) / 3);
+}
+
+.theme-segmented__track[data-active="system"] .theme-segmented__thumb {
+    left: calc(var(--theme-pad) + ((100% - 2 * var(--theme-pad)) * 2 / 3));
+}
+
+.theme-segmented__btn {
+    flex: 1;
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    padding: 4px 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 999px;
+    color: #1a1a1a;
+}
+
+.theme-segmented__btn:focus-visible {
+    outline: 2px solid #6e5cf5;
+    outline-offset: 2px;
+}
+
+.theme-segmented__icon {
+    width: 15px;
+    height: 15px;
+    display: block;
+    opacity: 0.4;
+    transition: opacity 0.22s ease, filter 0.2s ease;
+}
+
+.theme-segmented__btn.is-active .theme-segmented__icon {
+    opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .theme-segmented__thumb {
+        transition: none;
+    }
+
+    .theme-segmented__icon {
+        transition: none;
+    }
 }
 
 .dock-separator {
@@ -133,38 +238,3 @@ body.dark-mode #introName .txt {
     }
 }
 
-/* Theme toggle styles */
-.theme-icon-container {
-    position: relative;
-    width: 32px;
-    height: 32px;
-}
-
-.theme-icon {
-    position: absolute;
-    inset: 0;
-    margin: auto;
-    width: var(--dock-icon-size);
-    height: var(--dock-icon-size);
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-body:not(.dark-mode) .sun-icon {
-    opacity: 1;
-    transform: rotate(0) scale(1);
-}
-
-body:not(.dark-mode) .moon-icon {
-    opacity: 0;
-    transform: rotate(-90deg) scale(0);
-}
-
-body.dark-mode .sun-icon {
-    opacity: 0;
-    transform: rotate(90deg) scale(0);
-}
-
-body.dark-mode .moon-icon {
-    opacity: 1;
-    transform: rotate(0) scale(1);
-}
