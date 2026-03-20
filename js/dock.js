@@ -10,8 +10,7 @@ function setupDockHoverEffects() {
     dockItems.forEach((item) => {
         if (!item.classList.contains("dock-separator")) {
             item.addEventListener("mouseenter", () => {
-                // Apply a more subtle scale to the hovered item
-                item.style.transform = "scale(1.08) translateY(-3px)"
+                item.style.transform = "scale(1.04) translateY(-1px)"
             })
 
             item.addEventListener("mouseleave", () => {

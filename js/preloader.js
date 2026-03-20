@@ -170,7 +170,6 @@ function initPage() {
     runIntroSequence()
     setupDockHoverEffects()
     setupThemeToggle()
-    setupHomeButton()
     setupHashLinkBehavior()
     setupContactForm()
     setupProjectCards()
