@@ -58,14 +58,12 @@ html::-webkit-scrollbar {
 
 /* Body */
 body {
-    --page-bg: #fafafa;
-    --card-surface-bg: #ffffff;
     font-family: "Montserrat", sans-serif;
     font-weight: 400;
-    background-color: var(--page-bg);
+    background-color: var(--color-page);
     margin: 0;
     padding: 0;
-    color: #333;
+    color: var(--color-text-muted);
     font-size: 19px;
     line-height: 1.6;
     overflow-y: auto;
@@ -115,8 +113,8 @@ body.is-preloading {
     align-items: center;
     justify-content: center;
     gap: 18px;
-    background-color: #fafafa;
-    color: #333;
+    background-color: var(--color-page);
+    color: var(--color-text-muted);
     font-family: "Montserrat", sans-serif;
     font-weight: 500;
     letter-spacing: 0.05em;
@@ -135,8 +133,8 @@ body.preloading-complete #preloader {
     width: 56px;
     height: 56px;
     border-radius: 50%;
-    border: 6px solid rgba(110, 92, 245, 0.2);
-    border-top-color: #6e5cf5;
+    border: 6px solid var(--color-border);
+    border-top-color: var(--color-text);
     animation: preloaderSpin 0.9s linear infinite;
 }
 
@@ -187,4 +185,40 @@ body.intro-prep #dock {
 body.intro-animate .intro-target {
     animation: introLift 0.75s cubic-bezier(0.22, 0.9, 0.2, 1) forwards;
     animation-delay: var(--intro-delay, 0s);
+}
+
+/* Content column — open layout (no section-wide panels) */
+.introduction,
+.skills,
+.experience,
+.projects,
+.education,
+.contact {
+    width: 100%;
+    max-width: var(--content-max-width);
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: clamp(20px, 3vw, 36px) 0;
+}
+
+.introduction {
+    margin-top: 176px;
+    margin-bottom: var(--section-gap);
+}
+
+.skills,
+.experience,
+.projects,
+.education {
+    margin-top: 0;
+    margin-bottom: var(--section-gap);
+}
+
+.contact {
+    margin-top: 0;
+    margin-bottom: clamp(32px, 5vw, 56px);
 }
