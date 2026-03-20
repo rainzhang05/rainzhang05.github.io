@@ -1,5 +1,8 @@
 /* Main CSS file - imports all component styles */
 
+/* Design tokens (monochrome) */
+@import url('tokens.css');
+
 /* Base styles, fonts, reset, preloader */
 @import url('base.css');
 @import url('theme-transition.css');
@@ -7,7 +10,7 @@
 /* Navigation bar */
 @import url('navigation.css');
 
-/* Decorative elements (stripe, circles) */
+/* Decorative layer (disabled — flat blank page) */
 @import url('decorations.css');
 
 /* Introduction section */
@@ -30,6 +33,9 @@
 
 /* Contact section */
 @import url('contact.css');
+
+/* Site footer */
+@import url('footer.css');
 
 /* Common components (headings, typewriter, dock, etc.) */
 @import url('components.css');
