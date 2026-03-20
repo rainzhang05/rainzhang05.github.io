@@ -3,6 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        (function () {
+            var ua = navigator.userAgent
+            var isChromium = /Chrome|Chromium|Edg\//.test(ua) || /CriOS|EdgiOS/.test(ua)
+            if (/Safari/.test(ua) && !isChromium) {
+                document.documentElement.classList.add("safari-like")
+            }
+        })()
+    </script>
     <title>Rain Zhang</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="preload" href="fonts/Montserrat-Regular.ttf" as="font" type="font/ttf" crossorigin>
@@ -40,9 +49,6 @@
 <div id="education-container"></div>
 <div id="contact-container"></div>
 
-<!-- Dock -->
-<div id="dock-container"></div>
-
 <script>
     // Load HTML sections dynamically
     async function loadSection(containerId, sectionPath) {
@@ -66,8 +72,7 @@
             loadSection('experience-container', 'html/experience.html'),
             loadSection('projects-container', 'html/projects.html'),
             loadSection('education-container', 'html/education.html'),
-            loadSection('contact-container', 'html/contact.html'),
-            loadSection('dock-container', 'html/dock.html')
+            loadSection('contact-container', 'html/contact.html')
         ]);
 
         // Dispatch event to notify that all sections are loaded
