@@ -35,8 +35,10 @@
     height: clamp(50px, 4vw, 70px);
     margin: clamp(15px, 1.5vw, 25px);
     vertical-align: middle;
+    -webkit-user-select: none;
     user-select: none;
     -webkit-user-drag: none;
+    -webkit-touch-callout: none;
     object-fit: contain;
     background-color: transparent;
     transition: none;
