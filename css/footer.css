@@ -29,12 +29,26 @@
     letter-spacing: -0.02em;
 }
 
+.site-footer__taglines {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    max-width: 100%;
+}
+
 .site-footer__tagline {
     margin: 0;
     font-size: clamp(13px, 0.9vw, 15px);
     color: var(--color-text-muted);
     line-height: 1.5;
-    max-width: 320px;
+    white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+    .site-footer__tagline {
+        white-space: normal;
+    }
 }
 
 .site-footer__nav {
