@@ -71,3 +71,45 @@
     font-family: "Montserrat", sans-serif;
     font-size: clamp(16px, 1vw, 18px);
 }
+
+@media (max-width: 768px) {
+    .contact-form {
+        margin-top: 24px;
+        max-width: none;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        margin-bottom: 10px;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        min-height: 48px;
+        padding: 14px 16px;
+    }
+
+    .form-group textarea {
+        min-height: 160px;
+    }
+
+    .submit-btn {
+        width: 100%;
+        margin-top: 8px;
+        min-height: 48px;
+        padding: 14px 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .form-group {
+        margin-bottom: 18px;
+    }
+
+    .form-group textarea {
+        min-height: 140px;
+    }
+}
