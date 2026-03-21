@@ -573,7 +573,25 @@ body.dark-mode .link-card-desc {
     }
 }
 
+@media (max-width: 576px) {
+    .outcomes-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 @media (max-width: 480px) {
+    .modern-hero {
+        padding: 20px;
+    }
+
+    .modern-section {
+        padding: 20px;
+    }
+
+    .experience-role-header {
+        padding: 20px;
+    }
+
     .outcomes-grid {
         grid-template-columns: 1fr;
     }
