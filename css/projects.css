@@ -364,8 +364,8 @@ body.modal-open {
     background-color: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: 36px;
-    width: 80vw;
-    height: 85vh;
+    width: 84vw;
+    height: 80vh;
     box-shadow: var(--shadow-lg);
     display: flex;
     flex-direction: column;
@@ -694,8 +694,8 @@ body.modal-open {
 .project-modal[data-project-id="project-language-learning"],
 .project-modal[data-project-id="project-snake-game"] {
     height: auto;
-    max-height: 85vh;
-    width: 60vw;
+    max-height: 80vh;
+    width: 64vw;
 }
 
 .project-modal[data-project-id="project-language-learning"] .project-content,
@@ -706,7 +706,7 @@ body.modal-open {
 @media (max-width: 1200px) {
     .project-modal[data-project-id="project-language-learning"],
     .project-modal[data-project-id="project-snake-game"] {
-        width: 70vw;
+        width: 74vw;
     }
 }
 
@@ -723,7 +723,7 @@ body.modal-open {
 
     .project-modal {
         width: 92vw;
-        height: 90vh;
+        height: 85vh;
         max-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 32px);
     }
 
