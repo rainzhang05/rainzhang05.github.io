@@ -715,17 +715,34 @@ body.modal-open {
     .project-modal[data-project-id="project-snake-game"] {
         width: 92vw;
     }
-}
 
-@media (max-width: 900px) {
+    .project-modal-overlay {
+        padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px))
+            max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+    }
+
     .project-modal {
         width: 92vw;
         height: 90vh;
+        max-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 32px);
     }
 
     .project-modal .project-header,
     .project-modal .project-content {
         padding: 24px;
+    }
+
+    .project-modal .project-content,
+    .project-modal .project-description-rich {
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+    }
+
+    .project-modal-close {
+        top: max(18px, calc(env(safe-area-inset-top, 0px) + 8px));
+        right: max(18px, calc(env(safe-area-inset-right, 0px) + 8px));
+        width: 46px;
+        height: 46px;
     }
 
     .project-description-rich .project-figure {
@@ -754,5 +771,26 @@ body.modal-open {
 
     .project-description-rich .project-section > * + * {
         margin-top: 12px;
+    }
+}
+
+@media (max-width: 576px) {
+    .project-modal .project-header,
+    .project-modal .project-content {
+        padding: 18px 16px;
+    }
+
+    .project-link-button {
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        min-height: 44px;
+    }
+}
+
+@media (max-width: 480px) {
+    .project-modal .project-header,
+    .project-modal .project-content {
+        padding: 16px 14px;
     }
 }
