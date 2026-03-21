@@ -202,7 +202,10 @@ function openProjectModal(card) {
 
     modal.addEventListener("keydown", handleFocusTrap)
 
-    closeButton.focus({ preventScroll: true })
+    // Opening from a click (e.g. experience "related project" links) would otherwise match
+    // :focus-visible on the close button; it shares styles with :hover and looks "stuck".
+    // focusVisible: false suppresses that for programmatic focus; Tab still shows a ring.
+    closeButton.focus({ preventScroll: true, focusVisible: false })
 
     activeProjectModal = {
         overlay,
