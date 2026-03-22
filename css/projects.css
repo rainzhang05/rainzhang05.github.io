@@ -408,9 +408,9 @@ body.modal-open {
 }
 
 .project-modal .project-tag {
-    font-size: 13px;
+    font-size: 14px;
     padding: 5px 10px;
-    border-radius: 16px;
+    border-radius: var(--radius-md);
     color: var(--color-text);
 }
 
@@ -675,15 +675,6 @@ body.modal-open {
 
 .project-modal-close:active {
     transform: scale(0.95);
-}
-
-.project-modal .project-tag {
-    gap: 6px;
-}
-
-.project-modal .project-tag img {
-    width: 18px;
-    height: 18px;
 }
 
 .project-modal[data-project-id="experience-feitian"] .project-header {
