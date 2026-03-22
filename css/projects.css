@@ -388,30 +388,46 @@ body.modal-open {
 }
 
 .project-modal .project-header {
-    padding: 20px 24px;
+    padding: 17px 21px;
     border-bottom: 1px solid var(--color-border);
     color: var(--color-text);
 }
 
 .project-modal .project-title-row {
-    gap: clamp(10px, 1.2vw, 16px);
+    gap: clamp(8px, 1vw, 13px);
+    margin-bottom: 12px;
 }
 
 .project-modal .project-title-row h3 {
-    font-size: clamp(20px, 1.7vw, 26px);
+    font-size: clamp(18px, 1.48vw, 23px);
     color: var(--color-text);
 }
 
+.project-modal .project-links {
+    gap: 10px;
+}
+
+.project-modal .project-link-button {
+    width: 34px;
+    height: 34px;
+}
+
 .project-modal .project-meta {
-    gap: clamp(8px, 0.9vw, 12px);
+    gap: clamp(7px, 0.75vw, 10px);
     color: var(--color-text);
 }
 
 .project-modal .project-tag {
-    font-size: 14px;
-    padding: 5px 10px;
+    font-size: 13px;
+    padding: 4px 9px;
     border-radius: var(--radius-md);
     color: var(--color-text);
+}
+
+.project-modal .project-tag img {
+    width: 15px;
+    height: 15px;
+    margin-left: 4px;
 }
 
 .project-modal .project-content {
@@ -626,10 +642,10 @@ body.modal-open {
 
 .project-modal-close {
     position: absolute;
-    top: 18px;
-    right: 18px;
-    width: 42px;
-    height: 42px;
+    top: 16px;
+    right: 16px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
     border: 1px solid var(--color-border);
     background: var(--color-surface-muted);
@@ -649,7 +665,7 @@ body.modal-open {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 18px;
+    width: 16px;
     height: 2px;
     background: currentColor;
     border-radius: 2px;
@@ -720,7 +736,7 @@ body.modal-open {
 
     .project-modal .project-header,
     .project-modal .project-content {
-        padding: 24px;
+        padding: 20px;
     }
 
     .project-modal .project-content,
@@ -730,10 +746,10 @@ body.modal-open {
     }
 
     .project-modal-close {
-        top: max(18px, calc(env(safe-area-inset-top, 0px) + 8px));
-        right: max(18px, calc(env(safe-area-inset-right, 0px) + 8px));
-        width: 46px;
-        height: 46px;
+        top: max(16px, calc(env(safe-area-inset-top, 0px) + 6px));
+        right: max(16px, calc(env(safe-area-inset-right, 0px) + 6px));
+        width: 42px;
+        height: 42px;
     }
 
     .project-description-rich .project-figure {
@@ -768,7 +784,7 @@ body.modal-open {
 @media (max-width: 576px) {
     .project-modal .project-header,
     .project-modal .project-content {
-        padding: 18px 16px;
+        padding: 16px 14px;
     }
 
     .project-link-button {
@@ -777,11 +793,18 @@ body.modal-open {
         min-width: 44px;
         min-height: 44px;
     }
+
+    .project-modal .project-link-button {
+        width: 38px;
+        height: 38px;
+        min-width: 38px;
+        min-height: 38px;
+    }
 }
 
 @media (max-width: 480px) {
     .project-modal .project-header,
     .project-modal .project-content {
-        padding: 16px 14px;
+        padding: 14px 12px;
     }
 }
