@@ -46,9 +46,12 @@
         max-width: 280px;
     }
 
-    #introHeading,
-    #introName {
-        font-size: 48px;
+    .intro-terminal__greeting {
+        font-size: 45px;
+    }
+
+    .intro-terminal__typer {
+        font-size: 42px;
     }
 
     .projects-grid,
@@ -121,9 +124,12 @@
         display: none;
     }
 
-    #introHeading,
-    #introName {
-        font-size: 42px;
+    .intro-terminal__greeting {
+        font-size: 39px;
+    }
+
+    .intro-terminal__typer {
+        font-size: 36px;
     }
 
     .introduction,
@@ -186,9 +192,12 @@
         border-radius: 20px;
     }
 
-    #introHeading,
-    #introName {
-        font-size: 34px;
+    .intro-terminal__greeting {
+        font-size: 31px;
+    }
+
+    .intro-terminal__typer {
+        font-size: 33px;
     }
 
     .introduction,
@@ -289,8 +298,11 @@
         padding: 10px 10px;
     }
 
-    #introHeading,
-    #introName {
+    .intro-terminal__greeting {
+        font-size: 26px;
+    }
+
+    .intro-terminal__typer {
         font-size: 28px;
     }
 

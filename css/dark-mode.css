@@ -140,16 +140,28 @@ body.dark-mode h3,
 body.dark-mode h4,
 body.dark-mode p,
 body.dark-mode li,
-body.dark-mode #introHeading,
-body.dark-mode #introName,
+body.dark-mode .intro-terminal__greeting,
+body.dark-mode .intro-terminal__typer,
 body.dark-mode #introName .txt,
 body.dark-mode .skill-name,
 body.dark-mode label {
     color: var(--color-text) !important;
 }
 
-body.dark-mode #introHeading {
-    -webkit-text-fill-color: var(--color-text) !important;
+body.dark-mode .intro-terminal {
+    background-color: var(--color-surface-muted);
+    border-color: var(--color-border-strong);
+    box-shadow: var(--shadow-sm);
+}
+
+body.dark-mode .intro-terminal__chrome {
+    background-color: var(--color-surface);
+    border-bottom-color: var(--color-border);
+}
+
+body.dark-mode .intro-terminal__dot {
+    background-color: var(--color-text-muted);
+    opacity: 0.5;
 }
 
 /* Nav: color-only states (do not bundle with global heading color) */

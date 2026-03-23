@@ -118,21 +118,104 @@ body.dark-mode .resumeButton__icon {
     content: none;
 }
 
-#introHeading,
-#introName {
+/* Fake terminal — minimalist panel, site typography + monospace prompts */
+.intro-terminal {
+    width: 100%;
+    max-width: min(720px, 100%);
+    box-sizing: border-box;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border-strong);
+    background-color: var(--color-surface-muted);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    text-align: left;
+}
+
+.intro-terminal__chrome {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 40px;
+    padding: 0 16px;
+    border-bottom: 1px solid var(--color-border);
+    background-color: var(--color-page);
+}
+
+.intro-terminal__traffic {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.intro-terminal__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--color-text-subtle);
+    opacity: 0.45;
+}
+
+.intro-terminal__title {
+    font-family: "Montserrat", sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-text-subtle);
+}
+
+.intro-terminal__body {
+    padding: clamp(20px, 3vw, 28px) clamp(18px, 2.5vw, 24px);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(10px, 1.5vw, 14px);
+}
+
+.intro-terminal__line {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin: 0;
+}
+
+.intro-terminal__prompt {
+    flex-shrink: 0;
+    width: 1.1em;
+    font-family: ui-monospace, "SFMono-Regular", "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    font-size: 0.85em;
+    font-weight: 500;
+    color: var(--color-text-subtle);
+    line-height: 1.2;
+    user-select: none;
+}
+
+.intro-terminal__prompt--tilde {
+    color: var(--color-accent);
+    opacity: 0.85;
+}
+
+.intro-terminal__greeting {
     font-family: "Montserrat", sans-serif;
     font-weight: 700;
-    font-size: clamp(32px, 3vw, 54px);
-    margin-bottom: 0;
-    margin-top: 0;
-}
-
-#introHeading {
-    color: var(--color-text-muted);
-    background: none;
-    -webkit-text-fill-color: var(--color-text-muted);
-}
-
-#introName {
+    font-size: clamp(26px, 2.58vw, 45px);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin: 0;
     color: var(--color-text);
+}
+
+.intro-terminal__typer {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: clamp(27px, 2.58vw, 42px);
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    margin: 0;
+    min-height: 1.35em;
+    color: var(--color-text-muted);
+}
+
+.intro-terminal__line--typer .intro-terminal__typer {
+    flex: 1;
+    min-width: 0;
 }
