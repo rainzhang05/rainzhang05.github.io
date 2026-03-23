@@ -3,10 +3,6 @@
         --content-max-width: min(1240px, calc(100vw - 64px));
     }
 
-    .introduction {
-        margin-top: 136px;
-    }
-
     #dock.dock--top {
         width: max-content;
         max-width: min(1200px, calc(100vw - 48px));
@@ -22,12 +18,6 @@
 }
 
 /* Responsive Design */
-@media (max-width: 1600px) {
-    .introduction {
-        margin-top: 168px;
-    }
-}
-
 @media (max-width: 992px) {
     .introduction,
     .skills,
@@ -42,7 +32,6 @@
     .introduction {
         grid-template-columns: 1fr;
         gap: 36px;
-        margin-top: 148px;
     }
 
     .intro-text {

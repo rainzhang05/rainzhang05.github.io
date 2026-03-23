@@ -1,4 +1,19 @@
-/* Introduction Section */
+/* Introduction Section — viewport-centered hero; .introduction keeps bottom gap to #skills */
+.intro-hero {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    /* Fixed dock sits over the page; keep centered content clear of it + notches */
+    padding-top: max(1rem, calc(env(safe-area-inset-top, 0px) + 88px));
+    padding-bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+    margin: 0;
+}
+
 .introduction {
     font-family: "Montserrat", sans-serif;
     font-weight: 500;

@@ -207,7 +207,7 @@ body.intro-animate .intro-target {
 }
 
 .introduction {
-    margin-top: 176px;
+    margin-top: 0;
     margin-bottom: var(--section-gap);
 }
 
