@@ -64,30 +64,23 @@ describe("theme", () => {
         expect(darkBtn.classList.contains("is-active")).toBe(true)
     })
 
-    it("applyTheme runs immediately when skipTransition or reduced motion", () => {
+    it("applyTheme updates body and segmented UI synchronously", () => {
         vi.stubGlobal("matchMedia", vi.fn(() => ({ matches: true })))
-        window.applyTheme("dark", { skipTransition: true })
-        expect(document.body.classList.contains("dark-mode")).toBe(true)
-
         document.body.classList.remove("dark-mode")
         window.applyTheme("dark")
         expect(document.body.classList.contains("dark-mode")).toBe(true)
     })
 
-    it("applyTheme uses startViewTransition when available", () => {
+    it("applyTheme does not use document.startViewTransition", () => {
         vi.stubGlobal("matchMedia", vi.fn(() => ({ matches: false })))
-        const run = vi.fn()
+        const vt = vi.fn()
         const orig = document.startViewTransition
-        document.startViewTransition = (cb) => {
-            run()
-            cb()
-            return {}
-        }
+        document.startViewTransition = vt
         try {
             document.body.classList.remove("dark-mode")
             window.applyTheme("dark")
-            expect(run).toHaveBeenCalled()
             expect(document.body.classList.contains("dark-mode")).toBe(true)
+            expect(vt).not.toHaveBeenCalled()
         } finally {
             if (orig) {
                 document.startViewTransition = orig
@@ -104,7 +97,7 @@ describe("theme", () => {
         window.matchMedia = mm
         window.setupThemeToggle()
         window.localStorage.setItem("portfolio-color-scheme", "dark")
-        window.applyTheme("dark", { skipTransition: true })
+        window.applyTheme("dark")
         const darkBtn = document.querySelector('[data-theme="dark"]')
         expect(document.body.classList.contains("dark-mode")).toBe(true)
         expect(darkBtn.getAttribute("aria-checked")).toBe("true")
