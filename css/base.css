@@ -69,6 +69,7 @@ body {
     overflow-y: auto;
     scrollbar-width: none;
     -ms-overflow-style: none;
+    transition: background-color 0.22s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body::-webkit-scrollbar {
@@ -221,4 +222,10 @@ body.intro-animate .intro-target {
 .contact {
     margin-top: 0;
     margin-bottom: clamp(32px, 5vw, 56px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body {
+        transition: none;
+    }
 }

@@ -1,9 +1,6 @@
 // Theme: light / dark / system segmented control (see html/layout.html #themeToggle)
+// Theme applies synchronously (no View Transition API) so scroll position stays stable.
 const THEME_STORAGE_KEY = "portfolio-color-scheme"
-
-function prefersReducedMotion() {
-    return window.matchMedia("(prefers-reduced-motion: reduce)").matches
-}
 
 function getStoredTheme() {
     const v = localStorage.getItem(THEME_STORAGE_KEY)
@@ -53,27 +50,9 @@ function updateThemeUI(mode) {
     })
 }
 
-function applyTheme(mode, options = {}) {
-    const run = () => {
-        applyBodyFromMode(mode)
-        updateThemeUI(mode)
-    }
-
-    if (options.skipTransition) {
-        run()
-        return
-    }
-
-    if (prefersReducedMotion()) {
-        run()
-        return
-    }
-
-    if (document.startViewTransition) {
-        document.startViewTransition(run)
-    } else {
-        run()
-    }
+function applyTheme(mode) {
+    applyBodyFromMode(mode)
+    updateThemeUI(mode)
 }
 
 function setupThemeToggle() {
@@ -83,7 +62,7 @@ function setupThemeToggle() {
     }
 
     const mode = getStoredTheme()
-    applyTheme(mode, { skipTransition: true })
+    applyTheme(mode)
 
     root.querySelectorAll(".theme-segmented__btn").forEach((btn) => {
         btn.addEventListener("click", () => {

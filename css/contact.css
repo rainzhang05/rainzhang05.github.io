@@ -1,6 +1,7 @@
 /* Contact Section */
 .contact {
     color: var(--color-text);
+    overflow-anchor: none;
 }
 
 .contact h2 {
