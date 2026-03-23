@@ -28,8 +28,7 @@ function animateIntro() {
 
     const selectors = [
         "#dock",
-        "#introHeading",
-        "#introName",
+        "#introTerminal",
         "#introParagraph",
         ".resumeButton",
         ".intro-photo",

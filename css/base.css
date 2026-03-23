@@ -151,8 +151,7 @@ body.preloading-complete #preloader {
     }
 }
 
-body.intro-prep #introHeading,
-body.intro-prep #introName,
+body.intro-prep #introTerminal,
 body.intro-prep #introParagraph,
 body.intro-prep .resumeButton,
 body.intro-prep .intro-photo,

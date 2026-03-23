@@ -15,8 +15,9 @@ h2 {
     letter-spacing: -0.02em;
 }
 
-/* Type Writer Effect Elements */
+/* Typewriter caret on intro terminal second line */
 #introName .txt {
+    color: var(--color-text);
     border-right: 0.5rem solid;
     animation: blink-caret 0.75s step-end infinite;
 }
@@ -31,7 +32,8 @@ h2 {
     }
 }
 
-/* Ensure the introName text color changes in dark mode */
+/* Intro terminal typer + caret — dark mode text */
+body.dark-mode .intro-terminal__typer,
 body.dark-mode #introName,
 body.dark-mode #introName .txt {
     color: var(--color-text);
