@@ -31,6 +31,48 @@ test.describe("portfolio (static server)", () => {
         await expect(page.locator("body")).not.toHaveClass(/dark-mode/)
     })
 
+    test("theme toggle keeps the viewport anchored near the footer", async ({ page }) => {
+        await page.evaluate(() => {
+            document.documentElement.style.scrollBehavior = "auto"
+            document.body.style.scrollBehavior = "auto"
+            window.scrollTo(0, document.documentElement.scrollHeight)
+        })
+
+        const before = await page.evaluate(() => {
+            const footer = document.querySelector(".site-footer")
+            return {
+                scrollY: window.scrollY,
+                footerTop: footer ? footer.getBoundingClientRect().top : null,
+            }
+        })
+
+        await page.locator('#themeToggle [data-theme="dark"]').click()
+
+        const afterDark = await page.evaluate(() => {
+            const footer = document.querySelector(".site-footer")
+            return {
+                scrollY: window.scrollY,
+                footerTop: footer ? footer.getBoundingClientRect().top : null,
+            }
+        })
+
+        expect(afterDark.scrollY).toBe(before.scrollY)
+        expect(afterDark.footerTop).toBe(before.footerTop)
+
+        await page.locator('#themeToggle [data-theme="light"]').click()
+
+        const afterLight = await page.evaluate(() => {
+            const footer = document.querySelector(".site-footer")
+            return {
+                scrollY: window.scrollY,
+                footerTop: footer ? footer.getBoundingClientRect().top : null,
+            }
+        })
+
+        expect(afterLight.scrollY).toBe(before.scrollY)
+        expect(afterLight.footerTop).toBe(before.footerTop)
+    })
+
     test("hash link to #skills reveals skills heading", async ({ page }) => {
         await page.goto("/#skills")
         await page.waitForFunction(() => document.body.classList.contains("preloading-complete"), null, {
