@@ -106,65 +106,33 @@ body.is-preloading {
     touch-action: none;
 }
 
-#preloader {
+#load-gate {
     position: fixed;
     inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 18px;
     background-color: var(--color-page);
-    color: var(--color-text-muted);
-    font-family: "Montserrat", sans-serif;
-    font-weight: 500;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
     z-index: 3000;
     transition: opacity 0.4s ease, visibility 0.4s ease;
 }
 
-body.preloading-complete #preloader {
+body.preloading-complete #load-gate {
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
 }
 
-.preloader-spinner {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    border: 6px solid var(--color-border);
-    border-top-color: var(--color-text);
-    animation: preloaderSpin 0.9s linear infinite;
-}
-
-.preloader-text {
-    margin: 0;
-    font-size: 14px;
-    letter-spacing: 0.12em;
-}
-
-@keyframes preloaderSpin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-body.intro-prep #introTerminal,
 body.intro-prep #introParagraph,
 body.intro-prep .resumeButton,
 body.intro-prep .intro-photo,
 body.intro-prep #dock {
     opacity: 0;
-    filter: blur(4px);
-    transform: var(--intro-transform-start, translateY(14px)) scale(0.98);
+    filter: var(--intro-filter-start, blur(4px));
+    transform: var(--intro-transform-start, translateY(14px));
 }
 
 .intro-target {
     opacity: 0;
-    filter: blur(4px);
-    transform: var(--intro-transform-start, translateY(14px)) scale(0.98);
+    filter: var(--intro-filter-start, blur(4px));
+    transform: var(--intro-transform-start, translateY(14px));
     transform-origin: center;
     will-change: transform, opacity, filter;
 }
@@ -172,13 +140,13 @@ body.intro-prep #dock {
 @keyframes introLift {
     from {
         opacity: 0;
-        filter: blur(4px);
-        transform: var(--intro-transform-start, translateY(14px)) scale(0.98);
+        filter: var(--intro-filter-start, blur(4px));
+        transform: var(--intro-transform-start, translateY(14px));
     }
     to {
         opacity: 1;
-        filter: blur(0);
-        transform: var(--intro-transform-end, translateY(0)) scale(1);
+        filter: var(--intro-filter-end, blur(0));
+        transform: var(--intro-transform-end, translateY(0));
     }
 }
 
