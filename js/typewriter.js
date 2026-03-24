@@ -1,11 +1,14 @@
 // Typewriter Effect
 const INTRO_GREETING = "Hello, I'm Rain Zhang"
-const INTRO_BEFORE_LINE1_TYPE_MS = 300
+/* After intro layout runs, wait before showing the line-1 caret so it follows the terminal appearing. */
+const INTRO_AFTER_TERMINAL_FIRST_CARET_MS = 200
+const INTRO_BEFORE_LINE1_TYPE_MS = 600
+const INTRO_LINE1_TYPE_SPEED_MS = 88
 const INTRO_AFTER_GREETING_PAUSE_MS = 500
 const INTRO_BEFORE_LINE2_TYPE_MS = 300
-const INTRO_LINE2_TYPE_SPEED_MS = 90
+const INTRO_LINE2_TYPE_SPEED_MS = 70
 const INTRO_LINE2_WORD_HOLD_MS = 1700
-const INTRO_LINE2_BETWEEN_WORDS_MS = 420
+const INTRO_LINE2_BETWEEN_WORDS_MS = 250
 const INTRO_CYCLING_WORDS = [
     "Computer Science undergraduate",
     "Full-stack Engineer",
@@ -124,14 +127,16 @@ async function initIntroTerminalTyping() {
 
     setGreetingStatic(greetingSpan, false)
     setIntroText(greetingSpan, "")
-    setCaretActive(greetingSpan, true)
+    setCaretActive(greetingSpan, false)
 
     setGreetingStatic(nameSpan, false)
     setIntroText(nameSpan, "")
     setCaretActive(nameSpan, false)
 
+    await delay(INTRO_AFTER_TERMINAL_FIRST_CARET_MS)
+    setCaretActive(greetingSpan, true)
     await delay(INTRO_BEFORE_LINE1_TYPE_MS)
-    await typePlainText(greetingSpan, INTRO_GREETING, 100)
+    await typePlainText(greetingSpan, INTRO_GREETING, INTRO_LINE1_TYPE_SPEED_MS)
     await delay(INTRO_AFTER_GREETING_PAUSE_MS)
     setGreetingStatic(greetingSpan, true)
     setCaretActive(greetingSpan, false)
@@ -187,9 +192,6 @@ class TypeWriter {
         setIntroText(this.textSpan, this.txt)
 
         let typeSpeed = INTRO_LINE2_TYPE_SPEED_MS
-        if (this.isDeleting) {
-            typeSpeed /= 2
-        }
 
         if (!this.isDeleting && this.txt === fullTxt) {
             typeSpeed = this.wait

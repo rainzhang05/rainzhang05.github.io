@@ -42,7 +42,7 @@ describe("TypeWriter", () => {
     it("initIntroTerminalTyping types greeting then starts typewriter on introName", async () => {
         document.body.innerHTML = `<span id="introGreeting"></span><p id="introName"></p>`
         const p = window.initIntroTerminalTyping()
-        await vi.advanceTimersByTimeAsync(3400)
+        await vi.advanceTimersByTimeAsync(3700)
         await p
         expect(document.getElementById("introGreeting").textContent).toBe("Hello, I'm Rain Zhang")
         expect(document.getElementById("introGreeting").innerHTML).toContain("intro-terminal__line1-static")
@@ -62,7 +62,7 @@ describe("TypeWriter", () => {
 
         const p = window.initIntroTerminalTyping()
 
-        await vi.advanceTimersByTimeAsync(3400)
+        await vi.advanceTimersByTimeAsync(3700)
         await p
 
         const greetingAfterHandoff = document.querySelector("#introGreeting span")
