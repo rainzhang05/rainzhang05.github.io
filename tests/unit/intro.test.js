@@ -32,16 +32,23 @@ describe("intro", () => {
         createPortfolioWindow()
         const orig = document.fonts
         Reflect.deleteProperty(document, "fonts")
-        const spy = vi.spyOn(window, "animateIntro").mockImplementation(() => {})
-        const tw = vi.spyOn(window, "initTypewriter").mockImplementation(() => {})
+        const mql = { matches: false, addEventListener: vi.fn(), removeEventListener: vi.fn() }
+        vi.stubGlobal("matchMedia", vi.fn(() => mql))
+        const spy = vi.spyOn(window, "animateIntro").mockImplementation((cb) => {
+            if (typeof cb === "function") {
+                cb()
+            }
+        })
+        const typing = vi.spyOn(window, "initIntroTerminalTyping").mockImplementation(() => {})
         try {
             window.runIntroSequence()
             expect(spy).toHaveBeenCalled()
-            expect(tw).toHaveBeenCalled()
+            expect(typing).toHaveBeenCalled()
         } finally {
             Object.defineProperty(document, "fonts", { value: orig, configurable: true })
             spy.mockRestore()
-            tw.mockRestore()
+            typing.mockRestore()
+            vi.unstubAllGlobals()
         }
     })
 })
