@@ -3,7 +3,7 @@
 /* Design tokens (monochrome) */
 @import url('tokens.css');
 
-/* Base styles, fonts, reset, preloader */
+/* Base styles, fonts, reset, load gate */
 @import url('base.css');
 
 /* Navigation bar */

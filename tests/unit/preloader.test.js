@@ -22,7 +22,7 @@ describe("preloader and initPage", () => {
         vi.useFakeTimers()
         createPortfolioWindow()
         document.body.innerHTML = `
-      <div id="preloader"></div>
+      <div id="load-gate"></div>
       <div id="dock"></div>
       <div id="skills-section" class="skills--await-scroll"><h2 id="skills">S</h2></div>
       <form id="contactForm"><input id="name"><input id="email"><textarea id="message"></textarea><button type="submit" id="submitBtn">x</button></form>
@@ -82,9 +82,9 @@ describe("preloader and initPage", () => {
         expect(root.hasAttribute("inert")).toBe(false)
     })
 
-    it("beginPreloadingSequence completes preloading and removes preloader from DOM", async () => {
+    it("beginPreloadingSequence completes preloading and removes load gate from DOM", async () => {
         createPortfolioWindow()
-        document.body.innerHTML = `<div id="preloader"></div><span id="introName"></span>`
+        document.body.innerHTML = `<div id="load-gate"></div><span id="introName"></span>`
         Object.defineProperty(document, "readyState", { value: "complete", configurable: true })
         Object.defineProperty(document, "fonts", {
             value: { ready: Promise.resolve() },
@@ -95,6 +95,8 @@ describe("preloader and initPage", () => {
         await new Promise((r) => setTimeout(r, 2000))
 
         expect(document.body.classList.contains("preloading-complete")).toBe(true)
-        expect(document.getElementById("preloader")).toBeNull()
+        expect(document.body.classList.contains("is-preloading")).toBe(false)
+        expect(document.documentElement.classList.contains("is-preloading")).toBe(false)
+        expect(document.getElementById("load-gate")).toBeNull()
     })
 })

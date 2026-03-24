@@ -114,7 +114,7 @@ function waitForImages() {
 
 function beginPreloadingSequence() {
     lockPreloaderInteractions()
-    const preloaderElement = document.getElementById("preloader")
+    const loadGateElement = document.getElementById("load-gate")
 
     const completePreloading = () => {
         if (document.body.classList.contains("preloading-complete")) {
@@ -123,20 +123,20 @@ function beginPreloadingSequence() {
 
         document.body.classList.add("preloading-complete")
 
-        if (preloaderElement) {
-            const removePreloader = () => {
-                preloaderElement.removeEventListener("transitionend", removePreloader)
-                if (preloaderElement.parentNode) {
-                    preloaderElement.parentNode.removeChild(preloaderElement)
+        if (loadGateElement) {
+            const removeLoadGate = () => {
+                loadGateElement.removeEventListener("transitionend", removeLoadGate)
+                if (loadGateElement.parentNode) {
+                    loadGateElement.parentNode.removeChild(loadGateElement)
                 }
 
                 document.body.classList.remove("is-preloading")
                 unlockPreloaderInteractions()
             }
 
-            preloaderElement.addEventListener("transitionend", removePreloader)
+            loadGateElement.addEventListener("transitionend", removeLoadGate)
             // Ensure the transition runs even if the browser does not trigger transitionend.
-            setTimeout(removePreloader, 800)
+            setTimeout(removeLoadGate, 800)
         } else {
             document.body.classList.remove("is-preloading")
             unlockPreloaderInteractions()
