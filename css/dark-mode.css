@@ -143,6 +143,8 @@ body.dark-mode li,
 body.dark-mode .intro-terminal__greeting,
 body.dark-mode .intro-terminal__typer,
 body.dark-mode #introName .txt,
+body.dark-mode #introGreeting .txt,
+body.dark-mode #introGreeting .intro-terminal__line1-static,
 body.dark-mode .skill-name,
 body.dark-mode label {
     color: var(--color-text) !important;

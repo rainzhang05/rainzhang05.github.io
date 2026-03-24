@@ -15,11 +15,37 @@ h2 {
     letter-spacing: -0.02em;
 }
 
-/* Typewriter caret on intro terminal second line */
-#introName .txt {
+/* Typewriter caret on intro terminal (greeting + cycling line) */
+#introGreeting .txt,
+#introName .txt,
+#introGreeting .intro-terminal__line1-static {
     color: var(--color-text);
-    border-right: 0.5rem solid;
+    display: inline-block;
+    vertical-align: baseline;
+    line-height: inherit;
+    min-height: 1em;
+    min-width: 0.5rem;
+    box-sizing: border-box;
+    border-right: 0.5rem solid currentColor;
     animation: blink-caret 0.75s step-end infinite;
+}
+
+#introGreeting .txt.is-caret-hidden,
+#introName .txt.is-caret-hidden,
+#introGreeting .intro-terminal__line1-static {
+    border-right-color: transparent;
+    animation: none;
+}
+
+#introGreeting .txt.is-caret-active,
+#introName .txt.is-caret-active {
+    border-right-color: currentColor;
+    animation: blink-caret 0.75s step-end infinite;
+}
+
+#introGreeting .txt:empty::before,
+#introName .txt:empty::before {
+    content: "\200B";
 }
 
 @keyframes blink-caret {
@@ -35,7 +61,9 @@ h2 {
 /* Intro terminal typer + caret — dark mode text */
 body.dark-mode .intro-terminal__typer,
 body.dark-mode #introName,
-body.dark-mode #introName .txt {
+body.dark-mode #introName .txt,
+body.dark-mode #introGreeting .txt,
+body.dark-mode #introGreeting .intro-terminal__line1-static {
     color: var(--color-text);
 }
 
