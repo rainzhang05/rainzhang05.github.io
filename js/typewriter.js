@@ -3,10 +3,10 @@ const INTRO_GREETING = "Hello, I'm Rain Zhang"
 /* After intro layout runs, wait before showing the line-1 caret so it follows the terminal appearing. */
 const INTRO_AFTER_TERMINAL_FIRST_CARET_MS = 200
 const INTRO_BEFORE_LINE1_TYPE_MS = 600
-const INTRO_LINE1_TYPE_SPEED_MS = 88
+const INTRO_LINE1_TYPE_SPEED_MS = 66
 const INTRO_AFTER_GREETING_PAUSE_MS = 500
 const INTRO_BEFORE_LINE2_TYPE_MS = 300
-const INTRO_LINE2_TYPE_SPEED_MS = 70
+const INTRO_LINE2_TYPE_SPEED_MS = 52
 const INTRO_LINE2_WORD_HOLD_MS = 1700
 const INTRO_LINE2_BETWEEN_WORDS_MS = 250
 const INTRO_CYCLING_WORDS = [
