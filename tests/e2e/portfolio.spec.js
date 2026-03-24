@@ -6,13 +6,149 @@ test.describe("portfolio (static server)", () => {
         await page.waitForFunction(() => document.body.classList.contains("preloading-complete"), null, {
             timeout: 30_000,
         })
-        await expect(page.locator("#preloader")).toHaveCount(0)
+        await expect(page.locator("#load-gate")).toHaveCount(0)
     })
 
     test("dock and primary sections render", async ({ page }) => {
         await expect(page.locator("#dock")).toBeVisible()
         await expect(page.locator("h2#projects")).toBeVisible()
         await expect(page.getByRole("heading", { name: "Contact Me" })).toBeVisible()
+    })
+
+    test("intro terminal remains stable right before line-1 typing starts", async ({ page }) => {
+        await page.goto("/")
+
+        const movement = await page.evaluate(async () => {
+            let terminal = null
+            let greeting = null
+            const samples = []
+            const startedAt = performance.now()
+            let sampleStartedAt = null
+            let firstCharAt = null
+
+            const delta = (list, key) => {
+                const values = list.map((item) => item[key])
+                return Math.max(...values) - Math.min(...values)
+            }
+
+            return new Promise((resolve) => {
+                const capture = (now) => {
+                    if (!terminal || !greeting) {
+                        terminal = document.querySelector("#introTerminal")
+                        greeting = document.querySelector("#introGreeting")
+                        if (terminal && greeting && sampleStartedAt === null) {
+                            sampleStartedAt = now
+                        }
+                    }
+
+                    if (terminal && greeting) {
+                        const rect = terminal.getBoundingClientRect()
+                        const greetingLength = (greeting.textContent || "").length
+
+                        samples.push({
+                            now,
+                            width: rect.width,
+                            height: rect.height,
+                            top: rect.top,
+                            left: rect.left,
+                            greetingLength,
+                        })
+
+                        if (firstCharAt === null && greetingLength > 0) {
+                            firstCharAt = now
+                        }
+                    }
+
+                    if (firstCharAt !== null && now > firstCharAt + 48) {
+                        const preStart = Math.max(sampleStartedAt ?? startedAt, firstCharAt - 180)
+                        const preEnd = firstCharAt - 20
+                        const preWindowSamples = samples.filter(
+                            (sample) => sample.now >= preStart && sample.now <= preEnd
+                        )
+
+                        resolve({
+                            sampleCount: preWindowSamples.length,
+                            deltaWidth: preWindowSamples.length ? delta(preWindowSamples, "width") : Infinity,
+                            deltaHeight: preWindowSamples.length ? delta(preWindowSamples, "height") : Infinity,
+                            deltaTop: preWindowSamples.length ? delta(preWindowSamples, "top") : Infinity,
+                            deltaLeft: preWindowSamples.length ? delta(preWindowSamples, "left") : Infinity,
+                        })
+                        return
+                    }
+
+                    if (now - startedAt > 8_000) {
+                        resolve(null)
+                        return
+                    }
+
+                    requestAnimationFrame(capture)
+                }
+
+                requestAnimationFrame(capture)
+            })
+        })
+
+        expect(movement).not.toBeNull()
+        expect(movement.sampleCount).toBeGreaterThan(4)
+        expect(movement.deltaWidth).toBeLessThan(1.2)
+        expect(movement.deltaHeight).toBeLessThan(1.2)
+        expect(movement.deltaTop).toBeLessThan(1.2)
+        expect(movement.deltaLeft).toBeLessThan(1.2)
+    })
+
+    test("intro terminal stays stable during the greeting-to-typer caret handoff", async ({ page }) => {
+        await page.waitForSelector("#introGreeting .intro-terminal__line1-static", { timeout: 15_000 })
+
+        const movement = await page.evaluate(async () => {
+            const terminal = document.querySelector("#introTerminal")
+            if (!terminal) {
+                return null
+            }
+
+            const sampleDurationMs = 320
+
+            return new Promise((resolve) => {
+                const samples = []
+                const startedAt = performance.now()
+
+                const capture = (now) => {
+                    const rect = terminal.getBoundingClientRect()
+                    samples.push({
+                        width: rect.width,
+                        height: rect.height,
+                        top: rect.top,
+                        left: rect.left,
+                    })
+
+                    if (now - startedAt >= sampleDurationMs) {
+                        const delta = (key) => {
+                            const values = samples.map((sample) => sample[key])
+                            return Math.max(...values) - Math.min(...values)
+                        }
+
+                        resolve({
+                            sampleCount: samples.length,
+                            deltaWidth: delta("width"),
+                            deltaHeight: delta("height"),
+                            deltaTop: delta("top"),
+                            deltaLeft: delta("left"),
+                        })
+                        return
+                    }
+
+                    requestAnimationFrame(capture)
+                }
+
+                requestAnimationFrame(capture)
+            })
+        })
+
+        expect(movement).not.toBeNull()
+        expect(movement.sampleCount).toBeGreaterThan(5)
+        expect(movement.deltaWidth).toBeLessThan(1.2)
+        expect(movement.deltaHeight).toBeLessThan(1.2)
+        expect(movement.deltaTop).toBeLessThan(1.2)
+        expect(movement.deltaLeft).toBeLessThan(1.2)
     })
 
     test("project modal opens from card title and closes with Escape", async ({ page }) => {
