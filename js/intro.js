@@ -1,9 +1,42 @@
 // Intro sequence and animations
 
+function primeIntroTerminalLineIfNeeded(container) {
+    if (!container) {
+        return
+    }
+
+    let textSpan = container.querySelector(".txt")
+    if (!textSpan) {
+        textSpan = container.querySelector("span")
+
+        if (!textSpan) {
+            textSpan = document.createElement("span")
+            container.textContent = ""
+            container.appendChild(textSpan)
+        }
+
+        textSpan.classList.add("txt")
+    }
+
+    textSpan.classList.add("is-caret-hidden")
+    textSpan.classList.remove("is-caret-active")
+}
+
+function primeIntroTerminalShellIfNeeded() {
+    primeIntroTerminalLineIfNeeded(document.querySelector("#introGreeting"))
+    primeIntroTerminalLineIfNeeded(document.querySelector("#introName"))
+    /* Keep both rows structurally stable; caret visibility is toggled later to keep one visible caret. */
+}
+
 function runIntroSequence() {
     const startIntro = () => {
-        animateIntro()
-        initTypewriter()
+        animateIntro(() => {
+            if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+                applyIntroTerminalReducedMotion()
+                return
+            }
+            initIntroTerminalTyping()
+        })
     }
 
     if (document.fonts && document.fonts.ready && typeof document.fonts.ready.then === "function") {
@@ -21,14 +54,13 @@ function runIntroSequence() {
 }
 
 // Reveal in Effect for Intro Elements with improved animation
-function animateIntro() {
+function animateIntro(onIntroTerminalReady) {
     if (hasIntroAnimated) {
         return
     }
 
     const selectors = [
         "#dock",
-        "#introTerminal",
         "#introParagraph",
         ".resumeButton",
         ".intro-photo",
@@ -37,10 +69,16 @@ function animateIntro() {
         .map((selector) => document.querySelector(selector))
         .filter((element) => Boolean(element))
 
+    const notifyTerminalReady =
+        typeof onIntroTerminalReady === "function" ? onIntroTerminalReady : null
+
     if (!introElements.length) {
         document.body.classList.remove("intro-prep")
         document.body.classList.add("intro-animate")
         hasIntroAnimated = true
+        if (notifyTerminalReady) {
+            notifyTerminalReady()
+        }
         return
     }
 
@@ -76,6 +114,48 @@ function animateIntro() {
     requestAnimationFrame(() => {
         document.body.classList.add("intro-animate")
         document.body.classList.remove("intro-prep")
+        primeIntroTerminalShellIfNeeded()
+
+        if (!notifyTerminalReady) {
+            return
+        }
+
+        const terminal = document.querySelector("#introTerminal")
+        const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        const terminalIsAnimated = Boolean(terminal && introElements.includes(terminal))
+
+        if (reducedMotion || !terminalIsAnimated) {
+            requestAnimationFrame(() => {
+                notifyTerminalReady()
+            })
+            return
+        }
+
+        let finished = false
+        const finish = () => {
+            if (finished) {
+                return
+            }
+            finished = true
+            terminal.removeEventListener("animationend", onAnimationEnd)
+            requestAnimationFrame(() => {
+                notifyTerminalReady()
+            })
+        }
+
+        const onAnimationEnd = (event) => {
+            if (event.target !== terminal) {
+                return
+            }
+            finish()
+        }
+
+        terminal.addEventListener("animationend", onAnimationEnd)
+
+        const terminalIndex = introElements.indexOf(terminal)
+        const staggerMs = terminalIndex >= 0 ? terminalIndex * 120 : 0
+        const fallbackMs = staggerMs + 750 + 100
+        setTimeout(finish, fallbackMs)
     })
 
     hasIntroAnimated = true
