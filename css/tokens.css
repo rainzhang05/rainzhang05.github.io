@@ -33,23 +33,31 @@
 }
 
 body.dark-mode {
-    --color-page: #0a0a0a;
-    --color-surface: #141414;
-    --color-surface-muted: #1a1a1a;
-    --color-surface-hover: #222222;
-    --color-border: rgba(255, 255, 255, 0.12);
-    --color-border-strong: rgba(255, 255, 255, 0.2);
-    --color-text: #f5f5f5;
-    --color-text-muted: #a3a3a3;
-    --color-text-subtle: #737373;
+    /* Neutral zinc-like ramp: wider steps so cards/dock read vs canvas (light mode uses shadow + border; dark needs visible planes). */
+    --color-page: #09090b;
+    --color-surface: #18181b;
+    --color-surface-muted: #242429;
+    --color-surface-hover: #303036;
+    --color-border: rgba(255, 255, 255, 0.1);
+    --color-border-strong: rgba(255, 255, 255, 0.18);
+    --color-text: #f4f4f5;
+    --color-text-muted: #b0b0b8;
+    --color-text-subtle: #8a8a93;
     --color-accent: #fafafa;
     --color-accent-hover: #ffffff;
-    --color-accent-muted: rgba(255, 255, 255, 0.1);
-    --color-on-accent: #0a0a0a;
-    --color-nav-active-bg: #262626;
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
-    --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.35);
-    --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.45);
+    --color-accent-muted: rgba(255, 255, 255, 0.12);
+    --color-on-accent: #09090b;
+    --color-nav-active-bg: #2e2e35;
+    /* Highlight edge + ambient depth (pure black shadows vanish on near-black page). */
+    --shadow-sm:
+        0 1px 0 rgba(255, 255, 255, 0.05),
+        0 1px 3px rgba(0, 0, 0, 0.45);
+    --shadow-md:
+        0 1px 0 rgba(255, 255, 255, 0.045),
+        0 6px 20px rgba(0, 0, 0, 0.42);
+    --shadow-lg:
+        0 1px 0 rgba(255, 255, 255, 0.055),
+        0 14px 40px rgba(0, 0, 0, 0.48);
 }
 
 body {
