@@ -129,6 +129,11 @@ body.dark-mode .resumeButton__icon {
     box-shadow: var(--shadow-sm);
     overflow: hidden;
     text-align: left;
+    /* Keep terminal footprint fully static through reveal/typing handoff. */
+    --intro-transform-start: translateY(0);
+    --intro-transform-end: translateY(0);
+    --intro-filter-start: blur(0);
+    --intro-filter-end: blur(0);
 }
 
 .intro-terminal__chrome {
@@ -179,6 +184,7 @@ body.dark-mode .resumeButton__icon {
 }
 
 .intro-terminal__prompt {
+    display: inline-block;
     flex-shrink: 0;
     width: 1.1em;
     font-family: ui-monospace, "SFMono-Regular", "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", monospace;
@@ -187,6 +193,14 @@ body.dark-mode .resumeButton__icon {
     color: var(--color-text-subtle);
     line-height: 1.2;
     user-select: none;
+}
+
+.intro-terminal__line:first-child .intro-terminal__prompt {
+    line-height: 1.15;
+}
+
+.intro-terminal__line--typer .intro-terminal__prompt {
+    line-height: 1.25;
 }
 
 .intro-terminal__prompt--tilde {
@@ -202,6 +216,9 @@ body.dark-mode .resumeButton__icon {
     letter-spacing: -0.02em;
     margin: 0;
     color: var(--color-text);
+    /* One line: avoids collapse when empty without extra gap after intro */
+    min-height: calc(1.15 * 1em);
+    box-sizing: border-box;
 }
 
 .intro-terminal__typer {
