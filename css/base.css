@@ -77,6 +77,47 @@ body::-webkit-scrollbar {
     height: 0;
 }
 
+html.theme-transitioning,
+html.theme-transitioning *,
+html.theme-transitioning *::before,
+html.theme-transitioning *::after {
+    transition: background-color 0.3s ease-in-out,
+        color 0.3s ease-in-out,
+        border-color 0.3s ease-in-out,
+        box-shadow 0.3s ease-in-out,
+        text-decoration-color 0.3s ease-in-out,
+        outline-color 0.3s ease-in-out,
+        fill 0.3s ease-in-out,
+        stroke 0.3s ease-in-out !important;
+}
+
+html.theme-transitioning img,
+html.theme-transitioning picture,
+html.theme-transitioning picture *,
+html.theme-transitioning video,
+html.theme-transitioning iframe,
+html.theme-transitioning canvas {
+    transition: none !important;
+}
+
+html.theme-transitioning .dock-item img,
+html.theme-transitioning .project-link-button img,
+html.theme-transitioning .project-tag img,
+html.theme-transitioning .line-icon img,
+html.theme-transitioning .modal-line-icon,
+html.theme-transitioning .resumeButton__icon,
+html.theme-transitioning .theme-segmented__icon,
+html.theme-transitioning #macIcon,
+html.theme-transitioning #rustIcon {
+    transition: filter 0.3s ease-in-out, opacity 0.3s ease-in-out !important;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation-duration: 0.3s;
+    animation-timing-function: ease-in-out;
+}
+
 /* Safari respects -webkit-*; keep form fields selectable */
 input:not([disabled]),
 textarea:not([disabled]),
@@ -192,6 +233,13 @@ body.intro-animate .intro-target {
 }
 
 @media (prefers-reduced-motion: reduce) {
+    html.theme-transitioning,
+    html.theme-transitioning *,
+    html.theme-transitioning *::before,
+    html.theme-transitioning *::after {
+        transition: none !important;
+    }
+
     body {
         transition: none;
     }

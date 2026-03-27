@@ -1,6 +1,11 @@
 // Theme: light / dark / system segmented control (see html/layout.html #themeToggle)
-// Theme applies synchronously (no View Transition API) so scroll position stays stable.
+// Theme uses a temporary root transition class for smooth screen-wide changes.
 const THEME_STORAGE_KEY = "portfolio-color-scheme"
+const THEME_TRANSITION_CLASS = "theme-transitioning"
+const THEME_VIEW_TRANSITION_CLASS = "theme-view-transitioning"
+const THEME_TRANSITION_DURATION_MS = 300
+
+let themeTransitionTimeoutId = null
 
 function getStoredTheme() {
     const v = localStorage.getItem(THEME_STORAGE_KEY)
@@ -22,6 +27,57 @@ function isDarkForMode(mode) {
         return false
     }
     return systemPrefersDark()
+}
+
+function prefersReducedMotion() {
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches
+}
+
+function stopThemeTransition() {
+    if (themeTransitionTimeoutId !== null) {
+        window.clearTimeout(themeTransitionTimeoutId)
+        themeTransitionTimeoutId = null
+    }
+    document.documentElement.classList.remove(THEME_TRANSITION_CLASS)
+}
+
+function startThemeTransition() {
+    if (prefersReducedMotion()) {
+        stopThemeTransition()
+        return
+    }
+
+    stopThemeTransition()
+    document.documentElement.classList.add(THEME_TRANSITION_CLASS)
+    themeTransitionTimeoutId = window.setTimeout(() => {
+        document.documentElement.classList.remove(THEME_TRANSITION_CLASS)
+        themeTransitionTimeoutId = null
+    }, THEME_TRANSITION_DURATION_MS)
+}
+
+function finishViewTransition() {
+    document.documentElement.classList.remove(THEME_VIEW_TRANSITION_CLASS)
+}
+
+function runViewTransition(updateTheme) {
+    if (typeof document.startViewTransition !== "function" || prefersReducedMotion()) {
+        return null
+    }
+
+    stopThemeTransition()
+    document.documentElement.classList.add(THEME_VIEW_TRANSITION_CLASS)
+
+    const transition = document.startViewTransition(() => {
+        updateTheme()
+    })
+
+    Promise.resolve(transition.finished)
+        .catch(() => {})
+        .finally(() => {
+            finishViewTransition()
+        })
+
+    return transition
 }
 
 function applyBodyFromMode(mode) {
@@ -50,9 +106,29 @@ function updateThemeUI(mode) {
     })
 }
 
-function applyTheme(mode) {
-    applyBodyFromMode(mode)
-    updateThemeUI(mode)
+function applyTheme(mode, animate = true) {
+    const updateTheme = () => {
+        applyBodyFromMode(mode)
+        updateThemeUI(mode)
+    }
+
+    if (animate) {
+        const viewTransition = runViewTransition(updateTheme)
+        if (viewTransition) {
+            return viewTransition
+        }
+
+        startThemeTransition()
+        // Commit the transition class before the theme tokens change so the
+        // color swap enters a stable animated state instead of flashing.
+        void document.documentElement.offsetWidth
+    } else {
+        stopThemeTransition()
+        finishViewTransition()
+    }
+
+    updateTheme()
+    return null
 }
 
 function setupThemeToggle() {
@@ -62,7 +138,7 @@ function setupThemeToggle() {
     }
 
     const mode = getStoredTheme()
-    applyTheme(mode)
+    applyTheme(mode, false)
 
     root.querySelectorAll(".theme-segmented__btn").forEach((btn) => {
         btn.addEventListener("click", () => {
@@ -78,7 +154,7 @@ function setupThemeToggle() {
     const mql = window.matchMedia("(prefers-color-scheme: dark)")
     mql.addEventListener("change", () => {
         if (getStoredTheme() === "system") {
-            applyBodyFromMode("system")
+            applyTheme("system")
         }
     })
 }

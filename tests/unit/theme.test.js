@@ -12,6 +12,36 @@ function themeToggleMarkup() {
     </div>`
 }
 
+function stubThemeMedia({ prefersDark = false, reducedMotion = false } = {}) {
+    const colorSchemeMql = {
+        matches: prefersDark,
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+    }
+    const reducedMotionMql = {
+        matches: reducedMotion,
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+    }
+    const mm = vi.fn((query) => {
+        if (query === "(prefers-color-scheme: dark)") {
+            return colorSchemeMql
+        }
+        if (query === "(prefers-reduced-motion: reduce)") {
+            return reducedMotionMql
+        }
+        return { matches: false, addEventListener: vi.fn(), removeEventListener: vi.fn() }
+    })
+    vi.stubGlobal("matchMedia", mm)
+    window.matchMedia = mm
+    return { colorSchemeMql, reducedMotionMql, mm }
+}
+
+function bindWindowTimersToGlobals() {
+    window.setTimeout = setTimeout
+    window.clearTimeout = clearTimeout
+}
+
 describe("theme", () => {
     beforeEach(() => {
         createPortfolioWindow()
@@ -22,6 +52,7 @@ describe("theme", () => {
     afterEach(() => {
         unlockIfPreloaderLocked()
         localStorage.clear()
+        vi.useRealTimers()
         vi.unstubAllGlobals()
     })
 
@@ -71,16 +102,59 @@ describe("theme", () => {
         expect(document.body.classList.contains("dark-mode")).toBe(true)
     })
 
-    it("applyTheme does not use document.startViewTransition", () => {
-        vi.stubGlobal("matchMedia", vi.fn(() => ({ matches: false })))
-        const vt = vi.fn()
+    it("applyTheme adds a temporary root transition class and removes it after the timeout", () => {
+        vi.useFakeTimers()
+        bindWindowTimersToGlobals()
+        stubThemeMedia()
+        window.applyTheme("dark")
+        expect(document.body.classList.contains("dark-mode")).toBe(true)
+        expect(document.documentElement.classList.contains("theme-transitioning")).toBe(true)
+        vi.advanceTimersByTime(299)
+        expect(document.documentElement.classList.contains("theme-transitioning")).toBe(true)
+        vi.advanceTimersByTime(1)
+        expect(document.documentElement.classList.contains("theme-transitioning")).toBe(false)
+    })
+
+    it("applyTheme restarts the transition timer on rapid toggles", () => {
+        vi.useFakeTimers()
+        bindWindowTimersToGlobals()
+        stubThemeMedia()
+        window.applyTheme("dark")
+        vi.advanceTimersByTime(200)
+        window.applyTheme("light")
+        expect(document.body.classList.contains("dark-mode")).toBe(false)
+        expect(document.documentElement.classList.contains("theme-transitioning")).toBe(true)
+        vi.advanceTimersByTime(299)
+        expect(document.documentElement.classList.contains("theme-transitioning")).toBe(true)
+        vi.advanceTimersByTime(1)
+        expect(document.documentElement.classList.contains("theme-transitioning")).toBe(false)
+    })
+
+    it("applyTheme skips the temporary root transition when reduced motion is enabled", () => {
+        stubThemeMedia({ reducedMotion: true })
+        window.applyTheme("dark")
+        expect(document.body.classList.contains("dark-mode")).toBe(true)
+        expect(document.documentElement.classList.contains("theme-transitioning")).toBe(false)
+    })
+
+    it("applyTheme uses document.startViewTransition when available", async () => {
+        stubThemeMedia()
+        const vt = vi.fn((update) => {
+            update()
+            return {
+                finished: Promise.resolve(),
+            }
+        })
         const orig = document.startViewTransition
         document.startViewTransition = vt
         try {
             document.body.classList.remove("dark-mode")
-            window.applyTheme("dark")
+            const transition = window.applyTheme("dark")
             expect(document.body.classList.contains("dark-mode")).toBe(true)
-            expect(vt).not.toHaveBeenCalled()
+            expect(vt).toHaveBeenCalledTimes(1)
+            expect(document.documentElement.classList.contains("theme-view-transitioning")).toBe(true)
+            await transition.finished
+            expect(document.documentElement.classList.contains("theme-transitioning")).toBe(false)
         } finally {
             if (orig) {
                 document.startViewTransition = orig
@@ -90,16 +164,28 @@ describe("theme", () => {
         }
     })
 
-    it("setupThemeToggle installs listeners; click path matches applyTheme(dark)", () => {
-        const mql = { matches: false, addEventListener: vi.fn(), removeEventListener: vi.fn() }
-        const mm = vi.fn(() => mql)
-        vi.stubGlobal("matchMedia", mm)
-        window.matchMedia = mm
+    it("setupThemeToggle applies the stored theme without animating the initial paint", () => {
+        stubThemeMedia({ prefersDark: true })
+        localStorage.setItem("portfolio-color-scheme", "dark")
         window.setupThemeToggle()
-        window.localStorage.setItem("portfolio-color-scheme", "dark")
-        window.applyTheme("dark")
+        expect(document.body.classList.contains("dark-mode")).toBe(true)
+        expect(document.documentElement.classList.contains("theme-transitioning")).toBe(false)
+    })
+
+    it("setupThemeToggle installs listeners; click path matches applyTheme(dark)", () => {
+        vi.useFakeTimers()
+        bindWindowTimersToGlobals()
+        stubThemeMedia()
+        delete document.startViewTransition
+        window.setupThemeToggle()
+        unlockIfPreloaderLocked()
         const darkBtn = document.querySelector('[data-theme="dark"]')
+        darkBtn.click()
         expect(document.body.classList.contains("dark-mode")).toBe(true)
         expect(darkBtn.getAttribute("aria-checked")).toBe("true")
+        expect(window.localStorage.getItem("portfolio-color-scheme")).toBe("dark")
+        expect(document.documentElement.classList.contains("theme-transitioning")).toBe(true)
+        vi.advanceTimersByTime(300)
+        expect(document.documentElement.classList.contains("theme-transitioning")).toBe(false)
     })
 })
