@@ -90,10 +90,6 @@
         border-radius: 24px;
     }
 
-    .intro-terminal {
-        border-radius: 24px;
-    }
-
     .introduction,
     .skills,
     .experience,
@@ -193,10 +189,6 @@
 
     .project-card,
     .education-card {
-        border-radius: 20px;
-    }
-
-    .intro-terminal {
         border-radius: 20px;
     }
 
