@@ -162,7 +162,22 @@ test.describe("portfolio (static server)", () => {
 
     test("theme segmented control toggles dark class", async ({ page }) => {
         await page.locator('#themeToggle [data-theme="dark"]').click()
+        await page.waitForFunction(() => {
+            const root = document.documentElement
+            return (
+                root.classList.contains("theme-transitioning") ||
+                root.classList.contains("theme-view-transitioning") ||
+                typeof document.startViewTransition === "function"
+            )
+        })
         await expect(page.locator("body")).toHaveClass(/dark-mode/)
+        await page.waitForFunction(() => {
+            const root = document.documentElement
+            return (
+                !root.classList.contains("theme-transitioning") &&
+                !root.classList.contains("theme-view-transitioning")
+            )
+        })
         await page.locator('#themeToggle [data-theme="light"]').click()
         await expect(page.locator("body")).not.toHaveClass(/dark-mode/)
     })
