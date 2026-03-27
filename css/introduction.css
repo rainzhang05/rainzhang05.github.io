@@ -123,7 +123,7 @@ body.dark-mode .resumeButton__icon {
     width: 100%;
     max-width: min(720px, 100%);
     box-sizing: border-box;
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-section);
     border: 1px solid var(--color-border-strong);
     background-color: var(--color-surface-muted);
     box-shadow: var(--shadow-sm);
