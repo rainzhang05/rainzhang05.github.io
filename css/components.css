@@ -76,7 +76,7 @@ body.dark-mode #introGreeting .intro-terminal__line1-static {
     --dock-icon-size: 36px;
     transform: translateX(-50%);
     background-color: var(--card-surface-bg, #ffffff);
-    border-radius: 32px;
+    border-radius: var(--radius-dock-lg);
     border: 1px solid var(--color-border-strong);
     padding: 4px 16px;
     display: flex;
@@ -103,7 +103,7 @@ body.dark-mode #introGreeting .intro-terminal__line1-static {
     align-items: center;
     gap: 7px;
     padding: 3px 14px 3px 22px;
-    border-radius: 28px;
+    border-radius: var(--radius-dock);
     border: 1px solid var(--color-border-strong);
     box-shadow: none;
     /* Avoid a scrollport on desktop: it can defer hover hit-testing next to card icons (overflow auto). */
