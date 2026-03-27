@@ -1,11 +1,12 @@
 /**
- * Squircle corners: `corner-shape: squircle` uses a superellipse blend (spec “squircle”),
- * giving smooth, G³-style continuity with `border-radius`. Chromium 139+; others ignore.
- * Circles (50%), hairline pseudo-elements (2px), and zero-radius sections are excluded.
+ * Apple-style continuous corners: superellipse + border-radius (CSS Borders 4).
+ * - superellipse(3): fuller curve than spec “squircle” (superellipse(2)); tuned for UI panels.
+ * - squircle: fallback where superellipse() args aren’t supported yet.
+ * - Unsupported engines: plain border-radius only (circular arcs) — same radii as tokens.
+ * Omit: circles (50%), 2px hairlines, radius 0.
  */
 @supports (corner-shape: squircle) {
     :is(
-        /* Cards & surfaces */
         .project-card,
         .education-card,
         .project-card .project-content,
@@ -13,18 +14,14 @@
         .project-modal,
         .intro-terminal,
         #dock,
-        /* Tags & chips */
         .project-tag,
         .education-tag,
         .project-modal .project-tag,
-        /* Links & actions */
         .related-project-link,
         .project-card-title-trigger:focus-visible,
-        /* Modal rich content */
         .project-description-rich .project-section-list > li,
         .project-description-rich .project-figure img,
         .project-description-rich code,
-        /* Modern project layout (modal.css) */
         .modern-hero,
         .info-card,
         .modern-section,
@@ -36,11 +33,9 @@
         .outcome-item,
         .project-link-card,
         .tech-pill,
-        /* Dock: theme control (pill track uses same shape system) */
         .theme-segmented__track,
         .theme-segmented__thumb,
         .theme-segmented__btn,
-        /* Global UI */
         .success-message,
         .line-icon,
         .form-group input,
@@ -50,5 +45,48 @@
         .site-footer__nav a:focus-visible
     ) {
         corner-shape: squircle;
+    }
+}
+
+@supports (corner-shape: superellipse(3)) {
+    :is(
+        .project-card,
+        .education-card,
+        .project-card .project-content,
+        .project-cover,
+        .project-modal,
+        .intro-terminal,
+        #dock,
+        .project-tag,
+        .education-tag,
+        .project-modal .project-tag,
+        .related-project-link,
+        .project-card-title-trigger:focus-visible,
+        .project-description-rich .project-section-list > li,
+        .project-description-rich .project-figure img,
+        .project-description-rich code,
+        .modern-hero,
+        .info-card,
+        .modern-section,
+        .feature-card,
+        .arch-card,
+        .module-item,
+        .challenge-card,
+        .challenge-badge,
+        .outcome-item,
+        .project-link-card,
+        .tech-pill,
+        .theme-segmented__track,
+        .theme-segmented__thumb,
+        .theme-segmented__btn,
+        .success-message,
+        .line-icon,
+        .form-group input,
+        .form-group textarea,
+        .submit-btn,
+        .resumeButton,
+        .site-footer__nav a:focus-visible
+    ) {
+        corner-shape: superellipse(3);
     }
 }
