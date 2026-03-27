@@ -50,7 +50,7 @@
 .project-card,
 .education-card {
     background-color: var(--card-surface-bg, #ffffff);
-    border-radius: 28px;
+    border-radius: var(--radius-section);
     overflow: hidden;
     border: 1px solid var(--color-border);
     box-shadow: var(--shadow-sm);
@@ -281,12 +281,12 @@
 }
 
 .project-card .project-content {
-    border-radius: 0 0 28px 28px;
+    border-radius: 0 0 var(--radius-section) var(--radius-section);
 }
 
 .project-cover {
     width: 100%;
-    border-radius: 24px;
+    border-radius: var(--radius-card-sm);
     margin: 12px 0 20px;
     box-shadow: var(--shadow-md);
     border: 1px solid var(--color-border);
@@ -367,7 +367,7 @@ body.modal-open {
 .project-modal {
     background-color: var(--color-surface);
     border: 1px solid var(--color-border);
-    border-radius: 36px;
+    border-radius: var(--radius-modal);
     width: 84vw;
     height: 80vh;
     box-shadow: var(--shadow-lg);
@@ -590,7 +590,7 @@ body.modal-open {
 
 .project-description-rich .project-figure img {
     width: 100%;
-    border-radius: 24px;
+    border-radius: var(--radius-card-sm);
     box-shadow: var(--shadow-lg);
     border: 1px solid var(--color-border);
     display: block;

@@ -87,7 +87,11 @@
 
     .project-card,
     .education-card {
-        border-radius: 24px;
+        border-radius: var(--radius-card-sm);
+    }
+
+    .project-card .project-content {
+        border-radius: 0 0 var(--radius-card-sm) var(--radius-card-sm);
     }
 
     .introduction,
@@ -189,7 +193,11 @@
 
     .project-card,
     .education-card {
-        border-radius: 20px;
+        border-radius: var(--radius-xl);
+    }
+
+    .project-card .project-content {
+        border-radius: 0 0 var(--radius-xl) var(--radius-xl);
     }
 
     .intro-terminal__greeting {
@@ -239,7 +247,7 @@
     #dock.dock--top {
         --dock-icon-size: 22px;
         padding: 2px 10px 2px 16px;
-        border-radius: 24px;
+        border-radius: var(--radius-card-sm);
     }
 
     .theme-segmented__track {
