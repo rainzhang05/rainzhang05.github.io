@@ -44,6 +44,3 @@
 
 /* Responsive design / media queries */
 @import url('responsive.css');
-
-/* Squircle corner-shape for rounded rectangles (after all border-radius rules) */
-@import url('corner-shape.css');
