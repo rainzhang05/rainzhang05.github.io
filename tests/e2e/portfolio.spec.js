@@ -1,5 +1,32 @@
 import { expect, test } from "@playwright/test"
 
+async function getPageScrollState(page) {
+    return await page.evaluate(() => {
+        const footer = document.querySelector(".site-footer")
+        return {
+            scrollTop:
+                window.scrollY ||
+                window.pageYOffset ||
+                document.documentElement.scrollTop ||
+                document.body.scrollTop ||
+                0,
+            footerTop: footer ? footer.getBoundingClientRect().top : null,
+        }
+    })
+}
+
+async function scrollPageToBottom(page) {
+    await page.evaluate(() => {
+        document.documentElement.style.scrollBehavior = "auto"
+        document.body.style.scrollBehavior = "auto"
+
+        const bottom = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight)
+        document.documentElement.scrollTop = bottom
+        document.body.scrollTop = bottom
+        window.scrollTo(0, bottom)
+    })
+}
+
 test.describe("portfolio (static server)", () => {
     test.beforeEach(async ({ page }) => {
         await page.goto("/")
@@ -13,6 +40,22 @@ test.describe("portfolio (static server)", () => {
         await expect(page.locator("#dock")).toBeVisible()
         await expect(page.locator("h2#projects")).toBeVisible()
         await expect(page.getByRole("heading", { name: "Contact Me" })).toBeVisible()
+    })
+
+    test("theme toggle works while the preload gate is still active", async ({ page }) => {
+        await page.route("**/images/portfolio-photo.png", async (route) => {
+            await new Promise((resolve) => setTimeout(resolve, 1500))
+            await route.continue()
+        })
+
+        await page.goto("/", { waitUntil: "domcontentloaded" })
+        await expect(page.locator("#themeToggle")).toBeVisible()
+        await expect
+            .poll(() => page.evaluate(() => document.body.classList.contains("preloading-complete")))
+            .toBe(false)
+
+        await page.locator('#themeToggle [data-theme="dark"]').click()
+        await expect(page.locator("body")).toHaveClass(/dark-mode/)
     })
 
     test("intro terminal remains stable right before line-1 typing starts", async ({ page }) => {
@@ -162,65 +205,34 @@ test.describe("portfolio (static server)", () => {
 
     test("theme segmented control toggles dark class", async ({ page }) => {
         await page.locator('#themeToggle [data-theme="dark"]').click()
-        await page.waitForFunction(() => {
-            const root = document.documentElement
-            return (
-                root.classList.contains("theme-transitioning") ||
-                root.classList.contains("theme-view-transitioning") ||
-                typeof document.startViewTransition === "function"
-            )
-        })
         await expect(page.locator("body")).toHaveClass(/dark-mode/)
-        await page.waitForFunction(() => {
-            const root = document.documentElement
-            return (
-                !root.classList.contains("theme-transitioning") &&
-                !root.classList.contains("theme-view-transitioning")
-            )
-        })
         await page.locator('#themeToggle [data-theme="light"]').click()
         await expect(page.locator("body")).not.toHaveClass(/dark-mode/)
     })
 
-    test("theme toggle keeps the viewport anchored near the footer", async ({ page }) => {
-        await page.evaluate(() => {
-            document.documentElement.style.scrollBehavior = "auto"
-            document.body.style.scrollBehavior = "auto"
-            window.scrollTo(0, document.documentElement.scrollHeight)
-        })
+    test("page scrolls with wheel input after preloading completes", async ({ page }) => {
+        const before = await getPageScrollState(page)
 
-        const before = await page.evaluate(() => {
-            const footer = document.querySelector(".site-footer")
-            return {
-                scrollY: window.scrollY,
-                footerTop: footer ? footer.getBoundingClientRect().top : null,
-            }
-        })
+        await page.mouse.move(700, 500)
+        await page.mouse.wheel(0, 1200)
+        await page.waitForTimeout(250)
+
+        const after = await getPageScrollState(page)
+        expect(after.scrollTop).toBeGreaterThan(before.scrollTop)
+    })
+
+    test("theme toggle keeps the viewport anchored near the footer", async ({ page }) => {
+        await scrollPageToBottom(page)
+        const before = await getPageScrollState(page)
 
         await page.locator('#themeToggle [data-theme="dark"]').click()
-
-        const afterDark = await page.evaluate(() => {
-            const footer = document.querySelector(".site-footer")
-            return {
-                scrollY: window.scrollY,
-                footerTop: footer ? footer.getBoundingClientRect().top : null,
-            }
-        })
-
-        expect(afterDark.scrollY).toBe(before.scrollY)
+        const afterDark = await getPageScrollState(page)
+        expect(afterDark.scrollTop).toBe(before.scrollTop)
         expect(afterDark.footerTop).toBe(before.footerTop)
 
         await page.locator('#themeToggle [data-theme="light"]').click()
-
-        const afterLight = await page.evaluate(() => {
-            const footer = document.querySelector(".site-footer")
-            return {
-                scrollY: window.scrollY,
-                footerTop: footer ? footer.getBoundingClientRect().top : null,
-            }
-        })
-
-        expect(afterLight.scrollY).toBe(before.scrollY)
+        const afterLight = await getPageScrollState(page)
+        expect(afterLight.scrollTop).toBe(before.scrollTop)
         expect(afterLight.footerTop).toBe(before.footerTop)
     })
 

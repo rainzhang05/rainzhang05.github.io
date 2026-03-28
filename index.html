@@ -3,15 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <script>
-        (function () {
-            var ua = navigator.userAgent
-            var isChromium = /Chrome|Chromium|Edg\//.test(ua) || /CriOS|EdgiOS/.test(ua)
-            if (/Safari/.test(ua) && !isChromium) {
-                document.documentElement.classList.add("safari-like")
-            }
-        })()
-    </script>
     <title>Rain Zhang</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="preload" href="fonts/Montserrat-Regular.ttf" as="font" type="font/ttf" crossorigin>
@@ -32,11 +23,40 @@
     <script src="js/main.js"></script>
 </head>
 <body class="intro-prep is-preloading">
+<script>
+    (function () {
+        var storageKey = "portfolio-color-scheme"
 
-<div id="load-gate" class="load-gate" aria-hidden="true"></div>
+        function getStoredTheme() {
+            try {
+                var value = window.localStorage.getItem(storageKey)
+                if (value === "light" || value === "dark" || value === "system") {
+                    return value
+                }
+            } catch (error) {}
+
+            return "light"
+        }
+
+        var mode = getStoredTheme()
+        var prefersDark = false
+
+        try {
+            prefersDark = Boolean(
+                window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
+            )
+        } catch (error) {}
+
+        if (mode === "dark" || (mode === "system" && prefersDark)) {
+            document.body.classList.add("dark-mode")
+        }
+    })()
+</script>
 
 <!-- Layout (Navigation & Decorations) -->
 <div id="layout-container"></div>
+
+<div id="load-gate" class="load-gate" aria-hidden="true"></div>
 
 <!-- Main Content Sections -->
 <div id="introduction-container"></div>
@@ -60,11 +80,14 @@
         }
     }
 
-    // Load all sections when DOM is ready
-    document.addEventListener('DOMContentLoaded', async () => {
-        // Load sections in order
+    async function loadPageSections() {
+        await loadSection('layout-container', 'html/layout.html');
+
+        if (typeof setupThemeToggle === "function") {
+            setupThemeToggle();
+        }
+
         await Promise.all([
-            loadSection('layout-container', 'html/layout.html'),
             loadSection('introduction-container', 'html/introduction.html'),
             loadSection('skills-container', 'html/skills.html'),
             loadSection('experience-container', 'html/experience.html'),
@@ -76,6 +99,11 @@
 
         // Dispatch event to notify that all sections are loaded
         document.dispatchEvent(new CustomEvent('sectionsLoaded'));
+    }
+
+    // Load all sections when DOM is ready
+    document.addEventListener('DOMContentLoaded', () => {
+        loadPageSections();
     });
 </script>
 </body>

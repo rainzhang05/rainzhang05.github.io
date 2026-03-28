@@ -5,6 +5,20 @@
  * - Unsupported engines: plain border-radius only (circular arcs) — same radii as tokens.
  * Omit: circles (50%), 2px hairlines, radius 0.
  */
+@supports not (corner-shape: superellipse(3)) {
+    :root {
+        --radius-sm: 10px;
+        --radius-md: 14px;
+        --radius-lg: 18px;
+        --radius-xl: 22px;
+        --radius-section: 32px;
+        --radius-card-sm: 26px;
+        --radius-modal: 40px;
+        --radius-dock: 30px;
+        --radius-dock-lg: 34px;
+    }
+}
+
 @supports (corner-shape: squircle) {
     :is(
         .project-card,

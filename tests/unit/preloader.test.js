@@ -43,7 +43,7 @@ describe("preloader and initPage", () => {
 
         expect(runIntro).toHaveBeenCalledTimes(1)
         expect(dock).toHaveBeenCalledTimes(1)
-        expect(theme).toHaveBeenCalledTimes(1)
+        expect(theme).not.toHaveBeenCalled()
         expect(hash).toHaveBeenCalledTimes(1)
         expect(contact).toHaveBeenCalledTimes(1)
         expect(cards).toHaveBeenCalledTimes(1)
@@ -60,6 +60,29 @@ describe("preloader and initPage", () => {
             links,
             skills,
         ].forEach((s) => s.mockRestore())
+    })
+
+    it("preloader interaction lock only blocks scroll-affecting inputs", () => {
+        createPortfolioWindow()
+        document.body.innerHTML = `<button id="dockTheme" type="button">Theme</button>`
+        document.documentElement.classList.add("is-preloading")
+        document.body.classList.add("is-preloading")
+
+        const clickEvent = new MouseEvent("click", { bubbles: true, cancelable: true })
+        const wheelEvent = new WheelEvent("wheel", { bubbles: true, cancelable: true, deltaY: 40 })
+        const keyEvent = new KeyboardEvent("keydown", {
+            bubbles: true,
+            cancelable: true,
+            key: "PageDown",
+        })
+
+        document.getElementById("dockTheme").dispatchEvent(clickEvent)
+        document.dispatchEvent(wheelEvent)
+        document.dispatchEvent(keyEvent)
+
+        expect(clickEvent.defaultPrevented).toBe(false)
+        expect(wheelEvent.defaultPrevented).toBe(true)
+        expect(keyEvent.defaultPrevented).toBe(true)
     })
 
     it("setupSkillsScrollReveal skips wait for #skills initial hash", () => {

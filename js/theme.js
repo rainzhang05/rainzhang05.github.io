@@ -1,22 +1,29 @@
 // Theme: light / dark / system segmented control (see html/layout.html #themeToggle)
-// Theme uses a temporary root transition class for smooth screen-wide changes.
 const THEME_STORAGE_KEY = "portfolio-color-scheme"
-const THEME_TRANSITION_CLASS = "theme-transitioning"
-const THEME_VIEW_TRANSITION_CLASS = "theme-view-transitioning"
-const THEME_TRANSITION_DURATION_MS = 300
-
-let themeTransitionTimeoutId = null
 
 function getStoredTheme() {
-    const v = localStorage.getItem(THEME_STORAGE_KEY)
-    if (v === "light" || v === "dark" || v === "system") {
-        return v
+    try {
+        const v = localStorage.getItem(THEME_STORAGE_KEY)
+        if (v === "light" || v === "dark" || v === "system") {
+            return v
+        }
+    } catch (error) {
+        // Ignore blocked storage and fall back to the default theme.
     }
+
     return "light"
 }
 
 function systemPrefersDark() {
     return window.matchMedia("(prefers-color-scheme: dark)").matches
+}
+
+function setStoredTheme(mode) {
+    try {
+        localStorage.setItem(THEME_STORAGE_KEY, mode)
+    } catch (error) {
+        // Ignore blocked storage; the in-memory theme change still applies.
+    }
 }
 
 function isDarkForMode(mode) {
@@ -29,58 +36,11 @@ function isDarkForMode(mode) {
     return systemPrefersDark()
 }
 
-function prefersReducedMotion() {
-    return window.matchMedia("(prefers-reduced-motion: reduce)").matches
-}
-
-function stopThemeTransition() {
-    if (themeTransitionTimeoutId !== null) {
-        window.clearTimeout(themeTransitionTimeoutId)
-        themeTransitionTimeoutId = null
-    }
-    document.documentElement.classList.remove(THEME_TRANSITION_CLASS)
-}
-
-function startThemeTransition() {
-    if (prefersReducedMotion()) {
-        stopThemeTransition()
+function applyBodyFromMode(mode) {
+    if (!document.body) {
         return
     }
 
-    stopThemeTransition()
-    document.documentElement.classList.add(THEME_TRANSITION_CLASS)
-    themeTransitionTimeoutId = window.setTimeout(() => {
-        document.documentElement.classList.remove(THEME_TRANSITION_CLASS)
-        themeTransitionTimeoutId = null
-    }, THEME_TRANSITION_DURATION_MS)
-}
-
-function finishViewTransition() {
-    document.documentElement.classList.remove(THEME_VIEW_TRANSITION_CLASS)
-}
-
-function runViewTransition(updateTheme) {
-    if (typeof document.startViewTransition !== "function" || prefersReducedMotion()) {
-        return null
-    }
-
-    stopThemeTransition()
-    document.documentElement.classList.add(THEME_VIEW_TRANSITION_CLASS)
-
-    const transition = document.startViewTransition(() => {
-        updateTheme()
-    })
-
-    Promise.resolve(transition.finished)
-        .catch(() => {})
-        .finally(() => {
-            finishViewTransition()
-        })
-
-    return transition
-}
-
-function applyBodyFromMode(mode) {
     const dark = isDarkForMode(mode)
     if (dark) {
         document.body.classList.add("dark-mode")
@@ -106,28 +66,9 @@ function updateThemeUI(mode) {
     })
 }
 
-function applyTheme(mode, animate = true) {
-    const updateTheme = () => {
-        applyBodyFromMode(mode)
-        updateThemeUI(mode)
-    }
-
-    if (animate) {
-        const viewTransition = runViewTransition(updateTheme)
-        if (viewTransition) {
-            return viewTransition
-        }
-
-        startThemeTransition()
-        // Commit the transition class before the theme tokens change so the
-        // color swap enters a stable animated state instead of flashing.
-        void document.documentElement.offsetWidth
-    } else {
-        stopThemeTransition()
-        finishViewTransition()
-    }
-
-    updateTheme()
+function applyTheme(mode) {
+    applyBodyFromMode(mode)
+    updateThemeUI(mode)
     return null
 }
 
@@ -138,7 +79,13 @@ function setupThemeToggle() {
     }
 
     const mode = getStoredTheme()
-    applyTheme(mode, false)
+    applyTheme(mode)
+
+    if (root.dataset.themeToggleBound === "true") {
+        return
+    }
+
+    root.dataset.themeToggleBound = "true"
 
     root.querySelectorAll(".theme-segmented__btn").forEach((btn) => {
         btn.addEventListener("click", () => {
@@ -146,15 +93,21 @@ function setupThemeToggle() {
             if (!next) {
                 return
             }
-            localStorage.setItem(THEME_STORAGE_KEY, next)
+            setStoredTheme(next)
             applyTheme(next)
         })
     })
 
     const mql = window.matchMedia("(prefers-color-scheme: dark)")
-    mql.addEventListener("change", () => {
+    const handleSystemThemeChange = () => {
         if (getStoredTheme() === "system") {
             applyTheme("system")
         }
-    })
+    }
+
+    if (typeof mql.addEventListener === "function") {
+        mql.addEventListener("change", handleSystemThemeChange)
+    } else if (typeof mql.addListener === "function") {
+        mql.addListener(handleSystemThemeChange)
+    }
 }

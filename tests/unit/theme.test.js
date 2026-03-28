@@ -37,11 +37,6 @@ function stubThemeMedia({ prefersDark = false, reducedMotion = false } = {}) {
     return { colorSchemeMql, reducedMotionMql, mm }
 }
 
-function bindWindowTimersToGlobals() {
-    window.setTimeout = setTimeout
-    window.clearTimeout = clearTimeout
-}
-
 describe("theme", () => {
     beforeEach(() => {
         createPortfolioWindow()
@@ -100,83 +95,19 @@ describe("theme", () => {
         document.body.classList.remove("dark-mode")
         window.applyTheme("dark")
         expect(document.body.classList.contains("dark-mode")).toBe(true)
+        expect(document.querySelector(".theme-segmented__track").getAttribute("data-active")).toBe("dark")
     })
 
-    it("applyTheme adds a temporary root transition class and removes it after the timeout", () => {
-        vi.useFakeTimers()
-        bindWindowTimersToGlobals()
-        stubThemeMedia()
-        window.applyTheme("dark")
-        expect(document.body.classList.contains("dark-mode")).toBe(true)
-        expect(document.documentElement.classList.contains("theme-transitioning")).toBe(true)
-        vi.advanceTimersByTime(299)
-        expect(document.documentElement.classList.contains("theme-transitioning")).toBe(true)
-        vi.advanceTimersByTime(1)
-        expect(document.documentElement.classList.contains("theme-transitioning")).toBe(false)
-    })
-
-    it("applyTheme restarts the transition timer on rapid toggles", () => {
-        vi.useFakeTimers()
-        bindWindowTimersToGlobals()
-        stubThemeMedia()
-        window.applyTheme("dark")
-        vi.advanceTimersByTime(200)
-        window.applyTheme("light")
-        expect(document.body.classList.contains("dark-mode")).toBe(false)
-        expect(document.documentElement.classList.contains("theme-transitioning")).toBe(true)
-        vi.advanceTimersByTime(299)
-        expect(document.documentElement.classList.contains("theme-transitioning")).toBe(true)
-        vi.advanceTimersByTime(1)
-        expect(document.documentElement.classList.contains("theme-transitioning")).toBe(false)
-    })
-
-    it("applyTheme skips the temporary root transition when reduced motion is enabled", () => {
-        stubThemeMedia({ reducedMotion: true })
-        window.applyTheme("dark")
-        expect(document.body.classList.contains("dark-mode")).toBe(true)
-        expect(document.documentElement.classList.contains("theme-transitioning")).toBe(false)
-    })
-
-    it("applyTheme uses document.startViewTransition when available", async () => {
-        stubThemeMedia()
-        const vt = vi.fn((update) => {
-            update()
-            return {
-                finished: Promise.resolve(),
-            }
-        })
-        const orig = document.startViewTransition
-        document.startViewTransition = vt
-        try {
-            document.body.classList.remove("dark-mode")
-            const transition = window.applyTheme("dark")
-            expect(document.body.classList.contains("dark-mode")).toBe(true)
-            expect(vt).toHaveBeenCalledTimes(1)
-            expect(document.documentElement.classList.contains("theme-view-transitioning")).toBe(true)
-            await transition.finished
-            expect(document.documentElement.classList.contains("theme-transitioning")).toBe(false)
-        } finally {
-            if (orig) {
-                document.startViewTransition = orig
-            } else {
-                delete document.startViewTransition
-            }
-        }
-    })
-
-    it("setupThemeToggle applies the stored theme without animating the initial paint", () => {
+    it("setupThemeToggle applies the stored theme as soon as the dock loads", () => {
         stubThemeMedia({ prefersDark: true })
         localStorage.setItem("portfolio-color-scheme", "dark")
         window.setupThemeToggle()
         expect(document.body.classList.contains("dark-mode")).toBe(true)
-        expect(document.documentElement.classList.contains("theme-transitioning")).toBe(false)
+        expect(document.querySelector(".theme-segmented__track").getAttribute("data-active")).toBe("dark")
     })
 
     it("setupThemeToggle installs listeners; click path matches applyTheme(dark)", () => {
-        vi.useFakeTimers()
-        bindWindowTimersToGlobals()
         stubThemeMedia()
-        delete document.startViewTransition
         window.setupThemeToggle()
         unlockIfPreloaderLocked()
         const darkBtn = document.querySelector('[data-theme="dark"]')
@@ -184,8 +115,17 @@ describe("theme", () => {
         expect(document.body.classList.contains("dark-mode")).toBe(true)
         expect(darkBtn.getAttribute("aria-checked")).toBe("true")
         expect(window.localStorage.getItem("portfolio-color-scheme")).toBe("dark")
-        expect(document.documentElement.classList.contains("theme-transitioning")).toBe(true)
-        vi.advanceTimersByTime(300)
-        expect(document.documentElement.classList.contains("theme-transitioning")).toBe(false)
+    })
+
+    it("setupThemeToggle reacts to system color-scheme changes", () => {
+        const { colorSchemeMql } = stubThemeMedia({ prefersDark: false })
+        localStorage.setItem("portfolio-color-scheme", "system")
+        window.setupThemeToggle()
+
+        colorSchemeMql.matches = true
+        const handleChange = colorSchemeMql.addEventListener.mock.calls[0][1]
+        handleChange()
+
+        expect(document.body.classList.contains("dark-mode")).toBe(true)
     })
 })
