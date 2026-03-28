@@ -25,28 +25,17 @@ html,
 body {
     margin: 0;
     padding: 0;
+    height: 100%;
     scroll-behavior: smooth;
     overflow-x: hidden;
     -webkit-user-select: none;
     user-select: none;
-    overscroll-behavior: none;
-    overscroll-behavior-y: none;
 }
 
-/* Safari / WebKit: confine scroll to body so viewport rubber-band overscroll is avoided (Chrome-like) */
-html.safari-like {
-    height: 100%;
-    overflow: hidden;
-}
-
-html.safari-like body {
-    height: 100%;
-    overflow-x: hidden;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-}
-
+/* Unify scrolling on body so every browser uses the same viewport owner. */
 html {
+    overflow: hidden;
+    overscroll-behavior: none;
     scrollbar-width: none;
     -ms-overflow-style: none;
 }
@@ -58,6 +47,7 @@ html::-webkit-scrollbar {
 
 /* Body */
 body {
+    min-height: 100%;
     font-family: "Montserrat", sans-serif;
     font-weight: 400;
     background-color: var(--color-page);
@@ -67,9 +57,10 @@ body {
     font-size: 19px;
     line-height: 1.6;
     overflow-y: auto;
+    overscroll-behavior-y: none;
+    -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    transition: background-color 0.22s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body::-webkit-scrollbar {
@@ -77,45 +68,10 @@ body::-webkit-scrollbar {
     height: 0;
 }
 
-html.theme-transitioning,
-html.theme-transitioning *,
-html.theme-transitioning *::before,
-html.theme-transitioning *::after {
-    transition: background-color 0.3s ease-in-out,
-        color 0.3s ease-in-out,
-        border-color 0.3s ease-in-out,
-        box-shadow 0.3s ease-in-out,
-        text-decoration-color 0.3s ease-in-out,
-        outline-color 0.3s ease-in-out,
-        fill 0.3s ease-in-out,
-        stroke 0.3s ease-in-out !important;
-}
-
-html.theme-transitioning img,
-html.theme-transitioning picture,
-html.theme-transitioning picture *,
-html.theme-transitioning video,
-html.theme-transitioning iframe,
-html.theme-transitioning canvas {
-    transition: none !important;
-}
-
-html.theme-transitioning .dock-item img,
-html.theme-transitioning .project-link-button img,
-html.theme-transitioning .project-tag img,
-html.theme-transitioning .line-icon img,
-html.theme-transitioning .modal-line-icon,
-html.theme-transitioning .resumeButton__icon,
-html.theme-transitioning .theme-segmented__icon,
-html.theme-transitioning #macIcon,
-html.theme-transitioning #rustIcon {
-    transition: filter 0.3s ease-in-out, opacity 0.3s ease-in-out !important;
-}
-
-::view-transition-old(root),
-::view-transition-new(root) {
-    animation-duration: 0.3s;
-    animation-timing-function: ease-in-out;
+html.is-preloading,
+body.is-preloading {
+    overflow: hidden;
+    overscroll-behavior: none;
 }
 
 /* Safari respects -webkit-*; keep form fields selectable */
@@ -136,22 +92,11 @@ video {
     -webkit-touch-callout: none;
 }
 
-html.is-preloading,
-body.is-preloading {
-    overflow: hidden;
-    overscroll-behavior: none;
-}
-
-body.is-preloading {
-    pointer-events: none;
-    touch-action: none;
-}
-
 #load-gate {
     position: fixed;
     inset: 0;
     background-color: var(--color-page);
-    z-index: 3000;
+    z-index: 2050;
     transition: opacity 0.4s ease, visibility 0.4s ease;
 }
 
@@ -230,17 +175,4 @@ body.intro-animate .intro-target {
 .contact {
     margin-top: 0;
     margin-bottom: clamp(32px, 5vw, 56px);
-}
-
-@media (prefers-reduced-motion: reduce) {
-    html.theme-transitioning,
-    html.theme-transitioning *,
-    html.theme-transitioning *::before,
-    html.theme-transitioning *::after {
-        transition: none !important;
-    }
-
-    body {
-        transition: none;
-    }
 }

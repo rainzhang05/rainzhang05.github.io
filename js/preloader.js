@@ -1,20 +1,60 @@
 // Interaction lock while preloading
 let preloaderInteractionsLocked = false
-const preloaderInteractionEvents = [
-    "click",
-    "mousedown",
-    "mouseup",
-    "pointerdown",
-    "pointerup",
-    "touchstart",
-    "touchmove",
-    "wheel",
-    "keydown",
-]
+const preloaderInteractionEvents = ["touchmove", "wheel", "keydown"]
 const preloaderInteractionOptions = { passive: false, capture: true }
+const preloaderScrollKeys = new Set([
+    " ",
+    "Spacebar",
+    "ArrowUp",
+    "ArrowDown",
+    "ArrowLeft",
+    "ArrowRight",
+    "PageUp",
+    "PageDown",
+    "Home",
+    "End",
+])
+
+function isEditablePreloaderTarget(target) {
+    return Boolean(
+        target &&
+            typeof target.closest === "function" &&
+            target.closest('input, textarea, select, [contenteditable=""], [contenteditable="true"]')
+    )
+}
+
+function isInteractivePreloaderTarget(target) {
+    return Boolean(
+        target &&
+            typeof target.closest === "function" &&
+            target.closest('button, [role="button"], a[href], input, textarea, select')
+    )
+}
+
+function shouldPreventPreloaderInteraction(event) {
+    if (event.type === "keydown") {
+        if (!preloaderScrollKeys.has(event.key)) {
+            return false
+        }
+
+        if (isEditablePreloaderTarget(event.target)) {
+            return false
+        }
+
+        if ((event.key === " " || event.key === "Spacebar") && isInteractivePreloaderTarget(event.target)) {
+            return false
+        }
+    }
+
+    return true
+}
 
 function preventPreloaderInteraction(event) {
     if (!document.documentElement.classList.contains("is-preloading")) {
+        return
+    }
+
+    if (!shouldPreventPreloaderInteraction(event)) {
         return
     }
 
@@ -52,6 +92,9 @@ function unlockPreloaderInteractions() {
     })
 
     document.documentElement.classList.remove("is-preloading")
+    if (document.body) {
+        document.body.classList.remove("is-preloading")
+    }
 }
 
 lockPreloaderInteractions()
@@ -170,7 +213,6 @@ function initPage() {
 
     runIntroSequence()
     setupDockHoverEffects()
-    setupThemeToggle()
     setupHashLinkBehavior()
     setupContactForm()
     setupProjectCards()
