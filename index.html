@@ -56,7 +56,12 @@
 <!-- Layout (Navigation & Decorations) -->
 <div id="layout-container"></div>
 
-<div id="load-gate" class="load-gate" aria-hidden="true"></div>
+<div id="load-gate" class="load-gate" role="status" aria-live="polite" aria-label="Loading site content">
+    <div class="load-gate__content">
+        <div class="load-gate__spinner" aria-hidden="true"></div>
+        <p class="load-gate__text">Loading</p>
+    </div>
+</div>
 
 <!-- Main Content Sections -->
 <div id="introduction-container"></div>

@@ -2,6 +2,8 @@
 let preloaderInteractionsLocked = false
 const preloaderInteractionEvents = ["touchmove", "wheel", "keydown"]
 const preloaderInteractionOptions = { passive: false, capture: true }
+const preloaderAssetTimeoutMs = 15000
+const preloaderFallbackTimeoutMs = preloaderAssetTimeoutMs + 1000
 const preloaderScrollKeys = new Set([
     " ",
     "Spacebar",
@@ -128,31 +130,94 @@ function waitForFonts() {
     return Promise.resolve()
 }
 
-function waitForImages() {
-    const imageElements = Array.from(document.querySelectorAll("img"))
+function normalizePreloadUrl(url) {
+    if (!url) {
+        return ""
+    }
 
-    if (!imageElements.length) {
+    try {
+        return new URL(url, window.location.href).href
+    } catch (error) {
+        return ""
+    }
+}
+
+function parseSrcsetUrls(srcset) {
+    if (!srcset) {
+        return []
+    }
+
+    return srcset
+        .split(",")
+        .map((entry) => entry.trim().split(/\s+/)[0])
+        .filter(Boolean)
+}
+
+function collectRenderableImageUrls() {
+    const imageUrls = new Set()
+
+    const addUrl = (value) => {
+        const normalized = normalizePreloadUrl(value)
+        if (!normalized) {
+            return
+        }
+
+        imageUrls.add(normalized)
+    }
+
+    document.querySelectorAll("img").forEach((image) => {
+        image.loading = "eager"
+        image.decoding = "async"
+
+        addUrl(image.currentSrc || image.getAttribute("src") || image.src)
+        parseSrcsetUrls(image.getAttribute("srcset") || image.srcset).forEach(addUrl)
+    })
+
+    document.querySelectorAll("source[srcset]").forEach((source) => {
+        parseSrcsetUrls(source.getAttribute("srcset") || "").forEach(addUrl)
+    })
+
+    return Array.from(imageUrls)
+}
+
+function preloadImageUrl(url) {
+    return new Promise((resolve) => {
+        const preloaderImage = new Image()
+        let isResolved = false
+
+        const finalize = () => {
+            if (isResolved) {
+                return
+            }
+
+            isResolved = true
+            clearTimeout(timeoutId)
+            preloaderImage.removeEventListener("load", finalize)
+            preloaderImage.removeEventListener("error", finalize)
+            resolve()
+        }
+
+        const timeoutId = setTimeout(finalize, preloaderAssetTimeoutMs)
+
+        preloaderImage.addEventListener("load", finalize)
+        preloaderImage.addEventListener("error", finalize)
+        preloaderImage.decoding = "async"
+        preloaderImage.src = url
+
+        if (preloaderImage.complete) {
+            finalize()
+        }
+    })
+}
+
+function waitForImages() {
+    const imageUrls = collectRenderableImageUrls()
+
+    if (!imageUrls.length) {
         return Promise.resolve()
     }
 
-    const loadPromises = imageElements.map((image) => {
-        if (image.complete && image.naturalWidth !== 0) {
-            return Promise.resolve()
-        }
-
-        return new Promise((resolve) => {
-            const finalize = () => {
-                image.removeEventListener("load", finalize)
-                image.removeEventListener("error", finalize)
-                resolve()
-            }
-
-            image.addEventListener("load", finalize)
-            image.addEventListener("error", finalize)
-        })
-    })
-
-    return Promise.all(loadPromises)
+    return Promise.all(imageUrls.map((url) => preloadImageUrl(url)))
 }
 
 function beginPreloadingSequence() {
@@ -194,7 +259,7 @@ function beginPreloadingSequence() {
 
     const assetPromises = Promise.all([waitForWindowLoad(), waitForFonts(), waitForImages()]).catch(() => {})
     const fallbackTimeout = new Promise((resolve) => {
-        setTimeout(resolve, 10000)
+        setTimeout(resolve, preloaderFallbackTimeoutMs)
     })
 
     Promise.all([minimumDisplayTime, Promise.race([assetPromises, fallbackTimeout])]).then(() => {
