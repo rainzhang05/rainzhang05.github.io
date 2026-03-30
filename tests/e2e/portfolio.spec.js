@@ -49,6 +49,9 @@ test.describe("portfolio (static server)", () => {
         })
 
         await page.goto("/", { waitUntil: "domcontentloaded" })
+        await expect(page.locator("#load-gate")).toBeVisible()
+        await expect(page.locator("#load-gate .load-gate__spinner")).toBeVisible()
+        await expect(page.locator("#load-gate .load-gate__text")).toHaveText("Loading")
         await expect(page.locator("#themeToggle")).toBeVisible()
         await expect
             .poll(() => page.evaluate(() => document.body.classList.contains("preloading-complete")))
