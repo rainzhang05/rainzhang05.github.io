@@ -345,6 +345,15 @@ body.modal-open {
 
 /* Modal overlay and iOS-style card expansion */
 .project-modal-overlay {
+    --project-modal-gap: 16px;
+    --project-modal-side-gap: clamp(20px, 2vw, 32px);
+    --project-modal-dock-top-offset: 16px;
+    --project-modal-dock-height: 44px;
+    --project-modal-top-clearance: calc(
+        var(--project-modal-dock-top-offset) +
+        var(--project-modal-dock-height) +
+        var(--project-modal-gap)
+    );
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.4);
@@ -358,9 +367,9 @@ body.modal-open {
     pointer-events: none;
     transition: opacity 0.35s var(--ease-smooth),
                 background-color 0.35s var(--ease-smooth);
-    /* Equal spacing: top dock ~56px + gap. Modal top = 80px from viewport top.
-       Bottom spacing = 80px. Space between dock bottom and modal top ~24px */
-    padding: 80px 20px;
+    /* Keep the viewport rhythm consistent:
+       gap above dock = gap between dock and modal = gap below modal. */
+    padding: var(--project-modal-top-clearance) var(--project-modal-side-gap) var(--project-modal-gap);
     overscroll-behavior: contain;
 }
 
@@ -378,11 +387,10 @@ body.dark-mode .project-modal-overlay {
     background-color: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-modal);
-    width: 84vw;
-    max-width: 1100px;
-    /* Height fills available space minus top and bottom padding (80px each) */
-    height: calc(100vh - 160px);
-    max-height: calc(100vh - 160px);
+    width: 88vw;
+    max-width: 1240px;
+    height: calc(100vh - var(--project-modal-top-clearance) - var(--project-modal-gap));
+    max-height: calc(100vh - var(--project-modal-top-clearance) - var(--project-modal-gap));
     box-shadow: var(--shadow-xl);
     display: flex;
     flex-direction: column;
@@ -729,7 +737,7 @@ body.dark-mode .project-modal-overlay {
 .project-modal[data-project-id="project-snake-game"] {
     height: auto;
     max-height: 80vh;
-    width: 64vw;
+    width: 70vw;
 }
 
 .project-modal[data-project-id="project-language-learning"] .project-content,
@@ -740,7 +748,7 @@ body.dark-mode .project-modal-overlay {
 @media (max-width: 1200px) {
     .project-modal[data-project-id="project-language-learning"],
     .project-modal[data-project-id="project-snake-game"] {
-        width: 74vw;
+        width: 80vw;
     }
 }
 
@@ -751,17 +759,21 @@ body.dark-mode .project-modal-overlay {
     }
 
     .project-modal-overlay {
-        /* Maintain equal spacing on mobile: 72px top (dock + gap), 72px bottom */
-        padding: max(72px, calc(env(safe-area-inset-top, 0px) + 72px)) 
-                 max(16px, env(safe-area-inset-right, 0px))
-                 max(72px, calc(env(safe-area-inset-bottom, 0px) + 16px)) 
-                 max(16px, env(safe-area-inset-left, 0px));
+        --project-modal-gap: 12px;
+        --project-modal-side-gap: max(16px, env(safe-area-inset-right, 0px));
+        --project-modal-dock-top-offset: max(12px, env(safe-area-inset-top, 0px));
+        --project-modal-dock-height: 48px;
+        padding:
+            var(--project-modal-top-clearance)
+            max(16px, env(safe-area-inset-right, 0px))
+            max(var(--project-modal-gap), calc(env(safe-area-inset-bottom, 0px) + var(--project-modal-gap)))
+            max(16px, env(safe-area-inset-left, 0px));
     }
 
     .project-modal {
         width: 92vw;
-        height: calc(100vh - 144px);
-        max-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 144px);
+        height: calc(100dvh - var(--project-modal-top-clearance) - max(var(--project-modal-gap), calc(env(safe-area-inset-bottom, 0px) + var(--project-modal-gap))));
+        max-height: calc(100dvh - var(--project-modal-top-clearance) - max(var(--project-modal-gap), calc(env(safe-area-inset-bottom, 0px) + var(--project-modal-gap))));
     }
 
     .project-modal .project-header,
