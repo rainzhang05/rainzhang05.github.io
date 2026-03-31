@@ -106,15 +106,6 @@
         padding-right: max(20px, env(safe-area-inset-right, 0px));
     }
 
-    #skills-section.skills {
-        text-align: center;
-    }
-
-    #skills-section.skills h2,
-    #skills-section.skills h3 {
-        text-align: left;
-    }
-
     #dock nav ul li {
         margin-right: 8px;
         margin-left: 8px;
