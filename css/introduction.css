@@ -34,7 +34,7 @@
 
 .introduction p {
     font-size: clamp(16px, 1.1vw, 20px);
-    margin-top: 20px;
+    margin-top: 28px;
 }
 
 .intro-photo {
@@ -48,19 +48,7 @@
     max-width: 320px;
     border-radius: 50%;
     aspect-ratio: 1 / 1;
-    box-shadow: var(--shadow-lg);
     object-fit: cover;
-    border: 3px solid var(--color-page);
-    outline: 1px solid var(--color-border);
-    transition: transform var(--dur-slow) var(--ease-out),
-                box-shadow var(--dur-slow) var(--ease-smooth),
-                outline-color var(--dur-slow) var(--ease-smooth);
-}
-
-.intro-photo img:hover {
-    transform: scale(1.02) rotate(1deg);
-    outline-color: var(--color-border-strong);
-    box-shadow: var(--shadow-xl);
 }
 
 .resumeButton {

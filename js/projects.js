@@ -76,6 +76,11 @@ function openProjectModal(card) {
 
     lastFocusedElement = document.activeElement
 
+    // Capture card position for iOS-style expansion animation
+    const cardRect = card.getBoundingClientRect()
+    const cardCenterX = cardRect.left + cardRect.width / 2
+    const cardCenterY = cardRect.top + cardRect.height / 2
+
     const overlay = document.createElement("div")
     overlay.className = "project-modal-overlay"
 
@@ -153,6 +158,16 @@ function openProjectModal(card) {
 
     applyModalScrollLock()
     document.body.appendChild(overlay)
+
+    // Calculate transform origin based on card position relative to viewport center
+    const viewportCenterX = window.innerWidth / 2
+    const viewportCenterY = window.innerHeight / 2
+    const originX = ((cardCenterX - viewportCenterX) / viewportCenterX) * 50 + 50
+    const originY = ((cardCenterY - viewportCenterY) / viewportCenterY) * 50 + 50
+    modal.style.transformOrigin = `${originX}% ${originY}%`
+
+    // Store card reference for closing animation
+    modal.dataset.sourceCardId = card.id || ''
 
     requestAnimationFrame(() => {
         overlay.classList.add("active")
@@ -258,6 +273,22 @@ function closeProjectModal(options = {}) {
 
     activeProjectModal.isClosing = true
 
+    // Update transform origin to animate back toward source card
+    const sourceCardId = modal.dataset.sourceCardId
+    if (sourceCardId) {
+        const sourceCard = document.getElementById(sourceCardId)
+        if (sourceCard) {
+            const cardRect = sourceCard.getBoundingClientRect()
+            const cardCenterX = cardRect.left + cardRect.width / 2
+            const cardCenterY = cardRect.top + cardRect.height / 2
+            const viewportCenterX = window.innerWidth / 2
+            const viewportCenterY = window.innerHeight / 2
+            const originX = ((cardCenterX - viewportCenterX) / viewportCenterX) * 50 + 50
+            const originY = ((cardCenterY - viewportCenterY) / viewportCenterY) * 50 + 50
+            modal.style.transformOrigin = `${originX}% ${originY}%`
+        }
+    }
+
     overlay.classList.remove("active")
     modal.classList.remove("project-modal-open")
     modal.classList.add("project-modal-closing")
@@ -273,5 +304,5 @@ function closeProjectModal(options = {}) {
     setTimeout(() => {
         modal.removeEventListener("transitionend", handleCloseTransitionEnd)
         cleanup()
-    }, 400)
+    }, 350)
 }
