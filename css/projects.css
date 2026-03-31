@@ -686,7 +686,7 @@ body.dark-mode .project-modal-overlay {
     cursor: pointer;
     display: block;
     transition: background var(--dur-med) var(--ease-smooth), 
-                transform var(--dur-fast) var(--ease-spring),
+                transform var(--dur-med) var(--ease-smooth),
                 border-color var(--dur-med) var(--ease-smooth),
                 color var(--dur-med) var(--ease-smooth);
     padding: 0;
@@ -714,10 +714,15 @@ body.dark-mode .project-modal-overlay {
     transform: translate(-50%, -50%) rotate(-45deg);
 }
 
-.project-modal-close:hover,
+.project-modal-close:hover {
+    background: var(--color-surface-hover);
+    transform: translateY(-1px);
+    border-color: var(--color-border-strong);
+    color: var(--color-text);
+}
+
 .project-modal-close:focus-visible {
     background: var(--color-surface-hover);
-    transform: scale(1.08) rotate(90deg);
     border-color: var(--color-border-strong);
     color: var(--color-text);
     outline: 2px solid var(--color-text-subtle);
@@ -725,7 +730,7 @@ body.dark-mode .project-modal-overlay {
 }
 
 .project-modal-close:active {
-    transform: scale(0.92) rotate(90deg);
+    transform: scale(0.96);
 }
 
 .project-modal[data-project-id="experience-feitian"] .project-header {
