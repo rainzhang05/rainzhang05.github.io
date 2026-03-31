@@ -349,10 +349,16 @@ body.modal-open {
     --project-modal-side-gap: clamp(20px, 2vw, 32px);
     --project-modal-dock-top-offset: 16px;
     --project-modal-dock-height: 46px;
+    --project-modal-bottom-clearance: var(--project-modal-gap);
     --project-modal-top-clearance: calc(
         var(--project-modal-dock-top-offset) +
         var(--project-modal-dock-height) +
         var(--project-modal-gap)
+    );
+    --project-modal-available-height: calc(
+        100dvh -
+        var(--project-modal-top-clearance) -
+        var(--project-modal-bottom-clearance)
     );
     position: fixed;
     inset: 0;
@@ -360,16 +366,15 @@ body.modal-open {
     backdrop-filter: blur(var(--blur-sm));
     -webkit-backdrop-filter: blur(var(--blur-sm));
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: center;
     z-index: 2000;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.35s var(--ease-smooth),
                 background-color 0.35s var(--ease-smooth);
-    /* Keep the viewport rhythm consistent:
-       gap above dock = gap between dock and modal = gap below modal. */
-    padding: var(--project-modal-top-clearance) var(--project-modal-side-gap) var(--project-modal-gap);
+    /* Center the modal within the viewport area below the dock. */
+    padding: var(--project-modal-top-clearance) var(--project-modal-side-gap) var(--project-modal-bottom-clearance);
     overscroll-behavior: contain;
 }
 
@@ -387,10 +392,10 @@ body.dark-mode .project-modal-overlay {
     background-color: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-modal);
-    width: 88vw;
-    max-width: 1240px;
-    height: calc(100vh - var(--project-modal-top-clearance) - var(--project-modal-gap));
-    max-height: calc(100vh - var(--project-modal-top-clearance) - var(--project-modal-gap));
+    width: 90vw;
+    max-width: 1280px;
+    height: calc(var(--project-modal-available-height) - clamp(24px, 4vh, 40px));
+    max-height: calc(var(--project-modal-available-height) - clamp(24px, 4vh, 40px));
     box-shadow: var(--shadow-xl);
     display: flex;
     flex-direction: column;
@@ -742,7 +747,7 @@ body.dark-mode .project-modal-overlay {
 .project-modal[data-project-id="project-snake-game"] {
     height: auto;
     max-height: 80vh;
-    width: 70vw;
+    width: 74vw;
 }
 
 .project-modal[data-project-id="project-language-learning"] .project-content,
@@ -753,7 +758,7 @@ body.dark-mode .project-modal-overlay {
 @media (max-width: 1200px) {
     .project-modal[data-project-id="project-language-learning"],
     .project-modal[data-project-id="project-snake-game"] {
-        width: 80vw;
+        width: 84vw;
     }
 }
 
@@ -768,17 +773,18 @@ body.dark-mode .project-modal-overlay {
         --project-modal-side-gap: max(16px, env(safe-area-inset-right, 0px));
         --project-modal-dock-top-offset: max(12px, env(safe-area-inset-top, 0px));
         --project-modal-dock-height: 50px;
+        --project-modal-bottom-clearance: max(var(--project-modal-gap), calc(env(safe-area-inset-bottom, 0px) + var(--project-modal-gap)));
         padding:
             var(--project-modal-top-clearance)
             max(16px, env(safe-area-inset-right, 0px))
-            max(var(--project-modal-gap), calc(env(safe-area-inset-bottom, 0px) + var(--project-modal-gap)))
+            var(--project-modal-bottom-clearance)
             max(16px, env(safe-area-inset-left, 0px));
     }
 
     .project-modal {
-        width: 92vw;
-        height: calc(100dvh - var(--project-modal-top-clearance) - max(var(--project-modal-gap), calc(env(safe-area-inset-bottom, 0px) + var(--project-modal-gap))));
-        max-height: calc(100dvh - var(--project-modal-top-clearance) - max(var(--project-modal-gap), calc(env(safe-area-inset-bottom, 0px) + var(--project-modal-gap))));
+        width: 94vw;
+        height: calc(var(--project-modal-available-height) - 20px);
+        max-height: calc(var(--project-modal-available-height) - 20px);
     }
 
     .project-modal .project-header,
