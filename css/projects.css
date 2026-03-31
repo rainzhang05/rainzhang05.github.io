@@ -348,7 +348,7 @@ body.modal-open {
     --project-modal-gap: 16px;
     --project-modal-side-gap: clamp(20px, 2vw, 32px);
     --project-modal-dock-top-offset: 16px;
-    --project-modal-dock-height: 44px;
+    --project-modal-dock-height: 46px;
     --project-modal-top-clearance: calc(
         var(--project-modal-dock-top-offset) +
         var(--project-modal-dock-height) +
@@ -718,10 +718,10 @@ body.dark-mode .project-modal-overlay {
 .project-modal-close:focus-visible {
     background: var(--color-surface-hover);
     transform: scale(1.08) rotate(90deg);
-    outline: 2px solid var(--color-text-subtle);
-    outline-offset: 2px;
     border-color: var(--color-border-strong);
     color: var(--color-text);
+    outline: 2px solid var(--color-text-subtle);
+    outline-offset: 2px;
 }
 
 .project-modal-close:active {
@@ -762,7 +762,7 @@ body.dark-mode .project-modal-overlay {
         --project-modal-gap: 12px;
         --project-modal-side-gap: max(16px, env(safe-area-inset-right, 0px));
         --project-modal-dock-top-offset: max(12px, env(safe-area-inset-top, 0px));
-        --project-modal-dock-height: 48px;
+        --project-modal-dock-height: 50px;
         padding:
             var(--project-modal-top-clearance)
             max(16px, env(safe-area-inset-right, 0px))
