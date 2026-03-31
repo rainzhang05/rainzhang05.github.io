@@ -18,7 +18,7 @@ function setupProjectCards() {
         title.addEventListener("click", (event) => {
             event.preventDefault()
             event.stopPropagation()
-            openProjectModal(card)
+            openProjectModal(card, { clientX: event.clientX, clientY: event.clientY })
         })
 
         title.addEventListener("keydown", (event) => {
@@ -63,12 +63,20 @@ function bindOpenProjectLinks(root = document) {
             if (titleTrigger && typeof titleTrigger.focus === "function") {
                 titleTrigger.focus({ preventScroll: true })
             }
-            openProjectModal(projectCard)
+            openProjectModal(projectCard, { clientX: event.clientX, clientY: event.clientY })
         })
     })
 }
 
-function openProjectModal(card) {
+function setProjectModalTransformOrigin(modal, viewportPointX, viewportPointY) {
+    const viewportCenterX = Math.max(1, window.innerWidth / 2)
+    const viewportCenterY = Math.max(1, window.innerHeight / 2)
+    const originX = ((viewportPointX - viewportCenterX) / viewportCenterX) * 50 + 50
+    const originY = ((viewportPointY - viewportCenterY) / viewportCenterY) * 50 + 50
+    modal.style.transformOrigin = `${originX}% ${originY}%`
+}
+
+function openProjectModal(card, originOptions) {
     if (!card) return
 
     // Close any existing modal instantly before opening a new one
@@ -76,10 +84,15 @@ function openProjectModal(card) {
 
     lastFocusedElement = document.activeElement
 
-    // Capture card position for iOS-style expansion animation
     const cardRect = card.getBoundingClientRect()
     const cardCenterX = cardRect.left + cardRect.width / 2
     const cardCenterY = cardRect.top + cardRect.height / 2
+    const usePointer =
+        originOptions &&
+        Number.isFinite(originOptions.clientX) &&
+        Number.isFinite(originOptions.clientY)
+    const viewportPointX = usePointer ? originOptions.clientX : cardCenterX
+    const viewportPointY = usePointer ? originOptions.clientY : cardCenterY
 
     const overlay = document.createElement("div")
     overlay.className = "project-modal-overlay"
@@ -159,15 +172,7 @@ function openProjectModal(card) {
     applyModalScrollLock()
     document.body.appendChild(overlay)
 
-    // Calculate transform origin based on card position relative to viewport center
-    const viewportCenterX = window.innerWidth / 2
-    const viewportCenterY = window.innerHeight / 2
-    const originX = ((cardCenterX - viewportCenterX) / viewportCenterX) * 50 + 50
-    const originY = ((cardCenterY - viewportCenterY) / viewportCenterY) * 50 + 50
-    modal.style.transformOrigin = `${originX}% ${originY}%`
-
-    // Store card reference for closing animation
-    modal.dataset.sourceCardId = card.id || ''
+    setProjectModalTransformOrigin(modal, viewportPointX, viewportPointY)
 
     requestAnimationFrame(() => {
         overlay.classList.add("active")
@@ -272,22 +277,6 @@ function closeProjectModal(options = {}) {
     }
 
     activeProjectModal.isClosing = true
-
-    // Update transform origin to animate back toward source card
-    const sourceCardId = modal.dataset.sourceCardId
-    if (sourceCardId) {
-        const sourceCard = document.getElementById(sourceCardId)
-        if (sourceCard) {
-            const cardRect = sourceCard.getBoundingClientRect()
-            const cardCenterX = cardRect.left + cardRect.width / 2
-            const cardCenterY = cardRect.top + cardRect.height / 2
-            const viewportCenterX = window.innerWidth / 2
-            const viewportCenterY = window.innerHeight / 2
-            const originX = ((cardCenterX - viewportCenterX) / viewportCenterX) * 50 + 50
-            const originY = ((cardCenterY - viewportCenterY) / viewportCenterY) * 50 + 50
-            modal.style.transformOrigin = `${originX}% ${originY}%`
-        }
-    }
 
     overlay.classList.remove("active")
     modal.classList.remove("project-modal-open")
