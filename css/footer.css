@@ -63,7 +63,27 @@
     font-weight: 500;
     color: var(--color-text-muted);
     text-decoration: none;
-    transition: color 0.16s ease-out;
+    position: relative;
+    padding: 4px 0;
+    transition: color var(--dur-med) var(--ease-smooth);
+}
+
+.site-footer__nav a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--color-text);
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform var(--dur-med) var(--ease-out);
+}
+
+.site-footer__nav a:hover::after,
+.site-footer__nav a:focus-visible::after {
+    transform: scaleX(1);
 }
 
 .site-footer__nav a:hover,
