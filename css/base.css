@@ -114,20 +114,21 @@ video {
 }
 
 .load-gate__spinner {
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    border: 3px solid var(--color-border);
+    border: 2px solid var(--color-border);
     border-top-color: var(--color-text);
-    animation: loadGateSpin 0.85s linear infinite;
+    animation: loadGateSpin 0.8s cubic-bezier(0.5, 0.1, 0.5, 0.9) infinite;
 }
 
 .load-gate__text {
     margin: 0;
-    font-size: 16px;
+    font-size: 13px;
     font-weight: 600;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
+    color: var(--color-text-muted);
 }
 
 @keyframes loadGateSpin {
@@ -170,8 +171,8 @@ body.intro-prep #dock {
 @keyframes introLift {
     from {
         opacity: 0;
-        filter: var(--intro-filter-start, blur(4px));
-        transform: var(--intro-transform-start, translateY(14px));
+        filter: var(--intro-filter-start, blur(6px));
+        transform: var(--intro-transform-start, translateY(20px));
     }
     to {
         opacity: 1;
@@ -181,7 +182,7 @@ body.intro-prep #dock {
 }
 
 body.intro-animate .intro-target {
-    animation: introLift 0.75s cubic-bezier(0.22, 0.9, 0.2, 1) forwards;
+    animation: introLift 0.85s cubic-bezier(0.22, 0.9, 0.36, 1) forwards;
     animation-delay: var(--intro-delay, 0s);
 }
 
