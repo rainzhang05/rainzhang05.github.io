@@ -35,12 +35,5 @@
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: var(--color-text-subtle);
-}
-
-/* Highlight key achievements */
-.education ul li:first-child::before,
-.education ul li:nth-child(3)::before,
-.education ul li:nth-child(4)::before {
     background: var(--color-text);
 }
