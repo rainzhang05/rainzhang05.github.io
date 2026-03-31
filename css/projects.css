@@ -678,6 +678,7 @@ body.dark-mode .project-modal-overlay {
 
 .project-modal-close {
     position: absolute;
+    z-index: 10;
     top: 16px;
     right: 16px;
     width: 38px;
