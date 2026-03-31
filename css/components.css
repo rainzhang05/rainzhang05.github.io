@@ -17,18 +17,6 @@ h2 {
     display: inline-block;
 }
 
-h2::after {
-    content: '';
-    position: absolute;
-    bottom: -6px;
-    left: 0;
-    width: 32px;
-    height: 3px;
-    background: var(--color-text);
-    border-radius: 2px;
-    opacity: 0.15;
-}
-
 /* Typewriter caret on intro terminal (greeting + cycling line) */
 #introGreeting .txt,
 #introName .txt,
