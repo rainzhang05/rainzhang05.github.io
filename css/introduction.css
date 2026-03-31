@@ -137,18 +137,11 @@ body.dark-mode .resumeButton__icon {
     box-shadow: var(--shadow-md);
     overflow: hidden;
     text-align: left;
-    transition: box-shadow var(--dur-slow) var(--ease-smooth),
-                border-color var(--dur-slow) var(--ease-smooth);
     /* Keep terminal footprint fully static through reveal/typing handoff. */
     --intro-transform-start: translateY(0);
     --intro-transform-end: translateY(0);
     --intro-filter-start: blur(0);
     --intro-filter-end: blur(0);
-}
-
-.intro-terminal:hover {
-    box-shadow: var(--shadow-lg);
-    border-color: var(--color-border-strong);
 }
 
 .intro-terminal__chrome {
