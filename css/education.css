@@ -1,23 +1,108 @@
-/* Education Section */
-.education {
-    color: var(--color-text);
+/* ==========================================
+   EDUCATION SECTION - Portfolio Redesign
+   ========================================== */
+
+.education-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
 }
 
-.education h2 {
-    margin-top: 5px;
-    margin-bottom: 15px;
+.education-card {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: var(--space-6);
+  padding: var(--space-6);
+  border-radius: var(--radius-lg);
+  background-color: transparent;
+  border: 1px solid transparent;
+  transition: all var(--transition-base);
 }
 
-.education h3 {
-    font-size: clamp(18px, 1.3vw, 24px);
+.education-card:hover {
+  background-color: var(--color-background-light);
+  border-color: var(--color-border);
+  box-shadow: var(--shadow-card);
 }
 
-.education ul {
-    padding-left: clamp(20px, 2vw, 40px);
-    margin-top: 10px;
+.education-logo {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background-color: var(--color-background-lighter);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2);
 }
 
-.education ul li {
-    margin-bottom: 12px;
-    font-size: clamp(16px, 1.1vw, 19px);
+.education-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.education-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.education-degree {
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-heading);
+  margin: 0;
+  line-height: var(--leading-snug);
+}
+
+.education-school {
+  font-size: var(--text-base);
+  color: var(--color-accent);
+  margin: 0;
+}
+
+.education-date {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.education-details {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--leading-relaxed);
+  margin: var(--space-2) 0 0;
+}
+
+/* Coursework List */
+.education-coursework {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.education-coursework li {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  padding: var(--space-1) var(--space-3);
+  background-color: var(--color-background-lighter);
+  border-radius: var(--radius-pill);
+}
+
+/* Mobile responsive */
+@media (max-width: 640px) {
+  .education-card {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+  
+  .education-logo {
+    width: 50px;
+    height: 50px;
+  }
 }

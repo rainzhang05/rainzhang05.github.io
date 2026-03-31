@@ -3,113 +3,394 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Rain Zhang</title>
+    <title>Rain Zhang | Full-Stack Developer</title>
+    <meta name="description" content="Rain Zhang - Full-Stack Developer specializing in security, cryptography, and building elegant digital experiences.">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link rel="preload" href="fonts/Montserrat-Regular.ttf" as="font" type="font/ttf" crossorigin>
-    <link rel="preload" href="fonts/Montserrat-Medium.ttf" as="font" type="font/ttf" crossorigin>
-    <link rel="preload" href="fonts/Montserrat-Bold.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
-    <!-- JavaScript modules loaded in dependency order -->
-    <script src="js/globals.js"></script>
-    <script src="js/modal.js"></script>
-    <script src="js/preloader.js"></script>
-    <script src="js/intro.js"></script>
-    <script src="js/typewriter.js"></script>
-    <script src="js/dock.js"></script>
     <script src="js/theme.js"></script>
-    <script src="js/navigation.js"></script>
-    <script src="js/contact.js"></script>
-    <script src="js/projects.js"></script>
-    <script src="js/main.js"></script>
+    <script src="js/navigation.js" defer></script>
+    <script src="js/animations.js" defer></script>
+    <script src="js/modal.js" defer></script>
+    <script src="js/contact.js" defer></script>
+    <script src="js/main.js" defer></script>
 </head>
-<body class="intro-prep is-preloading">
+<body>
 <script>
+    // Apply theme immediately to prevent flash
     (function () {
-        var storageKey = "portfolio-color-scheme"
-
-        function getStoredTheme() {
-            try {
-                var value = window.localStorage.getItem(storageKey)
-                if (value === "light" || value === "dark" || value === "system") {
-                    return value
-                }
-            } catch (error) {}
-
-            return "light"
+        const storageKey = "portfolio-color-scheme";
+        const stored = localStorage.getItem(storageKey);
+        if (stored === "light") {
+            document.body.classList.add("light-mode");
         }
-
-        var mode = getStoredTheme()
-        var prefersDark = false
-
-        try {
-            prefersDark = Boolean(
-                window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
-            )
-        } catch (error) {}
-
-        if (mode === "dark" || (mode === "system" && prefersDark)) {
-            document.body.classList.add("dark-mode")
-        }
-    })()
+    })();
 </script>
 
-<!-- Layout (Navigation & Decorations) -->
-<div id="layout-container"></div>
-
-<div id="load-gate" class="load-gate" role="status" aria-live="polite" aria-label="Loading site content">
+<!-- Loading Gate -->
+<div id="load-gate" role="status" aria-live="polite" aria-label="Loading site content">
     <div class="load-gate__content">
         <div class="load-gate__spinner" aria-hidden="true"></div>
         <p class="load-gate__text">Loading</p>
     </div>
 </div>
 
-<!-- Main Content Sections -->
-<div id="introduction-container"></div>
-<div id="skills-container"></div>
-<div id="experience-container"></div>
-<div id="projects-container"></div>
-<div id="education-container"></div>
-<div id="contact-container"></div>
-<div id="footer-container"></div>
+<!-- Portfolio Container - Split Layout -->
+<div class="portfolio-container">
+    
+    <!-- Left Sidebar - Fixed -->
+    <aside class="sidebar" aria-label="Main navigation">
+        <div class="sidebar-content">
+            <!-- Header -->
+            <header class="sidebar-header">
+                <h1 class="sidebar-name">Rain Zhang</h1>
+                <h2 class="sidebar-title">Full-Stack Developer</h2>
+                <p class="sidebar-tagline">I build secure, accessible, and elegant digital experiences.</p>
+            </header>
+            
+            <!-- Navigation -->
+            <nav class="sidebar-nav">
+                <ul class="nav-list">
+                    <li>
+                        <a href="#about" class="nav-item active" data-section="about">
+                            <span class="nav-number">01.</span>
+                            <span>About</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#skills" class="nav-item" data-section="skills">
+                            <span class="nav-number">02.</span>
+                            <span>Skills</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#experience" class="nav-item" data-section="experience">
+                            <span class="nav-number">03.</span>
+                            <span>Experience</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#projects" class="nav-item" data-section="projects">
+                            <span class="nav-number">04.</span>
+                            <span>Projects</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#education" class="nav-item" data-section="education">
+                            <span class="nav-number">05.</span>
+                            <span>Education</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#contact" class="nav-item" data-section="contact">
+                            <span class="nav-number">06.</span>
+                            <span>Contact</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        
+        <!-- Footer with Socials -->
+        <div class="sidebar-footer">
+            <div class="sidebar-socials">
+                <a href="https://github.com/rainzhang05" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                </a>
+                <a href="https://www.linkedin.com/in/rain-zhang-swe/" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
+                </a>
+                <a href="mailto:rain.zhang@uwaterloo.ca" class="social-link" aria-label="Email">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="4" width="20" height="16" rx="2"/>
+                        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                    </svg>
+                </a>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                    <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="4"/>
+                        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+                    </svg>
+                    <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </aside>
+    
+    <!-- Right Content - Scrollable -->
+    <main class="main-content" id="main-content">
+        
+        <!-- About Section -->
+        <section id="about" class="section reveal">
+            <div class="about-content">
+                <p>
+                    Hello! I'm Rain, a Computer Science student at the <a href="https://uwaterloo.ca/" target="_blank" rel="noopener noreferrer">University of Waterloo</a> with a passion for building secure and elegant software solutions. My journey in tech started with curiosity about how systems work under the hood, which led me to explore everything from low-level cryptography to full-stack web development.
+                </p>
+                <p>
+                    I specialize in creating applications that are not only functional but also secure by design. Whether it's implementing cryptographic protocols, building responsive web interfaces, or architecting backend systems, I approach each project with attention to detail and a commitment to best practices.
+                </p>
+                <p>
+                    When I'm not coding, you can find me exploring new technologies, contributing to open-source projects, or diving deep into security research. I'm always excited to tackle challenging problems and learn something new.
+                </p>
+            </div>
+        </section>
+        
+        <!-- Skills Section -->
+        <section id="skills" class="section reveal">
+            <header class="section-header">
+                <span class="section-number">02.</span>
+                <h2 class="section-title">Skills</h2>
+                <div class="section-line" aria-hidden="true"></div>
+            </header>
+            
+            <div class="skills-grid stagger-children">
+                <div class="skill-category">
+                    <h3 class="skill-category-title">Languages</h3>
+                    <ul class="skill-list">
+                        <li>Python</li>
+                        <li>JavaScript / TypeScript</li>
+                        <li>Java</li>
+                        <li>C / C++</li>
+                        <li>Go</li>
+                        <li>SQL</li>
+                    </ul>
+                </div>
+                
+                <div class="skill-category">
+                    <h3 class="skill-category-title">Frontend</h3>
+                    <ul class="skill-list">
+                        <li>React / Next.js</li>
+                        <li>Vue.js</li>
+                        <li>HTML5 / CSS3</li>
+                        <li>Tailwind CSS</li>
+                        <li>SASS / SCSS</li>
+                    </ul>
+                </div>
+                
+                <div class="skill-category">
+                    <h3 class="skill-category-title">Backend</h3>
+                    <ul class="skill-list">
+                        <li>Node.js / Express</li>
+                        <li>Django / Flask</li>
+                        <li>PostgreSQL / MongoDB</li>
+                        <li>Redis</li>
+                        <li>GraphQL / REST APIs</li>
+                    </ul>
+                </div>
+                
+                <div class="skill-category">
+                    <h3 class="skill-category-title">Tools & DevOps</h3>
+                    <ul class="skill-list">
+                        <li>Git / GitHub</li>
+                        <li>Docker / Kubernetes</li>
+                        <li>AWS / GCP</li>
+                        <li>CI/CD Pipelines</li>
+                        <li>Linux / Unix</li>
+                    </ul>
+                </div>
+                
+                <div class="skill-category">
+                    <h3 class="skill-category-title">Security</h3>
+                    <ul class="skill-list">
+                        <li>Cryptography</li>
+                        <li>Secure Coding</li>
+                        <li>Penetration Testing</li>
+                        <li>OWASP Standards</li>
+                        <li>Authentication Systems</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Experience Section -->
+        <section id="experience" class="section reveal">
+            <header class="section-header">
+                <span class="section-number">03.</span>
+                <h2 class="section-title">Experience</h2>
+                <div class="section-line" aria-hidden="true"></div>
+            </header>
+            
+            <div class="experience-list stagger-children">
+                <article class="experience-card">
+                    <div class="experience-date">
+                        <span>May 2024 - Present</span>
+                    </div>
+                    <div class="experience-content">
+                        <h3 class="experience-title">
+                            Software Developer Co-op
+                            <span class="experience-company">@ <a href="#" target="_blank" rel="noopener noreferrer">Company Name</a></span>
+                        </h3>
+                        <p class="experience-description">
+                            Building and maintaining web applications with modern technologies. Implementing secure authentication systems and optimizing database performance. Collaborating with cross-functional teams to deliver high-quality software solutions.
+                        </p>
+                        <ul class="experience-tech">
+                            <li>React</li>
+                            <li>Node.js</li>
+                            <li>PostgreSQL</li>
+                            <li>AWS</li>
+                        </ul>
+                    </div>
+                </article>
+                
+                <article class="experience-card">
+                    <div class="experience-date">
+                        <span>Sep 2023 - Apr 2024</span>
+                    </div>
+                    <div class="experience-content">
+                        <h3 class="experience-title">
+                            Research Assistant
+                            <span class="experience-company">@ <a href="https://uwaterloo.ca/" target="_blank" rel="noopener noreferrer">University of Waterloo</a></span>
+                        </h3>
+                        <p class="experience-description">
+                            Conducted research on cryptographic protocols and secure system design. Developed proof-of-concept implementations for novel security solutions. Published findings and contributed to academic papers.
+                        </p>
+                        <ul class="experience-tech">
+                            <li>Python</li>
+                            <li>Cryptography</li>
+                            <li>C++</li>
+                            <li>Research</li>
+                        </ul>
+                    </div>
+                </article>
+            </div>
+        </section>
+        
+        <!-- Projects Section -->
+        <section id="projects" class="section reveal">
+            <header class="section-header">
+                <span class="section-number">04.</span>
+                <h2 class="section-title">Projects</h2>
+                <div class="section-line" aria-hidden="true"></div>
+            </header>
+            
+            <div class="projects-grid stagger-children" id="projects-grid">
+                <!-- Projects will be loaded dynamically -->
+            </div>
+        </section>
+        
+        <!-- Education Section -->
+        <section id="education" class="section reveal">
+            <header class="section-header">
+                <span class="section-number">05.</span>
+                <h2 class="section-title">Education</h2>
+                <div class="section-line" aria-hidden="true"></div>
+            </header>
+            
+            <div class="education-list stagger-children">
+                <article class="education-card">
+                    <div class="education-logo">
+                        <img src="images/uwaterloo-logo.png" alt="University of Waterloo logo" loading="lazy">
+                    </div>
+                    <div class="education-content">
+                        <h3 class="education-degree">Bachelor of Computer Science</h3>
+                        <p class="education-school">University of Waterloo</p>
+                        <p class="education-date">2022 - 2027 (Expected)</p>
+                        <p class="education-details">
+                            Honours Computer Science with Co-op. Focus on security, cryptography, and software engineering.
+                        </p>
+                    </div>
+                </article>
+            </div>
+        </section>
+        
+        <!-- Contact Section -->
+        <section id="contact" class="section reveal">
+            <header class="section-header">
+                <span class="section-number">06.</span>
+                <h2 class="section-title">Get In Touch</h2>
+                <div class="section-line" aria-hidden="true"></div>
+            </header>
+            
+            <div class="contact-content">
+                <p class="contact-description">
+                    I'm currently looking for new opportunities and my inbox is always open. Whether you have a question, want to collaborate on a project, or just want to say hi, I'll do my best to get back to you!
+                </p>
+                
+                <form class="contact-form" id="contact-form">
+                    <div class="form-group">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" id="name" name="name" class="form-input" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" id="email" name="email" class="form-input" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message" class="form-label">Message</label>
+                        <textarea id="message" name="message" class="form-textarea" rows="5" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="form-submit">
+                        Send Message
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+                </form>
+                
+                <a href="mailto:rain.zhang@uwaterloo.ca" class="contact-email-link">
+                    Or email me directly at rain.zhang@uwaterloo.ca
+                </a>
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer class="footer">
+            <p class="footer-text">
+                Designed & Built by <a href="https://github.com/rainzhang05" target="_blank" rel="noopener noreferrer">Rain Zhang</a>
+            </p>
+            <p class="footer-copyright">
+                &copy; 2024 Rain Zhang. All rights reserved.
+            </p>
+        </footer>
+        
+    </main>
+</div>
 
-<script>
-    // Load HTML sections dynamically
-    async function loadSection(containerId, sectionPath) {
-        try {
-            const response = await fetch(sectionPath);
-            if (!response.ok) throw new Error(`Failed to load ${sectionPath}`);
-            const html = await response.text();
-            document.getElementById(containerId).innerHTML = html;
-        } catch (error) {
-            console.error(`Error loading section: ${error.message}`);
-        }
-    }
+<!-- Mobile Navigation -->
+<nav class="mobile-nav" id="mobile-nav">
+    <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+    </button>
+    
+    <div class="mobile-nav-menu" id="mobile-nav-menu">
+        <ul class="mobile-nav-list">
+            <li><a href="#about" class="mobile-nav-link"><span class="nav-number">01.</span> About</a></li>
+            <li><a href="#skills" class="mobile-nav-link"><span class="nav-number">02.</span> Skills</a></li>
+            <li><a href="#experience" class="mobile-nav-link"><span class="nav-number">03.</span> Experience</a></li>
+            <li><a href="#projects" class="mobile-nav-link"><span class="nav-number">04.</span> Projects</a></li>
+            <li><a href="#education" class="mobile-nav-link"><span class="nav-number">05.</span> Education</a></li>
+            <li><a href="#contact" class="mobile-nav-link"><span class="nav-number">06.</span> Contact</a></li>
+        </ul>
+        <a href="resume.pdf" class="mobile-resume-btn" target="_blank" rel="noopener noreferrer">Resume</a>
+    </div>
+</nav>
 
-    async function loadPageSections() {
-        await loadSection('layout-container', 'html/layout.html');
+<!-- Project Modal -->
+<div class="modal-overlay" id="modal-overlay">
+    <div class="modal" id="project-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <button class="modal-close" id="modal-close" aria-label="Close modal">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 6 6 18M6 6l12 12"/>
+            </svg>
+        </button>
+        <div class="modal-content" id="modal-content">
+            <!-- Modal content will be populated dynamically -->
+        </div>
+    </div>
+</div>
 
-        if (typeof setupThemeToggle === "function") {
-            setupThemeToggle();
-        }
-
-        await Promise.all([
-            loadSection('introduction-container', 'html/introduction.html'),
-            loadSection('skills-container', 'html/skills.html'),
-            loadSection('experience-container', 'html/experience.html'),
-            loadSection('projects-container', 'html/projects.html'),
-            loadSection('education-container', 'html/education.html'),
-            loadSection('contact-container', 'html/contact.html'),
-            loadSection('footer-container', 'html/footer.html')
-        ]);
-
-        // Dispatch event to notify that all sections are loaded
-        document.dispatchEvent(new CustomEvent('sectionsLoaded'));
-    }
-
-    // Load all sections when DOM is ready
-    document.addEventListener('DOMContentLoaded', () => {
-        loadPageSections();
-    });
-</script>
 </body>
 </html>

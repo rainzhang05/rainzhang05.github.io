@@ -1,319 +1,222 @@
-/* Headings and Text */
-h1,
-h3,
-h4,
-p,
-ul {
-    margin-bottom: 15px;
+/* ==========================================
+   COMPONENT STYLES - Portfolio Redesign
+   ========================================== */
+
+/* ==========================================
+   ABOUT SECTION
+   ========================================== */
+
+.about-content {
+  max-width: 540px;
 }
 
-h2 {
-    font-size: clamp(28px, 2vw, 35px);
-    scroll-margin-top: 104px;
-    color: var(--color-text);
-    font-weight: 600;
-    letter-spacing: -0.02em;
+.about-content p {
+  margin-bottom: var(--space-6);
+  font-size: var(--text-base);
+  color: var(--color-text-secondary);
+  line-height: var(--leading-relaxed);
 }
 
-/* Typewriter caret on intro terminal (greeting + cycling line) */
-#introGreeting .txt,
-#introName .txt,
-#introGreeting .intro-terminal__line1-static {
-    color: var(--color-text);
-    display: inline-block;
-    vertical-align: baseline;
-    line-height: inherit;
-    min-height: 1em;
-    min-width: 0.5rem;
-    box-sizing: border-box;
-    border-right: 0.5rem solid currentColor;
-    animation: blink-caret 0.75s step-end infinite;
+.about-content a {
+  color: var(--color-accent);
+  text-decoration: none;
+  position: relative;
 }
 
-#introGreeting .txt.is-caret-hidden,
-#introName .txt.is-caret-hidden,
-#introGreeting .intro-terminal__line1-static {
-    border-right-color: transparent;
-    animation: none;
+.about-content a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: var(--color-accent);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--transition-base);
 }
 
-#introGreeting .txt.is-caret-active,
-#introName .txt.is-caret-active {
-    border-right-color: currentColor;
-    animation: blink-caret 0.75s step-end infinite;
+.about-content a:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
 }
 
-#introGreeting .txt:empty::before,
-#introName .txt:empty::before {
-    content: "\200B";
+/* ==========================================
+   CARDS - Generic Hover Card Style
+   ========================================== */
+
+.hover-card {
+  padding: var(--space-6);
+  border-radius: var(--radius-lg);
+  background-color: transparent;
+  border: 1px solid transparent;
+  transition: all var(--transition-base);
 }
 
-@keyframes blink-caret {
-    from,
-    to {
-        border-color: currentColor;
-    }
-    50% {
-        border-color: transparent;
-    }
+.hover-card:hover {
+  background-color: var(--color-background-light);
+  border-color: var(--color-border);
+  box-shadow: var(--shadow-card);
 }
 
-/* Intro terminal typer + caret — dark mode text */
-body.dark-mode .intro-terminal__typer,
-body.dark-mode #introName,
-body.dark-mode #introName .txt,
-body.dark-mode #introGreeting .txt,
-body.dark-mode #introGreeting .intro-terminal__line1-static {
-    color: var(--color-text);
+/* ==========================================
+   BUTTONS
+   ========================================== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-6);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--color-accent);
+  background-color: transparent;
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  text-decoration: none;
 }
 
-/* Top dock bar (section nav + actions) */
-/* Above .project-modal-overlay (z-index 2000): overlay is transparent but was stacking on top
-   of the dock at equal z-index, so hovers hit the overlay first and the bar felt dead / delayed. */
-#dock {
-    position: fixed;
-    left: 50%;
-    --dock-icon-size: 36px;
-    transform: translateX(-50%);
-    background-color: var(--card-surface-bg, #ffffff);
-    border-radius: var(--radius-dock-lg);
-    border: 1px solid var(--color-border-strong);
-    padding: 4px 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    z-index: 2100;
-    box-shadow: none;
-    transition: none;
+.btn:hover {
+  background-color: var(--color-accent-muted);
 }
 
-#dock.dock--top {
-    top: 15px;
-    bottom: auto;
-    /* Slightly slimmer than base #dock: small trim on padding, radius, icon size */
-    --dock-icon-size: 26px;
-    --intro-transform-start: translateX(-50%) translateY(-14px);
-    --intro-transform-end: translateX(-50%) translateY(0);
-    /* One row; hug content so divider + icons sit near the nav (no spacer to the far right) */
-    width: max-content;
-    max-width: calc(100vw - 16px);
-    box-sizing: border-box;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 7px;
-    padding: 3px 14px 3px 22px;
-    border-radius: var(--radius-dock);
-    border: 1px solid var(--color-border-strong);
-    box-shadow: none;
-    /* Avoid a scrollport on desktop: it can defer hover hit-testing next to card icons (overflow auto). */
-    overflow-x: visible;
-    overflow-y: visible;
+.btn-primary {
+  background-color: var(--color-accent);
+  color: var(--color-background);
 }
 
-#dock.dock--top::-webkit-scrollbar {
-    display: none;
+.btn-primary:hover {
+  background-color: var(--color-accent-hover);
 }
 
-#dock.dock--top .dock-item {
-    width: 34px;
-    height: 34px;
-    padding: 4px;
-    flex-shrink: 0;
+/* ==========================================
+   TECH TAGS
+   ========================================== */
+
+.tech-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-1) var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-accent);
+  background-color: var(--color-accent-muted);
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
 }
 
-#dock .dock-bar-divider {
-    flex-shrink: 0;
-    color: var(--color-text-subtle);
-    font-weight: 300;
-    font-size: 1.05rem;
-    line-height: 1;
-    align-self: center;
-    -webkit-user-select: none;
-    user-select: none;
-    /* Extra inset after Contact so Contact–| better matches |–icon (7px flex gap looked tight) */
-    margin-left: 6px;
-    padding: 0 2px;
+/* ==========================================
+   LINKS WITH ARROW
+   ========================================== */
+
+.link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--color-text-heading);
+  text-decoration: none;
+  transition: all var(--transition-base);
 }
 
-.dock-item {
-    width: 45px;
-    height: 45px;
-    padding: 6px;
-    border-radius: 50%;
-    cursor: pointer;
-    background: transparent;
-    border: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
+.link-arrow svg {
+  width: 16px;
+  height: 16px;
+  transition: transform var(--transition-base);
 }
 
-.dock-item:hover,
-.dock-item:focus-visible {
-    background: transparent;
+.link-arrow:hover {
+  color: var(--color-accent);
 }
 
-.dock-item:focus-visible {
-    outline: 2px solid var(--color-text-subtle);
-    outline-offset: 2px;
+.link-arrow:hover svg {
+  transform: translateX(4px);
 }
 
-.dock-item img {
-    width: var(--dock-icon-size);
-    height: var(--dock-icon-size);
-    object-fit: contain;
-    display: block;
-    opacity: 1;
-    transition: opacity 0.16s var(--ease-out);
+/* ==========================================
+   ICON LINKS (GitHub, External, etc.)
+   ========================================== */
+
+.icon-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2);
+  color: var(--color-text-secondary);
+  transition: all var(--transition-base);
 }
 
-.dock-item:hover img,
-.dock-item:focus-visible img {
-    opacity: 0.48;
+.icon-link:hover {
+  color: var(--color-accent);
+  transform: translateY(-2px);
 }
 
-/* Light / dark / system theme switcher (pill + sliding thumb) */
-.theme-segmented {
-    flex-shrink: 0;
-    align-self: center;
+.icon-link svg {
+  width: 20px;
+  height: 20px;
 }
 
-.theme-segmented__track {
-    --theme-pad: 4px;
-    position: relative;
-    display: flex;
-    width: 114px;
-    padding: var(--theme-pad);
-    box-sizing: border-box;
-    border-radius: 999px;
-    background-color: var(--card-surface-bg, #ffffff);
-    border: 1px solid var(--color-border-strong);
-    box-shadow: none;
-}
+/* ==========================================
+   SUCCESS MESSAGE (Contact Form)
+   ========================================== */
 
-.theme-segmented__thumb {
-    position: absolute;
-    top: var(--theme-pad);
-    bottom: var(--theme-pad);
-    width: calc((100% - 2 * var(--theme-pad)) / 3);
-    border-radius: 999px;
-    background: rgba(0, 0, 0, 0.09);
-    left: var(--theme-pad);
-    transition: left 0.32s cubic-bezier(0.25, 0.9, 0.32, 1), background-color 0.2s ease;
-    pointer-events: none;
-}
-
-.theme-segmented__track[data-active="dark"] .theme-segmented__thumb {
-    left: calc(var(--theme-pad) + (100% - 2 * var(--theme-pad)) / 3);
-}
-
-.theme-segmented__track[data-active="system"] .theme-segmented__thumb {
-    left: calc(var(--theme-pad) + ((100% - 2 * var(--theme-pad)) * 2 / 3));
-}
-
-.theme-segmented__btn {
-    flex: 1;
-    position: relative;
-    z-index: 1;
-    margin: 0;
-    padding: 4px 0;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 999px;
-    color: var(--color-text);
-}
-
-.theme-segmented__btn:focus-visible {
-    outline: 2px solid var(--color-text);
-    outline-offset: 2px;
-}
-
-.theme-segmented__icon {
-    width: 15px;
-    height: 15px;
-    display: block;
-    opacity: 0.4;
-    transition: opacity 0.16s var(--ease-out), filter 0.2s ease;
-}
-
-.theme-segmented__btn.is-active .theme-segmented__icon {
-    opacity: 1;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .theme-segmented__thumb {
-        transition: none;
-    }
-
-    .theme-segmented__icon {
-        transition: none;
-    }
-}
-
-.dock-separator {
-    width: 1px;
-    height: 24px;
-    background-color: var(--color-border-strong);
-    margin: 0 4px;
-    transition: background-color 0.2s ease;
-}
-
-/* Success Message */
 .success-message {
-    display: none;
-    background-color: var(--color-surface-muted);
-    border: 1px solid var(--color-border);
-    border-left-width: 4px;
-    border-left-color: var(--color-text);
-    padding: 15px;
-    margin-top: 20px;
-    border-radius: var(--radius-lg);
-    animation: fadeIn 0.45s var(--ease-out);
+  display: none;
+  background-color: var(--color-accent-muted);
+  border: 1px solid var(--color-accent);
+  padding: var(--space-4);
+  margin-top: var(--space-6);
+  border-radius: var(--radius-md);
+  color: var(--color-accent);
+  font-size: var(--text-sm);
+  animation: fadeIn 0.45s var(--ease-out-expo);
 }
 
-/* Line icons (Iconify Lucide) — replaces emoji in modals / rich project content */
-.line-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    border-radius: var(--radius-md);
-    background: var(--color-surface-muted);
-    flex-shrink: 0;
-    transition: background-color var(--dur-med) var(--ease-out), transform var(--dur-med) var(--ease-out);
-}
-
-.line-icon img {
-    width: 22px;
-    height: 22px;
-    display: block;
-}
-
-.line-icon--inline {
-    width: 36px;
-    height: 36px;
-    margin-bottom: 0;
-}
-
-.line-icon--inline img {
-    width: 20px;
-    height: 20px;
+.success-message.show {
+  display: block;
 }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================
+   UTILITY CLASSES
+   ========================================== */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.text-accent {
+  color: var(--color-accent);
+}
+
+.text-muted {
+  color: var(--color-text-muted);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
 }

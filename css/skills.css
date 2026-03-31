@@ -1,81 +1,111 @@
-/* Skills Section */
-.skills {
-    color: var(--color-text);
+/* ==========================================
+   SKILLS SECTION - Portfolio Redesign
+   ========================================== */
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-8);
 }
 
-/* Hidden until user scrolls (or immediate reveal when hash / reduced-motion / already scrolled) */
-.skills.skills--await-scroll:not(.skills--visible) {
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(14px);
-    pointer-events: none;
-    transition: opacity 0.55s var(--ease-out), transform 0.55s var(--ease-out), visibility 0s linear 0.55s;
+.skill-category {
+  padding: var(--space-6);
+  border-radius: var(--radius-lg);
+  background-color: transparent;
+  border: 1px solid transparent;
+  transition: all var(--transition-base);
 }
 
-.skills.skills--await-scroll.skills--visible {
-    opacity: 1;
-    visibility: visible;
-    transform: none;
-    pointer-events: auto;
-    transition: opacity 0.55s var(--ease-out), transform 0.55s var(--ease-out), visibility 0s linear 0s;
+.skill-category:hover {
+  background-color: var(--color-background-light);
+  border-color: var(--color-border);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card);
 }
 
-@media (prefers-reduced-motion: reduce) {
-    .skills.skills--await-scroll:not(.skills--visible) {
-        transition: opacity 0.2s ease, visibility 0s linear 0.2s;
-    }
-
-    .skills.skills--await-scroll.skills--visible {
-        transition: opacity 0.2s ease, visibility 0s linear 0s;
-    }
+.skill-category-title {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--color-accent);
+  margin-bottom: var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
 }
 
-.skills h2 {
-    margin-top: 5px;
-    margin-bottom: 15px;
+.skill-category-title::before {
+  content: '>';
+  color: var(--color-accent);
 }
 
-.skill-item {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    margin: clamp(10px, 1.5vw, 20px);
-    width: clamp(80px, 6vw, 100px);
-    cursor: default;
-    transition: none;
+.skill-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
 }
 
-/* No motion/scaling — skill tiles are not interactive */
-.skills .skill-item,
-.skills .skill-item img,
-.skills .skill-item .skill-name {
-    transform: none !important;
+.skill-list li {
+  position: relative;
+  padding-left: var(--space-5);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  transition: color var(--transition-fast);
 }
 
-.skills img {
-    width: clamp(50px, 4vw, 70px);
-    height: clamp(50px, 4vw, 70px);
-    margin: clamp(15px, 1.5vw, 25px);
-    vertical-align: middle;
-    -webkit-user-select: none;
-    user-select: none;
-    -webkit-user-drag: none;
-    -webkit-touch-callout: none;
-    object-fit: contain;
-    background-color: transparent;
-    transition: none;
-    pointer-events: none;
+.skill-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 1px;
+  background-color: var(--color-text-muted);
+  transition: all var(--transition-fast);
 }
 
-.skill-name {
-    font-family: "Montserrat", sans-serif;
-    font-weight: 700;
-    font-size: clamp(12px, 0.9vw, 15px);
-    margin-top: 10px;
-    text-align: center;
+.skill-list li:hover {
+  color: var(--color-accent);
 }
 
-.skills h3 {
-    margin-top: 30px;
-    font-size: clamp(18px, 1.3vw, 24px);
+.skill-list li:hover::before {
+  width: 10px;
+  background-color: var(--color-accent);
+}
+
+/* Alternative Skills Display - Icon Grid */
+.skills-icon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: var(--space-4);
+  margin-top: var(--space-8);
+}
+
+.skill-icon-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+  cursor: default;
+}
+
+.skill-icon-item:hover {
+  background-color: var(--color-background-light);
+  transform: translateY(-2px);
+}
+
+.skill-icon-item img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.skill-icon-item span {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  text-align: center;
 }

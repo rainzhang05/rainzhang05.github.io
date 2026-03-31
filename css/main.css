@@ -1,19 +1,13 @@
 /* Main CSS file - imports all component styles */
 
-/* Design tokens (monochrome) */
+/* Design tokens (colors, typography, spacing) */
 @import url('tokens.css');
 
-/* Base styles, fonts, reset, load gate */
+/* Base styles, fonts, reset, layout structure */
 @import url('base.css');
 
-/* Navigation bar */
-@import url('navigation.css');
-
-/* Decorative layer (disabled — flat blank page) */
-@import url('decorations.css');
-
-/* Introduction section */
-@import url('introduction.css');
+/* Section component styles */
+@import url('components.css');
 
 /* Skills section */
 @import url('skills.css');
@@ -27,20 +21,17 @@
 /* Education section */
 @import url('education.css');
 
-/* Modal and modern layout styles */
-@import url('modal.css');
-
 /* Contact section */
 @import url('contact.css');
+
+/* Modal styles */
+@import url('modal.css');
 
 /* Site footer */
 @import url('footer.css');
 
-/* Common components (headings, typewriter, dock, etc.) */
-@import url('components.css');
-
-/* Dark mode styles */
-@import url('dark-mode.css');
+/* Mobile navigation */
+@import url('navigation.css');
 
 /* Responsive design / media queries */
 @import url('responsive.css');

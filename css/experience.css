@@ -1,72 +1,120 @@
-/* Experience Section */
-.experience {
-    color: var(--color-text);
+/* ==========================================
+   EXPERIENCE SECTION - Portfolio Redesign
+   ========================================== */
+
+.experience-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
 }
 
-.experience h2 {
-    margin-top: 5px;
-    margin-bottom: 15px;
+.experience-card {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: var(--space-6);
+  padding: var(--space-6);
+  border-radius: var(--radius-lg);
+  background-color: transparent;
+  border: 1px solid transparent;
+  transition: all var(--transition-base);
 }
 
-.experience h3 {
-    font-size: clamp(18px, 1.3vw, 24px);
+.experience-card:hover {
+  background-color: var(--color-background-light);
+  border-color: var(--color-border);
+  box-shadow: var(--shadow-card);
 }
 
-.experience h4 {
-    font-size: clamp(16px, 1.1vw, 20px);
+.experience-card:hover .experience-title {
+  color: var(--color-accent);
 }
 
-.experience p {
-    font-size: clamp(16px, 1.1vw, 19px);
-    max-width: 1200px;
+.experience-date {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding-top: var(--space-1);
 }
 
-/* Experience Role Header with Logo */
-.experience-role-header-content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 40px;
+.experience-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
 }
 
-.experience-logo-container {
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.experience-title {
+  font-size: var(--text-lg);
+  font-weight: var(--font-medium);
+  color: var(--color-text-heading);
+  transition: color var(--transition-fast);
+  margin: 0;
+  line-height: var(--leading-snug);
+}
+
+.experience-company {
+  font-weight: var(--font-normal);
+  color: var(--color-text-secondary);
+}
+
+.experience-company a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.experience-company a:hover {
+  text-decoration: underline;
+}
+
+.experience-description {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--leading-relaxed);
+  margin: 0;
+}
+
+.experience-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.experience-tech li {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-1) var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-accent);
+  background-color: var(--color-accent-muted);
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+}
+
+/* Logo variant */
+.experience-card--with-logo {
+  grid-template-columns: 80px 1fr;
 }
 
 .experience-logo {
-    width: 120px;
-    height: auto;
-    opacity: 0.9;
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-md);
+  object-fit: contain;
+  background-color: var(--color-background-lighter);
+  padding: var(--space-2);
 }
 
-.experience-role-text {
-    text-align: left;
+/* Mobile responsive */
+@media (max-width: 640px) {
+  .experience-card {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+  
+  .experience-date {
+    order: -1;
+  }
 }
-
-.experience-role-text .role-title {
-    margin: 0 0 8px 0;
-}
-
-.experience-role-text .role-meta {
-    margin: 0;
-}
-
-/* Responsive - stack on smaller screens */
-@media (max-width: 576px) {
-    .experience-role-header-content {
-        flex-direction: column;
-        gap: 16px;
-    }
-
-    .experience-role-text {
-        text-align: center;
-    }
-
-    .experience-logo {
-        width: 70px;
-    }
-}
-

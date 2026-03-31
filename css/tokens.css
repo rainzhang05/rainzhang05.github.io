@@ -1,71 +1,181 @@
-/* Flat minimalist palette (light / dark) — OpenAI-inspired monochrome */
+/* ==========================================
+   DESIGN TOKENS - Portfolio Redesign
+   ========================================== */
+
 :root {
-    --color-page: #ffffff;
-    --color-surface: #ffffff;
-    --color-surface-muted: #f4f4f5;
-    --color-surface-hover: #ebebec;
-    --color-border: rgba(0, 0, 0, 0.1);
-    --color-border-strong: rgba(0, 0, 0, 0.16);
-    --color-text: #0d0d0d;
-    --color-text-muted: #5c5c5c;
-    --color-text-subtle: #8e8e8e;
-    --color-accent: #0d0d0d;
-    --color-accent-hover: #2e2e2e;
-    --color-accent-muted: rgba(13, 13, 13, 0.08);
-    --color-on-accent: #ffffff;
-    --color-nav-active-bg: #ebebec;
-    /* Corner radii (px): single scale for border-radius across browsers */
-    --radius-sm: 10px;
-    --radius-md: 14px;
-    --radius-lg: 18px;
-    --radius-xl: 22px;
-    --radius-pill: 999px;
-    --radius-section: 32px;
-    --radius-card-sm: 26px;
-    --radius-modal: 40px;
-    --radius-dock: 30px;
-    --radius-dock-lg: 34px;
-    /* Main content column — wider than legacy side margins */
-    --content-max-width: min(1180px, calc(100vw - 48px));
-    --section-gap: clamp(24px, 3.5vw, 40px);
-    --ease-out: cubic-bezier(0.33, 1, 0.68, 1);
-    --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
-    --dur-fast: 0.18s;
-    --dur-med: 0.32s;
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
-    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.06);
-    --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.08);
+  /* Primary Colors - Dark Theme (Default) */
+  --color-background: #0a192f;
+  --color-background-light: #112240;
+  --color-background-lighter: #1d3557;
+  
+  /* Accent Colors */
+  --color-accent: #64ffda;
+  --color-accent-hover: #4fd1c5;
+  --color-accent-muted: rgba(100, 255, 218, 0.1);
+  
+  /* Text Colors */
+  --color-text-primary: #ccd6f6;
+  --color-text-secondary: #8892b0;
+  --color-text-muted: #495670;
+  --color-text-heading: #e6f1ff;
+  
+  /* UI Colors */
+  --color-border: #233554;
+  --color-shadow: rgba(2, 12, 27, 0.7);
+  --color-overlay: rgba(10, 25, 47, 0.85);
+  
+  /* Legacy token mapping for compatibility */
+  --color-page: var(--color-background);
+  --color-surface: var(--color-background-light);
+  --color-surface-muted: var(--color-background-lighter);
+  --color-surface-hover: var(--color-background-lighter);
+  --color-text: var(--color-text-primary);
+  --color-text-subtle: var(--color-text-muted);
+  --color-on-accent: var(--color-background);
+  --color-nav-active-bg: var(--color-background-light);
+  
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'Fira Code', 'SF Mono', 'Fira Mono', 'Roboto Mono', monospace;
+  
+  /* Font Sizes - Fluid Typography */
+  --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+  --text-sm: clamp(0.875rem, 0.8rem + 0.375vw, 1rem);
+  --text-base: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);
+  --text-lg: clamp(1.125rem, 1rem + 0.625vw, 1.25rem);
+  --text-xl: clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem);
+  --text-2xl: clamp(1.5rem, 1.25rem + 1.25vw, 2rem);
+  --text-3xl: clamp(2rem, 1.5rem + 2.5vw, 3rem);
+  --text-4xl: clamp(2.5rem, 2rem + 2.5vw, 4rem);
+  --text-5xl: clamp(3rem, 2.5rem + 2.5vw, 5rem);
+  
+  /* Font Weights */
+  --font-light: 300;
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+  
+  /* Line Heights */
+  --leading-tight: 1.1;
+  --leading-snug: 1.3;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.75;
+  
+  /* Spacing Scale */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+  
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-pill: 999px;
+  
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 400ms ease;
+  --transition-slower: 600ms ease;
+  
+  /* Cubic Bezier Easings */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-in-out-cubic: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-out: cubic-bezier(0.33, 1, 0.68, 1);
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Timing */
+  --dur-fast: 0.18s;
+  --dur-med: 0.32s;
+  
+  /* Layout */
+  --sidebar-width: 45%;
+  --sidebar-max-width: 600px;
+  --content-max-width: 1000px;
+  --section-padding: clamp(60px, 10vh, 100px);
+  --section-gap: clamp(24px, 3.5vw, 40px);
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(2, 12, 27, 0.2);
+  --shadow-md: 0 4px 16px rgba(2, 12, 27, 0.3);
+  --shadow-lg: 0 10px 30px -10px rgba(2, 12, 27, 0.5);
+  --shadow-card: 0 10px 30px -15px rgba(2, 12, 27, 0.7);
+  
+  /* Z-Index Scale */
+  --z-base: 1;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-fixed: 300;
+  --z-modal-backdrop: 400;
+  --z-modal: 500;
+  --z-tooltip: 600;
 }
 
-body.dark-mode {
-    /* Neutral zinc-like ramp: wider steps so cards/dock read vs canvas (light mode uses shadow + border; dark needs visible planes). */
-    --color-page: #09090b;
-    --color-surface: #18181b;
-    --color-surface-muted: #242429;
-    --color-surface-hover: #303036;
-    --color-border: rgba(255, 255, 255, 0.1);
-    --color-border-strong: rgba(255, 255, 255, 0.18);
-    --color-text: #f4f4f5;
-    --color-text-muted: #b0b0b8;
-    --color-text-subtle: #8a8a93;
-    --color-accent: #fafafa;
-    --color-accent-hover: #ffffff;
-    --color-accent-muted: rgba(255, 255, 255, 0.12);
-    --color-on-accent: #09090b;
-    --color-nav-active-bg: #2e2e35;
-    /* Highlight edge + ambient depth (pure black shadows vanish on near-black page). */
-    --shadow-sm:
-        0 1px 0 rgba(255, 255, 255, 0.05),
-        0 1px 3px rgba(0, 0, 0, 0.45);
-    --shadow-md:
-        0 1px 0 rgba(255, 255, 255, 0.045),
-        0 6px 20px rgba(0, 0, 0, 0.42);
-    --shadow-lg:
-        0 1px 0 rgba(255, 255, 255, 0.055),
-        0 14px 40px rgba(0, 0, 0, 0.48);
+/* Light Theme Override */
+body.light-mode {
+  --color-background: #f8fafc;
+  --color-background-light: #ffffff;
+  --color-background-lighter: #e2e8f0;
+  
+  --color-accent: #0d9488;
+  --color-accent-hover: #0f766e;
+  --color-accent-muted: rgba(13, 148, 136, 0.1);
+  
+  --color-text-primary: #1e293b;
+  --color-text-secondary: #475569;
+  --color-text-muted: #94a3b8;
+  --color-text-heading: #0f172a;
+  
+  --color-border: #e2e8f0;
+  --color-shadow: rgba(0, 0, 0, 0.1);
+  --color-overlay: rgba(248, 250, 252, 0.9);
+  
+  /* Legacy mapping */
+  --color-page: var(--color-background);
+  --color-surface: var(--color-background-light);
+  --color-text: var(--color-text-primary);
+  
+  /* Adjusted shadows for light mode */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 10px 30px -10px rgba(0, 0, 0, 0.15);
+  --shadow-card: 0 10px 30px -15px rgba(0, 0, 0, 0.1);
 }
 
-body {
-    --page-bg: var(--color-page);
-    --card-surface-bg: var(--color-surface);
+/* Selection Color */
+::selection {
+  background-color: var(--color-accent-muted);
+  color: var(--color-accent);
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-text-muted);
+  border-radius: var(--radius-lg);
+  border: 2px solid var(--color-background);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-secondary);
 }
