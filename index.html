@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="css/main.css">
     <!-- JavaScript modules loaded in dependency order -->
     <script src="js/globals.js"></script>
+    <script src="js/utils.js"></script>
     <script src="js/modal.js"></script>
     <script src="js/preloader.js"></script>
     <script src="js/intro.js"></script>
@@ -21,34 +22,16 @@
     <script src="js/contact.js"></script>
     <script src="js/projects.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/bootstrap.js"></script>
 </head>
 <body class="intro-prep is-preloading">
 <script>
     (function () {
-        var storageKey = "portfolio-color-scheme"
-
-        function getStoredTheme() {
-            try {
-                var value = window.localStorage.getItem(storageKey)
-                if (value === "light" || value === "dark" || value === "system") {
-                    return value
-                }
-            } catch (error) {}
-
-            return "light"
-        }
-
-        var mode = getStoredTheme()
-        var prefersDark = false
-
-        try {
-            prefersDark = Boolean(
-                window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
-            )
-        } catch (error) {}
-
-        if (mode === "dark" || (mode === "system" && prefersDark)) {
-            document.body.classList.add("dark-mode")
+        if (
+            typeof getStoredTheme === "function" &&
+            typeof applyBodyFromMode === "function"
+        ) {
+            applyBodyFromMode(getStoredTheme())
         }
     })()
 </script>
@@ -71,45 +54,5 @@
 <div id="education-container"></div>
 <div id="contact-container"></div>
 <div id="footer-container"></div>
-
-<script>
-    // Load HTML sections dynamically
-    async function loadSection(containerId, sectionPath) {
-        try {
-            const response = await fetch(sectionPath);
-            if (!response.ok) throw new Error(`Failed to load ${sectionPath}`);
-            const html = await response.text();
-            document.getElementById(containerId).innerHTML = html;
-        } catch (error) {
-            console.error(`Error loading section: ${error.message}`);
-        }
-    }
-
-    async function loadPageSections() {
-        await loadSection('layout-container', 'html/layout.html');
-
-        if (typeof setupThemeToggle === "function") {
-            setupThemeToggle();
-        }
-
-        await Promise.all([
-            loadSection('introduction-container', 'html/introduction.html'),
-            loadSection('skills-container', 'html/skills.html'),
-            loadSection('experience-container', 'html/experience.html'),
-            loadSection('projects-container', 'html/projects.html'),
-            loadSection('education-container', 'html/education.html'),
-            loadSection('contact-container', 'html/contact.html'),
-            loadSection('footer-container', 'html/footer.html')
-        ]);
-
-        // Dispatch event to notify that all sections are loaded
-        document.dispatchEvent(new CustomEvent('sectionsLoaded'));
-    }
-
-    // Load all sections when DOM is ready
-    document.addEventListener('DOMContentLoaded', () => {
-        loadPageSections();
-    });
-</script>
 </body>
 </html>
