@@ -85,4 +85,32 @@ describe("project cards and modal", () => {
         window.closeProjectModal({ immediate: true })
         expect(document.querySelector(".project-modal-overlay")).toBeNull()
     })
+
+    it("restores focus to the last focused element when the modal closes", () => {
+        const opener = document.getElementById("crossOpen")
+        opener.focus()
+
+        window.setupProjectCards()
+        window.openProjectModal(document.getElementById("project-test"))
+        window.closeProjectModal({ immediate: true })
+
+        expect(document.activeElement).toBe(opener)
+    })
+
+    it("opening a second modal replaces the first overlay immediately", () => {
+        document.body.innerHTML = `
+            ${minimalCardHtml("project-a")}
+            <div class="project-card" id="project-b">
+                <div class="project-header"><h3>Project B</h3></div>
+                <div class="project-content"><p class="project-description">Body</p></div>
+            </div>
+        `
+
+        window.setupProjectCards()
+        window.openProjectModal(document.getElementById("project-a"))
+        window.openProjectModal(document.getElementById("project-b"))
+
+        expect(document.querySelectorAll(".project-modal-overlay").length).toBe(1)
+        expect(document.querySelector(".project-modal").getAttribute("data-project-id")).toBe("project-b")
+    })
 })
