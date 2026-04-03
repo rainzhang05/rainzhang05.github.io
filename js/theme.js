@@ -1,5 +1,6 @@
 // Theme: light / dark / system segmented control (see html/layout.html #themeToggle)
-const THEME_STORAGE_KEY = "portfolio-color-scheme"
+const THEME_STORAGE_KEY = PORTFOLIO_CONFIG.themeStorageKey
+const THEME_MEDIA_QUERY = "(prefers-color-scheme: dark)"
 
 function getStoredTheme() {
     try {
@@ -15,7 +16,11 @@ function getStoredTheme() {
 }
 
 function systemPrefersDark() {
-    return window.matchMedia("(prefers-color-scheme: dark)").matches
+    try {
+        return Boolean(window.matchMedia && window.matchMedia(THEME_MEDIA_QUERY).matches)
+    } catch (error) {
+        return false
+    }
 }
 
 function setStoredTheme(mode) {
@@ -98,7 +103,13 @@ function setupThemeToggle() {
         })
     })
 
-    const mql = window.matchMedia("(prefers-color-scheme: dark)")
+    let mql
+    try {
+        mql = window.matchMedia(THEME_MEDIA_QUERY)
+    } catch (error) {
+        return
+    }
+
     const handleSystemThemeChange = () => {
         if (getStoredTheme() === "system") {
             applyTheme("system")
