@@ -17,6 +17,29 @@ h2 {
     display: inline-block;
 }
 
+.skills,
+.experience,
+.projects,
+.education,
+.contact {
+    color: var(--color-text);
+}
+
+.skills h2,
+.experience h2,
+.projects h2,
+.education h2,
+.contact h2 {
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+.projects h3,
+.experience h3,
+.education h3 {
+    font-size: clamp(18px, 1.3vw, 24px);
+}
+
 /* Typewriter caret on intro terminal (greeting + cycling line) */
 #introGreeting .txt,
 #introName .txt,
@@ -280,14 +303,6 @@ body.dark-mode #introGreeting .intro-terminal__line1-static {
     .theme-segmented__icon {
         transition: none;
     }
-}
-
-.dock-separator {
-    width: 1px;
-    height: 24px;
-    background-color: var(--color-border-strong);
-    margin: 0 4px;
-    transition: background-color 0.2s ease;
 }
 
 /* Success Message */
