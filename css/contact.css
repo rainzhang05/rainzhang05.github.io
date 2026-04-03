@@ -1,12 +1,6 @@
 /* Contact Section */
 .contact {
-    color: var(--color-text);
     overflow-anchor: none;
-}
-
-.contact h2 {
-    margin-top: 5px;
-    margin-bottom: 15px;
 }
 
 .contact p {
