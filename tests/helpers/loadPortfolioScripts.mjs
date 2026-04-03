@@ -9,6 +9,7 @@ const REPO_ROOT = resolve(__dirname, "../..")
 /** Matches [index.html](index.html) script order, excluding main.js (event wiring tested separately). */
 export const PORTFOLIO_SCRIPT_ORDER = [
     "globals.js",
+    "utils.js",
     "modal.js",
     "preloader.js",
     "intro.js",
