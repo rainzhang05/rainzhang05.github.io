@@ -1,17 +1,3 @@
-/* Project Section */
-.projects {
-    color: var(--color-text);
-}
-
-.projects h2 {
-    margin-top: 5px;
-    margin-bottom: 15px;
-}
-
-.projects h3 {
-    font-size: clamp(18px, 1.3vw, 24px);
-}
-
 .projects ul {
     padding-left: clamp(20px, 2vw, 40px);
 }
@@ -231,14 +217,6 @@
     flex-direction: column;
     justify-content: flex-start;
     min-height: 0;
-}
-
-/* Project Card Styles */
-.project-card-inner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    text-align: left;
 }
 
 .project-summary {
