@@ -105,6 +105,23 @@ describe("preloader and initPage", () => {
         expect(root.hasAttribute("inert")).toBe(false)
     })
 
+    it("collectRenderableImageUrls deduplicates src and srcset assets", () => {
+        createPortfolioWindow({ url: "http://localhost:8080/" })
+        document.body.innerHTML = `
+            <picture>
+                <source srcset="/images/a.png 1x, /images/a@2x.png 2x">
+                <img src="/images/a.png" srcset="/images/a.png 1x, /images/a@2x.png 2x" alt="">
+            </picture>
+            <img src="/images/b.png" alt="">
+        `
+
+        expect(window.collectRenderableImageUrls()).toEqual([
+            "http://localhost:8080/images/a.png",
+            "http://localhost:8080/images/a@2x.png",
+            "http://localhost:8080/images/b.png",
+        ])
+    })
+
     it("beginPreloadingSequence completes preloading and removes load gate from DOM", async () => {
         createPortfolioWindow()
         document.body.innerHTML = `<div id="load-gate"></div><span id="introName"></span>`
