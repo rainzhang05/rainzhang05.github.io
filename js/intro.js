@@ -1,25 +1,7 @@
 // Intro sequence and animations
 
 function primeIntroTerminalLineIfNeeded(container) {
-    if (!container) {
-        return
-    }
-
-    let textSpan = container.querySelector(".txt")
-    if (!textSpan) {
-        textSpan = container.querySelector("span")
-
-        if (!textSpan) {
-            textSpan = document.createElement("span")
-            container.textContent = ""
-            container.appendChild(textSpan)
-        }
-
-        textSpan.classList.add("txt")
-    }
-
-    textSpan.classList.add("is-caret-hidden")
-    textSpan.classList.remove("is-caret-active")
+    primeIntroTextSpan(container)
 }
 
 function primeIntroTerminalShellIfNeeded() {
@@ -55,7 +37,7 @@ function runIntroSequence() {
 
 // Reveal in Effect for Intro Elements with improved animation
 function animateIntro(onIntroTerminalReady) {
-    if (hasIntroAnimated) {
+    if (PORTFOLIO_STATE.page.hasIntroAnimated) {
         return
     }
 
@@ -75,7 +57,7 @@ function animateIntro(onIntroTerminalReady) {
     if (!introElements.length) {
         document.body.classList.remove("intro-prep")
         document.body.classList.add("intro-animate")
-        hasIntroAnimated = true
+        PORTFOLIO_STATE.page.hasIntroAnimated = true
         if (notifyTerminalReady) {
             notifyTerminalReady()
         }
@@ -158,5 +140,5 @@ function animateIntro(onIntroTerminalReady) {
         setTimeout(finish, fallbackMs)
     })
 
-    hasIntroAnimated = true
+    PORTFOLIO_STATE.page.hasIntroAnimated = true
 }
