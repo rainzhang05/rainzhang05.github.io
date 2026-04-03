@@ -23,27 +23,6 @@ function delay(ms) {
     })
 }
 
-function ensureIntroTextSpan(container) {
-    if (!container) {
-        return null
-    }
-
-    let textSpan = container.querySelector(".txt")
-    if (!textSpan) {
-        textSpan = container.querySelector("span")
-
-        if (!textSpan) {
-            textSpan = document.createElement("span")
-            container.textContent = ""
-            container.appendChild(textSpan)
-        }
-
-        textSpan.classList.add("txt")
-    }
-
-    return textSpan
-}
-
 function setIntroText(textSpan, text) {
     if (!textSpan) {
         return
@@ -156,15 +135,16 @@ class TypeWriter {
         this.isDeleting = false
 
         // Add a flag to ensure only one instance is running
-        if (window.activeTypewriter) {
-            const previousSpan = window.activeTypewriter.textSpan ||
-                ensureIntroTextSpan(window.activeTypewriter.txtElement)
+        if (PORTFOLIO_STATE.intro.activeTypewriter) {
+            const previousTypewriter = PORTFOLIO_STATE.intro.activeTypewriter
+            const previousSpan = previousTypewriter.textSpan ||
+                ensureIntroTextSpan(previousTypewriter.txtElement)
             if (previousSpan) {
                 setIntroText(previousSpan, "")
                 setCaretActive(previousSpan, false)
             }
         }
-        window.activeTypewriter = this
+        PORTFOLIO_STATE.intro.activeTypewriter = this
 
         if (!this.textSpan) {
             return
@@ -178,7 +158,7 @@ class TypeWriter {
 
     type() {
         // Check if this instance is still the active one
-        if (window.activeTypewriter !== this || !this.textSpan) return
+        if (PORTFOLIO_STATE.intro.activeTypewriter !== this || !this.textSpan) return
 
         const current = this.wordIndex % this.words.length
         const fullTxt = this.words[current]
