@@ -1,10 +1,6 @@
-// Interaction lock while preloading
-let preloaderInteractionsLocked = false
-const preloaderInteractionEvents = ["touchmove", "wheel", "keydown"]
-const preloaderInteractionOptions = { passive: false, capture: true }
-const preloaderAssetTimeoutMs = 15000
-const preloaderFallbackTimeoutMs = preloaderAssetTimeoutMs + 1000
-const preloaderScrollKeys = new Set([
+const PRELOADER_INTERACTION_EVENTS = ["touchmove", "wheel", "keydown"]
+const PRELOADER_INTERACTION_OPTIONS = { passive: false, capture: true }
+const PRELOADER_SCROLL_KEYS = new Set([
     " ",
     "Spacebar",
     "ArrowUp",
@@ -35,7 +31,7 @@ function isInteractivePreloaderTarget(target) {
 
 function shouldPreventPreloaderInteraction(event) {
     if (event.type === "keydown") {
-        if (!preloaderScrollKeys.has(event.key)) {
+        if (!PRELOADER_SCROLL_KEYS.has(event.key)) {
             return false
         }
 
@@ -67,41 +63,56 @@ function preventPreloaderInteraction(event) {
     event.stopPropagation()
 }
 
+function setPreloaderClassState(isPreloading) {
+    document.documentElement.classList.toggle("is-preloading", isPreloading)
+    if (document.body) {
+        document.body.classList.toggle("is-preloading", isPreloading)
+    }
+}
+
 function lockPreloaderInteractions() {
-    if (preloaderInteractionsLocked) {
+    if (PORTFOLIO_STATE.preloader.interactionsLocked) {
         return
     }
 
-    preloaderInteractionsLocked = true
-    preloaderInteractionEvents.forEach((eventName) => {
-        document.addEventListener(eventName, preventPreloaderInteraction, preloaderInteractionOptions)
+    PORTFOLIO_STATE.preloader.interactionsLocked = true
+    PRELOADER_INTERACTION_EVENTS.forEach((eventName) => {
+        document.addEventListener(eventName, preventPreloaderInteraction, PRELOADER_INTERACTION_OPTIONS)
     })
 
-    document.documentElement.classList.add("is-preloading")
-    if (document.body) {
-        document.body.classList.add("is-preloading")
-    }
+    setPreloaderClassState(true)
 }
 
 function unlockPreloaderInteractions() {
-    if (!preloaderInteractionsLocked) {
+    if (!PORTFOLIO_STATE.preloader.interactionsLocked) {
         return
     }
 
-    preloaderInteractionsLocked = false
-    preloaderInteractionEvents.forEach((eventName) => {
-        document.removeEventListener(eventName, preventPreloaderInteraction, preloaderInteractionOptions)
+    PORTFOLIO_STATE.preloader.interactionsLocked = false
+    PRELOADER_INTERACTION_EVENTS.forEach((eventName) => {
+        document.removeEventListener(eventName, preventPreloaderInteraction, PRELOADER_INTERACTION_OPTIONS)
     })
 
-    document.documentElement.classList.remove("is-preloading")
-    if (document.body) {
-        document.body.classList.remove("is-preloading")
+    setPreloaderClassState(false)
+}
+
+function waitForDelay(ms) {
+    return new Promise((resolve) => {
+        setTimeout(resolve, ms)
+    })
+}
+
+function prefersReducedMotion() {
+    try {
+        return Boolean(
+            window.matchMedia &&
+            window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        )
+    } catch (error) {
+        return false
     }
 }
 
-lockPreloaderInteractions()
-
-// Clearing up the URL after refreshing the page
 function removeHash() {
     history.pushState("", document.title, window.location.pathname + window.location.search)
 }
@@ -130,39 +141,13 @@ function waitForFonts() {
     return Promise.resolve()
 }
 
-function normalizePreloadUrl(url) {
-    if (!url) {
-        return ""
-    }
-
-    try {
-        return new URL(url, window.location.href).href
-    } catch (error) {
-        return ""
-    }
-}
-
-function parseSrcsetUrls(srcset) {
-    if (!srcset) {
-        return []
-    }
-
-    return srcset
-        .split(",")
-        .map((entry) => entry.trim().split(/\s+/)[0])
-        .filter(Boolean)
-}
-
 function collectRenderableImageUrls() {
     const imageUrls = new Set()
-
     const addUrl = (value) => {
-        const normalized = normalizePreloadUrl(value)
-        if (!normalized) {
-            return
+        const normalized = normalizeAssetUrl(value)
+        if (normalized) {
+            imageUrls.add(normalized)
         }
-
-        imageUrls.add(normalized)
     }
 
     document.querySelectorAll("img").forEach((image) => {
@@ -197,7 +182,7 @@ function preloadImageUrl(url) {
             resolve()
         }
 
-        const timeoutId = setTimeout(finalize, preloaderAssetTimeoutMs)
+        const timeoutId = setTimeout(finalize, PORTFOLIO_CONFIG.preloaderAssetTimeoutMs)
 
         preloaderImage.addEventListener("load", finalize)
         preloaderImage.addEventListener("error", finalize)
@@ -212,7 +197,6 @@ function preloadImageUrl(url) {
 
 function waitForImages() {
     const imageUrls = collectRenderableImageUrls()
-
     if (!imageUrls.length) {
         return Promise.resolve()
     }
@@ -220,59 +204,67 @@ function waitForImages() {
     return Promise.all(imageUrls.map((url) => preloadImageUrl(url)))
 }
 
-function beginPreloadingSequence() {
-    lockPreloaderInteractions()
-    const loadGateElement = document.getElementById("load-gate")
+function waitForPreloadAssets() {
+    return Promise.all([waitForWindowLoad(), waitForFonts(), waitForImages()]).catch(() => {})
+}
 
-    const completePreloading = () => {
-        if (document.body.classList.contains("preloading-complete")) {
+function removeLoadGate(loadGateElement) {
+    if (!loadGateElement) {
+        unlockPreloaderInteractions()
+        return
+    }
+
+    let removed = false
+    const finalizeRemoval = () => {
+        if (removed) {
             return
         }
 
-        document.body.classList.add("preloading-complete")
-
-        if (loadGateElement) {
-            const removeLoadGate = () => {
-                loadGateElement.removeEventListener("transitionend", removeLoadGate)
-                if (loadGateElement.parentNode) {
-                    loadGateElement.parentNode.removeChild(loadGateElement)
-                }
-
-                document.body.classList.remove("is-preloading")
-                unlockPreloaderInteractions()
-            }
-
-            loadGateElement.addEventListener("transitionend", removeLoadGate)
-            // Ensure the transition runs even if the browser does not trigger transitionend.
-            setTimeout(removeLoadGate, 800)
-        } else {
-            document.body.classList.remove("is-preloading")
-            unlockPreloaderInteractions()
+        removed = true
+        loadGateElement.removeEventListener("transitionend", finalizeRemoval)
+        if (loadGateElement.parentNode) {
+            loadGateElement.parentNode.removeChild(loadGateElement)
         }
 
-        initPage()
+        unlockPreloaderInteractions()
     }
 
-    const minimumDisplayTime = new Promise((resolve) => {
-        setTimeout(resolve, 400)
-    })
+    loadGateElement.addEventListener("transitionend", finalizeRemoval)
+    setTimeout(finalizeRemoval, 800)
+}
 
-    const assetPromises = Promise.all([waitForWindowLoad(), waitForFonts(), waitForImages()]).catch(() => {})
-    const fallbackTimeout = new Promise((resolve) => {
-        setTimeout(resolve, preloaderFallbackTimeoutMs)
-    })
+function completePreloading(loadGateElement) {
+    if (document.body.classList.contains("preloading-complete")) {
+        return
+    }
 
-    Promise.all([minimumDisplayTime, Promise.race([assetPromises, fallbackTimeout])]).then(() => {
-        completePreloading()
+    document.body.classList.add("preloading-complete")
+    removeLoadGate(loadGateElement)
+    initPage()
+}
+
+function beginPreloadingSequence() {
+    lockPreloaderInteractions()
+
+    const minimumDisplayTime = waitForDelay(400)
+    const fallbackTimeout = waitForDelay(PORTFOLIO_CONFIG.preloaderFallbackTimeoutMs)
+    const loadGateElement = document.getElementById("load-gate")
+
+    Promise.all([
+        minimumDisplayTime,
+        Promise.race([waitForPreloadAssets(), fallbackTimeout]),
+    ]).then(() => {
+        completePreloading(loadGateElement)
     })
 }
 
 function initPage() {
-    if (isPageInitialized) {
+    if (PORTFOLIO_STATE.page.isInitialized) {
         return
     }
 
-    isPageInitialized = true
+    PORTFOLIO_STATE.page.isInitialized = true
+
     const initialHash = (window.location.hash || "").toLowerCase()
     removeHash()
 
@@ -301,69 +293,57 @@ function setupSkillsScrollReveal(initialHash) {
         return
     }
 
-    function scrollTopCombined() {
-        const se = document.scrollingElement
-        return (
-            window.scrollY ||
-            window.pageYOffset ||
-            (se && se.scrollTop) ||
-            document.documentElement.scrollTop ||
-            document.body.scrollTop ||
-            0
-        )
-    }
-
-    let revealed = false
-    const minScrollToReveal = 28
-
-    const scrollOpts = { passive: true }
-    const documentScrollOpts = { passive: true, capture: true }
-
-    function checkScroll() {
-        if (scrollTopCombined() >= minScrollToReveal) {
-            finish()
-        }
-    }
-
-    function onWheel(event) {
-        if (event.deltaY > 0 || event.deltaX !== 0) {
-            finish()
-        }
-    }
-
-    function teardown() {
-        window.removeEventListener("scroll", checkScroll, scrollOpts)
-        document.removeEventListener("scroll", checkScroll, documentScrollOpts)
-        document.documentElement.removeEventListener("scroll", checkScroll, scrollOpts)
-        document.body.removeEventListener("scroll", checkScroll, scrollOpts)
-        window.removeEventListener("wheel", onWheel, scrollOpts)
-    }
-
-    function finish() {
-        if (revealed) {
-            return
-        }
-        revealed = true
-        revealSkillsSection()
-        teardown()
-    }
-
-    const skipWait =
-        window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
-        scrollTopCombined() >= minScrollToReveal ||
+    const shouldRevealImmediately =
+        prefersReducedMotion() ||
+        getDocumentScrollTop() >= PORTFOLIO_CONFIG.skillsRevealScrollTop ||
         initialHash === "#skills"
 
-    if (skipWait) {
+    if (shouldRevealImmediately) {
         skillsRoot.classList.remove("skills--await-scroll")
         skillsRoot.removeAttribute("inert")
         return
     }
 
-    skillsRoot.setAttribute("inert", "")
+    let revealed = false
+    const scrollOptions = { passive: true }
+    const documentScrollOptions = { passive: true, capture: true }
 
-    window.addEventListener("scroll", checkScroll, scrollOpts)
-    document.addEventListener("scroll", checkScroll, documentScrollOpts)
-    document.documentElement.addEventListener("scroll", checkScroll, scrollOpts)
-    document.body.addEventListener("scroll", checkScroll, scrollOpts)
-    window.addEventListener("wheel", onWheel, scrollOpts)
+    const finishReveal = () => {
+        if (revealed) {
+            return
+        }
+
+        revealed = true
+        revealSkillsSection()
+        teardownRevealListeners()
+    }
+
+    const checkScroll = () => {
+        if (getDocumentScrollTop() >= PORTFOLIO_CONFIG.skillsRevealScrollTop) {
+            finishReveal()
+        }
+    }
+
+    const onWheel = (event) => {
+        if (event.deltaY > 0 || event.deltaX !== 0) {
+            finishReveal()
+        }
+    }
+
+    function teardownRevealListeners() {
+        window.removeEventListener("scroll", checkScroll, scrollOptions)
+        document.removeEventListener("scroll", checkScroll, documentScrollOptions)
+        document.documentElement.removeEventListener("scroll", checkScroll, scrollOptions)
+        document.body.removeEventListener("scroll", checkScroll, scrollOptions)
+        window.removeEventListener("wheel", onWheel, scrollOptions)
+    }
+
+    skillsRoot.setAttribute("inert", "")
+    window.addEventListener("scroll", checkScroll, scrollOptions)
+    document.addEventListener("scroll", checkScroll, documentScrollOptions)
+    document.documentElement.addEventListener("scroll", checkScroll, scrollOptions)
+    document.body.addEventListener("scroll", checkScroll, scrollOptions)
+    window.addEventListener("wheel", onWheel, scrollOptions)
 }
+
+lockPreloaderInteractions()
