@@ -9,9 +9,6 @@
 /* Navigation bar */
 @import url('navigation.css');
 
-/* Decorative layer (disabled — flat blank page) */
-@import url('decorations.css');
-
 /* Introduction section */
 @import url('introduction.css');
 
