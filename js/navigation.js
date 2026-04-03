@@ -1,21 +1,8 @@
-// Smooth scrolling for in-page hash links
-function getScrollTop() {
-    const se = document.scrollingElement
-    return (
-        window.scrollY ||
-        window.pageYOffset ||
-        (se && se.scrollTop) ||
-        document.documentElement.scrollTop ||
-        document.body.scrollTop ||
-        0
-    )
-}
-
 function scrollNavigationTargetIntoView(targetElement) {
     const rect = targetElement.getBoundingClientRect()
     const marginTop = parseFloat(getComputedStyle(targetElement).scrollMarginTop)
     const scrollMarginTop = Number.isFinite(marginTop) ? marginTop : 0
-    const targetY = rect.top + getScrollTop() - scrollMarginTop
+    const targetY = rect.top + getDocumentScrollTop() - scrollMarginTop
     const top = Math.max(0, targetY)
 
     const body = document.body
@@ -28,6 +15,12 @@ function scrollNavigationTargetIntoView(targetElement) {
 
 function setupHashLinkBehavior() {
     document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        if (anchor.dataset.hashLinkBound === "true") {
+            return
+        }
+
+        anchor.dataset.hashLinkBound = "true"
+
         anchor.addEventListener("click", function (e) {
             e.preventDefault()
             const targetId = this.getAttribute("href").substring(1)
