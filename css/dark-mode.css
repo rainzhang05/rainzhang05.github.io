@@ -20,6 +20,16 @@ body.dark-mode .form-group textarea {
     background-color: var(--color-surface-muted);
 }
 
+body.dark-mode .form-group input:focus,
+body.dark-mode .form-group input:focus-visible,
+body.dark-mode .form-group textarea:focus,
+body.dark-mode .form-group textarea:focus-visible {
+    outline: none;
+    border-color: var(--color-border-strong);
+    box-shadow: none;
+    background-color: var(--color-surface-hover);
+}
+
 body.dark-mode .project-card,
 body.dark-mode .education-card {
     background-color: var(--card-surface-bg);
