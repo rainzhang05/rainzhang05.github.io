@@ -15,7 +15,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: border-color var(--dur-med) var(--ease-out), box-shadow var(--dur-med) var(--ease-out);
 }
 
 .hero-content {
@@ -104,7 +103,6 @@ body.dark-mode .info-card p {
     border: 1px solid var(--color-border);
     border-radius: var(--radius-xl);
     padding: 32px;
-    transition: border-color var(--dur-med) var(--ease-out);
 }
 
 .modern-section + .modern-section {
@@ -352,7 +350,6 @@ body.dark-mode .challenge-card {
     text-transform: uppercase;
     letter-spacing: 0.5px;
     border-radius: var(--radius-md);
-    transition: background-color var(--dur-med) var(--ease-out), transform var(--dur-fast) var(--ease-out);
 }
 
 body.dark-mode .challenge-badge {
@@ -511,7 +508,6 @@ body.dark-mode .outcomes-list li {
     text-decoration: none;
     pointer-events: none;
     cursor: default;
-    transition: border-color var(--dur-med) var(--ease-out);
 }
 
 body.dark-mode .project-link-card {
@@ -595,4 +591,136 @@ body.dark-mode .link-card-desc {
     .outcomes-grid {
         grid-template-columns: 1fr;
     }
+}
+
+/* Added for refined project modals */
+.clean-bullet-list {
+    list-style-type: none;
+    padding-left: 0;
+    margin: 1rem 0;
+}
+.clean-bullet-list li {
+    margin-bottom: 0.75rem;
+    position: relative;
+    padding-left: 1.5rem;
+    color: var(--text-color);
+}
+.clean-bullet-list li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--primary-color);
+    font-weight: bold;
+}
+body.dark-mode .clean-bullet-list li {
+    color: var(--dark-text);
+}
+body.dark-mode .clean-bullet-list li::before {
+    color: var(--dark-primary);
+}
+.unified-tech-stack .tech-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+/* Ensure the modern-section in the simplified view looks clean */
+.project-modern-layout.simplified .modern-section {
+    padding: 1.5rem;
+    border-radius: 12px;
+    background: var(--surface-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+body.dark-mode .project-modern-layout.simplified .modern-section {
+    background: var(--dark-surface);
+    border-color: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Modern Sleek UI Components */
+.role-tools-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+}
+.detail-badge {
+    background: var(--color-surface-muted);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-pill);
+    font-size: 0.9rem;
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+}
+.detail-badge strong {
+    color: var(--color-text-muted);
+    margin-right: 0.5rem;
+}
+body.dark-mode .detail-badge {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.impact-cards-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+@media (min-width: 768px) {
+    .impact-cards-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+@media (min-width: 1024px) {
+    .impact-cards-grid.three-cols {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+.impact-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+}
+.impact-icon {
+    font-size: 24px;
+    height: 24px;
+    width: 24px;
+    color: var(--color-text);
+    margin-bottom: 1rem;
+    opacity: 0.8;
+}
+.impact-icon img {
+    width: 100%;
+    height: 100%;
+    filter: invert(0);
+}
+body.dark-mode .impact-icon img {
+    filter: invert(1);
+}
+.impact-card h5 {
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--color-text);
+}
+.impact-card p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--color-text-muted);
+    margin: 0;
+}
+.project-modern-layout.sleek .modern-section {
+    padding: 0;
+    border: none;
+    background: transparent;
+    box-shadow: none;
 }
