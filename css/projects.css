@@ -36,7 +36,7 @@
 .project-card,
 .education-card {
     background-color: var(--card-surface-bg, #ffffff);
-    border-radius: var(--radius-section);
+    border-radius: var(--radius-card-sm);
     overflow: hidden;
     border: 1px solid var(--color-border);
     box-shadow: var(--shadow-sm);
@@ -258,7 +258,7 @@
 }
 
 .project-card .project-content {
-    border-radius: 0 0 var(--radius-section) var(--radius-section);
+    border-radius: 0 0 var(--radius-card-sm) var(--radius-card-sm);
 }
 
 .project-cover {
@@ -434,7 +434,7 @@ body.dark-mode .project-modal-overlay {
 .project-modal .project-tag {
     font-size: 13px;
     padding: 4px 9px;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-pill);
     color: var(--color-text);
 }
 
