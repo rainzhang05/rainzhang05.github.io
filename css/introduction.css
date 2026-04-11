@@ -56,8 +56,9 @@
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    padding: 12px 24px;
-    font-size: 18px;
+    padding: 12px 30px;
+    font-size: clamp(16px, 1vw, 18px);
+    font-family: "Montserrat", sans-serif;
     text-decoration: none;
     cursor: pointer;
 }
@@ -97,16 +98,8 @@ body.dark-mode .resumeButton__icon {
 .resumeButton:focus-visible,
 .submit-btn:hover,
 .submit-btn:focus-visible {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
     background-color: var(--color-accent-hover);
     border-color: var(--color-accent-hover);
-}
-
-.resumeButton:active,
-.submit-btn:active {
-    transform: translateY(0);
-    box-shadow: var(--shadow-sm);
 }
 
 .resumeButton::before,
