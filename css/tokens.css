@@ -15,14 +15,14 @@
     --color-on-accent: #ffffff;
     --color-nav-active-bg: #ebebec;
     /* Corner radii (px): single scale for border-radius across browsers */
-    --radius-sm: 10px;
-    --radius-md: 14px;
-    --radius-lg: 18px;
-    --radius-xl: 22px;
+    --radius-sm: 8px;
+    --radius-md: 10px;
+    --radius-lg: 20px;
+    --radius-xl: 20px;
     --radius-pill: 999px;
-    --radius-section: 32px;
-    --radius-card-sm: 26px;
-    --radius-modal: 40px;
+    --radius-section: 20px;
+    --radius-card-sm: 20px;
+    --radius-modal: 20px;
     --radius-dock: 30px;
     --radius-dock-lg: 34px;
     /* Main content column — wider than legacy side margins */
