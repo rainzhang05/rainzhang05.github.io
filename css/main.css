@@ -33,6 +33,9 @@
 /* Site footer */
 @import url('footer.css');
 
+/* Noscript fallback (visible only inside <noscript>) */
+@import url('noscript.css');
+
 /* Common components (headings, typewriter, dock, etc.) */
 @import url('components.css');
 
