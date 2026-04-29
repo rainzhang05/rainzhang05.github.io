@@ -51,7 +51,7 @@ export default function Experience() {
                 <span>Beijing, China · Remote from Vancouver</span>
               </div>
             </div>
-            <div className="exp-period">Sep 2025 — Present</div>
+            <div className="exp-period">Sep 2025 — Dec 2025</div>
           </header>
           <div className="exp-body">
             <p className="exp-scope">

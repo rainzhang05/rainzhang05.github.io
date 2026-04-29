@@ -48,9 +48,8 @@ export default function Contact() {
           <div className="contact-intro">
             <h3>Get in touch</h3>
             <p>
-              Feel free to reach out if you have any questions or would like to connect. I&rsquo;m currently interning at
-              FEITIAN through December 2025 and open to internships and full-stack roles starting Summer 2026, based in
-              Vancouver.
+              Feel free to reach out if you have any questions or would like to connect. I&rsquo;m looking for
+              full-stack internship opportunities, based in Vancouver.
             </p>
             <div className="contact-channels">
               <a className="channel" href="mailto:rainzhang.zty@gmail.com">
