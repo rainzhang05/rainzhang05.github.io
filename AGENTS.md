@@ -1,51 +1,73 @@
 # AGENTS.md
 
 ## Project Snapshot
-- Static portfolio site (no build step, no framework, no package manager) served from root files.
-- Runtime is plain browser JS + HTML fragments + CSS imports; deployment target is Vercel per `README.md`.
+- Next.js 14 (App Router) + React 18 + TypeScript portfolio at `https://rainzhang.me/`.
+- Deployed on Vercel (auto-build from `main`); CI runs lint + build + Playwright e2e on every push and PR.
+- Single-page app: one route (`/`) composed of vertically stacked sections with anchor links.
 
 ## Architecture (Read First)
-- `index.html` is the shell: it loads CSS (`css/main.css`) and JS files in strict dependency order.
-- Section HTML is fetched at runtime into containers (`#layout-container`, `#projects-container`, `#footer-container`, etc.) via `loadSection(...)` in `index.html`.
-- After all fragments load, `index.html` dispatches `sectionsLoaded`; `js/main.js` listens and starts `beginPreloadingSequence()`.
-- `js/preloader.js` gates user interaction, waits for window load/fonts/images, then calls `initPage()` once.
-- `initPage()` wires all features in order: intro/typewriter, dock, theme, navigation, contact form, project cards/modal links.
+- `app/layout.tsx` — root layout. Loads `globals.css`, declares page metadata, and wires Inter / Instrument Serif / JetBrains Mono via `next/font/google` (exposed as CSS variables `--f-sans-next`, `--f-serif-next`, `--f-mono-next`).
+- `app/page.tsx` — composes the home page in render order: `Nav → Hero → Marquee → About → Skills → Experience → Projects → Education → Contact → Footer`. Adding a section means adding an anchor (`<section id="…">`) and importing it here.
+- `app/globals.css` — single CSS file with design tokens at the top (`:root { --bg, --ink, --accent, --r-md, --f-serif, … }`) and component styles below. There is no Tailwind, CSS modules, or CSS-in-JS.
 
-## Module Boundaries
-- Shared state lives in `js/globals.js` (`isPageInitialized`, modal state, intro state).
-- Modal scroll locking is isolated in `js/modal.js`; project modal behavior is in `js/projects.js`.
-- Navigation/hash behavior is in `js/navigation.js`; dock behavior and icon normalization in `js/dock.js`.
-- Contact submit flow is in `js/contact.js` (Formspree POST + inline success/failure UI).
+## Component Map (`components/`)
+- `Nav.tsx` — sticky top bar. IntersectionObserver in this file watches `#about, #skills, #work, #projects, #education` and toggles `.is-active` on the matching nav link.
+- `Hero.tsx` — landing block: eyebrow, name (split into `.word` spans for character-level reveal), lede, primary/secondary buttons, portrait `next/image`, and a fact card.
+- `Marquee.tsx` — passive horizontal strip. Items are duplicated and animated via the `@keyframes scroll` rule in `globals.css`.
+- `About.tsx`, `Skills.tsx`, `Experience.tsx`, `Education.tsx`, `Contact.tsx`, `Footer.tsx` — section components.
+- `Projects.tsx` — accordion-style project list. Reads from `lib/projects.ts`. Each row has `role="button"`, supports keyboard toggle (Enter/Space), and ignores clicks that originate inside `<a>` so external links don't expand the row.
+- `ui.tsx` — shared primitives:
+  - `useReveal<T>()`: returns a generic ref. After mount, IntersectionObserver finds every `.reveal` and `.word` descendant and adds `.is-in` once visible. CSS handles the actual transition.
+  - `Arrow`, `Download`, `CheckCircle`: inline SVG icon components.
 
-## Conventions You Should Preserve
-- JS is global-script style (no ES modules/imports); function names are referenced across files, so load order in `index.html` matters.
-- Initialization must remain idempotent (`isPageInitialized` guard in `js/preloader.js`).
-- Keep state classes consistent: `intro-prep`, `intro-animate`, `is-preloading`, `preloading-complete`, `dark-mode`, `modal-open`.
-- For new sections, update both `index.html` container + `Promise.all([...loadSection(...)])` entry.
-- Navigation anchors expect matching section IDs in fragments (example: nav `#projects` -> `<h2 id="projects">` in `html/projects.html`).
+## Conventions to Preserve
+- **`useReveal` ref contract.** Only call it once per section. Children that should fade in must have the class `reveal` (and optionally `data-delay="1..5"`); animated headline words use `.word` with a nested `<span>`. Don't add new motion classes — extend these.
+- **`use client` rule.** Sections that use `useReveal`, `useState`, or any DOM API need the `"use client"` directive at the top. `Marquee`, `Footer`, and `app/page.tsx` are pure server components — keep them that way unless you need state.
+- **Class contract.** `.reveal`, `.is-in`, `.word`, `.is-open`, `.is-active`, `.pill`, `.btn`, `.section-head`, `.wrap` — CSS in `globals.css` keys off these names. Don't rename without updating the CSS.
+- **Section IDs.** Anchor IDs in `Nav.tsx` (`#about`, `#skills`, `#work`, `#projects`, `#education`, `#contact`) must match the `id` props on the corresponding `<section>` elements. `#top` is the hero target for "Back to top".
+- **Project links.** Add cross-section anchors via `id={p.id}` (e.g. `#project-demo` from `Experience.tsx`). The IDs live in `lib/projects.ts`.
 
-## Project Card / Modal Pattern
-- Modal content is derived from `.project-card` DOM in `html/projects.html` and `html/experience.html`.
-- Keep card structure: `.project-card` -> `.project-header` + `.project-content` + `.project-summary` + `.project-description`.
-- `openProjectModal()` removes `.project-summary`, `.experience-related`, `.project-cover`, and `.read-more` from cloned content; account for this when editing card markup.
-- Project/experience modals open from **`.project-header h3`** only (`role="button"` + `.project-card-title-trigger` in `js/projects.js`); the card shell is not clickable.
-- Cross-links use `data-open-project="<project-card-id>"` (see `html/experience.html`).
-- Rich modal content in `html/projects.html` uses Iconify Lucide line icons (`.line-icon` / `.feature-icon.line-icon` / `.info-icon.line-icon`); `css/dark-mode.css` inverts `.line-icon img` for dark mode.
+## Project Data Shape (`lib/projects.ts`)
+```ts
+type Project = {
+  id: string;            // also serves as the anchor id
+  period: string;        // "Nov — Dec 2025"
+  title: string;
+  role: string;
+  summary: string;
+  tags: string[];        // shown in the row head
+  impacts: { title: string; body: string }[];  // expanded view
+  stack: string[];       // pills shown after impacts
+  links: { label: string; href: string }[];
+};
+```
+Order in the array is order on the page (currently newest first).
 
-## CSS Organization
-- `css/main.css` is the single import hub; add new stylesheet imports there.
-- Put theme overrides in `css/dark-mode.css` and breakpoint overrides in `css/responsive.css`.
-- Modal-related layout/animation styles are centralized in `css/modal.css` and `css/projects.css`.
+## Contact Form
+- `components/Contact.tsx` POSTs `FormData` to `https://formspree.io/f/xoveaaqo` (Formspree). The form ID is hardcoded; rotating it requires editing `FORMSPREE_ENDPOINT`.
+- States: `idle | sending | sent | error`. Success and error states auto-clear after 5 seconds.
+- Success message: "Thank you for your message! I'll get back to you as soon as possible."
 
-## Local Workflow / Debugging
-- Use a local HTTP server (fragments are fetched; opening `index.html` directly can break section loading).
-- Quick run from repo root: `python3 -m http.server 8000` then open `http://localhost:8000`.
-- If UI hooks fail, first confirm fragment IDs/classes exist after `sectionsLoaded` (many setup functions query DOM once).
-- Automated tests: `npm test` (Vitest + Playwright); see `README.md` → Testing. Validate visual changes with manual browser checks when needed.
+## Styling Notes
+- Light theme only by design. There is currently no dark-mode override; if you reintroduce one, do it via `prefers-color-scheme` overriding the `:root` tokens — don't add component-level dark styles.
+- Body content (`p, li, h1–h6, dt, dd`, plus form fields and a few specific selectors) is text-selectable; chrome (nav, buttons, marquee, fact-card labels) is not. See the `user-select` block in `globals.css` near the body reset.
+- Reduced motion: `@media (prefers-reduced-motion: reduce)` near the bottom of `globals.css` neutralizes `.reveal` and `.word`. Honor it when adding new motion.
 
-## External Integrations
-- Contact form submits to Formspree endpoint in `html/contact.html` (`action="https://formspree.io/f/xoveaaqo"`).
-- Top bar (`#dock` in `html/layout.html`) uses `--card-surface-bg` (same fill as project/education cards): section nav, social links, and a segmented light/dark/system theme control (`js/theme.js`, `localStorage` key `portfolio-color-scheme`). Theme segment icons use external Iconify SVG URLs; other assets are local (`icons/`, `images/`, `fonts/`). Keep `#dock` stacked **above** `.project-modal-overlay` in `css/projects.css` (e.g. z-index 2100 vs 2000): the overlay is full-viewport and transparent, so equal stacking would steal pointer events over the dock.
-- Skills (`html/skills.html`, `#skills-section`) starts with `.skills--await-scroll` and fades in when the user scrolls down (`scrollTop` ≥ ~28px from combined scroll sources, or `wheel` with `deltaY > 0`). No `IntersectionObserver` (the skills block can intersect the viewport while still below the intro). `initPage()` captures `location.hash` **before** `removeHash()` so `#skills` still unlocks the section. While waiting: `inert`, `visibility: hidden`, and `opacity: 0`.
-- Site footer: `html/footer.html` loaded into `#footer-container` in `index.html` (after contact). Styles in `css/footer.css`.
+## Local Workflow
+- `npm run dev` — http://localhost:3000.
+- `npm run lint` — Next.js / ESLint.
+- `npm run build` — production build.
+- `npm test` — Playwright (boots `npm run start` automatically; specs in `tests/e2e/`).
+- `npm run test:ui` — Playwright UI mode for debugging.
 
+## CI / Deploy
+- `.github/workflows/test.yml` — runs lint, build, and Playwright on push and PR.
+- Vercel deploys `main` automatically. Preview deployments come from PR branches; the URL appears in the PR check.
+- The contact form's Formspree free tier has a monthly submission cap; if it gets exhausted, submissions fail and the error fallback appears.
+
+## When Editing
+- For section copy, edit the matching `components/*.tsx` directly.
+- For project entries, edit `lib/projects.ts` (preserve the `Project` type).
+- For metadata (title, description, OG, theme color), edit `app/layout.tsx`.
+- For visual styles, edit `app/globals.css` — keep changes scoped to existing variables before introducing new ones.
+- After any structural change, run `npm run build` to catch typing/route issues, and `npm test` to catch UI regressions.
