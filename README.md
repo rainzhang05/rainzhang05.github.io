@@ -1,27 +1,34 @@
-# Personal Portfolio Website
-Website URL: https://rainzhang.me/
+# Rain Zhang — Portfolio (Next.js source)
 
-## Purpose
+This folder is a drop-in Next.js 14+ App Router project. The same component code
+also powers the in-browser preview (`/Portfolio.html` at the project root).
 
-As a university student actively seeking internship opportunities and professional experience, this portfolio website aims to:
+## Run locally
 
-- Present my technical skills and programming knowledge
-- Showcase academic, personal, and internship projects I've completed
-- Provide information about my educational background
-- Offer an easy way for recruiters and potential employers to contact me
-- Demonstrate my web development capabilities through the website itself
+```bash
+pnpm install
+pnpm dev
+```
 
-## Technologies Used
+Then open http://localhost:3000.
 
-- **HTML5**: For structuring the content
-- **CSS3**: For styling and animations
-- **JavaScript**: For interactive elements and dynamic content
-- **Formspree**: For handling contact form submissions
-- **Vercel**: For website deployment
+## Structure
 
-## Contact
+```
+nextjs/
+  app/
+    layout.tsx        # fonts, metadata, global styles
+    page.tsx          # composes the home page
+    globals.css       # design tokens + element styles
+  components/         # design-system + section components
+  lib/projects.ts     # project data
+  public/             # static assets (portrait, logo, resume)
+  package.json
+  next.config.mjs
+  tsconfig.json
+```
 
-If you're a potential employer or collaborator, please feel free to:
-- Reach out through the contact form on the website
-- Connect with me on [Linkedin](https://www.linkedin.com/in/rainzhang05/)
-- Email me at rainzhang.zty@gmail.com
+The design system lives in `globals.css` (CSS variables) and the
+`components/ui/*` primitives — `Button`, `Pill`, `Eyebrow`, `Reveal`, `Section`.
+Sections (`Hero`, `About`, `Skills`, `Experience`, `Projects`, `Education`,
+`Contact`, `Footer`) compose those primitives only.
