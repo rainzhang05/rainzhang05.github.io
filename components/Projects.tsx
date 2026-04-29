@@ -70,9 +70,9 @@ function Row({ p }: { p: Project }) {
 }
 
 export default function Projects() {
-  const ref = useReveal();
+  const ref = useReveal<HTMLElement>();
   return (
-    <section className="projects" id="projects" ref={ref as any}>
+    <section className="projects" id="projects" ref={ref}>
       <div className="wrap">
         <div className="section-head reveal">
           <span className="label">Selected work</span>

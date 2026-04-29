@@ -3,9 +3,9 @@ import Image from "next/image";
 import { Arrow, Download, useReveal } from "./ui";
 
 export default function Hero() {
-  const ref = useReveal();
+  const ref = useReveal<HTMLElement>();
   return (
-    <header className="hero" id="top" ref={ref as any}>
+    <header className="hero" id="top" ref={ref}>
       <div className="wrap">
         <div className="hero-meta reveal">
           <span className="eyebrow">Vancouver, BC · Open to internship opportunities</span>
@@ -18,12 +18,13 @@ export default function Hero() {
               <span className="word" data-delay={2}><span>Zhang.</span></span>
             </h1>
             <p className="hero-lede reveal" data-delay={3}>
-              Computer Science undergraduate at <em>Simon Fraser University</em>. I build full-stack software end to
-              end, and I enjoy quietly making the small things work well.
+              Computer Science undergraduate at <em>Simon Fraser University</em>. I build full-stack systems across
+              modern technology stacks &mdash; Python, React, and TypeScript &mdash; emphasizing scalable backend
+              design, responsive interfaces, and maintainable code.
             </p>
             <div className="hero-actions reveal" data-delay={4}>
               <a className="btn" href="#contact">Say hello <Arrow className="arrow" /></a>
-              <a className="btn secondary" href="/Rain-Zhang-Resume.pdf" download>Résumé <Download /></a>
+              <a className="btn secondary" href="/Rain-Zhang-Resume.pdf" download>Resume <Download /></a>
             </div>
           </div>
           <aside className="hero-side reveal" data-delay={2}>
@@ -33,7 +34,7 @@ export default function Hero() {
             <div className="fact-card">
               <div className="item"><span className="k">Based in</span><span className="v">Vancouver, BC</span></div>
               <div className="item"><span className="k">Studying</span><span className="v">B.Sc. Computer Science · SFU</span></div>
-              <div className="item"><span className="k">Focus</span><span className="v">Full-stack web</span></div>
+              <div className="item"><span className="k">Focus</span><span className="v">Full-stack &amp; security-focused software</span></div>
               <div className="item"><span className="k">Working in</span><span className="v">Python · TypeScript · React · Rust</span></div>
             </div>
           </aside>

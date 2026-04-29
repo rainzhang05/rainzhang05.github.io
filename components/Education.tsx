@@ -2,9 +2,9 @@
 import { useReveal } from "./ui";
 
 export default function Education() {
-  const ref = useReveal();
+  const ref = useReveal<HTMLElement>();
   return (
-    <section className="education" id="education" ref={ref as any}>
+    <section className="education" id="education" ref={ref}>
       <div className="wrap">
         <div className="section-head reveal">
           <span className="label">Education</span>
@@ -18,8 +18,8 @@ export default function Education() {
             <ul>
               <li>Bachelor of Science in Computer Science</li>
               <li>CGPA — 3.43 / 4.33</li>
-              <li>Dean's Honor Roll · Fall 2024</li>
-              <li>Dean's Honor Roll · Summer 2025</li>
+              <li>Dean&rsquo;s Honor Roll · Fall 2024</li>
+              <li>Dean&rsquo;s Honor Roll · Summer 2025</li>
             </ul>
           </article>
           <article className="edu-card reveal" data-delay={1}>

@@ -2,9 +2,9 @@
 import { useReveal } from "./ui";
 
 export default function About() {
-  const ref = useReveal();
+  const ref = useReveal<HTMLElement>();
   return (
-    <section className="about" id="about" ref={ref as any}>
+    <section className="about" id="about" ref={ref}>
       <div className="wrap">
         <div className="section-head reveal">
           <span className="label">About</span>
@@ -12,16 +12,25 @@ export default function About() {
         </div>
         <div className="about-body">
           <p className="about-lede reveal">
-            I take an idea from sketch to production: <em>frontend, backend, infrastructure, and the product polish in between.</em>
+            I take ownership of features end to end:{" "}
+            <em>architecture, backend, frontend, deployment, and the polish in between.</em>
           </p>
           <div className="about-supporting reveal" data-delay={1}>
-            <p>I'm a Computer Science undergraduate at Simon Fraser University. I build full-stack systems across modern stacks — Python, React, TypeScript, and Rust — by rapidly learning new frameworks, integrating APIs, and turning ideas into shippable products.</p>
-            <p>My work emphasizes scalable backend design, responsive interfaces, and maintainable code. I love owning features end to end: shaping the architecture, writing the API, building the UI, wiring up CI/CD, and shipping. Recently I've been applying that same end-to-end approach to authentication and security tooling — but my interest is broader: I want to build great products, full stop.</p>
+            <p>
+              I am a Computer Science undergraduate at Simon Fraser University who builds full-stack systems across
+              modern technology stacks, including Python, React, and TypeScript. I have delivered multiple end-to-end
+              projects by rapidly learning new frameworks, integrating APIs, and turning ideas into products.
+            </p>
+            <p>
+              My work emphasizes scalable backend design, responsive interfaces, and maintainable code. I am
+              particularly interested in full-stack software engineering and technical project execution, where I can
+              take ownership of scalable features and deliver reliable solutions in fast-moving environments.
+            </p>
             <div className="kv-list">
               <dl>
                 <div className="kv-row"><dt>Based in</dt><dd>Vancouver, BC</dd></div>
-                <div className="kv-row"><dt>Studying</dt><dd>B.Sc. Computer Science · SFU · '27</dd></div>
-                <div className="kv-row"><dt>Interests</dt><dd>Full-stack web, developer tooling, security engineering</dd></div>
+                <div className="kv-row"><dt>Studying</dt><dd>B.Sc. Computer Science · SFU · Class of &rsquo;27</dd></div>
+                <div className="kv-row"><dt>Interests</dt><dd>Full-stack engineering, developer tooling, security &amp; authentication</dd></div>
                 <div className="kv-row"><dt>Languages</dt><dd>English · Mandarin</dd></div>
               </dl>
             </div>

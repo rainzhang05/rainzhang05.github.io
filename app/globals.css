@@ -67,14 +67,18 @@ body {
   text-rendering: optimizeLegibility;
   font-feature-settings: "ss01", "cv11";
   overflow-x: hidden;
-  /* Disable text selection across the entire site for a polished, app-like feel */
+  /* Disable text selection on chrome/UI by default; allow it on body content below. */
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
-/* Allow selection only inside form fields so users can edit their input */
+/* Allow selection on body content (paragraphs, headings, list items, key-value pairs)
+   and form fields, so readers can copy emails, quotes, and contact info. */
+p, li, h1, h2, h3, h4, h5, h6, dt, dd,
+.hero-lede, .exp-scope, .project-summary, .project-title,
+.impact h6, .impact p, .channel .v, .footer-tagline, .footer-built,
 input, textarea, [contenteditable="true"] {
   -webkit-user-select: text;
   -moz-user-select: text;
@@ -170,10 +174,6 @@ section { position: relative; scroll-margin-top: 96px; }
   letter-spacing: -.02em;
   padding-bottom: .12em;
   overflow: visible;
-}
-  line-height: 1;
-  font-weight: 400;
-  letter-spacing: -.02em;
 }
 .section-head h2 em { font-style: italic; color: var(--muted); }
 
@@ -999,6 +999,33 @@ section { position: relative; scroll-margin-top: 96px; }
 .footer-row a { color: var(--muted); transition: color var(--dur-fast) var(--ease); }
 .footer-row a:hover { color: var(--ink); }
 .footer-links { display: flex; gap: 22px; flex-wrap: wrap; }
+.footer-tagline {
+  margin: 14px 0 0;
+  max-width: 60ch;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+.footer-built {
+  margin: 22px 0 0;
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+}
+
+/* Contact form feedback */
+.form-feedback {
+  margin: 4px 0 0;
+  min-height: 1.2em;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.form-feedback[data-status="sent"] { color: var(--accent-ink); }
+.form-feedback[data-status="error"] { color: #b00020; }
+.submit-btn[disabled] { cursor: not-allowed; opacity: .9; }
 
 
 /* ============================================================

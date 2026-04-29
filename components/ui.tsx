@@ -2,8 +2,10 @@
 import { useEffect, useRef } from "react";
 
 /** Reveal-on-scroll: adds .is-in to .reveal/.word descendants when in view. */
-export function useReveal(rootMargin = "0px 0px -8% 0px") {
-  const ref = useRef<HTMLElement | null>(null);
+export function useReveal<T extends HTMLElement = HTMLElement>(
+  rootMargin = "0px 0px -8% 0px"
+) {
+  const ref = useRef<T | null>(null);
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
