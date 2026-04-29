@@ -1,0 +1,128 @@
+import { test, expect, type Page } from "@playwright/test";
+
+const SECTIONS = ["about", "skills", "work", "projects", "education", "contact"];
+
+function captureConsoleErrors(page: Page) {
+  const errors: string[] = [];
+  page.on("console", (msg) => {
+    if (msg.type() === "error") errors.push(msg.text());
+  });
+  page.on("pageerror", (err) => errors.push(err.message));
+  return errors;
+}
+
+test.describe("Portfolio site", () => {
+  test("loads and renders the hero", async ({ page }) => {
+    const errors = captureConsoleErrors(page);
+    const res = await page.goto("/");
+    expect(res?.status()).toBe(200);
+
+    await expect(page.locator("h1")).toContainText(/Rain/);
+    await expect(page.locator("h1")).toContainText(/Zhang\./);
+    await expect(page.locator(".hero-lede")).toContainText(/Simon Fraser University/);
+
+    expect(errors, errors.join("\n")).toEqual([]);
+  });
+
+  test("renders every primary section", async ({ page }) => {
+    await page.goto("/");
+    for (const id of SECTIONS) {
+      await expect(page.locator(`#${id}`)).toBeVisible();
+    }
+  });
+
+  test("nav active state updates as sections enter the viewport", async ({ page }) => {
+    await page.goto("/");
+    // Scroll directly so this works on mobile viewports where .nav-links are hidden.
+    await page.evaluate(() => {
+      const el = document.getElementById("projects");
+      if (el) window.scrollTo({ top: el.offsetTop + 80, behavior: "instant" as ScrollBehavior });
+    });
+    // IntersectionObserver in Nav.tsx flips the active class once #projects is in view.
+    await expect(page.locator('.nav-link[href="#projects"]')).toHaveClass(/is-active/, { timeout: 4000 });
+  });
+
+  test("reveal animations promote .reveal to .is-in on scroll", async ({ page }) => {
+    await page.goto("/");
+    // Scroll #projects into view via the page-level scroll API so the
+    // IntersectionObserver in useReveal definitely fires.
+    await page.evaluate(() => {
+      const el = document.getElementById("projects");
+      if (el) window.scrollTo({ top: el.offsetTop + 80, behavior: "instant" as ScrollBehavior });
+    });
+    const firstReveal = page.locator("#projects .reveal").first();
+    await expect(firstReveal).toHaveClass(/is-in/, { timeout: 6000 });
+  });
+
+  test("project rows toggle on click and ignore link clicks inside the head", async ({ page }) => {
+    await page.goto("/");
+    const firstRow = page.locator(".project-row").first();
+    const head = firstRow.locator(".project-row-head");
+
+    await expect(head).toHaveAttribute("aria-expanded", "false");
+
+    await head.click({ position: { x: 30, y: 40 } });
+    await expect(head).toHaveAttribute("aria-expanded", "true");
+    await expect(firstRow).toHaveClass(/is-open/);
+
+    // Clicking the head again collapses.
+    await head.click({ position: { x: 30, y: 40 } });
+    await expect(head).toHaveAttribute("aria-expanded", "false");
+  });
+
+  test("resume PDF is reachable", async ({ page, request }) => {
+    await page.goto("/");
+    const link = page.locator('a[download][href="/Rain-Zhang-Resume.pdf"]').first();
+    await expect(link).toBeVisible();
+    const res = await request.get("/Rain-Zhang-Resume.pdf");
+    expect(res.status()).toBe(200);
+    expect(res.headers()["content-type"]).toMatch(/pdf/);
+  });
+
+  test("contact form posts to Formspree on success", async ({ page }) => {
+    await page.goto("/");
+
+    let captured: { method: string; url: string } | null = null;
+    await page.route("**/formspree.io/f/xoveaaqo", async (route) => {
+      captured = { method: route.request().method(), url: route.request().url() };
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ ok: true }),
+      });
+    });
+
+    await page.locator("#name").fill("Test User");
+    await page.locator("#email").fill("test@example.com");
+    await page.locator("#message").fill("Hello from the test suite.");
+    await page.locator(".submit-btn").click();
+
+    await expect(page.locator(".form-feedback")).toContainText(/Thank you for your message/);
+    expect(captured).not.toBeNull();
+    expect(captured!.method).toBe("POST");
+  });
+
+  test("contact form shows error fallback on failure", async ({ page }) => {
+    // We don't capture console errors here — the browser logs a 500 from the
+    // intentionally failed Formspree request, which is expected for this path.
+    await page.goto("/");
+
+    await page.route("**/formspree.io/f/xoveaaqo", (route) =>
+      route.fulfill({ status: 500, contentType: "application/json", body: "{}" })
+    );
+
+    await page.locator("#name").fill("Test User");
+    await page.locator("#email").fill("test@example.com");
+    await page.locator("#message").fill("Trigger an error path.");
+    await page.locator(".submit-btn").click();
+
+    await expect(page.locator(".form-feedback")).toContainText(/Something went wrong/);
+    await expect(page.locator(".submit-btn")).toContainText(/Try again/);
+  });
+
+  test("footer year is the current year", async ({ page }) => {
+    await page.goto("/");
+    const expected = String(new Date().getFullYear());
+    await expect(page.locator(".footer-row")).toContainText(expected);
+  });
+});
