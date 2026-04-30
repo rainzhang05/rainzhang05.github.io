@@ -82,19 +82,17 @@ body {
   text-rendering: optimizeLegibility;
   font-feature-settings: "ss01", "cv11";
   overflow-x: hidden;
-  /* Disable text selection on chrome/UI by default; allow it on body content below. */
+  /* Non-editable UI/copy is not selectable; editable controls opt in below. */
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
-/* Allow selection on body content (paragraphs, headings, list items, key-value pairs)
-   and form fields, so readers can copy emails, quotes, and contact info. */
-p, li, h1, h2, h3, h4, h5, h6, dt, dd,
-.hero-lede, .exp-scope, .project-summary, .project-title,
-.impact h6, .impact p, .channel .v, .footer-tagline, .footer-built,
-input, textarea, [contenteditable="true"] {
+input:not([disabled]):not([readonly]),
+textarea:not([disabled]):not([readonly]),
+select:not([disabled]),
+[contenteditable="true"] {
   -webkit-user-select: text;
   -moz-user-select: text;
   -ms-user-select: text;
