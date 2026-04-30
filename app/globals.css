@@ -641,13 +641,13 @@ section { position: relative; scroll-margin-top: 96px; }
   .exp-top .exp-period { grid-column: 1 / -1; text-align: left; padding-top: 4px; }
 }
 .exp-logo {
-  width: 120px;
-  min-height: 40px;
+  width: 88px;
+  min-height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.exp-logo img { width: 120px; height: auto; }
+.exp-logo img { width: 88px; height: auto; }
 .exp-titles h3 { font-size: 19px; font-weight: 500; letter-spacing: -.01em; margin-bottom: 4px; }
 .exp-titles .org {
   font-size: 13.5px; color: var(--muted);
@@ -1090,8 +1090,8 @@ section { position: relative; scroll-margin-top: 96px; }
   .exp-card { padding: 22px; }
   .exp-top { grid-template-columns: 104px 1fr; }
   .exp-top .exp-period { grid-column: 1 / -1; padding-top: 6px; }
-  .exp-logo { width: 96px; min-height: 32px; }
-  .exp-logo img { width: 96px; }
+  .exp-logo { width: 72px; min-height: 28px; }
+  .exp-logo img { width: 72px; }
   .exp-titles h3 { font-size: 20px; }
   .impact-grid { grid-template-columns: 1fr; }
   .expanded-row { grid-template-columns: 1fr; }

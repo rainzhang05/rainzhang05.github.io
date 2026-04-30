@@ -41,7 +41,7 @@ export default function Experience() {
           <header className="exp-top">
             <div className="exp-logo">
               {/* eslint-disable-next-line @next/next/no-img-element -- small inline SVG, next/image adds no value */}
-              <img src="/feitian-logo.svg" alt="FEITIAN Technologies" width={120} height={31} />
+              <img src="/feitian-logo.svg" alt="FEITIAN Technologies" width={88} height={23} />
             </div>
             <div className="exp-titles">
               <h3>Full-Stack Engineer Intern</h3>
