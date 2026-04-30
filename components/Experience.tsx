@@ -48,7 +48,7 @@ export default function Experience() {
               <div className="org">
                 <span>FEITIAN Technologies Co., Ltd.</span>
                 <span>International Department</span>
-                <span>Beijing, China · Remote from Vancouver</span>
+                <span>Beijing, China · On-site</span>
               </div>
             </div>
             <div className="exp-period">Sep 2025 — Dec 2025</div>
