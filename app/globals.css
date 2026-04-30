@@ -45,7 +45,7 @@
   --dur:         .45s;
   --dur-slow:    .9s;
 
-  /* Anchor scroll: sticky nav clearance + extra inset so targets land slightly lower in view */
+  /* Anchor scroll fallback for native jumps and non-JS contexts. */
   --nav-scroll-offset: 90px;
 
   /* Elevation */
@@ -169,7 +169,7 @@ section {
   position: relative;
   scroll-margin-top: var(--nav-scroll-offset);
 }
-/* In-page nav targets the section headline rule, not padded <section> top (avoids marquee / prior block peeking under the bar). */
+/* Section headline rule is the visual start for in-page navigation. */
 .section-head {
   display: grid;
   grid-template-columns: 1fr;
@@ -1150,6 +1150,9 @@ section {
   display: none;
   position: fixed;
   inset: 0;
+  width: 100vw;
+  height: 100dvh;
+  min-height: 100vh;
   z-index: 55;
   background: color-mix(in oklab, var(--bg) 92%, transparent);
   backdrop-filter: saturate(140%) blur(24px);

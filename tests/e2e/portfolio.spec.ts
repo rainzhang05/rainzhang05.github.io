@@ -11,6 +11,41 @@ function captureConsoleErrors(page: Page) {
   return errors;
 }
 
+async function clickNavTarget(page: Page, id: string, isMobile: boolean) {
+  if (isMobile) {
+    await page.locator(".nav-toggle").click();
+    const selector = id === "contact" ? ".nav-mobile-cta" : `.nav-mobile-link[href="#${id}"]`;
+    await page.locator(selector).click();
+    return;
+  }
+
+  const selector = id === "contact" ? ".nav-cta" : `.nav-link[href="#${id}"]`;
+  await page.locator(selector).click();
+}
+
+async function expectSectionHeadAligned(page: Page, id: string) {
+  await page.waitForFunction(
+    (sectionId) => {
+      const nav = document.querySelector(".nav");
+      const head = document.querySelector(`#${sectionId} .section-head`);
+      if (!nav || !head) return false;
+
+      const diff = Math.abs(head.getBoundingClientRect().top - nav.getBoundingClientRect().bottom);
+      return diff <= 4;
+    },
+    id,
+    { timeout: 8000 }
+  );
+
+  const diff = await page.evaluate((sectionId) => {
+    const nav = document.querySelector(".nav")!;
+    const head = document.querySelector(`#${sectionId} .section-head`)!;
+    return Math.abs(head.getBoundingClientRect().top - nav.getBoundingClientRect().bottom);
+  }, id);
+
+  expect(diff).toBeLessThanOrEqual(4);
+}
+
 test.describe("Portfolio site", () => {
   const mobileTap = () => test.info().project.name === "mobile-chrome";
 
@@ -54,6 +89,21 @@ test.describe("Portfolio site", () => {
       null,
       { timeout: 8000 }
     );
+  });
+
+  test("nav section links align section heads under the sticky bar", async ({ page }) => {
+    await page.goto("/");
+
+    for (const id of SECTIONS) {
+      await clickNavTarget(page, id, mobileTap());
+      await expect(page).toHaveURL(new RegExp(`#${id}$`));
+      await expectSectionHeadAligned(page, id);
+    }
+  });
+
+  test("direct section hashes align section heads after hydration", async ({ page }) => {
+    await page.goto("/#skills");
+    await expectSectionHeadAligned(page, "skills");
   });
 
   test("reveal animations promote .reveal to .is-in on scroll", async ({ page }) => {
