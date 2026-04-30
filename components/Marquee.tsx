@@ -1,13 +1,11 @@
 export default function Marquee() {
   const items = [
-    "Full-stack software engineering",
-    "Scalable backend design",
-    "Responsive interfaces",
-    "End-to-end product delivery",
-    "WebAuthn & FIDO2",
-    "Post-quantum cryptography",
-    "React · TypeScript · Python · Rust",
-    "Cloud · CI/CD · Docker",
+    "Full-Stack Engineering",
+    "UI/UX Designing",
+    "Security & Authentication",
+    "Post-Quantum Cryptography",
+    "Cloud & DevOps",
+    "Developer Platforms & Tooling",
   ];
   const all = [...items, ...items];
   return (
