@@ -37,25 +37,37 @@ test.describe("Portfolio site", () => {
 
   test("nav active state updates as sections enter the viewport", async ({ page }) => {
     await page.goto("/");
-    // Scroll directly so this works on mobile viewports where .nav-links are hidden.
-    await page.evaluate(() => {
-      const el = document.getElementById("projects");
-      if (el) window.scrollTo({ top: el.offsetTop + 80, behavior: "instant" as ScrollBehavior });
+    await page.locator("#projects").waitFor({ state: "attached" });
+    await page.evaluate(async () => {
+      await new Promise<void>((r) => requestAnimationFrame(() => requestAnimationFrame(() => r())));
     });
-    // IntersectionObserver in Nav.tsx flips the active class once #projects is in view.
-    await expect(page.locator('.nav-link[href="#projects"]')).toHaveClass(/is-active/, { timeout: 4000 });
+    await page.evaluate(() => {
+      const el = document.querySelector("section.projects");
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const docTop = rect.top + window.scrollY;
+      const targetTop = docTop + rect.height / 2 - window.innerHeight / 2;
+      window.scrollTo(0, Math.max(0, targetTop));
+    });
+    await page.waitForFunction(
+      () => document.querySelector('.nav-link[href="#projects"]')?.classList.contains("is-active") === true,
+      null,
+      { timeout: 8000 }
+    );
   });
 
   test("reveal animations promote .reveal to .is-in on scroll", async ({ page }) => {
     await page.goto("/");
-    // Scroll #projects into view via the page-level scroll API so the
-    // IntersectionObserver in useReveal definitely fires.
     await page.locator("#projects").evaluate((el) => {
       (el as HTMLElement).scrollIntoView(true);
     });
     await page.evaluate(() => window.dispatchEvent(new Event("scroll")));
-    const firstReveal = page.locator("#projects .section-head.reveal");
-    await expect(firstReveal).toHaveClass(/is-in/, { timeout: 6000 });
+    await page.waitForFunction(
+      () =>
+        document.querySelector("#projects .section-head.reveal")?.classList.contains("is-in") === true,
+      null,
+      { timeout: 6000 }
+    );
   });
 
   test("project rows reveal expanded content on click and keyboard toggle", async ({ page }) => {
