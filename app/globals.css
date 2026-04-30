@@ -29,7 +29,7 @@
   --r-xl: 24px;
 
   /* Layout */
-  --max:  1360px;
+  --max:  1120px;
   --pad:  clamp(20px, 4vw, 56px);
   --section-pad: clamp(48px, 7vw, 110px);
 
