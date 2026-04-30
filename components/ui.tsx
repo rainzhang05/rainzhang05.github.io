@@ -1,7 +1,18 @@
 "use client";
 import { useEffect, useRef } from "react";
 
-/** Reveal-on-scroll: adds .is-in to .reveal/.word descendants when in view. */
+/**
+ * Reveal-on-scroll: adds `.is-in` to descendant `.reveal` / `.word` elements
+ * when they enter the viewport.
+ *
+ * Uses an IntersectionObserver as the primary trigger, with two fallbacks
+ * because the browser is allowed to coalesce IO entries during fast or
+ * programmatic scrolls (e.g. anchor jumps), which can leave an element stuck
+ * at opacity 0:
+ *   1. On mount, immediately reveal any element already in the viewport.
+ *   2. While unrevealed elements remain, a passive scroll listener checks
+ *      their bounding rects on each scroll event.
+ */
 export function useReveal<T extends HTMLElement = HTMLElement>(
   rootMargin = "0px 0px -8% 0px"
 ) {
@@ -9,19 +20,53 @@ export function useReveal<T extends HTMLElement = HTMLElement>(
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    const targets = Array.from(el.querySelectorAll<HTMLElement>(".reveal, .word"));
+
+    const inViewport = (n: HTMLElement) => {
+      const r = n.getBoundingClientRect();
+      return r.top < window.innerHeight && r.bottom > 0;
+    };
+    const reveal = (n: HTMLElement) => n.classList.add("is-in");
+
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((en) => {
           if (en.isIntersecting) {
-            en.target.classList.add("is-in");
+            reveal(en.target as HTMLElement);
             io.unobserve(en.target);
           }
         });
       },
       { threshold: 0.1, rootMargin }
     );
-    el.querySelectorAll(".reveal, .word").forEach((n) => io.observe(n));
-    return () => io.disconnect();
+
+    targets.forEach((n) => {
+      if (inViewport(n)) {
+        reveal(n);
+      } else {
+        io.observe(n);
+      }
+    });
+
+    const onScroll = () => {
+      let pending = false;
+      for (const n of targets) {
+        if (n.classList.contains("is-in")) continue;
+        if (inViewport(n)) {
+          reveal(n);
+          io.unobserve(n);
+        } else {
+          pending = true;
+        }
+      }
+      if (!pending) window.removeEventListener("scroll", onScroll);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      io.disconnect();
+    };
   }, [rootMargin]);
   return ref;
 }
