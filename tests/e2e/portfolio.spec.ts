@@ -73,7 +73,7 @@ test.describe("Portfolio site", () => {
       await expect(head).toHaveAttribute("aria-expanded", "false");
       await expect(details).toHaveAttribute("aria-hidden", "true");
 
-      await head.click({ position: { x: 30, y: 40 }, force: mobileTap() });
+      await head.click({ force: mobileTap() });
       await expect(head).toHaveAttribute("aria-expanded", "true");
       await expect(row).toHaveClass(/is-open/);
       await expect(row).toHaveCSS("opacity", "1");
@@ -81,7 +81,7 @@ test.describe("Portfolio site", () => {
       await expect(firstImpact).toBeVisible();
 
       // Clicking the head again collapses.
-      await head.click({ position: { x: 30, y: 40 }, force: mobileTap() });
+      await head.click({ force: mobileTap() });
       await expect(head).toHaveAttribute("aria-expanded", "false");
       await expect(details).toHaveAttribute("aria-hidden", "true");
     }
@@ -102,7 +102,7 @@ test.describe("Portfolio site", () => {
     const head = firstRow.locator(".project-row-head");
 
     await head.scrollIntoViewIfNeeded();
-    await head.click({ position: { x: 30, y: 40 }, force: mobileTap() });
+    await head.click({ force: mobileTap() });
     await expect(head).toHaveAttribute("aria-expanded", "true");
 
     const link = firstRow.locator(".exp-link").first();
@@ -116,7 +116,7 @@ test.describe("Portfolio site", () => {
     await expect(head).toHaveAttribute("aria-expanded", "true");
     await expect(firstRow.locator(".impact").first()).toBeVisible();
 
-    await head.click({ position: { x: 30, y: 40 }, force: mobileTap() });
+    await head.click({ force: mobileTap() });
     await expect(head).toHaveAttribute("aria-expanded", "false");
   });
 

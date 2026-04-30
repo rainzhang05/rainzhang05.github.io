@@ -66,17 +66,15 @@
 *, *::before, *::after { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
   scroll-padding-top: var(--nav-scroll-offset);
   color-scheme: light;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
   -moz-text-size-adjust: none;
   -ms-text-size-adjust: 100%;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+  scrollbar-color: var(--ink-3) var(--bg-2);
+  scrollbar-width: thin;
 }
 body {
   background: var(--bg);
@@ -319,7 +317,6 @@ section {
 .hero .reveal[data-delay="4"] { transition-delay: .22s; }
 
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: 0s !important; transition-duration: 0s !important; }
   .reveal, .word { opacity: 1; transform: none; }
   .word > span { transform: none; opacity: 1; }
@@ -332,6 +329,7 @@ section {
 .nav {
   position: sticky; top: 0;
   z-index: 50;
+  background: rgba(245, 243, 238, 0.84);
   background: color-mix(in oklab, var(--bg) 84%, transparent);
   backdrop-filter: saturate(140%) blur(14px);
   -webkit-backdrop-filter: saturate(140%) blur(14px);
@@ -1186,20 +1184,11 @@ section {
 /* ============================================================
    CROSS-BROWSER NORMALIZATION
    ============================================================ */
-/* Nav surface when backdrop-filter is unavailable (falls back like blurred siblings). */
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .nav {
-    background: rgba(245, 243, 238, 0.96);
-  }
-}
 /* Backdrop filter — Safari */
 .nav { -webkit-backdrop-filter: blur(18px) saturate(1.05); backdrop-filter: blur(18px) saturate(1.05); }
 
 /* Sticky position — Safari */
 .nav { position: -webkit-sticky; position: sticky; }
-
-/* Firefox: scrollbar styling */
-html { scrollbar-color: var(--ink-3) var(--bg-2); scrollbar-width: thin; }
 
 /* Webkit scrollbar */
 ::-webkit-scrollbar { width: 10px; height: 10px; }
