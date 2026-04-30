@@ -15,7 +15,7 @@ export const projects: Project[] = [
     id: "project-demo",
     period: "Nov — Dec 2025",
     title: "Authentication & Security Demo Platform",
-    role: "Full-Stack Developer · FEITIAN",
+    role: "Full-Stack Developer · FEITIAN Technologies Co., Ltd.",
     summary:
       "Unified web platform showcasing modern authentication flows — passwords, OTPs, and hardware security keys integrated into one passwordless experience, with post-quantum cryptography support and isolated Linux server deployment.",
     tags: ["Python", "React.js", "TypeScript", "Tailwind CSS"],
@@ -31,7 +31,7 @@ export const projects: Project[] = [
     id: "project-fido2",
     period: "Oct — Nov 2025",
     title: "Software FIDO2 Authenticator",
-    role: "Backend / Systems Developer · FEITIAN",
+    role: "Backend / Systems Developer · FEITIAN Technologies Co., Ltd.",
     summary:
       "A software solution built in Rust that simulates a physical security key — full CTAP2 conformance, post-quantum credential support, and browser integration over virtual HID on Linux.",
     tags: ["Rust", "Linux", "Systems"],
@@ -47,7 +47,7 @@ export const projects: Project[] = [
     id: "project-webauthn",
     period: "Sep — Oct 2025",
     title: "Web Authentication Developer Platform",
-    role: "Full-Stack Developer · FEITIAN",
+    role: "Full-Stack Developer · FEITIAN Technologies Co., Ltd.",
     summary:
       "A comprehensive developer tools platform for testing modern authentication flows and quantum-resistant security — 20+ COSE algorithms, FIDO Metadata Service integration, isolated session sandboxes, and post-quantum credential support.",
     tags: ["Python", "JavaScript", "HTML", "CSS"],
@@ -85,7 +85,7 @@ export const projects: Project[] = [
     id: "project-portfolio",
     period: "Feb 2025",
     title: "Personal Portfolio Website",
-    role: "Designer & Frontend Developer",
+    role: "UI/UX Designer & Frontend Developer",
     summary:
       "Personal portfolio website with a minimalist UI/UX — built with semantic HTML, CSS, and vanilla JavaScript. Zero-dependency engine, macOS-inspired interactions, dark mode, and a clean component-style architecture.",
     tags: ["HTML", "CSS", "JavaScript"],
