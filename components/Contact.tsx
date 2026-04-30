@@ -48,8 +48,8 @@ export default function Contact() {
           <div className="contact-intro">
             <h3>Get in touch</h3>
             <p>
-              Feel free to reach out if you have any questions or would like to connect. I&rsquo;m looking for
-              full-stack internship opportunities, based in Vancouver.
+              Feel free to reach out if you have any questions or would like to connect. I'm currently looking for
+              SWE or Project Management internship opportunities.
             </p>
             <div className="contact-channels">
               <a className="channel" href="mailto:rainzhang.zty@gmail.com">

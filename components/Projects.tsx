@@ -1,18 +1,45 @@
 "use client";
-import { useState } from "react";
+import { useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import { projects, type Project } from "@/lib/projects";
 import { Arrow, CheckCircle, useReveal } from "./ui";
 
 function Row({ p }: { p: Project }) {
   const [open, setOpen] = useState(false);
+  const [expandedHeight, setExpandedHeight] = useState(0);
+  const expandedRef = useRef<HTMLDivElement>(null);
+  const detailId = `${p.id}-details`;
   const toggle = () => setOpen((v) => !v);
+  const expandedStyle = {
+    "--project-expanded-height": `${expandedHeight}px`,
+  } as CSSProperties;
+
+  useLayoutEffect(() => {
+    const panel = expandedRef.current;
+    if (!panel) return;
+
+    const updateHeight = () => setExpandedHeight(panel.scrollHeight);
+    updateHeight();
+
+    if (!open) return;
+
+    const resizeObserver = new ResizeObserver(updateHeight);
+    resizeObserver.observe(panel);
+    window.addEventListener("resize", updateHeight);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", updateHeight);
+    };
+  }, [open]);
+
   return (
-    <article className={`project-row reveal${open ? " is-open" : ""}`} id={p.id}>
+    <article className={`project-row${open ? " is-open" : ""}`} id={p.id}>
       <div
         className="project-row-head"
         role="button"
         tabIndex={0}
         aria-expanded={open}
+        aria-controls={detailId}
         onClick={(e) => {
           if ((e.target as HTMLElement).closest("a")) return;
           toggle();
@@ -34,8 +61,8 @@ function Row({ p }: { p: Project }) {
           <div className="project-tags">{p.tags.map((t) => <span key={t} className="pill">{t}</span>)}</div>
         </div>
       </div>
-      <div className="project-expanded">
-        <div>
+      <div className="project-expanded" id={detailId} aria-hidden={!open} style={expandedStyle}>
+        <div ref={expandedRef}>
           <div className="expanded-inner">
             <div className="impact-grid">
               {p.impacts.map((im) => (

@@ -15,7 +15,7 @@ export default function Hero() {
             <h1>
               <span className="word" data-delay={1}><span>Rain</span></span>
               <br />
-              <span className="word" data-delay={2}><span>Zhang.</span></span>
+              <span className="word" data-delay={2}><span><em>Zhang.</em></span></span>
             </h1>
             <p className="hero-lede reveal" data-delay={3}>
               Computer Science undergraduate at <em>Simon Fraser University</em>. I build full-stack systems across
@@ -23,7 +23,7 @@ export default function Hero() {
               design, responsive interfaces, and maintainable code.
             </p>
             <div className="hero-actions reveal" data-delay={4}>
-              <a className="btn" href="#contact">Say hello <Arrow className="arrow" /></a>
+              <a className="btn" href="#contact">Get in touch <Arrow className="arrow" /></a>
               <a className="btn secondary" href="/Rain-Zhang-Resume.pdf" download>Resume <Download /></a>
             </div>
           </div>

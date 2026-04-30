@@ -54,20 +54,63 @@ test.describe("Portfolio site", () => {
     await expect(firstReveal).toHaveClass(/is-in/, { timeout: 6000 });
   });
 
-  test("project rows toggle on click and ignore link clicks inside the head", async ({ page }) => {
+  test("project rows reveal expanded content on click and keyboard toggle", async ({ page }) => {
+    await page.goto("/");
+    const rows = page.locator(".project-row");
+    const rowCount = await rows.count();
+
+    for (let i = 0; i < rowCount; i += 1) {
+      const row = rows.nth(i);
+      const head = row.locator(".project-row-head");
+      const details = row.locator(".project-expanded");
+      const firstImpact = row.locator(".impact").first();
+
+      await head.scrollIntoViewIfNeeded();
+      await expect(head).toHaveAttribute("aria-expanded", "false");
+      await expect(details).toHaveAttribute("aria-hidden", "true");
+
+      await head.click({ position: { x: 30, y: 40 } });
+      await expect(head).toHaveAttribute("aria-expanded", "true");
+      await expect(row).toHaveClass(/is-open/);
+      await expect(row).toHaveCSS("opacity", "1");
+      await expect(details).toHaveAttribute("aria-hidden", "false");
+      await expect(firstImpact).toBeVisible();
+
+      // Clicking the head again collapses.
+      await head.click({ position: { x: 30, y: 40 } });
+      await expect(head).toHaveAttribute("aria-expanded", "false");
+      await expect(details).toHaveAttribute("aria-hidden", "true");
+    }
+
+    const firstRow = rows.first();
+    const firstHead = firstRow.locator(".project-row-head");
+    await firstHead.scrollIntoViewIfNeeded();
+    await firstHead.press("Enter");
+    await expect(firstHead).toHaveAttribute("aria-expanded", "true");
+    await expect(firstRow.locator(".impact").first()).toBeVisible();
+    await firstHead.press("Space");
+    await expect(firstHead).toHaveAttribute("aria-expanded", "false");
+  });
+
+  test("project links stay usable without collapsing the row", async ({ page }) => {
     await page.goto("/");
     const firstRow = page.locator(".project-row").first();
     const head = firstRow.locator(".project-row-head");
 
-    await expect(head).toHaveAttribute("aria-expanded", "false");
-
+    await head.scrollIntoViewIfNeeded();
     await head.click({ position: { x: 30, y: 40 } });
     await expect(head).toHaveAttribute("aria-expanded", "true");
-    await expect(firstRow).toHaveClass(/is-open/);
 
-    // Clicking the head again collapses.
-    await head.click({ position: { x: 30, y: 40 } });
-    await expect(head).toHaveAttribute("aria-expanded", "false");
+    const link = firstRow.locator(".exp-link").first();
+    await expect(link).toBeVisible();
+
+    const popupPromise = page.waitForEvent("popup");
+    await link.click();
+    const popup = await popupPromise;
+    await popup.close();
+
+    await expect(head).toHaveAttribute("aria-expanded", "true");
+    await expect(firstRow.locator(".impact").first()).toBeVisible();
   });
 
   test("resume PDF is reachable", async ({ page, request }) => {

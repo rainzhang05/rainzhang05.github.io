@@ -66,9 +66,9 @@ export const projects: Project[] = [
     id: "project-travel",
     period: "Jan — Apr 2025",
     title: "Travel Advisor Website",
-    role: "SFU CMPT 276 Capstone · Frontend Developer · Group of 4",
+    role: "UI/UX Designer / Frontend Developer · Simon Fraser University",
     summary:
-      "Automated trip-planning website integrating OpenAI and Tripadvisor APIs — AI-generated itineraries, multi-step booking flows, and a floating chat assistant. Built as the SFU CMPT 276 capstone.",
+      "Automated trip-planning website integrating OpenAI and Tripadvisor APIs — AI-generated itineraries, multi-step booking flows, and a floating chat assistant. Built as the SFU CMPT 276 capstone in a group of 4.",
     tags: ["Python", "React.js", "Tailwind CSS"],
     impacts: [
       { title: "AI Trip Architect", body: "Integrated the backend OpenAI endpoints into the React frontend, cleanly presenting AI-generated destination recommendations to users." },
