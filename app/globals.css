@@ -690,22 +690,22 @@ section {
 .exp-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
 .exp-top {
   display: grid;
-  grid-template-columns: 128px 1fr auto;
-  gap: 24px;
+  grid-template-columns: auto 1fr auto;
+  gap: 14px;
   align-items: center;
   padding: 26px 28px;
   border-bottom: 1px solid var(--line-2);
 }
 @media (max-width: 720px) {
-  .exp-top { grid-template-columns: 104px 1fr; }
+  .exp-top { grid-template-columns: auto 1fr; gap: 12px; }
   .exp-top .exp-period { grid-column: 1 / -1; text-align: left; padding-top: 4px; }
 }
 .exp-logo {
-  width: 88px;
+  width: auto;
   min-height: 32px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 }
 .exp-logo img { width: 88px; height: auto; }
 .exp-titles h3 { font-size: 19px; font-weight: 500; letter-spacing: -.01em; margin-bottom: 4px; }
@@ -1148,9 +1148,9 @@ section {
   .skill-col { border-right: 0; border-bottom: 1px solid var(--line); border-radius: 0; min-height: auto; padding: 22px; }
   .skill-col:last-child { border-bottom: 0; }
   .exp-card { padding: 22px; }
-  .exp-top { grid-template-columns: 104px 1fr; }
+  .exp-top { grid-template-columns: auto 1fr; gap: 12px; }
   .exp-top .exp-period { grid-column: 1 / -1; padding-top: 6px; }
-  .exp-logo { width: 72px; min-height: 28px; }
+  .exp-logo { width: auto; min-height: 28px; }
   .exp-logo img { width: 72px; }
   .exp-titles h3 { font-size: 20px; }
   .impact-grid { grid-template-columns: 1fr; }
