@@ -9,7 +9,8 @@ export default function Nav() {
     const ids = ["about", "skills", "work", "projects", "education"];
     const io = new IntersectionObserver(
       (entries) => entries.forEach((e) => e.isIntersecting && setActive(e.target.id)),
-      { rootMargin: "-40% 0px -55% 0px" }
+      /* ~20% viewport band — stable active-state reads without requiring laser-precise scroll position */
+      { rootMargin: "-32% 0px -48% 0px" }
     );
     ids.forEach((id) => {
       const el = document.getElementById(id);

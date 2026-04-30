@@ -5,7 +5,7 @@ export default function Skills() {
   const ref = useReveal<HTMLElement>();
   const cols = [
     { title: "Languages", items: ["Python", "TypeScript", "JavaScript", "Java", "Rust", "C / C++"] },
-    { title: "Web & Frontend", items: ["React.js", "Next.js", "HTML & CSS", "Tailwind CSS", "REST APIs", "Vite"] },
+    { title: "Web & Frontend", items: ["React.js", "Next.js", "HTML", "Tailwind CSS", "REST APIs", "Vite"] },
     { title: "Backend & Cloud", items: ["Flask", "Node / Express", "Docker", "Google Cloud", "GitHub Actions", "Linux"] },
     { title: "Tools & Platforms", items: ["Git", "GitHub", "VS Code", "JetBrains", "WebAuthn / FIDO2", "liboqs"] },
   ];

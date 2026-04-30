@@ -34,8 +34,8 @@ export default function Hero() {
             <div className="fact-card">
               <div className="item"><span className="k">Based in</span><span className="v">Vancouver, BC</span></div>
               <div className="item"><span className="k">Studying</span><span className="v">B.Sc. Computer Science · SFU</span></div>
-              <div className="item"><span className="k">Focus</span><span className="v">Full-stack &amp; security-focused software</span></div>
-              <div className="item"><span className="k">Working in</span><span className="v">Python · TypeScript · React · Rust</span></div>
+              <div className="item"><span className="k">Focus</span><span className="v">Full-Stack Development</span></div>
+              <div className="item"><span className="k">Working in</span><span className="v">Python · TypeScript · React</span></div>
             </div>
           </aside>
         </div>
