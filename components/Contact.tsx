@@ -48,7 +48,7 @@ export default function Contact() {
           <div className="contact-intro">
             <h3>Get in touch</h3>
             <p>
-              Feel free to reach out if you have any questions or would like to connect. I'm currently looking for
+              Feel free to reach out if you have any questions or would like to connect. I&apos;m currently looking for
               SWE or Project Management internship opportunities.
             </p>
             <div className="contact-channels">
