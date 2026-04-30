@@ -7,16 +7,36 @@ export default function Nav() {
 
   useEffect(() => {
     const ids = ["about", "skills", "work", "projects", "education"];
-    const io = new IntersectionObserver(
-      (entries) => entries.forEach((e) => e.isIntersecting && setActive(e.target.id)),
-      /* ~20% viewport band — stable active-state reads without requiring laser-precise scroll position */
-      { rootMargin: "-32% 0px -48% 0px" }
-    );
-    ids.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) io.observe(el);
-    });
-    return () => io.disconnect();
+    let ticking = false;
+
+    const updateActive = () => {
+      ticking = false;
+      const raw = getComputedStyle(document.documentElement).getPropertyValue("--nav-scroll-offset").trim();
+      const offset = Number.parseFloat(raw) || 90;
+      let current = ids[0];
+      for (const id of ids) {
+        const anchor = document.getElementById(id);
+        if (!anchor) continue;
+        /* ids live on `.section-head`; compare headline row to sticky nav edge (matches anchor scroll UX). */
+        if (anchor.getBoundingClientRect().top <= offset) current = id;
+      }
+      setActive((prev) => (prev === current ? prev : current));
+    };
+
+    const onScrollOrResize = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(updateActive);
+      }
+    };
+
+    updateActive();
+    window.addEventListener("scroll", onScrollOrResize, { passive: true });
+    window.addEventListener("resize", onScrollOrResize, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScrollOrResize);
+      window.removeEventListener("resize", onScrollOrResize);
+    };
   }, []);
 
   const links = [
