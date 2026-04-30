@@ -31,7 +31,7 @@ export const projects: Project[] = [
     id: "project-fido2",
     period: "Oct — Nov 2025",
     title: "Software FIDO2 Authenticator",
-    role: "Backend / Systems Developer · FEITIAN Technologies Co., Ltd.",
+    role: "Backend & Systems Developer · FEITIAN Technologies Co., Ltd.",
     summary:
       "A software solution built in Rust that simulates a physical security key — full CTAP2 conformance, post-quantum credential support, and browser integration over virtual HID on Linux.",
     tags: ["Rust", "Linux", "Systems"],
@@ -66,7 +66,7 @@ export const projects: Project[] = [
     id: "project-travel",
     period: "Jan — Apr 2025",
     title: "Travel Advisor Website",
-    role: "UI/UX Designer / Frontend Developer · Simon Fraser University",
+    role: "UI/UX Designer & Frontend Developer · Simon Fraser University",
     summary:
       "Automated trip-planning website integrating OpenAI and Tripadvisor APIs — AI-generated itineraries, multi-step booking flows, and a floating chat assistant. Built as the SFU CMPT 276 capstone in a group of 4.",
     tags: ["Python", "React.js", "Tailwind CSS"],

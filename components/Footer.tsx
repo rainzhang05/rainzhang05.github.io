@@ -5,7 +5,7 @@ export default function Footer() {
       <div className="footer-inner">
         <h2 className="footer-display">Rain&nbsp;<em>Zhang.</em></h2>
         <p className="footer-tagline">
-          Computer Science student at Simon Fraser University · Full-stack &amp; security-focused software
+          Computer Science student @ Simon Fraser University · Full-Stack Engineer
         </p>
         <div className="footer-row">
           <div>© {year} Rain Zhang. All rights reserved.</div>

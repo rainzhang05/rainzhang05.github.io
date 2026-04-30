@@ -35,7 +35,7 @@ export default function Experience() {
       <div className="wrap">
         <div className="section-head reveal">
           <span className="label">Work</span>
-          <h2>Selected <em>experience</em></h2>
+          <h2>Work <em>experience</em></h2>
         </div>
         <article className="exp-card reveal">
           <header className="exp-top">
@@ -48,7 +48,8 @@ export default function Experience() {
               <div className="org">
                 <span>FEITIAN Technologies Co., Ltd.</span>
                 <span>International Department</span>
-                <span>Beijing, China · On-site</span>
+                <span>Beijing, China</span>
+                <span>On-site</span>
               </div>
             </div>
             <div className="exp-period">Sep 2025 — Dec 2025</div>

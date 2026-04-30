@@ -29,8 +29,8 @@ export default function About() {
             <div className="kv-list">
               <dl>
                 <div className="kv-row"><dt>Based in</dt><dd>Vancouver, BC</dd></div>
-                <div className="kv-row"><dt>Studying</dt><dd>B.Sc. Computer Science · SFU · Class of &rsquo;27</dd></div>
-                <div className="kv-row"><dt>Interests</dt><dd>Full-stack engineering, developer tooling, security &amp; authentication</dd></div>
+                <div className="kv-row"><dt>Studying</dt><dd>B.Sc. Computer Science · Simon Fraser University</dd></div>
+                <div className="kv-row"><dt>Interests</dt><dd>Full-stack Engineering, Security & Authentication, AI</dd></div>
                 <div className="kv-row"><dt>Languages</dt><dd>English · Mandarin</dd></div>
               </dl>
             </div>
