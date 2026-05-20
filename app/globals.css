@@ -95,6 +95,10 @@
    Base
    ────────────────────────────────────────────────────────────── */
 
+html {
+  scrollbar-gutter: stable;
+}
+
 html,
 body {
   background: var(--bg);

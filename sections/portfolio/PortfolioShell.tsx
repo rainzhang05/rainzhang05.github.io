@@ -145,11 +145,11 @@ export function PortfolioShell() {
           }`}
         >
           <div className="flex flex-col items-center gap-4">
-            <div className="relative flex items-center justify-center">
-              <span className="animate-ping absolute inline-flex h-3.5 w-3.5 rounded-full bg-[var(--accent)] opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-[var(--accent)]"></span>
+            <div className="relative flex items-center justify-center mb-1">
+              <span className="animate-ping absolute inline-flex h-5 w-5 rounded-full bg-[var(--accent)] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-4 w-4 bg-[var(--accent)]"></span>
             </div>
-            <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-[var(--text-subtle)] animate-pulse">
+            <span className="font-mono text-xs md:text-sm tracking-[0.35em] uppercase text-[var(--text-subtle)] animate-pulse">
               Loading
             </span>
           </div>
