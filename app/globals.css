@@ -1,0 +1,180 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ──────────────────────────────────────────────────────────────
+   Shared design tokens
+   ────────────────────────────────────────────────────────────── */
+
+:root {
+  /* Typography (font CSS vars come from next/font in layout.tsx) */
+  --font-display: var(--font-sans);
+
+  /* Radius scale — used everywhere via rounded-[calc(var(--r-*)*1px)] */
+  --r-sm: 10; /* tags, chips, small buttons, inputs */
+  --r-md: 18; /* cards, panels, thumbnails, mobile menu */
+  --r-lg: 28; /* large surfaces */
+
+  /* Spacing (comfy density, locked) */
+  --gap-card: 32px;
+  --gap-section: 120px;
+  --content-max-w: 1200px;
+
+  color-scheme: light dark;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Per-route accent — scoped via data-route on the page wrapper.
+   Defaults to portfolio (cyan).
+   ────────────────────────────────────────────────────────────── */
+
+:root,
+[data-route="portfolio"] {
+  --accent: #06b6d4;
+  --accent-strong: #0891b2;
+  --accent-soft: #67e8f9;
+}
+
+[data-route="design-system"] {
+  --accent: #14b8a6;
+  --accent-strong: #0d9488;
+  --accent-soft: #5eead4;
+  --gap-section: 100px; /* design-system page overrides */
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Light theme (default when no data-theme attribute)
+   ────────────────────────────────────────────────────────────── */
+
+:root[data-theme="light"],
+:root:not([data-theme]) {
+  --bg: #fafbfc;
+  --surface: #ffffff;
+  --surface-2: #f1f5f9;
+  --text: #0b1220;
+  --text-muted: #475569;
+  --text-subtle: #94a3b8;
+  --border: #e6ebf2;
+  --border-strong: #cbd5e1;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Dark theme (explicit)
+   ────────────────────────────────────────────────────────────── */
+
+:root[data-theme="dark"] {
+  --bg: #07090d;
+  --surface: #0c1014;
+  --surface-2: #131820;
+  --text: #e6edf6;
+  --text-muted: #94a3b8;
+  --text-subtle: #64748b;
+  --border: #1c2330;
+  --border-strong: #2a3444;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Dark fallback when no data-theme yet (matches dark theme exactly
+   so there's no flash before the ThemeScript sets the attribute).
+   ────────────────────────────────────────────────────────────── */
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --bg: #07090d;
+    --surface: #0c1014;
+    --surface-2: #131820;
+    --text: #e6edf6;
+    --text-muted: #94a3b8;
+    --text-subtle: #64748b;
+    --border: #1c2330;
+    --border-strong: #2a3444;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Base
+   ────────────────────────────────────────────────────────────── */
+
+html,
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+}
+
+body {
+  font-feature-settings: "ss01" 1, "cv11" 1;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+  font-feature-settings: "calt" 0;
+}
+.font-sans {
+  font-family: var(--font-sans);
+}
+.font-display {
+  font-family: var(--font-display);
+}
+
+::selection {
+  background: color-mix(in oklab, var(--accent) 30%, transparent);
+  color: var(--text);
+}
+
+/* Reveal-on-scroll utility (CSS only; no JS observer wired in the prototype) */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.7s ease-out,
+    transform 0.7s ease-out;
+}
+[data-reveal].is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Smooth scroll for hash nav */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 96px;
+}
+
+[data-route="design-system"] {
+  /* Design system page uses a shorter offset (header height = 60px) */
+  scroll-padding-top: 84px;
+}
+
+/* Focus ring */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 8px;
+  border: 2px solid var(--bg);
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-strong);
+  border: 2px solid var(--bg);
+  background-clip: padding-box;
+}
+
+/* Global transition timing — matches the prototype's `* { ... }` rule */
+* {
+  transition-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
