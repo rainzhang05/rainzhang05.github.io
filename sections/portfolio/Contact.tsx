@@ -159,10 +159,11 @@ export function Contact() {
               </div>
               {CONTACT_FIELDS.map((f) => (
                 <div key={f.name}>
-                  <label className="block font-mono text-[10px] tracking-[0.15em] uppercase text-[var(--text-subtle)] mb-2">
+                  <label htmlFor={`contact-${f.name}`} className="block font-mono text-[10px] tracking-[0.15em] uppercase text-[var(--text-subtle)] mb-2">
                     {f.label}
                   </label>
                   <input
+                    id={`contact-${f.name}`}
                     type={f.type}
                     value={form[f.name]}
                     onChange={(e) => setForm({ ...form, [f.name]: e.target.value })}
@@ -175,10 +176,11 @@ export function Contact() {
                 </div>
               ))}
               <div>
-                <label className="block font-mono text-[10px] tracking-[0.15em] uppercase text-[var(--text-subtle)] mb-2">
+                <label htmlFor="contact-message" className="block font-mono text-[10px] tracking-[0.15em] uppercase text-[var(--text-subtle)] mb-2">
                   Message
                 </label>
                 <textarea
+                  id="contact-message"
                   rows={4}
                   value={form.message}
                   onChange={(e) => setForm({ ...form, message: e.target.value })}

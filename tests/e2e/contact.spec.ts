@@ -7,16 +7,21 @@ test("contact form sends to Formspree and shows success state", async ({ page })
 
   await page.goto("/#contact");
 
+  // Wait for the preloader to dismiss and the contact section to be visible
   const form = page.locator("#contact form");
-  // Use pressSequentially so React's onChange fires consistently across
-  // chromium / firefox / mobile WebKit (mobile devices with hasTouch can
-  // skip change events on .fill() depending on input focus state).
-  await form.locator('input[type="text"]').first().click();
-  await form.locator('input[type="text"]').first().pressSequentially("Rain");
-  await form.locator('input[type="email"]').click();
-  await form.locator('input[type="email"]').pressSequentially("rain@example.com");
-  await form.locator("textarea").click();
-  await form.locator("textarea").pressSequentially("Hello from Playwright!");
+  await form.waitFor({ state: "visible", timeout: 10_000 });
+
+  // Target the visible Name input by its label, avoiding the hidden honeypot
+  const nameInput = form.getByLabel("Name");
+  const emailInput = form.getByLabel("Email");
+  const messageInput = form.getByLabel("Message");
+
+  await nameInput.click();
+  await nameInput.pressSequentially("Rain");
+  await emailInput.click();
+  await emailInput.pressSequentially("rain@example.com");
+  await messageInput.click();
+  await messageInput.pressSequentially("Hello from Playwright!");
 
   // Submit via the form element directly (rather than clicking the button)
   // so the test works identically across desktop Chromium/Firefox and mobile
