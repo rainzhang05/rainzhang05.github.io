@@ -36,12 +36,12 @@ export function PortfolioShell() {
   // Body scroll lock during loading - lock scroll as long as loader is mounted in the DOM
   useEffect(() => {
     if (showLoader) {
-      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
     }
     return () => {
-      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
     };
   }, [showLoader]);
 
