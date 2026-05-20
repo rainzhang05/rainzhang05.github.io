@@ -33,15 +33,20 @@ export function PortfolioShell() {
     }, 80);
   }, []);
 
+  // Body scroll lock during loading - lock scroll as long as loader is mounted in the DOM
   useEffect(() => {
-    let active = true;
-
-    // Body scroll lock during loading
-    if (loading) {
+    if (showLoader) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
     }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [showLoader]);
+
+  useEffect(() => {
+    let active = true;
 
     const handleLoad = async () => {
       // 1. Wait for window load event
@@ -70,7 +75,6 @@ export function PortfolioShell() {
       if (active) {
         setTimeout(() => {
           setLoading(false);
-          document.body.style.overflow = "";
           // Unmount loader after transition finishes
           setTimeout(() => {
             setShowLoader(false);
@@ -85,7 +89,6 @@ export function PortfolioShell() {
     const fallbackTimeout = setTimeout(() => {
       if (active) {
         setLoading(false);
-        document.body.style.overflow = "";
         setTimeout(() => {
           setShowLoader(false);
         }, 700);
@@ -95,9 +98,8 @@ export function PortfolioShell() {
     return () => {
       active = false;
       clearTimeout(fallbackTimeout);
-      document.body.style.overflow = "";
     };
-  }, [loading]);
+  }, []);
 
   return (
     <div className="relative min-h-screen text-[var(--text)] bg-[var(--bg)] font-sans">
