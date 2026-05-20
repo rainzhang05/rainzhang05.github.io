@@ -33,15 +33,35 @@ export function PortfolioShell() {
     }, 80);
   }, []);
 
-  // Body scroll lock during loading - lock scroll as long as loader is mounted in the DOM
+  // Body scroll lock during loading - lock scroll via events to prevent scrollbar/layout shift
   useEffect(() => {
-    if (showLoader) {
-      document.documentElement.style.overflow = "hidden";
-    } else {
-      document.documentElement.style.overflow = "";
-    }
+    if (!showLoader) return;
+
+    const preventDefault = (e: Event) => {
+      e.preventDefault();
+    };
+
+    const preventDefaultKeys = (e: KeyboardEvent) => {
+      const keys = ["Space", "ArrowUp", "ArrowDown", "PageUp", "PageDown", "End", "Home"];
+      if (keys.includes(e.code)) {
+        e.preventDefault();
+      }
+    };
+
+    const handleScroll = () => {
+      window.scrollTo(0, 0);
+    };
+
+    window.addEventListener("wheel", preventDefault, { passive: false });
+    window.addEventListener("touchmove", preventDefault, { passive: false });
+    window.addEventListener("keydown", preventDefaultKeys, { passive: false });
+    window.addEventListener("scroll", handleScroll, { passive: false });
+
     return () => {
-      document.documentElement.style.overflow = "";
+      window.removeEventListener("wheel", preventDefault);
+      window.removeEventListener("touchmove", preventDefault);
+      window.removeEventListener("keydown", preventDefaultKeys);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, [showLoader]);
 
