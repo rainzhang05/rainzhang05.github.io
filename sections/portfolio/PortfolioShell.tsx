@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { CursorGlow } from "@/components/chrome/CursorGlow";
 import { GridBackground } from "@/components/chrome/GridBackground";
 import { Nav } from "@/components/chrome/Nav";
@@ -21,6 +21,8 @@ export function PortfolioShell() {
   const [theme, toggleTheme] = useTheme();
   const [openProjectId, setOpenProjectId] = useState<string | null>(null);
   const activeSection = useScrollSpy();
+  const [loading, setLoading] = useState(true);
+  const [showLoader, setShowLoader] = useState(true);
 
   const onOpenProject = useCallback((id: string) => {
     setOpenProjectId(id);
@@ -31,38 +33,128 @@ export function PortfolioShell() {
     }, 80);
   }, []);
 
+  useEffect(() => {
+    let active = true;
+
+    // Body scroll lock during loading
+    if (loading) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    const handleLoad = async () => {
+      // 1. Wait for window load event
+      if (document.readyState !== "complete") {
+        await new Promise((resolve) => window.addEventListener("load", resolve));
+      }
+
+      // 2. Wait for fonts to be ready
+      if ("fonts" in document) {
+        await document.fonts.ready;
+      }
+
+      // 3. Wait for all image tags to load completely
+      const imgs = Array.from(document.images);
+      await Promise.all(
+        imgs.map((img) => {
+          if (img.complete) return Promise.resolve();
+          return new Promise((resolve) => {
+            img.addEventListener("load", resolve);
+            img.addEventListener("error", resolve);
+          });
+        })
+      );
+
+      // 4. Fade out transition
+      if (active) {
+        setTimeout(() => {
+          setLoading(false);
+          document.body.style.overflow = "";
+          // Unmount loader after transition finishes
+          setTimeout(() => {
+            setShowLoader(false);
+          }, 700);
+        }, 600); // 600ms stabilization delay for aesthetic pulse
+      }
+    };
+
+    handleLoad();
+
+    // Fallback maximum loading time: 3.5s
+    const fallbackTimeout = setTimeout(() => {
+      if (active) {
+        setLoading(false);
+        document.body.style.overflow = "";
+        setTimeout(() => {
+          setShowLoader(false);
+        }, 700);
+      }
+    }, 3500);
+
+    return () => {
+      active = false;
+      clearTimeout(fallbackTimeout);
+      document.body.style.overflow = "";
+    };
+  }, [loading]);
+
   return (
     <div className="relative min-h-screen text-[var(--text)] bg-[var(--bg)] font-sans">
       <GridBackground />
       <CursorGlow />
 
-      <Nav activeSection={activeSection} theme={theme} onToggleTheme={toggleTheme} />
-
-      <main
-        className="mx-auto px-6 lg:px-10"
-        style={{ maxWidth: "var(--content-max-w)", paddingTop: "92px" }}
+      <div
+        className={`transition-opacity duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          loading ? "opacity-0" : "opacity-100"
+        }`}
       >
-        <Hero />
-        <ScrollReveal>
-          <About />
-        </ScrollReveal>
-        <ScrollReveal>
-          <Experience onOpenProject={onOpenProject} />
-        </ScrollReveal>
-        <ScrollReveal>
-          <Projects openId={openProjectId} setOpenId={setOpenProjectId} />
-        </ScrollReveal>
-        <ScrollReveal>
-          <Skills />
-        </ScrollReveal>
-        <ScrollReveal>
-          <Education />
-        </ScrollReveal>
-        <ScrollReveal>
-          <Contact />
-        </ScrollReveal>
-        <Footer />
-      </main>
+        <Nav activeSection={activeSection} theme={theme} onToggleTheme={toggleTheme} />
+
+        <main
+          className="mx-auto px-6 lg:px-10"
+          style={{ maxWidth: "var(--content-max-w)", paddingTop: "92px" }}
+        >
+          <Hero />
+          <ScrollReveal>
+            <About />
+          </ScrollReveal>
+          <ScrollReveal>
+            <Experience onOpenProject={onOpenProject} />
+          </ScrollReveal>
+          <ScrollReveal>
+            <Projects openId={openProjectId} setOpenId={setOpenProjectId} />
+          </ScrollReveal>
+          <ScrollReveal>
+            <Skills />
+          </ScrollReveal>
+          <ScrollReveal>
+            <Education />
+          </ScrollReveal>
+          <ScrollReveal>
+            <Contact />
+          </ScrollReveal>
+          <Footer />
+        </main>
+      </div>
+
+      {showLoader && (
+        <div
+          className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-[var(--bg)] transition-opacity duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            loading ? "opacity-100" : "opacity-0 pointer-events-none"
+          }`}
+        >
+          <div className="flex flex-col items-center gap-4">
+            <div className="relative flex items-center justify-center">
+              <span className="animate-ping absolute inline-flex h-3.5 w-3.5 rounded-full bg-[var(--accent)] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-[var(--accent)]"></span>
+            </div>
+            <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-[var(--text-subtle)] animate-pulse">
+              Loading
+            </span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
