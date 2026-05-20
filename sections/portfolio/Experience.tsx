@@ -26,7 +26,7 @@ export function Experience({ onOpenProject }: ExperienceProps) {
         {EXPERIENCES.map((exp) => (
           <Card key={exp.id} className="p-[var(--gap-card)]">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6 pb-6 border-b border-[var(--border)]">
-              <div className="flex items-center gap-4 min-w-0">
+              <div className="flex items-center gap-[var(--gap-card)] min-w-0">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/feitian-logo.svg"
