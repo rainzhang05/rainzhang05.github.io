@@ -69,10 +69,10 @@ export function Contact() {
     }
   };
 
-  const inputClass = (key: keyof ContactFormState) =>
+  const inputClass = (key: keyof ContactFormState, focusAccent = true) =>
     `w-full bg-transparent border-b ${
       showErr(key) ? "border-red-400" : "border-[var(--border)]"
-    } focus:border-[var(--accent)] outline-none py-2.5 text-[var(--text)] placeholder:text-[var(--text-subtle)] transition-colors`;
+    } ${focusAccent ? "focus:border-[var(--accent)]" : ""} outline-none py-2.5 text-[var(--text)] placeholder:text-[var(--text-subtle)] transition-colors`;
 
   return (
     <section id="contact" data-section-label="contact" className="py-[var(--gap-section)]">
@@ -143,7 +143,7 @@ export function Contact() {
                   value={form.message}
                   onChange={(e) => setForm({ ...form, message: e.target.value })}
                   placeholder="What are you working on?"
-                  className={`${inputClass("message")} resize-none`}
+                  className={`${inputClass("message", false)} resize-none`}
                 />
                 {showErr("message") && (
                   <p className="mt-1 font-mono text-[10px] text-red-400">{errors.message}</p>
