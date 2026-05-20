@@ -14,8 +14,8 @@ export function Footer() {
   };
 
   return (
-    <footer className="pt-[calc(var(--gap-section)*0.7)] mt-[calc(var(--gap-section)*0.4)] border-t border-[var(--border)]">
-      <div className="grid lg:grid-cols-[1.5fr_1fr_1fr] gap-10 lg:gap-16 pb-12">
+    <footer className="pt-[calc(var(--gap-section)*0.45)] mt-[calc(var(--gap-section)*0.25)] border-t border-[var(--border)]">
+      <div className="grid lg:grid-cols-[1.5fr_1fr_1fr] gap-10 lg:gap-16 pb-8">
         <div>
           <a
             href="#intro"
@@ -61,7 +61,7 @@ export function Footer() {
         </div>
 
         <div>
-          <MicroLabel className="mb-4">Elsewhere</MicroLabel>
+          <MicroLabel className="mb-4">Contact</MicroLabel>
           <ul className="space-y-2.5">
             {FOOTER_ELSEWHERE.map((l) => {
               const external = l.href.startsWith("http") || l.href.endsWith(".pdf");
