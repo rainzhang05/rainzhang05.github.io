@@ -47,7 +47,7 @@ function HeroTags() {
   return (
     <div className="flex flex-wrap gap-1.5">
       <Tag mono>Computer Science · SFU</Tag>
-      <Tag mono>Burnaby, BC</Tag>
+      <Tag mono>Vancouver, BC</Tag>
       <Tag mono tone="accent">
         Full-stack engineer
       </Tag>
@@ -76,7 +76,7 @@ export function Hero() {
             <span className="text-[var(--text)]">
               Computer Science student at Simon Fraser University
             </span>
-            , based in Burnaby, BC. I build full-stack web applications across Python, React, and
+            , based in Vancouver, BC. I build full-stack web applications across Python, React, and
             TypeScript, and I&apos;m currently open to software engineering internship and new-grad
             opportunities.
           </p>
