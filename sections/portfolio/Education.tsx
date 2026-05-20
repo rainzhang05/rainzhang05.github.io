@@ -8,7 +8,7 @@ export function Education() {
       <SectionTitle kicker="Where I've studied.">Education</SectionTitle>
       <div className="grid md:grid-cols-2 gap-5">
         {EDUCATION.map((e) => (
-          <Card key={e.school} className="p-[var(--gap-card)]" interactive>
+          <Card key={e.school} className="p-[var(--gap-card)]">
             <div className="flex items-start justify-between gap-4 mb-4">
               <div className="min-w-0">
                 <h3 className="text-lg tracking-tight font-medium text-[var(--text)]">
