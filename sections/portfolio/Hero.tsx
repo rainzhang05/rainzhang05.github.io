@@ -7,14 +7,14 @@ import { Tag } from "@/components/atoms/Tag";
 
 function HeroPhoto() {
   return (
-    <div className="relative rounded-full overflow-hidden border border-[var(--border)] bg-[var(--surface-2)] group aspect-square w-full">
+    <div className="relative rounded-full overflow-hidden border border-[var(--border)] bg-[var(--surface-2)] aspect-square w-full">
       <Image
         src="/portfolio-photo.png"
         alt="Portrait of Rain Zhang"
         width={320}
         height={320}
         priority
-        className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+        className="w-full h-full object-cover"
       />
       <div className="absolute inset-0 pointer-events-none ring-1 ring-inset ring-white/5 rounded-full" />
     </div>
