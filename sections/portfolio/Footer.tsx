@@ -15,7 +15,6 @@ function FooterEmailLink({ href, label, icon }: { href: string; label: string; i
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     });
-    window.location.href = href;
   };
 
   return (
@@ -56,7 +55,6 @@ export function Footer() {
       setCopiedMain(true);
       setTimeout(() => setCopiedMain(false), 2000);
     });
-    window.location.href = "mailto:rainzhang.zty@gmail.com";
   };
 
   return (

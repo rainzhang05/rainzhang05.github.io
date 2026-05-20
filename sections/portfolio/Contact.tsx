@@ -35,7 +35,6 @@ function ContactLink({ href, icon, label, external = false }: ContactLinkProps) 
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
       });
-      window.location.href = href;
     }
   };
 

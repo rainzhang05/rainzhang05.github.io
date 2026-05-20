@@ -27,7 +27,6 @@ function HeroCtas() {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     });
-    window.location.href = "mailto:rainzhang.zty@gmail.com";
   };
 
   return (
