@@ -23,5 +23,5 @@ export const FOOTER_ELSEWHERE: FooterElsewhereLink[] = [
   { href: "https://github.com/rainzhang05", label: "GitHub", icon: "github" },
   { href: "https://www.linkedin.com/in/rainzhang05/", label: "LinkedIn", icon: "linkedin" },
   { href: "mailto:rainzhang.zty@gmail.com", label: "Email", icon: "mail" },
-  { href: "/rain-zhang-resume.pdf", label: "Résumé", icon: "file" },
+  { href: "/rain-zhang-resume.pdf", label: "Resume", icon: "file" },
 ];

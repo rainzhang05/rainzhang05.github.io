@@ -25,7 +25,7 @@ function HeroCtas() {
         className="group inline-flex items-center gap-2 bg-[var(--text)] text-[var(--bg)] px-5 py-2.5 rounded-[calc(var(--r-sm)*1px)] text-sm font-medium hover:opacity-90 transition-opacity"
       >
         <Icon name="file" size={14} />
-        Résumé
+        Resume
         <Icon
           name="arrow-right"
           size={14}

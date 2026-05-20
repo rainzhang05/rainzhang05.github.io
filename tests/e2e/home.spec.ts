@@ -4,7 +4,7 @@ test("home page renders Hero with name + Resume CTA", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Rain");
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Zhang");
-  await expect(page.getByRole("link", { name: /Résumé/ }).first()).toHaveAttribute(
+  await expect(page.getByRole("link", { name: /Resume/ }).first()).toHaveAttribute(
     "href",
     "/rain-zhang-resume.pdf"
   );
