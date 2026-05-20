@@ -152,7 +152,7 @@ export function Contact() {
               <button
                 type="submit"
                 disabled={status === "sending"}
-                className="group relative inline-flex items-center gap-2 bg-[var(--text)] text-[var(--bg)] border border-[var(--text)] px-5 py-3 rounded-[calc(var(--r-sm)*1px)] text-sm font-medium hover:bg-transparent hover:text-[var(--text)] hover:-translate-y-[1px] active:translate-y-0 transition-all duration-200 ease-out disabled:opacity-50 disabled:translate-y-0 disabled:pointer-events-none"
+                className="group relative inline-flex items-center gap-2 bg-[color-mix(in_oklab,var(--accent)_10%,transparent)] text-[var(--accent-strong)] border border-[color-mix(in_oklab,var(--accent)_30%,transparent)] px-5 py-3 rounded-[calc(var(--r-sm)*1px)] text-sm font-medium hover:bg-[color-mix(in_oklab,var(--accent)_18%,transparent)] hover:border-[color-mix(in_oklab,var(--accent)_50%,transparent)] hover:-translate-y-[1px] active:translate-y-0 transition-all duration-200 ease-out disabled:opacity-50 disabled:translate-y-0 disabled:pointer-events-none"
               >
                 {status === "sending" ? "Sending…" : "Send message"}
                 <Icon
