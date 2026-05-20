@@ -45,7 +45,6 @@ export function ProjectCard({ project, expanded, onToggle }: ProjectCardProps) {
     stack,
     links,
     impact,
-    featured,
     cryptoNote,
     image,
     hideThumbnail,
@@ -71,11 +70,6 @@ export function ProjectCard({ project, expanded, onToggle }: ProjectCardProps) {
               <span className="font-mono text-[10px] tracking-[0.15em] uppercase text-[var(--text-subtle)]">
                 {period}
               </span>
-              {featured && (
-                <span className="inline-flex items-center gap-1 font-mono text-[10px] tracking-[0.15em] uppercase text-[var(--accent-strong)]">
-                  · featured
-                </span>
-              )}
             </div>
             <h3 className="text-[clamp(1.35rem,2.2vw,1.6rem)] tracking-[-0.015em] font-medium leading-[1.15] text-[var(--text)]">
               {title}
