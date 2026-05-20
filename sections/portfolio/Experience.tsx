@@ -31,14 +31,14 @@ export function Experience({ onOpenProject }: ExperienceProps) {
                 <img
                   src="/feitian-logo.svg"
                   alt="FEITIAN"
-                  className="h-7 w-auto shrink-0"
+                  className="h-6 w-auto shrink-0"
                 />
                 <div className="min-w-0">
                   <h3 className="text-xl tracking-tight font-medium text-[var(--text)] leading-tight">
                     {exp.role}
                   </h3>
-                  <p className="text-sm text-[var(--text-muted)] mt-1">{exp.org}</p>
-                  <p className="text-xs text-[var(--text-subtle)] mt-0.5">{exp.dept}</p>
+                  <p className="text-sm text-[var(--text-muted)] mt-1.5">{exp.org}</p>
+                  <p className="text-xs text-[var(--text-subtle)] mt-1">{exp.dept}</p>
                 </div>
               </div>
               <div className="flex flex-wrap items-center gap-1.5 md:justify-end shrink-0">
