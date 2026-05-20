@@ -78,11 +78,7 @@ export function Contact() {
     <section id="contact" data-section-label="contact" className="py-[var(--gap-section)]">
       <div className="grid md:grid-cols-[1fr_1.2fr] gap-10 lg:gap-16">
         <div>
-          <SectionTitle>
-            Let&apos;s
-            <br />
-            build something.
-          </SectionTitle>
+          <SectionTitle>Let&apos;s connect.</SectionTitle>
           <p className="text-[var(--text-muted)] mb-8 leading-relaxed max-w-md">
             For internships, collaborations, or to chat about full-stack work and post-quantum auth
             — drop a note.
