@@ -20,4 +20,10 @@ export const TECH_ICONS: Record<string, string> = {
   Git: "/icons/git.png",
   "Google Cloud": "/icons/google-cloud.png",
   Docker: "/icons/docker.png",
+  "Next.js": "/icons/nextjs.svg",
+  Flask: "/icons/flask.svg",
+  "GitHub Actions": "/icons/githubactions.svg",
+  "WebAuthn / FIDO2": "/icons/fido2.svg",
+  "C/FFI": "/icons/c.png",
+  "Linux UHID": "/icons/linux.png",
 };
