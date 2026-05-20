@@ -22,7 +22,7 @@ function HeroCtas() {
         href="/rain-zhang-resume.pdf"
         target="_blank"
         rel="noopener noreferrer"
-        className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-[calc(var(--r-sm)*1px)] text-sm font-medium border border-[var(--border)] hover:border-[var(--border-strong)] hover:bg-[var(--surface-2)] transition-colors"
+        className="group inline-flex items-center gap-2 bg-transparent text-[var(--text)] border border-[var(--text)] px-5 py-2.5 rounded-[calc(var(--r-sm)*1px)] text-sm font-medium hover:bg-[color-mix(in_oklab,var(--text)_8%,transparent)] transition-colors"
       >
         <Icon name="file" size={14} />
         Resume
