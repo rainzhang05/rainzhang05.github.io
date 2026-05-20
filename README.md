@@ -1,72 +1,28 @@
-# Rain Zhang — Portfolio
+# Personal Portfolio Website
+Website URL: https://rainzhang.me/
 
-Personal portfolio site for Rain Zhang. Built with **Next.js 15 (App Router)**, **TypeScript**, and **Tailwind CSS**.
+## Purpose
 
-## Stack
+As a university student actively seeking internship opportunities and professional experience, this portfolio website aims to:
 
-- Next.js 15 (App Router) · React 18.3 (pinned via `overrides`)
-- TypeScript (strict mode)
-- Tailwind CSS · CSS custom properties for theming
-- `next/font/google` for self-hosted Manrope + JetBrains Mono
-- Vitest + React Testing Library (unit) · Playwright (e2e)
-- Deployed via Vercel
+- Present my technical skills and programming knowledge
+- Showcase academic, personal, and internship projects I've completed
+- Provide information about my educational background
+- Offer an easy way for recruiters and potential employers to contact me
+- Demonstrate my web development capabilities through the website itself
 
-## Routes
+## Technologies Used
 
-- `/` — main portfolio (Hero, About, Experience, Projects, Skills, Education, Contact)
-- `/design-system` — design tokens, typography, components
+- **Next.js**: For the application framework, routing, and production build
+- **React**: For building the user interface with reusable components
+- **TypeScript**: For type-safe development across the codebase
+- **Tailwind CSS**: For styling, layout, and theme-aware design
+- **Formspree**: For handling contact form submissions
+- **Vercel**: For website deployment
 
-## Local development
+## Contact
 
-```bash
-npm install
-npm run dev        # http://localhost:3000
-```
-
-## Scripts
-
-| Script | Description |
-|---|---|
-| `npm run dev` | Next.js dev server |
-| `npm run build` | Production build |
-| `npm run start` | Production server (after `build`) |
-| `npm run lint` | ESLint |
-| `npm run typecheck` | `tsc --noEmit` |
-| `npm run test` | Vitest unit tests |
-| `npm run test:watch` | Vitest in watch mode |
-| `npm run test:coverage` | Unit tests with coverage |
-| `npm run test:e2e` | Playwright e2e tests |
-| `npm run test:e2e:ui` | Playwright UI mode |
-
-## Structure
-
-```
-app/                  # Next.js routes (page.tsx, design-system/page.tsx, layout.tsx, globals.css)
-components/
-  atoms/              # Tag, Card, Icon, SectionTitle, ProjectThumbnail, TechTag, MicroLabel
-  chrome/             # Nav, MobileMenu, ThemeToggle, GridBackground, CursorGlow
-  theme/              # ThemeScript (anti-FOUC)
-sections/
-  portfolio/          # Hero, About, Experience, Projects, ProjectCard, Skills, Education, Contact, Footer, PortfolioShell
-  design-system/      # FoundationSection, ColorsSection, ..., DSBlock, DSSubhead, DesignSystemHeader
-lib/
-  data/               # experiences, projects, skills, education, nav, tech-icons, design-system
-  hooks/              # useTheme, useScrollSpy, useDsTheme
-  utils/              # smoothScroll, validateContact
-  types.ts            # shared types
-public/               # static assets (icons, projects, portrait, resume, feitian logo)
-tests/
-  unit/               # Vitest + RTL
-  e2e/                # Playwright (chromium, firefox, mobile)
-.github/workflows/    # ci.yml
-```
-
-## Theme
-
-Theme tokens live as CSS custom properties in `app/globals.css`. Light/dark is controlled by `data-theme="light"|"dark"` on `<html>`, persisted to `localStorage["portfolio.theme"]`. A pre-hydration script in `<head>` applies the stored preference before paint to avoid FOUC. The `/design-system` page intentionally does NOT persist its theme — it reflects `prefers-color-scheme` each visit.
-
-The portfolio (`/`) uses a cyan accent (`#06b6d4`); the design system (`/design-system`) uses teal (`#14b8a6`). The accent is scoped per route via `[data-route="..."]` on the page's root `<div>`.
-
-## License
-
-See [LICENSE](LICENSE).
+If you're a potential employer or collaborator, please feel free to:
+- Reach out through the contact form on the website
+- Connect with me on [Linkedin](https://www.linkedin.com/in/rainzhang05/)
+- Email me at rainzhang.zty@gmail.com
