@@ -72,7 +72,7 @@ export function Contact() {
   const inputClass = (key: keyof ContactFormState) =>
     `w-full bg-transparent border-b ${
       showErr(key) ? "border-red-400" : "border-[var(--border)]"
-    } focus:border-[var(--border-strong)] outline-none py-2.5 text-[var(--text)] placeholder:text-[var(--text-subtle)] transition-colors`;
+    } focus:border-[var(--border-strong)] outline-none focus-visible:outline-none py-2.5 text-[var(--text)] placeholder:text-[var(--text-subtle)] transition-colors`;
 
   return (
     <section id="contact" data-section-label="contact" className="py-[var(--gap-section)]">
