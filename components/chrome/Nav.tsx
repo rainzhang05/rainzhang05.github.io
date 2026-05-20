@@ -33,7 +33,7 @@ export function Nav({ activeSection, theme, onToggleTheme }: NavProps) {
             className="flex items-center gap-2 px-3 py-1 font-medium tracking-tight text-sm"
           >
             <span className="inline-block w-2 h-2 rounded-sm bg-[var(--accent)]" />
-            Rain
+            Rain Zhang
           </a>
           <span className="w-px h-4 bg-[var(--border)]" aria-hidden="true" />
           <nav className="hidden md:flex items-center" aria-label="Sections">
