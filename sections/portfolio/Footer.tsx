@@ -14,8 +14,8 @@ export function Footer() {
   };
 
   return (
-    <footer className="pt-[calc(var(--gap-section)*0.45)] mt-[calc(var(--gap-section)*0.25)] border-t border-[var(--border)]">
-      <div className="grid lg:grid-cols-[1.5fr_1fr_1fr] gap-10 lg:gap-16 pb-8">
+    <footer className="pt-[calc(var(--gap-section)*0.25)] mt-[calc(var(--gap-section)*0.25)] border-t border-[var(--border)]">
+      <div className="grid lg:grid-cols-[1.5fr_1fr_1fr] gap-10 lg:gap-16 pb-4">
         <div>
           <a
             href="#intro"
