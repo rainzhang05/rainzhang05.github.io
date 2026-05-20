@@ -80,8 +80,8 @@ export function Contact() {
         <div>
           <SectionTitle>Let&apos;s connect.</SectionTitle>
           <p className="text-[var(--text-muted)] mb-8 leading-relaxed max-w-md">
-            For internships, collaborations, or to chat about full-stack work and post-quantum auth
-            — drop a note.
+            I&apos;d love to connect — whether about an internship, a project, or just to trade
+            notes on full-stack work and post-quantum auth.
           </p>
           <div className="space-y-3">
             <ContactLink
