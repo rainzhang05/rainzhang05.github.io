@@ -29,7 +29,7 @@ function ContactLink({ href, icon, label, external = false }: ContactLinkProps) 
     <a
       href={href}
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-      className="group flex items-center gap-3 text-[var(--text)] hover:text-[var(--accent-strong)] transition-colors"
+      className="group inline-flex items-center gap-3 text-[var(--text)] hover:text-[var(--accent-strong)] transition-colors"
     >
       <Icon name={icon} size={16} />
       <span className="font-mono text-sm">{label}</span>
