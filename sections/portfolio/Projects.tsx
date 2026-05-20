@@ -12,7 +12,7 @@ interface ProjectsProps {
 export function Projects({ openId, setOpenId }: ProjectsProps) {
   return (
     <section id="projects" data-section-label="projects" className="py-[var(--gap-section)]">
-      <SectionTitle kicker="Selected work — production systems and experiments. Click any card to expand.">
+      <SectionTitle kicker="Selected work — production systems and experiments.">
         Selected work
       </SectionTitle>
       <div className="space-y-5">
