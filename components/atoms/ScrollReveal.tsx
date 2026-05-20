@@ -38,8 +38,8 @@ export function ScrollReveal({ children, delay = 0, className = "" }: ScrollReve
   return (
     <div
       ref={ref}
-      className={`transition-[opacity,transform] duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-        isIntersecting ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+      className={`transition-[opacity,transform] duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        isIntersecting ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-6 scale-[0.985]"
       } ${className}`}
       style={{ transitionDelay: `${delay}ms` }}
     >

@@ -72,7 +72,9 @@ function HeroTags() {
   );
 }
 
-export function Hero() {
+export function Hero({ animate = false }: { animate?: boolean }) {
+  const baseTransition = "transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)]";
+
   return (
     <section
       id="intro"
@@ -81,27 +83,37 @@ export function Hero() {
     >
       <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
         <div className="lg:col-span-8 lg:col-start-1">
-          <HeroTags />
-          <h1 className="mt-7 text-[clamp(2.5rem,7.2vw,6rem)] leading-[0.94] tracking-[-0.045em] font-medium text-[var(--text)]">
-            <span className="block">Rain</span>
-            <span className="block">
-              Zhang<span className="text-[var(--accent)]">.</span>
-            </span>
-          </h1>
-          <p className="mt-8 text-[clamp(1.1rem,1.6vw,1.4rem)] leading-[1.5] text-[var(--text-muted)] max-w-2xl">
-            I&apos;m a{" "}
-            <span className="text-[var(--text)]">
-              Computer Science student at Simon Fraser University
-            </span>
-            , based in Vancouver, BC. I build full-stack web applications across Python, React, and
-            TypeScript, and I&apos;m currently open to software engineering internship and new-grad
-            opportunities.
-          </p>
-          <HeroCtas />
+          <div className={`${baseTransition} delay-[100ms] ${animate ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
+            <HeroTags />
+          </div>
+          <div className={`${baseTransition} delay-[200ms] ${animate ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
+            <h1 className="mt-7 text-[clamp(2.5rem,7.2vw,6rem)] leading-[0.94] tracking-[-0.045em] font-medium text-[var(--text)]">
+              <span className="block">Rain</span>
+              <span className="block">
+                Zhang<span className="text-[var(--accent)]">.</span>
+              </span>
+            </h1>
+          </div>
+          <div className={`${baseTransition} delay-[300ms] ${animate ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
+            <p className="mt-8 text-[clamp(1.1rem,1.6vw,1.4rem)] leading-[1.5] text-[var(--text-muted)] max-w-2xl">
+              I&apos;m a{" "}
+              <span className="text-[var(--text)]">
+                Computer Science student at Simon Fraser University
+              </span>
+              , based in Vancouver, BC. I build full-stack web applications across Python, React, and
+              TypeScript, and I&apos;m currently open to software engineering internship and new-grad
+              opportunities.
+            </p>
+          </div>
+          <div className={`${baseTransition} delay-[400ms] ${animate ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
+            <HeroCtas />
+          </div>
         </div>
         <div className="lg:col-span-4 lg:col-start-9">
           <div className="max-w-[320px] mx-auto lg:mx-0 lg:ml-auto w-full">
-            <HeroPhoto />
+            <div className={`${baseTransition} delay-[300ms] ${animate ? "opacity-100 scale-100" : "opacity-0 scale-[0.97]"}`}>
+              <HeroPhoto />
+            </div>
           </div>
         </div>
       </div>

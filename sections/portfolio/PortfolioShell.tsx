@@ -137,7 +137,7 @@ export function PortfolioShell() {
           className="mx-auto px-6 lg:px-10"
           style={{ maxWidth: "var(--content-max-w)", paddingTop: "92px" }}
         >
-          <Hero />
+          <Hero animate={!loading} />
           <ScrollReveal>
             <About />
           </ScrollReveal>
