@@ -25,19 +25,40 @@ interface ContactLinkProps {
 }
 
 function ContactLink({ href, icon, label, external = false }: ContactLinkProps) {
+  const [copied, setCopied] = useState(false);
+
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (href.startsWith("mailto:")) {
+      e.preventDefault();
+      const email = href.replace("mailto:", "");
+      navigator.clipboard.writeText(email).then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      });
+      window.location.href = href;
+    }
+  };
+
   return (
     <a
       href={href}
+      onClick={handleClick}
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-      className="group inline-flex items-center gap-3 text-[var(--text)] hover:text-[var(--accent-strong)] transition-colors"
+      className="group inline-flex items-center gap-3 text-[var(--text)] hover:text-[var(--accent-strong)] transition-colors relative"
     >
       <Icon name={icon} size={16} />
-      <span className="font-mono text-sm">{label}</span>
-      <Icon
-        name="arrow-up-right"
-        size={13}
-        className="opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all"
-      />
+      <span className="font-mono text-sm">{copied ? "Email copied!" : label}</span>
+      {copied ? (
+        <span className="text-[10px] bg-[var(--accent)] text-white px-1.5 py-0.5 rounded font-sans ml-1">
+          Copied!
+        </span>
+      ) : (
+        <Icon
+          name="arrow-up-right"
+          size={13}
+          className="opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all"
+        />
+      )}
     </a>
   );
 }

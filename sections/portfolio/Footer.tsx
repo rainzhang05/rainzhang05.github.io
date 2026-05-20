@@ -1,16 +1,62 @@
 "use client";
 
-import type { MouseEvent } from "react";
+import { useState, type MouseEvent } from "react";
 import { Icon } from "@/components/atoms/Icon";
 import { MicroLabel } from "@/components/atoms/MicroLabel";
 import { FOOTER_ELSEWHERE, FOOTER_NAV } from "@/lib/data/nav";
 
+function FooterEmailLink({ href, label, icon }: { href: string; label: string; icon: any }) {
+  const [copied, setCopied] = useState(false);
+
+  const handleEmailClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const email = href.replace("mailto:", "");
+    navigator.clipboard.writeText(email).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+    window.location.href = href;
+  };
+
+  return (
+    <a
+      href={href}
+      onClick={handleEmailClick}
+      className="group inline-flex items-center gap-2.5 text-sm text-[var(--text-muted)] hover:text-[var(--text)] transition-colors"
+    >
+      <Icon name={icon} size={14} />
+      <span>{copied ? "Email copied!" : label}</span>
+      {copied ? (
+        <span className="text-[10px] bg-[var(--accent)] text-white px-1.5 py-0.5 rounded font-sans ml-1">
+          Copied!
+        </span>
+      ) : (
+        <Icon
+          name="arrow-up-right"
+          size={11}
+          className="opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all text-[var(--text-subtle)]"
+        />
+      )}
+    </a>
+  );
+}
+
 export function Footer() {
+  const [copiedMain, setCopiedMain] = useState(false);
   const scrollTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
   const onJump = (id: string) => (e: MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const handleMainEmailClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    navigator.clipboard.writeText("rainzhang.zty@gmail.com").then(() => {
+      setCopiedMain(true);
+      setTimeout(() => setCopiedMain(false), 2000);
+    });
+    window.location.href = "mailto:rainzhang.zty@gmail.com";
   };
 
   return (
@@ -31,15 +77,22 @@ export function Footer() {
           </p>
           <a
             href="mailto:rainzhang.zty@gmail.com"
+            onClick={handleMainEmailClick}
             className="mt-5 inline-flex items-center gap-2 text-sm text-[var(--text)] hover:text-[var(--accent-strong)] transition-colors group"
           >
             <Icon name="mail" size={14} />
-            <span className="font-mono">rainzhang.zty@gmail.com</span>
-            <Icon
-              name="arrow-up-right"
-              size={12}
-              className="opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all"
-            />
+            <span className="font-mono">{copiedMain ? "Email copied!" : "rainzhang.zty@gmail.com"}</span>
+            {copiedMain ? (
+              <span className="text-[10px] bg-[var(--accent)] text-white px-1.5 py-0.5 rounded font-sans ml-1">
+                Copied!
+              </span>
+            ) : (
+              <Icon
+                name="arrow-up-right"
+                size={12}
+                className="opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all"
+              />
+            )}
           </a>
         </div>
 
@@ -65,21 +118,26 @@ export function Footer() {
           <ul className="space-y-2.5">
             {FOOTER_ELSEWHERE.map((l) => {
               const external = l.href.startsWith("http") || l.href.endsWith(".pdf");
+              const isEmail = l.href.startsWith("mailto:");
               return (
                 <li key={l.label}>
-                  <a
-                    href={l.href}
-                    {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                    className="group inline-flex items-center gap-2.5 text-sm text-[var(--text-muted)] hover:text-[var(--text)] transition-colors"
-                  >
-                    <Icon name={l.icon} size={14} />
-                    <span>{l.label}</span>
-                    <Icon
-                      name="arrow-up-right"
-                      size={11}
-                      className="opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all text-[var(--text-subtle)]"
-                    />
-                  </a>
+                  {isEmail ? (
+                    <FooterEmailLink href={l.href} label={l.label} icon={l.icon} />
+                  ) : (
+                    <a
+                      href={l.href}
+                      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                      className="group inline-flex items-center gap-2.5 text-sm text-[var(--text-muted)] hover:text-[var(--text)] transition-colors"
+                    >
+                      <Icon name={l.icon} size={14} />
+                      <span>{l.label}</span>
+                      <Icon
+                        name="arrow-up-right"
+                        size={11}
+                        className="opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all text-[var(--text-subtle)]"
+                      />
+                    </a>
+                  )}
                 </li>
               );
             })}

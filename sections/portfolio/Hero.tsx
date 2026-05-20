@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { Icon } from "@/components/atoms/Icon";
 import { Tag } from "@/components/atoms/Tag";
 
@@ -16,6 +19,17 @@ function HeroPhoto() {
 }
 
 function HeroCtas() {
+  const [copied, setCopied] = useState(false);
+
+  const handleEmailClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    navigator.clipboard.writeText("rainzhang.zty@gmail.com").then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+    window.location.href = "mailto:rainzhang.zty@gmail.com";
+  };
+
   return (
     <div className="mt-8 flex flex-wrap items-center gap-2.5">
       <a
@@ -34,10 +48,11 @@ function HeroCtas() {
       </a>
       <a
         href="mailto:rainzhang.zty@gmail.com"
+        onClick={handleEmailClick}
         className="inline-flex items-center gap-2 px-5 py-2.5 rounded-[calc(var(--r-sm)*1px)] text-sm font-medium border border-[var(--border)] hover:border-[var(--border-strong)] hover:bg-[var(--surface-2)] transition-colors"
       >
         <Icon name="mail" size={14} />
-        Get in touch
+        {copied ? "Email copied!" : "Get in touch"}
       </a>
     </div>
   );
