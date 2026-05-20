@@ -122,12 +122,12 @@ export const PROJECTS: Project[] = [
     id: "portfolio",
     title: "Personal Portfolio Website",
     summary:
-      "A personal portfolio website with a minimalist UI/UX design, built from scratch with HTML, CSS, and JavaScript. Includes a macOS-inspired layout, project modals, and a dark-mode toggle.",
+      "A dual-theme personal portfolio rebuilt on Next.js with a custom token-driven design system, fully typed components, and a Vitest + Playwright test suite that runs on every commit.",
     hideThumbnail: true,
-    period: "Feb 2025",
-    role: "Frontend Developer",
-    tools: "HTML, CSS, JavaScript, Web APIs, Vercel",
-    stack: ["HTML", "CSS", "JavaScript"],
+    period: "Feb 2025 — May 2026",
+    role: "Designer & Engineer",
+    tools: "Next.js, TypeScript, Tailwind CSS, Vitest, Playwright, Vercel",
+    stack: ["Next.js", "React.js", "TypeScript", "Tailwind CSS"],
     cryptoNote: null,
     links: {
       live: "https://rainzhang.me/",
@@ -135,16 +135,16 @@ export const PROJECTS: Project[] = [
     },
     impact: [
       {
-        title: "Zero-Dependency Engine",
-        body: "Architected the entire site's logic and styling natively without heavy frameworks, guaranteeing blisteringly fast load times.",
+        title: "Token-Driven Design System",
+        body: "Defined a calibrated set of color, typography, spacing, and radius tokens that drive both the portfolio and a separately published design-system showcase page.",
       },
       {
-        title: "Dynamic UI Capabilities",
-        body: "Built deeply interactive macOS-inspired navigation, functional dark-mode toggles, and seamless CSS modal expansions.",
+        title: "Type-Safe Rebuild",
+        body: "Migrated from vanilla HTML, CSS, and JavaScript to a fully typed Next.js 15 + React 18 codebase, with strict TypeScript and ESLint enforcing clean component boundaries.",
       },
       {
-        title: "Maintainable Systems",
-        body: "Designed clean, component-style HTML and CSS tokens to ensure the platform easily scales as new projects are added.",
+        title: "Verified On Every Commit",
+        body: "Set up Vitest + React Testing Library unit tests and Playwright end-to-end coverage running across Chromium, Firefox, and mobile WebKit in CI.",
       },
     ],
   },
