@@ -33,9 +33,11 @@ export function PortfolioShell() {
     }, 80);
   }, []);
 
-  // Body scroll lock during loading - lock scroll via events to prevent scrollbar/layout shift
+  // Body scroll lock during loading - lock scroll via events to prevent scrollbar/layout shift.
+  // Tied to `loading` (not `showLoader`) so listeners release the moment loading completes;
+  // the visual fade-out is purely opacity and shouldn't block interaction.
   useEffect(() => {
-    if (!showLoader) return;
+    if (!loading) return;
 
     const preventDefault = (e: Event) => {
       e.preventDefault();
@@ -63,7 +65,7 @@ export function PortfolioShell() {
       window.removeEventListener("keydown", preventDefaultKeys);
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [showLoader]);
+  }, [loading]);
 
   useEffect(() => {
     let active = true;
@@ -162,6 +164,7 @@ export function PortfolioShell() {
 
       {showLoader && (
         <div
+          data-preloader
           className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-[var(--bg)] transition-opacity duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
             loading ? "opacity-100" : "opacity-0 pointer-events-none"
           }`}

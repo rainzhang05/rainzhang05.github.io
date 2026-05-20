@@ -5,13 +5,11 @@ test.describe("desktop nav", () => {
 
   test("clicking a nav link scrolls to the section", async ({ page }) => {
     await page.goto("/");
-    // Wait for the preloader to fully dismiss (load + fade transition)
-    await page.waitForFunction(
-      () => !document.querySelector(".fixed.inset-0.z-50:not(.pointer-events-none)"),
-      { timeout: 10_000 }
-    );
-    // Small extra buffer for scroll lock event listeners to be cleaned up
-    await page.waitForTimeout(300);
+    // Wait for the preloader to be fully unmounted from the DOM, not just visually
+    // faded — its scroll-lock listeners are detached at unmount.
+    await page.waitForFunction(() => !document.querySelector("[data-preloader]"), {
+      timeout: 10_000,
+    });
 
     await page.locator('header a[href="#projects"]').first().click();
 
@@ -26,12 +24,10 @@ test.describe("mobile menu", () => {
 
   test("opens, navigates, and closes", async ({ page }) => {
     await page.goto("/");
-    // Wait for the preloader to fully dismiss
-    await page.waitForFunction(
-      () => !document.querySelector(".fixed.inset-0.z-50:not(.pointer-events-none)"),
-      { timeout: 10_000 }
-    );
-    await page.waitForTimeout(300);
+    // Wait for the preloader to be fully unmounted from the DOM
+    await page.waitForFunction(() => !document.querySelector("[data-preloader]"), {
+      timeout: 10_000,
+    });
 
     await page.locator('button[aria-label="Open menu"]').click();
     const menu = page.locator('[aria-hidden="false"]');
