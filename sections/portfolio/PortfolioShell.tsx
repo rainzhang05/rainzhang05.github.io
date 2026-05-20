@@ -15,6 +15,7 @@ import { Footer } from "@/sections/portfolio/Footer";
 import { Hero } from "@/sections/portfolio/Hero";
 import { Projects } from "@/sections/portfolio/Projects";
 import { Skills } from "@/sections/portfolio/Skills";
+import { ScrollReveal } from "@/components/atoms/ScrollReveal";
 
 export function PortfolioShell() {
   const [theme, toggleTheme] = useTheme();
@@ -42,12 +43,24 @@ export function PortfolioShell() {
         style={{ maxWidth: "var(--content-max-w)", paddingTop: "92px" }}
       >
         <Hero />
-        <About />
-        <Experience onOpenProject={onOpenProject} />
-        <Projects openId={openProjectId} setOpenId={setOpenProjectId} />
-        <Skills />
-        <Education />
-        <Contact />
+        <ScrollReveal>
+          <About />
+        </ScrollReveal>
+        <ScrollReveal>
+          <Experience onOpenProject={onOpenProject} />
+        </ScrollReveal>
+        <ScrollReveal>
+          <Projects openId={openProjectId} setOpenId={setOpenProjectId} />
+        </ScrollReveal>
+        <ScrollReveal>
+          <Skills />
+        </ScrollReveal>
+        <ScrollReveal>
+          <Education />
+        </ScrollReveal>
+        <ScrollReveal>
+          <Contact />
+        </ScrollReveal>
         <Footer />
       </main>
     </div>

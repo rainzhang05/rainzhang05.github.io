@@ -64,6 +64,7 @@ function ContactLink({ href, icon, label, external = false }: ContactLinkProps) 
 
 export function Contact() {
   const [form, setForm] = useState<ContactFormState>({ name: "", email: "", message: "" });
+  const [honeypot, setHoneypot] = useState("");
   const [status, setStatus] = useState<ContactStatus>("idle");
 
   const errors = validateContact(form);
@@ -77,6 +78,15 @@ export function Contact() {
     e.preventDefault();
     if (!valid) return;
     setStatus("sending");
+
+    if (honeypot) {
+      // Quietly succeed to fool the bot without submitting to Formspree
+      setTimeout(() => {
+        setStatus("sent");
+      }, 1000);
+      return;
+    }
+
     try {
       const res = await fetch("https://formspree.io/f/xoveaaqo", {
         method: "POST",
@@ -137,6 +147,16 @@ export function Contact() {
             </div>
           ) : (
             <form onSubmit={onSubmit} className="space-y-5" noValidate>
+              <div className="hidden" aria-hidden="true">
+                <input
+                  type="text"
+                  name="confirm_username"
+                  value={honeypot}
+                  onChange={(e) => setHoneypot(e.target.value)}
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+              </div>
               {CONTACT_FIELDS.map((f) => (
                 <div key={f.name}>
                   <label className="block font-mono text-[10px] tracking-[0.15em] uppercase text-[var(--text-subtle)] mb-2">
