@@ -1,20 +1,40 @@
 "use client";
 
-import { useState, type MouseEvent } from "react";
+import { useEffect, useState, type MouseEvent } from "react";
 import { Icon } from "@/components/atoms/Icon";
 import { MicroLabel } from "@/components/atoms/MicroLabel";
 import { FOOTER_ELSEWHERE, FOOTER_NAV } from "@/lib/data/nav";
+import type { IconName } from "@/lib/types";
 
-function FooterEmailLink({ href, label, icon }: { href: string; label: string; icon: any }) {
+function useCopiedReset(copied: boolean, reset: () => void) {
+  useEffect(() => {
+    if (!copied) return;
+    const id = window.setTimeout(reset, 2000);
+    return () => window.clearTimeout(id);
+  }, [copied, reset]);
+}
+
+function copyEmail(
+  e: React.MouseEvent<HTMLAnchorElement>,
+  email: string,
+  onCopied: () => void
+) {
+  // Without a clipboard API, let the default mailto: navigation happen.
+  if (typeof navigator === "undefined" || !navigator.clipboard?.writeText) return;
+  e.preventDefault();
+  navigator.clipboard.writeText(email).then(onCopied, () => {
+    // Clipboard rejected (permission, non-secure context). Fall back to mailto.
+    window.location.href = `mailto:${email}`;
+  });
+}
+
+function FooterEmailLink({ href, label, icon }: { href: string; label: string; icon: IconName }) {
   const [copied, setCopied] = useState(false);
+  useCopiedReset(copied, () => setCopied(false));
 
   const handleEmailClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
     const email = href.replace("mailto:", "");
-    navigator.clipboard.writeText(email).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
+    copyEmail(e, email, () => setCopied(true));
   };
 
   return (
@@ -24,7 +44,7 @@ function FooterEmailLink({ href, label, icon }: { href: string; label: string; i
       className="group inline-flex items-center gap-2.5 text-sm text-[var(--text-muted)] hover:text-[var(--text)] transition-colors"
     >
       <Icon name={icon} size={14} />
-      <span>{copied ? "Email copied!" : label}</span>
+      <span aria-live="polite">{copied ? "Email copied!" : label}</span>
       {copied ? (
         <span className="text-[10px] bg-[var(--accent)] text-white px-1.5 py-0.5 rounded font-sans ml-1">
           Copied!
@@ -42,6 +62,8 @@ function FooterEmailLink({ href, label, icon }: { href: string; label: string; i
 
 export function Footer() {
   const [copiedMain, setCopiedMain] = useState(false);
+  useCopiedReset(copiedMain, () => setCopiedMain(false));
+
   const scrollTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
   const onJump = (id: string) => (e: MouseEvent<HTMLAnchorElement>) => {
@@ -50,11 +72,7 @@ export function Footer() {
   };
 
   const handleMainEmailClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    navigator.clipboard.writeText("rainzhang.zty@gmail.com").then(() => {
-      setCopiedMain(true);
-      setTimeout(() => setCopiedMain(false), 2000);
-    });
+    copyEmail(e, "rainzhang.zty@gmail.com", () => setCopiedMain(true));
   };
 
   return (
@@ -79,7 +97,9 @@ export function Footer() {
             className="mt-5 inline-flex items-center gap-2 text-sm text-[var(--text)] hover:text-[var(--accent-strong)] transition-colors group"
           >
             <Icon name="mail" size={14} />
-            <span className="font-mono">{copiedMain ? "Email copied!" : "rainzhang.zty@gmail.com"}</span>
+            <span className="font-mono" aria-live="polite">
+              {copiedMain ? "Email copied!" : "rainzhang.zty@gmail.com"}
+            </span>
             {copiedMain ? (
               <span className="text-[10px] bg-[var(--accent)] text-white px-1.5 py-0.5 rounded font-sans ml-1">
                 Copied!
