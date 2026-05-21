@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useReducedMotion } from "@/lib/hooks/useReducedMotion";
 
 interface ScrollRevealProps {
   children: ReactNode;
@@ -9,10 +10,22 @@ interface ScrollRevealProps {
 }
 
 export function ScrollReveal({ children, delay = 0, className = "" }: ScrollRevealProps) {
-  const [isIntersecting, setIsIntersecting] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
+  const [isIntersecting, setIsIntersecting] = useState(prefersReducedMotion);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (prefersReducedMotion) {
+      setIsIntersecting(true);
+      return;
+    }
+
+    if (typeof IntersectionObserver === "undefined") {
+      // Fallback: reveal immediately when the API is unavailable.
+      setIsIntersecting(true);
+      return;
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -33,7 +46,7 @@ export function ScrollReveal({ children, delay = 0, className = "" }: ScrollReve
         observer.unobserve(currentRef);
       }
     };
-  }, []);
+  }, [prefersReducedMotion]);
 
   return (
     <div
