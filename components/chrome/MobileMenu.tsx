@@ -1,6 +1,6 @@
 "use client";
 
-import type { MouseEvent } from "react";
+import { useEffect, type MouseEvent } from "react";
 import { Icon } from "@/components/atoms/Icon";
 import { NAV_ITEMS } from "@/lib/data/nav";
 
@@ -12,6 +12,30 @@ interface MobileMenuProps {
 }
 
 export function MobileMenu({ open, onClose, activeSection, onJump }: MobileMenuProps) {
+  // Close on Escape + lock background scroll while open. Uses the same
+  // wheel/touchmove preventDefault pattern as the preloader (AGENTS.md forbids
+  // overflow:hidden on body — caused a layout-shift incident).
+  useEffect(() => {
+    if (!open) return;
+
+    const onKeydown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    const preventDefault = (e: Event) => {
+      e.preventDefault();
+    };
+
+    window.addEventListener("keydown", onKeydown);
+    window.addEventListener("wheel", preventDefault, { passive: false });
+    window.addEventListener("touchmove", preventDefault, { passive: false });
+
+    return () => {
+      window.removeEventListener("keydown", onKeydown);
+      window.removeEventListener("wheel", preventDefault);
+      window.removeEventListener("touchmove", preventDefault);
+    };
+  }, [open, onClose]);
+
   return (
     <div
       className={`md:hidden fixed inset-0 z-50 transition-opacity ${
