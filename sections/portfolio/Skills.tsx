@@ -25,6 +25,10 @@ export function Skills() {
                         <img
                           src={icon}
                           alt=""
+                          loading="lazy"
+                          decoding="async"
+                          width={16}
+                          height={16}
                           className="w-4 h-4 object-contain"
                           aria-hidden="true"
                         />

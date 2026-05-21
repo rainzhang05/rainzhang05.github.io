@@ -31,6 +31,8 @@ export function Experience({ onOpenProject }: ExperienceProps) {
                 <img
                   src="/feitian-logo.svg"
                   alt="FEITIAN"
+                  loading="lazy"
+                  decoding="async"
                   className="h-6 w-auto shrink-0"
                 />
                 <div className="min-w-0">

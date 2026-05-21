@@ -15,6 +15,8 @@ export function ProjectThumbnail({ image, alt = "" }: ProjectThumbnailProps) {
         <img
           src={image}
           alt={alt}
+          loading="lazy"
+          decoding="async"
           className="absolute inset-0 w-full h-full object-cover"
         />
       )}
