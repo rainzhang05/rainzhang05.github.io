@@ -4,6 +4,7 @@ import { useCallback, useState, useEffect } from "react";
 import { CursorGlow } from "@/components/chrome/CursorGlow";
 import { GridBackground } from "@/components/chrome/GridBackground";
 import { Nav } from "@/components/chrome/Nav";
+import { useReducedMotion } from "@/lib/hooks/useReducedMotion";
 import { useScrollSpy } from "@/lib/hooks/useScrollSpy";
 import { useTheme } from "@/lib/hooks/useTheme";
 import { scrollToProject } from "@/lib/utils/smoothScroll";
@@ -23,6 +24,7 @@ export function PortfolioShell() {
   const activeSection = useScrollSpy();
   const [loading, setLoading] = useState(true);
   const [showLoader, setShowLoader] = useState(true);
+  const prefersReducedMotion = useReducedMotion();
 
   const onOpenProject = useCallback((id: string) => {
     setOpenProjectId(id);
@@ -57,7 +59,9 @@ export function PortfolioShell() {
     window.addEventListener("wheel", preventDefault, { passive: false });
     window.addEventListener("touchmove", preventDefault, { passive: false });
     window.addEventListener("keydown", preventDefaultKeys, { passive: false });
-    window.addEventListener("scroll", handleScroll, { passive: false });
+    // The scroll handler doesn't call preventDefault, so it can be passive — this
+    // keeps the browser's scroll optimizations enabled while we snap-back to 0.
+    window.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
       window.removeEventListener("wheel", preventDefault);
@@ -69,11 +73,20 @@ export function PortfolioShell() {
 
   useEffect(() => {
     let active = true;
+    const timers: number[] = [];
+
+    const schedule = (fn: () => void, delay: number) => {
+      const id = window.setTimeout(fn, delay);
+      timers.push(id);
+      return id;
+    };
 
     const handleLoad = async () => {
       // 1. Wait for window load event
       if (document.readyState !== "complete") {
-        await new Promise((resolve) => window.addEventListener("load", resolve));
+        await new Promise<void>((resolve) => {
+          window.addEventListener("load", () => resolve(), { once: true });
+        });
       }
 
       // 2. Wait for fonts to be ready
@@ -86,19 +99,21 @@ export function PortfolioShell() {
       await Promise.all(
         imgs.map((img) => {
           if (img.complete) return Promise.resolve();
-          return new Promise((resolve) => {
-            img.addEventListener("load", resolve);
-            img.addEventListener("error", resolve);
+          return new Promise<void>((resolve) => {
+            img.addEventListener("load", () => resolve(), { once: true });
+            img.addEventListener("error", () => resolve(), { once: true });
           });
         })
       );
 
       // 4. Fade out transition
       if (active) {
-        setTimeout(() => {
+        schedule(() => {
+          if (!active) return;
           setLoading(false);
           // Unmount loader after transition finishes
-          setTimeout(() => {
+          schedule(() => {
+            if (!active) return;
             setShowLoader(false);
           }, 700);
         }, 600); // 600ms stabilization delay for aesthetic pulse
@@ -108,20 +123,29 @@ export function PortfolioShell() {
     handleLoad();
 
     // Fallback maximum loading time: 3.5s
-    const fallbackTimeout = setTimeout(() => {
-      if (active) {
-        setLoading(false);
-        setTimeout(() => {
-          setShowLoader(false);
-        }, 700);
-      }
+    schedule(() => {
+      if (!active) return;
+      setLoading(false);
+      schedule(() => {
+        if (!active) return;
+        setShowLoader(false);
+      }, 700);
     }, 3500);
 
     return () => {
       active = false;
-      clearTimeout(fallbackTimeout);
+      timers.forEach((id) => window.clearTimeout(id));
     };
   }, []);
+
+  // In reduced-motion mode, skip the opacity fade entirely so the page is
+  // immediately visible the moment `loading` flips false.
+  const fadeTransition = prefersReducedMotion
+    ? ""
+    : "transition-opacity duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]";
+  const loaderTransition = prefersReducedMotion
+    ? ""
+    : "transition-opacity duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]";
 
   return (
     <div className="relative min-h-screen text-[var(--text)] bg-[var(--bg)] font-sans">
@@ -129,9 +153,7 @@ export function PortfolioShell() {
       <CursorGlow />
 
       <div
-        className={`transition-opacity duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-          loading ? "opacity-0" : "opacity-100"
-        }`}
+        className={`${fadeTransition} ${loading ? "opacity-0" : "opacity-100"}`}
       >
         <Nav activeSection={activeSection} theme={theme} onToggleTheme={toggleTheme} />
 
@@ -165,7 +187,7 @@ export function PortfolioShell() {
       {showLoader && (
         <div
           data-preloader
-          className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-[var(--bg)] transition-opacity duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-[var(--bg)] ${loaderTransition} ${
             loading ? "opacity-100" : "opacity-0 pointer-events-none"
           }`}
         >
