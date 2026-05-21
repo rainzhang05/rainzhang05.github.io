@@ -202,7 +202,11 @@ export function mockClipboard(options: MockClipboardOptions = {}): ClipboardCont
   const original = hadOriginal ? navigator.clipboard : undefined;
 
   if (options.absent) {
-    delete (navigator as ClipboardTarget).clipboard;
+    Object.defineProperty(navigator, "clipboard", {
+      value: undefined,
+      configurable: true,
+      writable: true,
+    });
     const writeText = vi.fn(() => Promise.resolve());
     return {
       writeText,
@@ -213,6 +217,8 @@ export function mockClipboard(options: MockClipboardOptions = {}): ClipboardCont
             configurable: true,
             writable: true,
           });
+        } else {
+          delete (navigator as ClipboardTarget).clipboard;
         }
       },
     };
@@ -376,9 +382,9 @@ export interface WindowLocationController {
   restore(): void;
 }
 
-export function mockWindowLocation(): WindowLocationController {
+export function mockWindowLocation(initialHref = "http://localhost/"): WindowLocationController {
   const original = window.location;
-  const location = { href: "" };
+  const location = { href: initialHref };
   Object.defineProperty(window, "location", {
     value: location,
     configurable: true,
