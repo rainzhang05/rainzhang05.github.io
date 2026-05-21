@@ -1,11 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card } from "@/components/atoms/Card";
 import { Icon } from "@/components/atoms/Icon";
 import { SectionTitle } from "@/components/atoms/SectionTitle";
 import { validateContact } from "@/lib/utils/validateContact";
 import type { ContactFormState, ContactStatus, IconName } from "@/lib/types";
+
+const FORMSPREE_URL = "https://formspree.io/f/xoveaaqo";
+const FETCH_TIMEOUT_MS = 15_000;
 
 const CONTACT_FIELDS: Array<{
   name: keyof ContactFormState;
@@ -27,15 +30,24 @@ interface ContactLinkProps {
 function ContactLink({ href, icon, label, external = false }: ContactLinkProps) {
   const [copied, setCopied] = useState(false);
 
+  useEffect(() => {
+    if (!copied) return;
+    const id = window.setTimeout(() => setCopied(false), 2000);
+    return () => window.clearTimeout(id);
+  }, [copied]);
+
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (href.startsWith("mailto:")) {
-      e.preventDefault();
-      const email = href.replace("mailto:", "");
-      navigator.clipboard.writeText(email).then(() => {
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-      });
-    }
+    if (!href.startsWith("mailto:")) return;
+    if (typeof navigator === "undefined" || !navigator.clipboard?.writeText) return;
+    e.preventDefault();
+    const email = href.replace("mailto:", "");
+    navigator.clipboard.writeText(email).then(
+      () => setCopied(true),
+      () => {
+        // Clipboard rejected — fall back to mailto navigation.
+        window.location.href = href;
+      }
+    );
   };
 
   return (
@@ -46,7 +58,9 @@ function ContactLink({ href, icon, label, external = false }: ContactLinkProps) 
       className="group inline-flex items-center gap-3 text-[var(--text)] hover:text-[var(--accent-strong)] transition-colors relative"
     >
       <Icon name={icon} size={16} />
-      <span className="font-mono text-sm">{copied ? "Email copied!" : label}</span>
+      <span className="font-mono text-sm" aria-live="polite">
+        {copied ? "Email copied!" : label}
+      </span>
       {copied ? (
         <span className="text-[10px] bg-[var(--accent)] text-white px-1.5 py-0.5 rounded font-sans ml-1">
           Copied!
@@ -74,28 +88,39 @@ export function Contact() {
   // AND what they typed is still invalid (e.g. a malformed email).
   const showErr = (key: keyof ContactFormState) => form[key].length > 0 && errors[key];
 
+  // Honeypot path: quietly succeed without contacting Formspree. Scheduled via
+  // an effect so the timer is cancelled if the component unmounts mid-flight.
+  useEffect(() => {
+    if (status !== "sending" || !honeypot) return;
+    const id = window.setTimeout(() => setStatus("sent"), 1000);
+    return () => window.clearTimeout(id);
+  }, [status, honeypot]);
+
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!valid) return;
     setStatus("sending");
 
-    if (honeypot) {
-      // Quietly succeed to fool the bot without submitting to Formspree
-      setTimeout(() => {
-        setStatus("sent");
-      }, 1000);
-      return;
-    }
+    // Honeypot path is handled by the effect above; just return here.
+    if (honeypot) return;
+
+    const controller = typeof AbortController !== "undefined" ? new AbortController() : null;
+    const timeoutId = controller
+      ? window.setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS)
+      : null;
 
     try {
-      const res = await fetch("https://formspree.io/f/xoveaaqo", {
+      const res = await fetch(FORMSPREE_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify(form),
+        signal: controller?.signal,
       });
       setStatus(res.ok ? "sent" : "error");
     } catch {
       setStatus("error");
+    } finally {
+      if (timeoutId !== null) window.clearTimeout(timeoutId);
     }
   };
 
@@ -136,7 +161,7 @@ export function Contact() {
 
         <Card className="p-[var(--gap-card)]">
           {status === "sent" ? (
-            <div className="py-12 text-center">
+            <div className="py-12 text-center" role="status" aria-live="polite">
               <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[color-mix(in_oklab,var(--accent)_15%,transparent)] border border-[var(--accent-strong)] mb-4">
                 <Icon name="check" size={22} className="text-[var(--accent-strong)]" />
               </div>
@@ -146,7 +171,13 @@ export function Contact() {
               </p>
             </div>
           ) : (
-            <form onSubmit={onSubmit} className="space-y-5" noValidate>
+            <form
+              onSubmit={onSubmit}
+              className="space-y-5"
+              noValidate
+              aria-busy={status === "sending"}
+              aria-label="Contact form"
+            >
               <div className="hidden" aria-hidden="true">
                 <input
                   type="text"
@@ -157,26 +188,41 @@ export function Contact() {
                   autoComplete="off"
                 />
               </div>
-              {CONTACT_FIELDS.map((f) => (
-                <div key={f.name}>
-                  <label htmlFor={`contact-${f.name}`} className="block font-mono text-[10px] tracking-[0.15em] uppercase text-[var(--text-subtle)] mb-2">
-                    {f.label}
-                  </label>
-                  <input
-                    id={`contact-${f.name}`}
-                    type={f.type}
-                    value={form[f.name]}
-                    onChange={(e) => setForm({ ...form, [f.name]: e.target.value })}
-                    placeholder={f.placeholder}
-                    className={inputClass(f.name)}
-                  />
-                  {showErr(f.name) && (
-                    <p className="mt-1 font-mono text-[10px] text-red-400">{errors[f.name]}</p>
-                  )}
-                </div>
-              ))}
+              {CONTACT_FIELDS.map((f) => {
+                const fieldId = `contact-${f.name}`;
+                const errorId = `${fieldId}-error`;
+                const hasErr = !!showErr(f.name);
+                return (
+                  <div key={f.name}>
+                    <label
+                      htmlFor={fieldId}
+                      className="block font-mono text-[10px] tracking-[0.15em] uppercase text-[var(--text-subtle)] mb-2"
+                    >
+                      {f.label}
+                    </label>
+                    <input
+                      id={fieldId}
+                      type={f.type}
+                      value={form[f.name]}
+                      onChange={(e) => setForm({ ...form, [f.name]: e.target.value })}
+                      placeholder={f.placeholder}
+                      className={inputClass(f.name)}
+                      aria-invalid={hasErr}
+                      aria-describedby={hasErr ? errorId : undefined}
+                    />
+                    {hasErr && (
+                      <p id={errorId} className="mt-1 font-mono text-[10px] text-red-400">
+                        {errors[f.name]}
+                      </p>
+                    )}
+                  </div>
+                );
+              })}
               <div>
-                <label htmlFor="contact-message" className="block font-mono text-[10px] tracking-[0.15em] uppercase text-[var(--text-subtle)] mb-2">
+                <label
+                  htmlFor="contact-message"
+                  className="block font-mono text-[10px] tracking-[0.15em] uppercase text-[var(--text-subtle)] mb-2"
+                >
                   Message
                 </label>
                 <textarea
@@ -186,9 +232,13 @@ export function Contact() {
                   onChange={(e) => setForm({ ...form, message: e.target.value })}
                   placeholder="What are you working on?"
                   className={`${inputClass("message")} resize-none`}
+                  aria-invalid={!!showErr("message")}
+                  aria-describedby={showErr("message") ? "contact-message-error" : undefined}
                 />
                 {showErr("message") && (
-                  <p className="mt-1 font-mono text-[10px] text-red-400">{errors.message}</p>
+                  <p id="contact-message-error" className="mt-1 font-mono text-[10px] text-red-400">
+                    {errors.message}
+                  </p>
                 )}
               </div>
               <button
@@ -204,7 +254,7 @@ export function Contact() {
                 />
               </button>
               {status === "error" && (
-                <p className="mt-1 font-mono text-[10px] text-red-400">
+                <p className="mt-1 font-mono text-[10px] text-red-400" role="alert">
                   Couldn&apos;t reach the server — try emailing me directly.
                 </p>
               )}
