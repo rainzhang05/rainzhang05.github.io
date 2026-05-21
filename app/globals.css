@@ -152,10 +152,15 @@ textarea {
   transform: translateY(0);
 }
 
-/* Smooth scroll for hash nav */
+/* Smooth scroll for hash nav — only when the user hasn't opted out of motion */
 html {
-  scroll-behavior: smooth;
   scroll-padding-top: 96px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 [data-route="design-system"] {
