@@ -43,6 +43,8 @@ jobs:
             browser: chromium
           - project: firefox
             browser: firefox
+          - project: safari
+            browser: webkit
           - project: mobile
             browser: webkit
     steps:
