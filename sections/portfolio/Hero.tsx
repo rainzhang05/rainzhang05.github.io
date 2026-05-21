@@ -1,9 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Icon } from "@/components/atoms/Icon";
 import { Tag } from "@/components/atoms/Tag";
+import { useReducedMotion } from "@/lib/hooks/useReducedMotion";
+
+const EMAIL = "rainzhang.zty@gmail.com";
 
 function HeroPhoto() {
   return (
@@ -24,12 +27,23 @@ function HeroPhoto() {
 function HeroCtas() {
   const [copied, setCopied] = useState(false);
 
+  useEffect(() => {
+    if (!copied) return;
+    const id = window.setTimeout(() => setCopied(false), 2000);
+    return () => window.clearTimeout(id);
+  }, [copied]);
+
   const handleEmailClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    // Without a clipboard API, let the default mailto: navigation happen.
+    if (typeof navigator === "undefined" || !navigator.clipboard?.writeText) return;
     e.preventDefault();
-    navigator.clipboard.writeText("rainzhang.zty@gmail.com").then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
+    navigator.clipboard.writeText(EMAIL).then(
+      () => setCopied(true),
+      () => {
+        // Clipboard rejected (permission, non-secure context). Fall back to mailto.
+        window.location.href = `mailto:${EMAIL}`;
+      }
+    );
   };
 
   return (
@@ -49,12 +63,12 @@ function HeroCtas() {
         />
       </a>
       <a
-        href="mailto:rainzhang.zty@gmail.com"
+        href={`mailto:${EMAIL}`}
         onClick={handleEmailClick}
         className="inline-flex items-center gap-2 px-5 py-2.5 rounded-[calc(var(--r-sm)*1px)] text-sm font-medium border border-[var(--border)] hover:border-[var(--border-strong)] hover:bg-[var(--surface-2)] transition-colors"
       >
         <Icon name="mail" size={14} />
-        {copied ? "Email copied!" : "Get in touch"}
+        <span aria-live="polite">{copied ? "Email copied!" : "Get in touch"}</span>
       </a>
     </div>
   );
@@ -73,7 +87,13 @@ function HeroTags() {
 }
 
 export function Hero({ animate = false }: { animate?: boolean }) {
-  const baseTransition = "transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)]";
+  const prefersReducedMotion = useReducedMotion();
+  // When the user wants reduced motion, render the final state immediately
+  // — no fade/translate stagger. Same final layout, no animation.
+  const shown = animate || prefersReducedMotion;
+  const baseTransition = prefersReducedMotion
+    ? ""
+    : "transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)]";
 
   return (
     <section
@@ -83,10 +103,14 @@ export function Hero({ animate = false }: { animate?: boolean }) {
     >
       <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
         <div className="lg:col-span-8 lg:col-start-1">
-          <div className={`${baseTransition} delay-[100ms] ${animate ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
+          <div
+            className={`${baseTransition} delay-[100ms] ${shown ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+          >
             <HeroTags />
           </div>
-          <div className={`${baseTransition} delay-[200ms] ${animate ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
+          <div
+            className={`${baseTransition} delay-[200ms] ${shown ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+          >
             <h1 className="mt-7 text-[clamp(2.5rem,7.2vw,6rem)] leading-[0.94] tracking-[-0.045em] font-medium text-[var(--text)]">
               <span className="block">Rain</span>
               <span className="block">
@@ -94,7 +118,9 @@ export function Hero({ animate = false }: { animate?: boolean }) {
               </span>
             </h1>
           </div>
-          <div className={`${baseTransition} delay-[300ms] ${animate ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
+          <div
+            className={`${baseTransition} delay-[300ms] ${shown ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+          >
             <p className="mt-8 text-[clamp(1.1rem,1.6vw,1.4rem)] leading-[1.5] text-[var(--text-muted)] max-w-2xl">
               I&apos;m a{" "}
               <span className="text-[var(--text)]">
@@ -105,13 +131,17 @@ export function Hero({ animate = false }: { animate?: boolean }) {
               opportunities.
             </p>
           </div>
-          <div className={`${baseTransition} delay-[400ms] ${animate ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
+          <div
+            className={`${baseTransition} delay-[400ms] ${shown ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+          >
             <HeroCtas />
           </div>
         </div>
         <div className="lg:col-span-4 lg:col-start-9">
           <div className="max-w-[320px] mx-auto lg:mx-0 lg:ml-auto w-full">
-            <div className={`${baseTransition} delay-[300ms] ${animate ? "opacity-100 scale-100" : "opacity-0 scale-[0.97]"}`}>
+            <div
+              className={`${baseTransition} delay-[300ms] ${shown ? "opacity-100 scale-100" : "opacity-0 scale-[0.97]"}`}
+            >
               <HeroPhoto />
             </div>
           </div>
