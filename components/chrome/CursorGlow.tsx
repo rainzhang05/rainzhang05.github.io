@@ -15,7 +15,7 @@ export function CursorGlow() {
         ref.current.style.setProperty("--my", `${e.clientY}px`);
       });
     };
-    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointermove", onMove, { passive: true });
     return () => {
       window.removeEventListener("pointermove", onMove);
       cancelAnimationFrame(raf);
@@ -26,7 +26,7 @@ export function CursorGlow() {
     <div
       ref={ref}
       aria-hidden="true"
-      className="fixed inset-0 -z-10 pointer-events-none"
+      className="fixed inset-0 -z-10 pointer-events-none [@media(pointer:coarse)]:hidden"
       style={{
         background:
           "radial-gradient(520px circle at var(--mx, 50%) var(--my, 30%), color-mix(in oklab, var(--accent) 8%, transparent), transparent 55%)",
