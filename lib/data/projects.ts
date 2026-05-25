@@ -28,6 +28,7 @@ export const PROJECTS: Project[] = [
       },
     ],
     featured: true,
+    tagType: "Internship",
   },
   {
     id: "mldsa-authenticator",
@@ -56,6 +57,7 @@ export const PROJECTS: Project[] = [
       },
     ],
     featured: true,
+    tagType: "Internship",
   },
   {
     id: "webauthn-platform",
@@ -87,6 +89,7 @@ export const PROJECTS: Project[] = [
       },
     ],
     featured: true,
+    tagType: "Internship",
   },
   {
     id: "travel-advisor",
@@ -117,6 +120,7 @@ export const PROJECTS: Project[] = [
         body: "Architected the frontend UI components and UX for an interactive conversational widget that connects to backend systems.",
       },
     ],
+    tagType: "Academic",
   },
   {
     id: "portfolio",
@@ -147,5 +151,6 @@ export const PROJECTS: Project[] = [
         body: "Set up Vitest + React Testing Library unit tests and Playwright end-to-end coverage running across Chromium, Firefox, and mobile WebKit in CI.",
       },
     ],
+    tagType: "Personal",
   },
 ];
