@@ -18,6 +18,7 @@ export const EXPERIENCES: Experience[] = [
       "Deployed applications on Linux servers using Docker-based workflows and CI pipelines — improving reliability and repeatability of testing and demos.",
       "Worked closely with security engineers and product teams to adapt platform behavior, data output, and testing flows to real product development needs.",
       "Reduced user-support burden through the self-service authentication demo platform.",
+      "Voluntarily continued to maintain and enhance all internship projects after the program ended, delivering post-internship contributions beyond the original scope.",
     ],
     stack: [
       "Python",
