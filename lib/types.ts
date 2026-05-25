@@ -52,6 +52,8 @@ export interface ProjectLinks {
   github?: string;
 }
 
+export type ProjectType = "Personal" | "Academic" | "Internship";
+
 export interface Project {
   id: string;
   title: string;
@@ -65,6 +67,7 @@ export interface Project {
   cryptoNote: string | null;
   links: ProjectLinks;
   impact: ProjectImpact[];
+  tagType: ProjectType;
   featured?: boolean;
 }
 
