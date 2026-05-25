@@ -15,6 +15,7 @@ const project: Project = {
   cryptoNote: null,
   links: { live: "https://example.com", github: "https://github.com/example/repo" },
   impact: [{ title: "Did stuff", body: "Lots of stuff." }],
+  tagType: "Internship",
 };
 
 describe("ProjectCard", () => {
@@ -23,6 +24,7 @@ describe("ProjectCard", () => {
     const toggle = screen.getByRole("button", { expanded: false });
     expect(toggle).toBeInTheDocument();
     expect(screen.getByText("Test Project")).toBeInTheDocument();
+    expect(screen.getByText("Internship")).toBeInTheDocument();
   });
 
   it("invokes onToggle when the card body is clicked", () => {

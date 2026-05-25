@@ -48,6 +48,7 @@ export function ProjectCard({ project, expanded, onToggle }: ProjectCardProps) {
     cryptoNote,
     image,
     hideThumbnail,
+    tagType,
   } = project;
 
   return (
@@ -67,6 +68,9 @@ export function ProjectCard({ project, expanded, onToggle }: ProjectCardProps) {
         <div className={hideThumbnail ? "" : "grid md:grid-cols-[1.6fr_1fr] gap-6 items-start"}>
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2 mb-3">
+              <Tag mono tone="accent">
+                {tagType}
+              </Tag>
               <span className="font-mono text-[10px] tracking-[0.15em] uppercase text-[var(--text-subtle)]">
                 {period}
               </span>
