@@ -1,7 +1,14 @@
 "use client";
 
 import type { MouseEvent } from "react";
-import { HTML_LANG, LOCALES, LOCALE_LABEL, LOCALE_PATH } from "@/lib/i18n/config";
+import {
+  HTML_LANG,
+  LOCALES,
+  LOCALE_LABEL,
+  LOCALE_PATH,
+  type Locale,
+} from "@/lib/i18n/config";
+import { persistLocalePreference } from "@/lib/i18n/geo";
 import { useCopy, useLocale } from "@/lib/i18n/LocaleProvider";
 
 interface LocaleToggleProps {
@@ -17,9 +24,11 @@ export function LocaleToggle({ className = "" }: LocaleToggleProps) {
   const activeLocale = useLocale();
   const copy = useCopy();
 
-  // Carry the current section across locales (/#projects -> /ja#projects).
-  // Done on click rather than in href so the server-rendered markup is stable.
-  const onNavigate = (path: string) => (e: MouseEvent<HTMLAnchorElement>) => {
+  // Persist the choice first so middleware honours it on the next visit to /.
+  // Hash is carried on click rather than in href so the server-rendered markup
+  // stays stable (/#projects -> /ja#projects).
+  const onNavigate = (locale: Locale, path: string) => (e: MouseEvent<HTMLAnchorElement>) => {
+    persistLocalePreference(locale);
     const hash = window.location.hash;
     if (!hash) return;
     e.preventDefault();
@@ -40,7 +49,7 @@ export function LocaleToggle({ className = "" }: LocaleToggleProps) {
             href={LOCALE_PATH[locale]}
             hrefLang={HTML_LANG[locale]}
             lang={HTML_LANG[locale]}
-            onClick={onNavigate(LOCALE_PATH[locale])}
+            onClick={onNavigate(locale, LOCALE_PATH[locale])}
             aria-current={isActive ? "page" : undefined}
             className={`flex items-center h-full px-1.5 sm:px-2 rounded-full text-[10px] sm:text-[11px] leading-none whitespace-nowrap transition-colors ${
               isActive

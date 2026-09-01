@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { LocaleToggle } from "@/components/chrome/LocaleToggle";
+import { LOCALE_COOKIE } from "@/lib/i18n/config";
 import { LocaleProvider } from "@/lib/i18n/LocaleProvider";
 
 describe("LocaleToggle", () => {
@@ -42,5 +43,14 @@ describe("LocaleToggle", () => {
       </LocaleProvider>
     );
     expect(screen.getByRole("group", { name: "表示言語" })).toBeInTheDocument();
+  });
+
+  it("writes the locale cookie when a language is chosen", () => {
+    render(<LocaleToggle />);
+    fireEvent.click(screen.getByRole("link", { name: "日本語" }));
+    expect(document.cookie).toContain(`${LOCALE_COOKIE}=ja`);
+
+    fireEvent.click(screen.getByRole("link", { name: "EN" }));
+    expect(document.cookie).toContain(`${LOCALE_COOKIE}=en`);
   });
 });
