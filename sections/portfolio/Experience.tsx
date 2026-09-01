@@ -6,37 +6,39 @@ import { MicroLabel } from "@/components/atoms/MicroLabel";
 import { SectionTitle } from "@/components/atoms/SectionTitle";
 import { Tag } from "@/components/atoms/Tag";
 import { TechTag } from "@/components/atoms/TechTag";
-import { EXPERIENCES } from "@/lib/data/experiences";
-import { PROJECTS } from "@/lib/data/projects";
+import { useContent, useCopy } from "@/lib/i18n/LocaleProvider";
 
 interface ExperienceProps {
   onOpenProject?: (id: string) => void;
 }
 
 export function Experience({ onOpenProject }: ExperienceProps) {
+  const copy = useCopy();
+  const { experiences, projects } = useContent();
+
   return (
     <section
       id="experience"
       data-section-label="experience"
       className="py-[var(--gap-section)]"
     >
-      <SectionTitle kicker="Roles and the systems I shipped.">Experience</SectionTitle>
+      <SectionTitle kicker={copy.experience.kicker}>{copy.experience.title}</SectionTitle>
 
       <div className="space-y-8">
-        {EXPERIENCES.map((exp) => (
+        {experiences.map((exp) => (
           <Card key={exp.id} className="p-[var(--gap-card)]">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6 pb-6 border-b border-[var(--border)]">
               <div className="flex items-center gap-[var(--gap-card)] min-w-0">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/feitian-logo.svg"
-                  alt="FEITIAN"
+                  alt={copy.experience.logoAlt}
                   loading="lazy"
                   decoding="async"
                   className="h-6 w-auto shrink-0"
                 />
                 <div className="min-w-0">
-                  <h3 className="text-xl tracking-tight font-medium text-[var(--text)] leading-tight">
+                  <h3 className="text-xl tracking-[var(--track-tight)] font-medium text-[var(--text)] leading-tight">
                     {exp.role}
                   </h3>
                   <p className="text-sm text-[var(--text-muted)] mt-1.5">{exp.org}</p>
@@ -45,7 +47,7 @@ export function Experience({ onOpenProject }: ExperienceProps) {
               </div>
               <div className="flex flex-wrap items-center gap-1.5 md:justify-end shrink-0">
                 <Tag mono tone="accent">
-                  {exp.tagType}
+                  {copy.tagLabels[exp.tagType]}
                 </Tag>
                 <Tag mono>{exp.period}</Tag>
                 <Tag mono>{exp.location}</Tag>
@@ -55,11 +57,11 @@ export function Experience({ onOpenProject }: ExperienceProps) {
             <div className="grid md:grid-cols-[1fr_280px] gap-8 lg:gap-10">
               <div className="space-y-7 min-w-0">
                 <div>
-                  <MicroLabel className="mb-2.5">Scope</MicroLabel>
+                  <MicroLabel className="mb-2.5">{copy.experience.scope}</MicroLabel>
                   <p className="text-[var(--text)] leading-relaxed text-[15px]">{exp.summary}</p>
                 </div>
                 <div>
-                  <MicroLabel className="mb-3">Key outcomes</MicroLabel>
+                  <MicroLabel className="mb-3">{copy.experience.outcomes}</MicroLabel>
                   <ul className="space-y-3">
                     {exp.outcomes.map((o, i) => (
                       <li
@@ -73,7 +75,7 @@ export function Experience({ onOpenProject }: ExperienceProps) {
                   </ul>
                 </div>
                 <div>
-                  <MicroLabel className="mb-3">Technologies</MicroLabel>
+                  <MicroLabel className="mb-3">{copy.experience.technologies}</MicroLabel>
                   <div className="flex flex-wrap gap-1.5">
                     {exp.stack.map((s) => (
                       <TechTag key={s} name={s} />
@@ -83,10 +85,10 @@ export function Experience({ onOpenProject }: ExperienceProps) {
               </div>
 
               <div className="md:border-l md:border-[var(--border)] md:pl-8">
-                <MicroLabel className="mb-3">Related work</MicroLabel>
+                <MicroLabel className="mb-3">{copy.experience.related}</MicroLabel>
                 <div className="flex flex-col gap-2">
                   {exp.related.map((id) => {
-                    const p = PROJECTS.find((x) => x.id === id);
+                    const p = projects.find((x) => x.id === id);
                     if (!p) return null;
                     return (
                       <button

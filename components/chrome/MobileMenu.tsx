@@ -2,7 +2,8 @@
 
 import { useEffect, type MouseEvent } from "react";
 import { Icon } from "@/components/atoms/Icon";
-import { NAV_ITEMS } from "@/lib/data/nav";
+import { LocaleToggle } from "@/components/chrome/LocaleToggle";
+import { useContent, useCopy } from "@/lib/i18n/LocaleProvider";
 
 interface MobileMenuProps {
   open: boolean;
@@ -12,6 +13,9 @@ interface MobileMenuProps {
 }
 
 export function MobileMenu({ open, onClose, activeSection, onJump }: MobileMenuProps) {
+  const copy = useCopy();
+  const { navItems } = useContent();
+
   // Close on Escape + lock background scroll while open. Uses the same
   // wheel/touchmove preventDefault pattern as the preloader (AGENTS.md forbids
   // overflow:hidden on body — caused a layout-shift incident).
@@ -50,18 +54,21 @@ export function MobileMenu({ open, onClose, activeSection, onJump }: MobileMenuP
         }`}
       >
         <div className="flex items-center justify-between mb-3">
-          <span className="font-medium">Menu</span>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close menu"
-            className="p-1 text-[var(--text-muted)]"
-          >
-            <Icon name="x" size={16} />
-          </button>
+          <span className="font-medium">{copy.nav.menuTitle}</span>
+          <div className="flex items-center gap-2">
+            <LocaleToggle />
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label={copy.nav.closeMenu}
+              className="p-1 text-[var(--text-muted)]"
+            >
+              <Icon name="x" size={16} />
+            </button>
+          </div>
         </div>
         <div className="grid gap-1">
-          {NAV_ITEMS.map((it) => (
+          {navItems.map((it) => (
             <a
               key={it.id}
               href={`#${it.id}`}

@@ -3,7 +3,7 @@
 import { useEffect, useState, type MouseEvent } from "react";
 import { Icon } from "@/components/atoms/Icon";
 import { MicroLabel } from "@/components/atoms/MicroLabel";
-import { FOOTER_ELSEWHERE, FOOTER_NAV } from "@/lib/data/nav";
+import { useContent, useCopy } from "@/lib/i18n/LocaleProvider";
 import type { IconName } from "@/lib/types";
 
 function useCopiedReset(copied: boolean, reset: () => void) {
@@ -29,6 +29,7 @@ function copyEmail(
 }
 
 function FooterEmailLink({ href, label, icon }: { href: string; label: string; icon: IconName }) {
+  const copy = useCopy();
   const [copied, setCopied] = useState(false);
   useCopiedReset(copied, () => setCopied(false));
 
@@ -44,10 +45,10 @@ function FooterEmailLink({ href, label, icon }: { href: string; label: string; i
       className="group inline-flex items-center gap-2.5 text-sm text-[var(--text-muted)] hover:text-[var(--text)] transition-colors"
     >
       <Icon name={icon} size={14} />
-      <span aria-live="polite">{copied ? "Email copied!" : label}</span>
+      <span aria-live="polite">{copied ? copy.footer.emailCopied : label}</span>
       {copied ? (
         <span className="text-[10px] bg-[var(--accent)] text-white px-1.5 py-0.5 rounded font-sans ml-1">
-          Copied!
+          {copy.footer.copiedBadge}
         </span>
       ) : (
         <Icon
@@ -61,6 +62,8 @@ function FooterEmailLink({ href, label, icon }: { href: string; label: string; i
 }
 
 export function Footer() {
+  const copy = useCopy();
+  const { footerNav, footerElsewhere } = useContent();
   const [copiedMain, setCopiedMain] = useState(false);
   useCopiedReset(copiedMain, () => setCopiedMain(false));
 
@@ -88,8 +91,7 @@ export function Footer() {
             Rain Zhang
           </a>
           <p className="mt-4 text-[var(--text-muted)] leading-relaxed max-w-sm text-[15px]">
-            Full-stack engineer focused on shipping production systems end-to-end across modern
-            stacks.
+            {copy.footer.tagline}
           </p>
           <a
             href="mailto:rainzhang.zty@gmail.com"
@@ -98,11 +100,11 @@ export function Footer() {
           >
             <Icon name="mail" size={14} />
             <span className="font-mono" aria-live="polite">
-              {copiedMain ? "Email copied!" : "rainzhang.zty@gmail.com"}
+              {copiedMain ? copy.footer.emailCopied : "rainzhang.zty@gmail.com"}
             </span>
             {copiedMain ? (
               <span className="text-[10px] bg-[var(--accent)] text-white px-1.5 py-0.5 rounded font-sans ml-1">
-                Copied!
+                {copy.footer.copiedBadge}
               </span>
             ) : (
               <Icon
@@ -115,9 +117,9 @@ export function Footer() {
         </div>
 
         <div>
-          <MicroLabel className="mb-4">Navigate</MicroLabel>
+          <MicroLabel className="mb-4">{copy.footer.navigateLabel}</MicroLabel>
           <ul className="grid grid-cols-2 gap-y-2.5 gap-x-4">
-            {FOOTER_NAV.map((l) => (
+            {footerNav.map((l) => (
               <li key={l.id}>
                 <a
                   href={`#${l.id}`}
@@ -132,9 +134,9 @@ export function Footer() {
         </div>
 
         <div>
-          <MicroLabel className="mb-4">Contact</MicroLabel>
+          <MicroLabel className="mb-4">{copy.footer.contactLabel}</MicroLabel>
           <ul className="space-y-2.5">
-            {FOOTER_ELSEWHERE.map((l) => {
+            {footerElsewhere.map((l) => {
               const external = l.href.startsWith("http") || l.href.endsWith(".pdf");
               const isEmail = l.href.startsWith("mailto:");
               return (
@@ -164,18 +166,20 @@ export function Footer() {
       </div>
 
       <div className="flex flex-col-reverse md:flex-row items-start md:items-center justify-between gap-4 py-6 border-t border-[var(--border)]">
-        <div className="flex flex-wrap items-center gap-3 text-[var(--text-subtle)] font-mono text-[11px]">
+        <div className="flex flex-wrap items-center gap-3 text-[var(--text-subtle)] font-[family-name:var(--label-font)] text-[11px]">
           <span>© {new Date().getFullYear()} Rain Zhang</span>
           <span className="opacity-40">·</span>
-          <span>Designed &amp; built by Rain Zhang</span>
+          <span>{copy.footer.credit}</span>
         </div>
         <button
           type="button"
           onClick={scrollTop}
-          aria-label="Back to top"
+          aria-label={copy.footer.backToTop}
           className="group inline-flex items-center gap-2 text-xs text-[var(--text-muted)] hover:text-[var(--text)] transition-colors"
         >
-          <span className="font-mono uppercase tracking-[0.15em] text-[10px]">Back to top</span>
+          <span className="font-[family-name:var(--label-font)] [text-transform:var(--label-transform)] tracking-[var(--label-tracking)] text-[10px]">
+            {copy.footer.backToTop}
+          </span>
           <span className="inline-flex items-center justify-center w-7 h-7 rounded-full border border-[var(--border)] group-hover:border-[var(--border-strong)] group-hover:bg-[var(--surface-2)] transition-colors">
             <svg
               width="11"

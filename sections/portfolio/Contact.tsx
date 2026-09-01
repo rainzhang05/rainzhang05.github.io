@@ -4,21 +4,24 @@ import { useEffect, useState } from "react";
 import { Card } from "@/components/atoms/Card";
 import { Icon } from "@/components/atoms/Icon";
 import { SectionTitle } from "@/components/atoms/SectionTitle";
+import { useCopy } from "@/lib/i18n/LocaleProvider";
 import { validateContact } from "@/lib/utils/validateContact";
-import type { ContactFormState, ContactStatus, IconName } from "@/lib/types";
+import type {
+  ContactErrorCode,
+  ContactFormState,
+  ContactStatus,
+  IconName,
+} from "@/lib/types";
+import type { Copy } from "@/lib/i18n/types";
 
 const FORMSPREE_URL = "https://formspree.io/f/xoveaaqo";
 const FETCH_TIMEOUT_MS = 15_000;
 
-const CONTACT_FIELDS: Array<{
-  name: keyof ContactFormState;
-  label: string;
-  type: string;
-  placeholder: string;
-}> = [
-  { name: "name", label: "Name", type: "text", placeholder: "Your name" },
-  { name: "email", label: "Email", type: "email", placeholder: "you@example.com" },
-];
+const LABEL_CLASS =
+  "block font-[family-name:var(--label-font)] text-[10px] tracking-[var(--label-tracking)] [text-transform:var(--label-transform)] text-[var(--text-subtle)] mb-2";
+
+const ERROR_CLASS =
+  "mt-1 font-[family-name:var(--label-font)] text-[10px] text-red-400";
 
 interface ContactLinkProps {
   href: string;
@@ -28,6 +31,7 @@ interface ContactLinkProps {
 }
 
 function ContactLink({ href, icon, label, external = false }: ContactLinkProps) {
+  const copy = useCopy();
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
@@ -59,11 +63,11 @@ function ContactLink({ href, icon, label, external = false }: ContactLinkProps) 
     >
       <Icon name={icon} size={16} />
       <span className="font-mono text-sm" aria-live="polite">
-        {copied ? "Email copied!" : label}
+        {copied ? copy.contact.emailCopied : label}
       </span>
       {copied ? (
         <span className="text-[10px] bg-[var(--accent)] text-white px-1.5 py-0.5 rounded font-sans ml-1">
-          Copied!
+          {copy.contact.copiedBadge}
         </span>
       ) : (
         <Icon
@@ -76,10 +80,37 @@ function ContactLink({ href, icon, label, external = false }: ContactLinkProps) 
   );
 }
 
+function errorMessage(copy: Copy, code: ContactErrorCode | null): string | null {
+  if (code === "required") return copy.contact.errors.required;
+  if (code === "invalid-email") return copy.contact.errors.invalidEmail;
+  return null;
+}
+
 export function Contact() {
+  const copy = useCopy();
   const [form, setForm] = useState<ContactFormState>({ name: "", email: "", message: "" });
   const [honeypot, setHoneypot] = useState("");
   const [status, setStatus] = useState<ContactStatus>("idle");
+
+  const textFields: Array<{
+    name: keyof ContactFormState;
+    label: string;
+    type: string;
+    placeholder: string;
+  }> = [
+    {
+      name: "name",
+      label: copy.contact.nameLabel,
+      type: "text",
+      placeholder: copy.contact.namePlaceholder,
+    },
+    {
+      name: "email",
+      label: copy.contact.emailLabel,
+      type: "email",
+      placeholder: copy.contact.emailPlaceholder,
+    },
+  ];
 
   const errors = validateContact(form);
   const valid = !errors.name && !errors.email && !errors.message;
@@ -133,10 +164,9 @@ export function Contact() {
     <section id="contact" data-section-label="contact" className="py-[var(--gap-section)]">
       <div className="grid md:grid-cols-[1fr_1.2fr] gap-10 lg:gap-16">
         <div>
-          <SectionTitle>Let&apos;s connect.</SectionTitle>
+          <SectionTitle>{copy.contact.title}</SectionTitle>
           <p className="text-[var(--text-muted)] mb-8 leading-relaxed max-w-md">
-            I&apos;d love to connect — whether about an internship, a project, or just to trade
-            notes on full-stack work and post-quantum auth.
+            {copy.contact.intro}
           </p>
           <div className="space-y-3">
             <ContactLink
@@ -165,10 +195,8 @@ export function Contact() {
               <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[color-mix(in_oklab,var(--accent)_15%,transparent)] border border-[var(--accent-strong)] mb-4">
                 <Icon name="check" size={22} className="text-[var(--accent-strong)]" />
               </div>
-              <h3 className="text-xl font-medium mb-1">Message sent.</h3>
-              <p className="text-[var(--text-muted)] text-sm">
-                Thanks — I&apos;ll get back to you as soon as possible.
-              </p>
+              <h3 className="text-xl font-medium mb-1">{copy.contact.sentTitle}</h3>
+              <p className="text-[var(--text-muted)] text-sm">{copy.contact.sentBody}</p>
             </div>
           ) : (
             <form
@@ -176,7 +204,7 @@ export function Contact() {
               className="space-y-5"
               noValidate
               aria-busy={status === "sending"}
-              aria-label="Contact form"
+              aria-label={copy.contact.formLabel}
             >
               <div className="hidden" aria-hidden="true">
                 <input
@@ -188,16 +216,13 @@ export function Contact() {
                   autoComplete="off"
                 />
               </div>
-              {CONTACT_FIELDS.map((f) => {
+              {textFields.map((f) => {
                 const fieldId = `contact-${f.name}`;
                 const errorId = `${fieldId}-error`;
                 const hasErr = !!showErr(f.name);
                 return (
                   <div key={f.name}>
-                    <label
-                      htmlFor={fieldId}
-                      className="block font-mono text-[10px] tracking-[0.15em] uppercase text-[var(--text-subtle)] mb-2"
-                    >
+                    <label htmlFor={fieldId} className={LABEL_CLASS}>
                       {f.label}
                     </label>
                     <input
@@ -211,33 +236,30 @@ export function Contact() {
                       aria-describedby={hasErr ? errorId : undefined}
                     />
                     {hasErr && (
-                      <p id={errorId} className="mt-1 font-mono text-[10px] text-red-400">
-                        {errors[f.name]}
+                      <p id={errorId} className={ERROR_CLASS}>
+                        {errorMessage(copy, errors[f.name])}
                       </p>
                     )}
                   </div>
                 );
               })}
               <div>
-                <label
-                  htmlFor="contact-message"
-                  className="block font-mono text-[10px] tracking-[0.15em] uppercase text-[var(--text-subtle)] mb-2"
-                >
-                  Message
+                <label htmlFor="contact-message" className={LABEL_CLASS}>
+                  {copy.contact.messageLabel}
                 </label>
                 <textarea
                   id="contact-message"
                   rows={4}
                   value={form.message}
                   onChange={(e) => setForm({ ...form, message: e.target.value })}
-                  placeholder="What are you working on?"
+                  placeholder={copy.contact.messagePlaceholder}
                   className={`${inputClass("message")} resize-none`}
                   aria-invalid={!!showErr("message")}
                   aria-describedby={showErr("message") ? "contact-message-error" : undefined}
                 />
                 {showErr("message") && (
-                  <p id="contact-message-error" className="mt-1 font-mono text-[10px] text-red-400">
-                    {errors.message}
+                  <p id="contact-message-error" className={ERROR_CLASS}>
+                    {errorMessage(copy, errors.message)}
                   </p>
                 )}
               </div>
@@ -246,7 +268,7 @@ export function Contact() {
                 disabled={status === "sending"}
                 className="group relative inline-flex items-center gap-2 bg-[var(--text)] text-[var(--bg)] px-5 py-3 rounded-[calc(var(--r-sm)*1px)] text-sm font-medium shadow-[inset_0_1px_0_color-mix(in_oklab,white_15%,transparent),0_4px_14px_-4px_color-mix(in_oklab,var(--text)_45%,transparent)] hover:shadow-[inset_0_1px_0_color-mix(in_oklab,white_22%,transparent),0_10px_24px_-8px_color-mix(in_oklab,var(--text)_60%,transparent)] hover:-translate-y-[1px] active:translate-y-0 active:shadow-[inset_0_1px_0_color-mix(in_oklab,white_10%,transparent),0_2px_8px_-2px_color-mix(in_oklab,var(--text)_40%,transparent)] transition-[transform,box-shadow] duration-200 ease-out disabled:opacity-50 disabled:translate-y-0 disabled:shadow-none"
               >
-                {status === "sending" ? "Sending…" : "Send message"}
+                {status === "sending" ? copy.contact.sending : copy.contact.submit}
                 <Icon
                   name="arrow-right"
                   size={14}
@@ -254,8 +276,8 @@ export function Contact() {
                 />
               </button>
               {status === "error" && (
-                <p className="mt-1 font-mono text-[10px] text-red-400" role="alert">
-                  Couldn&apos;t reach the server — try emailing me directly.
+                <p className={ERROR_CLASS} role="alert">
+                  {copy.contact.sendFailed}
                 </p>
               )}
             </form>

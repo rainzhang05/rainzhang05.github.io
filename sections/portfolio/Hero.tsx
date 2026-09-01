@@ -3,17 +3,20 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Icon } from "@/components/atoms/Icon";
+import { RichText } from "@/components/atoms/RichText";
 import { Tag } from "@/components/atoms/Tag";
+import { useCopy } from "@/lib/i18n/LocaleProvider";
 import { useReducedMotion } from "@/lib/hooks/useReducedMotion";
+import type { Copy } from "@/lib/i18n/types";
 
 const EMAIL = "rainzhang.zty@gmail.com";
 
-function HeroPhoto() {
+function HeroPhoto({ copy }: { copy: Copy }) {
   return (
     <div className="relative rounded-full overflow-hidden border border-[var(--border)] bg-[var(--surface-2)] aspect-square w-full">
       <Image
         src="/portfolio-photo.png"
-        alt="Portrait of Rain Zhang"
+        alt={copy.hero.photoAlt}
         width={320}
         height={320}
         priority
@@ -24,7 +27,7 @@ function HeroPhoto() {
   );
 }
 
-function HeroCtas() {
+function HeroCtas({ copy }: { copy: Copy }) {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
@@ -55,7 +58,7 @@ function HeroCtas() {
         className="group relative inline-flex items-center gap-2 bg-[var(--text)] text-[var(--bg)] px-5 py-2.5 rounded-[calc(var(--r-sm)*1px)] text-sm font-medium shadow-[inset_0_1px_0_color-mix(in_oklab,white_15%,transparent),0_4px_14px_-4px_color-mix(in_oklab,var(--text)_45%,transparent)] hover:shadow-[inset_0_1px_0_color-mix(in_oklab,white_22%,transparent),0_10px_24px_-8px_color-mix(in_oklab,var(--text)_60%,transparent)] hover:-translate-y-[1px] active:translate-y-0 active:shadow-[inset_0_1px_0_color-mix(in_oklab,white_10%,transparent),0_2px_8px_-2px_color-mix(in_oklab,var(--text)_40%,transparent)] transition-[transform,box-shadow] duration-200 ease-out"
       >
         <Icon name="file" size={14} />
-        Resume
+        {copy.hero.resume}
         <Icon
           name="arrow-right"
           size={14}
@@ -68,25 +71,26 @@ function HeroCtas() {
         className="inline-flex items-center gap-2 px-5 py-2.5 rounded-[calc(var(--r-sm)*1px)] text-sm font-medium border border-[var(--border)] hover:border-[var(--border-strong)] hover:bg-[var(--surface-2)] transition-colors"
       >
         <Icon name="mail" size={14} />
-        <span aria-live="polite">{copied ? "Email copied!" : "Get in touch"}</span>
+        <span aria-live="polite">{copied ? copy.hero.emailCopied : copy.hero.getInTouch}</span>
       </a>
     </div>
   );
 }
 
-function HeroTags() {
+function HeroTags({ copy }: { copy: Copy }) {
   return (
     <div className="flex flex-wrap gap-1.5">
-      <Tag mono>Computer Science · SFU</Tag>
-      <Tag mono>Vancouver, BC</Tag>
+      <Tag mono>{copy.hero.tagField}</Tag>
+      <Tag mono>{copy.hero.tagLocation}</Tag>
       <Tag mono tone="accent">
-        Full-stack engineer
+        {copy.hero.tagRole}
       </Tag>
     </div>
   );
 }
 
 export function Hero({ animate = false }: { animate?: boolean }) {
+  const copy = useCopy();
   const prefersReducedMotion = useReducedMotion();
   // When the user wants reduced motion, render the final state immediately
   // — no fade/translate stagger. Same final layout, no animation.
@@ -106,12 +110,12 @@ export function Hero({ animate = false }: { animate?: boolean }) {
           <div
             className={`${baseTransition} delay-[100ms] ${shown ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
           >
-            <HeroTags />
+            <HeroTags copy={copy} />
           </div>
           <div
             className={`${baseTransition} delay-[200ms] ${shown ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
           >
-            <h1 className="mt-7 text-[clamp(2.5rem,7.2vw,6rem)] leading-[0.94] tracking-[-0.045em] font-medium text-[var(--text)]">
+            <h1 className="mt-7 text-[clamp(2.5rem,7.2vw,6rem)] leading-[0.94] tracking-[var(--track-display)] font-medium text-[var(--text)]">
               <span className="block">Rain</span>
               <span className="block">
                 Zhang<span className="text-[var(--accent)]">.</span>
@@ -121,20 +125,14 @@ export function Hero({ animate = false }: { animate?: boolean }) {
           <div
             className={`${baseTransition} delay-[300ms] ${shown ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
           >
-            <p className="mt-8 text-[clamp(1.1rem,1.6vw,1.4rem)] leading-[1.5] text-[var(--text-muted)] max-w-2xl">
-              I&apos;m a{" "}
-              <span className="text-[var(--text)]">
-                Computer Science student at Simon Fraser University
-              </span>
-              , based in Vancouver, BC. I build full-stack web applications across Python, React, and
-              TypeScript, and I&apos;m currently open to software engineering internship and new-grad
-              opportunities.
+            <p className="mt-8 text-[clamp(1.1rem,1.6vw,1.4rem)] leading-[var(--leading-hero)] text-[var(--text-muted)] max-w-2xl">
+              <RichText paragraph={copy.hero.intro} />
             </p>
           </div>
           <div
             className={`${baseTransition} delay-[400ms] ${shown ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
           >
-            <HeroCtas />
+            <HeroCtas copy={copy} />
           </div>
         </div>
         <div className="lg:col-span-4 lg:col-start-9">
@@ -142,7 +140,7 @@ export function Hero({ animate = false }: { animate?: boolean }) {
             <div
               className={`${baseTransition} delay-[300ms] ${shown ? "opacity-100 scale-100" : "opacity-0 scale-[0.97]"}`}
             >
-              <HeroPhoto />
+              <HeroPhoto copy={copy} />
             </div>
           </div>
         </div>

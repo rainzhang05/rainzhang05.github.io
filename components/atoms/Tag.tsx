@@ -22,7 +22,7 @@ export function Tag({ children, mono = false, tone = "default", className = "" }
     <span
       className={`inline-flex items-center gap-1.5 whitespace-nowrap text-[11px] px-2 py-[3px] rounded-[calc(var(--r-sm)*1px)] ${
         TAG_TONES[tone] || TAG_TONES.default
-      } ${mono ? "font-mono" : "font-sans"} ${className}`}
+      } ${mono ? "font-[family-name:var(--label-font)]" : "font-sans"} ${className}`}
     >
       {children}
     </span>

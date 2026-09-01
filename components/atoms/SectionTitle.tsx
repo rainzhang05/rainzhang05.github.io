@@ -8,7 +8,7 @@ interface SectionTitleProps {
 export function SectionTitle({ children, kicker }: SectionTitleProps) {
   return (
     <div className="mb-10">
-      <h2 className="text-[clamp(2rem,4.2vw,3.25rem)] tracking-[-0.02em] font-medium leading-[1.05] text-[var(--text)]">
+      <h2 className="text-[clamp(2rem,4.2vw,3.25rem)] tracking-[var(--track-title)] font-medium leading-[var(--leading-title)] text-[var(--text)]">
         {children}
       </h2>
       {kicker && (

@@ -8,11 +8,12 @@ describe("MicroLabel", () => {
     expect(screen.getByText("Navigate")).toBeInTheDocument();
   });
 
-  it("applies the mono uppercase styling contract", () => {
+  it("drives font, tracking, and casing off the locale typography tokens", () => {
     render(<MicroLabel>label</MicroLabel>);
     const el = screen.getByText("label");
-    expect(el.className).toContain("font-mono");
-    expect(el.className).toContain("uppercase");
+    expect(el.className).toContain("font-[family-name:var(--label-font)]");
+    expect(el.className).toContain("tracking-[var(--label-tracking)]");
+    expect(el.className).toContain("[text-transform:var(--label-transform)]");
   });
 
   it("merges a custom className", () => {

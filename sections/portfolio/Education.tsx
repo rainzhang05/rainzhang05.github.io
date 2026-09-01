@@ -1,25 +1,32 @@
+"use client";
+
 import { Card } from "@/components/atoms/Card";
 import { SectionTitle } from "@/components/atoms/SectionTitle";
-import { EDUCATION } from "@/lib/data/education";
+import { useContent, useCopy } from "@/lib/i18n/LocaleProvider";
 
 export function Education() {
+  const copy = useCopy();
+  const { education } = useContent();
+
   return (
     <section id="education" data-section-label="education" className="py-[var(--gap-section)]">
-      <SectionTitle kicker="Where I've studied.">Education</SectionTitle>
+      <SectionTitle kicker={copy.education.kicker}>{copy.education.title}</SectionTitle>
       <div className="grid md:grid-cols-2 gap-5">
-        {EDUCATION.map((e) => (
+        {education.map((e) => (
           <Card key={e.school} className="p-[var(--gap-card)]">
             <div className="flex items-start justify-between gap-4 mb-4">
               <div className="min-w-0">
-                <h3 className="text-lg tracking-tight font-medium text-[var(--text)]">
+                <h3 className="text-lg tracking-[var(--track-tight)] font-medium text-[var(--text)]">
                   {e.school}
                 </h3>
                 <p className="text-sm text-[var(--text-muted)] mt-0.5">{e.location}</p>
               </div>
               <div className="text-right shrink-0">
-                <div className="font-mono text-[11px] text-[var(--text-muted)]">{e.period}</div>
+                <div className="font-[family-name:var(--label-font)] text-[11px] text-[var(--text-muted)]">
+                  {e.period}
+                </div>
                 {e.expected && (
-                  <div className="font-mono text-[10px] text-[var(--text-subtle)] mt-0.5">
+                  <div className="font-[family-name:var(--label-font)] text-[10px] text-[var(--text-subtle)] mt-0.5">
                     {e.expected}
                   </div>
                 )}

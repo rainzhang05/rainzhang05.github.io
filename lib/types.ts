@@ -131,10 +131,13 @@ export interface ContactFormState {
   message: string;
 }
 
+/** Locale-independent validation outcome; mapped to copy at render time. */
+export type ContactErrorCode = "required" | "invalid-email";
+
 export interface ContactErrors {
-  name: string | null;
-  email: string | null;
-  message: string | null;
+  name: ContactErrorCode | null;
+  email: ContactErrorCode | null;
+  message: ContactErrorCode | null;
 }
 
 export type ContactStatus = "idle" | "sending" | "sent" | "error";

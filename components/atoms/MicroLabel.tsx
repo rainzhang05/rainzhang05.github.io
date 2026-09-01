@@ -8,7 +8,7 @@ interface MicroLabelProps {
 export function MicroLabel({ children, className = "" }: MicroLabelProps) {
   return (
     <div
-      className={`font-mono text-[10px] tracking-[0.15em] uppercase text-[var(--text-subtle)] ${className}`}
+      className={`font-[family-name:var(--label-font)] text-[10px] tracking-[var(--label-tracking)] [text-transform:var(--label-transform)] text-[var(--text-subtle)] ${className}`}
     >
       {children}
     </div>

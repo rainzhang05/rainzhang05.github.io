@@ -1,15 +1,20 @@
+"use client";
+
 import { Card } from "@/components/atoms/Card";
 import { MicroLabel } from "@/components/atoms/MicroLabel";
 import { SectionTitle } from "@/components/atoms/SectionTitle";
-import { SKILL_GROUPS } from "@/lib/data/skills";
 import { TECH_ICONS } from "@/lib/data/tech-icons";
+import { useContent, useCopy } from "@/lib/i18n/LocaleProvider";
 
 export function Skills() {
+  const copy = useCopy();
+  const { skillGroups } = useContent();
+
   return (
     <section id="skills" data-section-label="skills" className="py-[var(--gap-section)]">
-      <SectionTitle kicker="Languages, frameworks, and tools I reach for.">Stack</SectionTitle>
+      <SectionTitle kicker={copy.skills.kicker}>{copy.skills.title}</SectionTitle>
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {SKILL_GROUPS.map((g) => (
+        {skillGroups.map((g) => (
           <Card key={g.label} className="p-5">
             <MicroLabel className="text-[11px] text-[var(--text-muted)] mb-5">
               {g.label}

@@ -7,8 +7,25 @@
    ────────────────────────────────────────────────────────────── */
 
 :root {
-  /* Typography (font CSS vars come from next/font in layout.tsx) */
+  /* Typography (font CSS vars come from next/font in the root layouts) */
   --font-display: var(--font-sans);
+
+  /* Latin typography defaults. Every value here matches what the components
+     used to hardcode, so `/` renders identically. The `[lang="ja"]` block
+     further down retunes them for Japanese — that indirection is what keeps
+     locale conditionals out of the JSX. */
+  --label-font: var(--font-mono);
+  --label-transform: uppercase;
+  --label-tracking: 0.15em;
+  --track-loading: 0.35em;
+  --track-display: -0.045em;
+  --track-title: -0.02em;
+  --track-card-title: -0.015em;
+  --track-tight: -0.025em;
+  --leading-title: 1.05;
+  --leading-hero: 1.5;
+  --leading-prose: 1.7;
+  --nav-link-px: 0.875rem;
 
   /* Radius scale — used everywhere via rounded-[calc(var(--r-*)*1px)] */
   --r-sm: 10; /* tags, chips, small buttons, inputs */
@@ -133,6 +150,65 @@ textarea {
 .font-display {
   font-family: var(--font-display);
 }
+
+/* ──────────────────────────────────────────────────────────────
+   Japanese typography — scoped to the `/ja` root layout's
+   <html lang="ja">. Retunes the tokens above rather than adding
+   locale branches in components.
+   ────────────────────────────────────────────────────────────── */
+
+:root[lang="ja"] {
+  /* Manrope stays first so Latin runs (tech names, "Rain Zhang") keep the
+     English look; only CJK glyphs fall through to the Japanese faces. */
+  --font-jp:
+    var(--font-sans), var(--font-jp-loaded), "Hiragino Sans", "Hiragino Kaku Gothic ProN",
+    "Yu Gothic", "Noto Sans JP", Meiryo, sans-serif;
+
+  /* Uppercase and wide tracking are Latin-display devices; on Japanese they
+     just shred the rhythm. Mono has no CJK coverage at all, so small labels
+     move to the sans stack. */
+  --label-font: var(--font-jp);
+  --label-transform: none;
+  --label-tracking: 0.06em;
+  --track-loading: 0.24em;
+
+  /* Japanese glyphs are full-width and need no optical tightening. */
+  --track-display: -0.01em;
+  --track-title: 0;
+  --track-card-title: 0;
+  --track-tight: 0;
+
+  /* Denser glyphs need more air between lines. */
+  --leading-title: 1.3;
+  --leading-hero: 1.75;
+  --leading-prose: 1.9;
+
+  --nav-link-px: 0.625rem;
+}
+
+:root[lang="ja"],
+:root[lang="ja"] body {
+  font-family: var(--font-jp);
+}
+
+/* Japanese has no spaces, so wrapping is per-character. `strict` keeps
+   小書き文字 and long vowel marks off the start of a line, and `anywhere`
+   stops long Latin runs (URLs, ML-DSA / ML-KEM) from overflowing. */
+:root[lang="ja"] body {
+  line-break: strict;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+
+/* `leading-relaxed` (1.625) is used across the sections for body prose; the
+   Japanese equivalent needs to breathe more. */
+:root[lang="ja"] .leading-relaxed {
+  line-height: 1.85;
+}
+
+/* `TechTag` and the email/URL links keep JetBrains Mono deliberately — their
+   content is Latin in every locale. Small UI labels that do get translated go
+   through `--label-font` instead, so they land on the sans stack here. */
 
 ::selection {
   background: color-mix(in oklab, var(--accent) 30%, transparent);

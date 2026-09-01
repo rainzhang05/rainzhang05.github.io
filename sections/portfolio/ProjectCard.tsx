@@ -7,6 +7,7 @@ import { MicroLabel } from "@/components/atoms/MicroLabel";
 import { ProjectThumbnail } from "@/components/atoms/ProjectThumbnail";
 import { Tag } from "@/components/atoms/Tag";
 import { TechTag } from "@/components/atoms/TechTag";
+import { useCopy } from "@/lib/i18n/LocaleProvider";
 import type { Project } from "@/lib/types";
 
 interface ProjectLinkButtonProps {
@@ -35,6 +36,7 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project, expanded, onToggle }: ProjectCardProps) {
+  const copy = useCopy();
   const {
     id,
     title,
@@ -69,13 +71,13 @@ export function ProjectCard({ project, expanded, onToggle }: ProjectCardProps) {
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2 mb-3">
               <Tag mono tone="accent">
-                {tagType}
+                {copy.tagLabels[tagType]}
               </Tag>
-              <span className="font-mono text-[10px] tracking-[0.15em] uppercase text-[var(--text-subtle)]">
+              <span className="font-[family-name:var(--label-font)] text-[10px] tracking-[var(--label-tracking)] [text-transform:var(--label-transform)] text-[var(--text-subtle)]">
                 {period}
               </span>
             </div>
-            <h3 className="text-[clamp(1.35rem,2.2vw,1.6rem)] tracking-[-0.015em] font-medium leading-[1.15] text-[var(--text)]">
+            <h3 className="text-[clamp(1.35rem,2.2vw,1.6rem)] tracking-[var(--track-card-title)] font-medium leading-[1.15] text-[var(--text)]">
               {title}
             </h3>
             <p className="mt-2.5 text-[var(--text-muted)] leading-relaxed">{summary}</p>
@@ -87,7 +89,7 @@ export function ProjectCard({ project, expanded, onToggle }: ProjectCardProps) {
           </div>
           {!hideThumbnail && (
             <div className="relative">
-              <ProjectThumbnail image={image} alt={`${title} preview`} />
+              <ProjectThumbnail image={image} alt={copy.projects.previewAlt(title)} />
             </div>
           )}
         </div>
@@ -99,16 +101,16 @@ export function ProjectCard({ project, expanded, onToggle }: ProjectCardProps) {
           <div className="flex items-center gap-1.5 flex-wrap">
             {links?.live && (
               <ProjectLinkButton href={links.live}>
-                Live <Icon name="external" size={12} />
+                {copy.projects.live} <Icon name="external" size={12} />
               </ProjectLinkButton>
             )}
             {links?.github && (
               <ProjectLinkButton href={links.github}>
-                <Icon name="github" size={12} /> Code
+                <Icon name="github" size={12} /> {copy.projects.code}
               </ProjectLinkButton>
             )}
             <span className="inline-flex items-center gap-1 text-xs px-2.5 py-1.5 rounded-[calc(var(--r-sm)*1px)] bg-[var(--surface-2)] text-[var(--text-muted)] border border-[var(--border)]">
-              {expanded ? "Collapse" : "Read more"}
+              {expanded ? copy.projects.collapse : copy.projects.readMore}
               <Icon
                 name={expanded ? "arrow-down" : "arrow-right"}
                 size={12}
@@ -128,20 +130,20 @@ export function ProjectCard({ project, expanded, onToggle }: ProjectCardProps) {
             <div className="border-t border-[var(--border)] pt-6">
               <div className="grid md:grid-cols-2 gap-3 mb-6">
                 <div className="text-sm">
-                  <span className="font-mono text-[10px] tracking-[0.15em] uppercase text-[var(--text-subtle)] mr-2">
-                    Role
+                  <span className="font-[family-name:var(--label-font)] text-[10px] tracking-[var(--label-tracking)] [text-transform:var(--label-transform)] text-[var(--text-subtle)] mr-2">
+                    {copy.projects.role}
                   </span>
                   <span className="text-[var(--text)]">{role}</span>
                 </div>
                 <div className="text-sm">
-                  <span className="font-mono text-[10px] tracking-[0.15em] uppercase text-[var(--text-subtle)] mr-2">
-                    Tools
+                  <span className="font-[family-name:var(--label-font)] text-[10px] tracking-[var(--label-tracking)] [text-transform:var(--label-transform)] text-[var(--text-subtle)] mr-2">
+                    {copy.projects.tools}
                   </span>
                   <span className="text-[var(--text)]">{tools}</span>
                 </div>
               </div>
 
-              <MicroLabel className="mb-4">Contributions &amp; impact</MicroLabel>
+              <MicroLabel className="mb-4">{copy.projects.impact}</MicroLabel>
               <div className="grid md:grid-cols-3 gap-3">
                 {impact.map((im, i) => (
                   <div
@@ -160,7 +162,7 @@ export function ProjectCard({ project, expanded, onToggle }: ProjectCardProps) {
               </div>
 
               <div className="mt-6">
-                <MicroLabel className="mb-3">Technologies</MicroLabel>
+                <MicroLabel className="mb-3">{copy.projects.technologies}</MicroLabel>
                 <div className="flex flex-wrap gap-1.5">
                   {stack.map((s) => (
                     <TechTag key={s} name={s} />

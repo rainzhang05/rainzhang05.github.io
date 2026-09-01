@@ -7,6 +7,7 @@ import { Nav } from "@/components/chrome/Nav";
 import { useReducedMotion } from "@/lib/hooks/useReducedMotion";
 import { useScrollSpy } from "@/lib/hooks/useScrollSpy";
 import { useTheme } from "@/lib/hooks/useTheme";
+import { useCopy } from "@/lib/i18n/LocaleProvider";
 import { scrollToProject } from "@/lib/utils/smoothScroll";
 import { About } from "@/sections/portfolio/About";
 import { Contact } from "@/sections/portfolio/Contact";
@@ -19,6 +20,7 @@ import { Skills } from "@/sections/portfolio/Skills";
 import { ScrollReveal } from "@/components/atoms/ScrollReveal";
 
 export function PortfolioShell() {
+  const copy = useCopy();
   const [theme, toggleTheme] = useTheme();
   const [openProjectId, setOpenProjectId] = useState<string | null>(null);
   const activeSection = useScrollSpy();
@@ -196,8 +198,8 @@ export function PortfolioShell() {
               <span className="animate-ping absolute inline-flex h-5 w-5 rounded-full bg-[var(--accent)] opacity-75"></span>
               <span className="relative inline-flex rounded-full h-4 w-4 bg-[var(--accent)]"></span>
             </div>
-            <span className="font-mono text-xs md:text-sm tracking-[0.35em] uppercase text-[var(--text-subtle)] animate-pulse">
-              Loading
+            <span className="font-[family-name:var(--label-font)] text-xs md:text-sm tracking-[var(--track-loading)] [text-transform:var(--label-transform)] text-[var(--text-subtle)] animate-pulse">
+              {copy.preloader.loading}
             </span>
           </div>
         </div>

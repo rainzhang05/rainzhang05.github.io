@@ -8,11 +8,13 @@ describe("Tag", () => {
     expect(screen.getByText("Hello")).toBeInTheDocument();
   });
 
-  it("uses sans font by default and switches to mono when mono is set", () => {
+  it("uses sans by default and the locale label font when mono is set", () => {
     const { rerender } = render(<Tag>Sans</Tag>);
     expect(screen.getByText("Sans").className).toContain("font-sans");
     rerender(<Tag mono>Mono</Tag>);
-    expect(screen.getByText("Mono").className).toContain("font-mono");
+    expect(screen.getByText("Mono").className).toContain(
+      "font-[family-name:var(--label-font)]"
+    );
   });
 
   it("applies the accent tone color treatment", () => {
