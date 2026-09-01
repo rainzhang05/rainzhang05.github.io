@@ -192,12 +192,20 @@ textarea {
 }
 
 /* Japanese has no spaces, so wrapping is per-character. `strict` keeps
-   小書き文字 and long vowel marks off the start of a line, and `anywhere`
-   stops long Latin runs (URLs, ML-DSA / ML-KEM) from overflowing. */
+   小書き文字 and long vowel marks off the start of a line. `break-word` is the
+   conservative choice over `anywhere`: it only splits a Latin run (a URL, or
+   ML-DSA / ML-KEM) when that run cannot fit a line on its own. */
 :root[lang="ja"] body {
   line-break: strict;
   word-break: normal;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
+}
+
+/* Without balancing, Japanese headings strand one or two characters on the
+   last line (e.g. お気軽にご連絡くだ / さい。). */
+:root[lang="ja"] h2,
+:root[lang="ja"] h3 {
+  text-wrap: balance;
 }
 
 /* `leading-relaxed` (1.625) is used across the sections for body prose; the

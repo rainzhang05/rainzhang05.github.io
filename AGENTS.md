@@ -29,7 +29,7 @@ That's it. No body. No trailer. No `--amend` on already-pushed commits.
 ## Project at a glance
 
 - **What it is:** Rain Zhang's personal portfolio website (live at https://rainzhang.me).
-- **Two routes:** `/` (portfolio home) and `/design-system` (design tokens / showcase page).
+- **Three routes:** `/` (English portfolio home), `/ja` (Japanese portfolio home), and `/design-system` (design tokens / showcase page, English only).
 - **Framework:** Next.js 15 App Router + React 18 + TypeScript (strict) + Tailwind CSS 3.
 - **Deployed on:** Vercel (`vercel.json` pins `framework: nextjs`).
 - **Forms:** Contact form posts to Formspree (`https://formspree.io/f/xoveaaqo`) — endpoint is hardcoded inside [Contact.tsx](sections/portfolio/Contact.tsx).
@@ -41,16 +41,20 @@ That's it. No body. No trailer. No `--amend` on already-pushed commits.
 
 ```
 app/                       # Next.js App Router (server components by default)
-  layout.tsx               # Root layout: fonts (Manrope + JetBrains Mono), ThemeScript, <head>
-  page.tsx                 # Portfolio home (sets data-route="portfolio")
-  design-system/page.tsx   # Design system page (sets data-route="design-system")
-  globals.css              # CSS variables, themes, base styles, reveal/scroll utilities
+  fonts.ts                 # next/font instances: Manrope, JetBrains Mono, Noto Sans JP
+  RootHtml.tsx             # Shared <html>/<head>/<body> shell + ThemeScript
+  (en)/layout.tsx          # English root layout: <html lang="en">
+  (en)/page.tsx            # /  — portfolio home (sets data-route="portfolio")
+  (en)/design-system/page.tsx  # /design-system (sets data-route="design-system")
+  (ja)/layout.tsx          # Japanese root layout: <html lang="ja"> + Noto Sans JP
+  (ja)/ja/page.tsx         # /ja — portfolio home
+  globals.css              # CSS variables, themes, base styles, ja typography, utilities
 
 components/
   atoms/                   # Reusable primitives: Card, Icon, Tag, TechTag, MicroLabel,
-                           # SectionTitle, ScrollReveal, ProjectThumbnail
+                           # SectionTitle, ScrollReveal, ProjectThumbnail, RichText
   chrome/                  # Top-level page chrome: Nav, MobileMenu, ThemeToggle,
-                           # GridBackground, CursorGlow
+                           # LocaleToggle, GridBackground, CursorGlow
   theme/                   # ThemeScript (inline <head> script that prevents FOUC)
 
 sections/
@@ -63,8 +67,10 @@ sections/
 
 lib/
   types.ts                 # All shared TypeScript types (Project, Experience, NavItem, etc.)
-  data/                    # Static content: projects, experiences, skills, education, nav,
+  data/                    # English content: projects, experiences, skills, education, nav,
                            # tech-icons, design-system
+  i18n/                    # Locale layer: config, types (Copy + SiteContent), metadata,
+                           # LocaleProvider (useLocale/useCopy/useContent), en/, ja/
   hooks/                   # useTheme (portfolio, persisted), useDsTheme (design-system,
                            # NOT persisted), useScrollSpy
   utils/                   # smoothScroll, validateContact
@@ -121,7 +127,8 @@ Design tokens live in [app/globals.css](app/globals.css) as CSS variables. They 
 - **Color tokens:** `--bg`, `--surface`, `--surface-2`, `--text`, `--text-muted`, `--text-subtle`, `--border`, `--border-strong`, plus per-route `--accent`, `--accent-strong`, `--accent-soft`.
 - **Radius tokens:** `--r-sm` (10), `--r-md` (18), `--r-lg` (28). Applied as `rounded-[calc(var(--r-md)*1px)]`.
 - **Spacing tokens:** `--gap-card` (32px), `--gap-section` (120px), `--content-max-w` (1200px).
-- **Fonts:** `--font-sans` (Manrope) and `--font-mono` (JetBrains Mono), loaded via `next/font/google` in [app/layout.tsx](app/layout.tsx).
+- **Fonts:** `--font-sans` (Manrope) and `--font-mono` (JetBrains Mono), loaded via `next/font/google` in [app/fonts.ts](app/fonts.ts). `--font-jp-loaded` (Noto Sans JP) is added by the `(ja)` layout only.
+- **Locale typography tokens:** `--label-font`, `--label-transform`, `--label-tracking`, `--track-display`, `--track-title`, `--track-card-title`, `--track-tight`, `--leading-title`, `--leading-hero`, `--leading-prose`, `--nav-link-px`. The `:root` values reproduce the old hardcoded Latin values exactly; `:root[lang="ja"]` retunes them. Components consume the tokens (e.g. `tracking-[var(--label-tracking)]`) so no component branches on locale.
 
 **Theme system** is attribute-driven via `data-theme="light|dark"` on `<html>`:
 
@@ -135,7 +142,7 @@ Design tokens live in [app/globals.css](app/globals.css) as CSS variables. They 
 
 ## Routing & navigation
 
-- Single-page scroll layout. Each section on `/` has an `id` matching an entry in [lib/data/nav.ts](lib/data/nav.ts).
+- Single-page scroll layout. Each section on `/` and `/ja` has an `id` matching an entry in [lib/data/nav.ts](lib/data/nav.ts); the ids are locale-independent, only the labels are translated.
 - The fixed nav pill uses smooth-scroll anchor jumps via [smoothScrollTo](lib/utils/smoothScroll.ts) — `scroll-padding-top` in `globals.css` accounts for the header height (96px on portfolio, 84px on design-system).
 - Active section is tracked by [useScrollSpy](lib/hooks/useScrollSpy.ts) (IntersectionObserver with rootMargin tuned for mid-viewport detection).
 - Projects can be opened/expanded; the card scrolls into view via [scrollToProject](lib/utils/smoothScroll.ts).
@@ -144,9 +151,31 @@ Design tokens live in [app/globals.css](app/globals.css) as CSS variables. They 
 
 ## Data architecture
 
-All page content (projects, experiences, skills, education, nav items) lives in [lib/data/](lib/data/) as typed TypeScript modules. Updating site content = editing one of these files, **not** the JSX. Types are in [lib/types.ts](lib/types.ts).
+All page content (projects, experiences, skills, education, nav items) lives in typed TypeScript modules. Updating site content = editing a data module, **not** the JSX. Types are in [lib/types.ts](lib/types.ts).
 
-When adding a new project, experience, or skill: edit the corresponding data file. The components iterate over the exported arrays automatically.
+- **English content** is [lib/data/](lib/data/) — still the source of truth for structure (ids, stacks, links, image paths). [lib/i18n/en/content.ts](lib/i18n/en/content.ts) just assembles those exports into a `SiteContent`.
+- **Japanese content** is [lib/i18n/ja/content.ts](lib/i18n/ja/content.ts), which mirrors the same shape with translated prose.
+
+When adding a new project, experience, or skill: edit the English data file **and** its Japanese counterpart. `tests/unit/i18n.test.ts` fails if ids, stacks, links, `tagType`, skill items, or nav ids drift apart, so you cannot forget one.
+
+---
+
+## Localization (`/` English, `/ja` Japanese)
+
+Three mechanisms, no `locale === "ja" ? … : …` anywhere in JSX:
+
+1. **Copy and content** come from a typed dictionary in [lib/i18n/](lib/i18n/), read through [LocaleProvider](lib/i18n/LocaleProvider.tsx) via `useCopy()` and `useContent()`. The context **defaults to English**, so a component rendered without a provider (every pre-existing unit test) behaves exactly as it did before localization. Do not remove that default.
+2. **Routing and `<html lang>`** use two root layouts under route groups — `app/(en)/` and `app/(ja)/`. There is intentionally **no `app/layout.tsx`**; adding one back would break the per-locale `lang` attribute. Language switching is a full document load, which is what makes `lang` actually change, so `LocaleToggle` uses plain `<a>` and not `next/link`.
+3. **Japanese typography** is the `:root[lang="ja"]` block in [globals.css](app/globals.css) — it retunes the typography tokens, relaxes `leading-relaxed`, sets wrapping rules, and balances headings.
+
+Conventions to preserve:
+
+- Section `id`s stay in English (`intro`, `about`, …) in both locales — [useScrollSpy](lib/hooks/useScrollSpy.ts) and hash links depend on them, and `LocaleToggle` carries the hash across locales.
+- `validateContact` returns error **codes** (`"required" | "invalid-email"`), mapped to copy in `Contact.tsx`. Do not put user-facing strings back in it.
+- `Project.tagType` / `Experience.tagType` keep the semantic English key; the display label comes from `copy.tagLabels`.
+- `TechTag` and the email/URL links keep literal `font-mono` because their content is Latin in every locale. Translated small labels use `--label-font` instead.
+- `/design-system` is English only and lives under `(en)`.
+- Never add claims the English site does not make (JLPT, Japanese proficiency, visa status, employment status, metrics). A unit test guards a blocklist of these.
 
 ---
 
@@ -166,6 +195,7 @@ When adding a new project, experience, or skill: edit the corresponding data fil
 - **`tsconfig.json` excludes `tests/e2e`** — Playwright uses its own tsconfig. If you add a Playwright test, you don't need to add it to the main TS project.
 - **Don't rely on `window.scrollY` checks** — they're flaky in headless browsers. Use `expect(locator).toBeInViewport()` instead (see [tests/e2e/nav.spec.ts](tests/e2e/nav.spec.ts)).
 - **Wait for the preloader to fully unmount** before interacting with the page: `await page.waitForFunction(() => !document.querySelector("[data-preloader]"))`. Its scroll-lock listeners stay attached until unmount.
+- [tests/e2e/i18n.spec.ts](tests/e2e/i18n.spec.ts) covers the `/ja` route, the language toggle, Japanese typography tokens, a scan for untranslated English on `/ja`, and nav-pill fit at 320–1280px. The nav-fit assertions are the guard against a wider nav label or an extra control overflowing the header gutter — if you add anything to the nav pill, run them.
 
 ---
 
@@ -194,8 +224,9 @@ A change that breaks CI on one matrix entry will block the whole PR. Don't disab
 - **Strict TypeScript** — no `any` (the lone exception is the Footer's small `any` icon prop; don't follow that pattern). Prefer importing types from [lib/types.ts](lib/types.ts).
 - **Prettier:** double quotes, semicolons, trailing commas (`es5`), `printWidth: 100`, 2-space indent. See [.prettierrc.json](.prettierrc.json).
 - **ESLint:** `@typescript-eslint/no-unused-vars` is warn-only with `argsIgnorePattern: "^_"`. `@next/next/no-img-element` is disabled — `<img>` is permitted; `next/image` is used selectively (e.g. in the Hero photo). When you use a raw `<img>`, leave the existing `eslint-disable-next-line` comments in place.
-- **Client vs server components:** server by default; add `"use client"` at the top only when the file uses hooks, browser APIs, or event handlers. The shells (`PortfolioShell`, anything under `chrome/`, most interactive sections) are client; static sections (`About`, `Education`, `Skills`) are server.
-- **Hash anchors:** every top-level section on `/` must keep its `id` aligned with [lib/data/nav.ts](lib/data/nav.ts) — `useScrollSpy` and smooth-scroll both depend on this.
+- **Client vs server components:** server by default; add `"use client"` at the top only when the file uses hooks, browser APIs, or event handlers. All portfolio sections are client because they read the locale context; the design-system sections are still mostly server.
+- **Hash anchors:** every top-level section must keep its `id` aligned with [lib/data/nav.ts](lib/data/nav.ts) — `useScrollSpy` and smooth-scroll both depend on this, and the ids are shared by both locales.
+- **Hardcoded UI strings:** don't add them to portfolio components. Add a key to the `Copy` interface in [lib/i18n/types.ts](lib/i18n/types.ts) and implement it in both `en/copy.ts` and `ja/copy.ts` — TypeScript will fail the build until you do.
 - **`select-none` on body** — text is unselectable globally; inputs/textareas opt back in via the CSS in `globals.css`. If you add a content surface where copy should be selectable, give it `user-select: text` explicitly.
 - **Preloader:** the portfolio has a 3.5s max-wait loader that locks scroll via wheel/touch/keydown listeners. Don't introduce competing scroll-lock mechanisms or `overflow: hidden` on `<body>` — they cause layout shift (see commit `6b7a434`).
 - **Honeypot field:** the contact form has a hidden `confirm_username` input. Don't unhide it or remove the bot-trap branch in [Contact.tsx](sections/portfolio/Contact.tsx).
@@ -206,10 +237,12 @@ A change that breaks CI on one matrix entry will block the whole PR. Don't disab
 
 ## Common tasks — where to look
 
-- **Add or edit a project card:** [lib/data/projects.ts](lib/data/projects.ts) (image goes in `/public/projects/`).
-- **Add or edit an experience:** [lib/data/experiences.ts](lib/data/experiences.ts).
-- **Add a skill or tech tag:** [lib/data/skills.ts](lib/data/skills.ts) + an icon in [lib/data/tech-icons.ts](lib/data/tech-icons.ts) (drop the asset in `/public/icons/`).
-- **Add a nav item:** [lib/data/nav.ts](lib/data/nav.ts) — the section's `id` and the `NavItem.id` must match.
+- **Add or edit a project card:** [lib/data/projects.ts](lib/data/projects.ts) + [lib/i18n/ja/content.ts](lib/i18n/ja/content.ts) (image goes in `/public/projects/`).
+- **Add or edit an experience:** [lib/data/experiences.ts](lib/data/experiences.ts) + [lib/i18n/ja/content.ts](lib/i18n/ja/content.ts).
+- **Add a skill or tech tag:** [lib/data/skills.ts](lib/data/skills.ts) + [lib/i18n/ja/content.ts](lib/i18n/ja/content.ts) + an icon in [lib/data/tech-icons.ts](lib/data/tech-icons.ts) (drop the asset in `/public/icons/`). Skill *items* must stay identical across locales so icons resolve; only group labels are translated.
+- **Add a nav item:** [lib/data/nav.ts](lib/data/nav.ts) + [lib/i18n/ja/content.ts](lib/i18n/ja/content.ts) — the section's `id` and the `NavItem.id` must match, and the id must be the same in both locales.
+- **Change a UI string:** [lib/i18n/en/copy.ts](lib/i18n/en/copy.ts) and [lib/i18n/ja/copy.ts](lib/i18n/ja/copy.ts).
+- **Change page title/description or hreflang:** [lib/i18n/metadata.ts](lib/i18n/metadata.ts) (`buildMetadata`) and the `metadata` keys in each locale's copy.
 - **Change a token (color, radius, spacing):** [app/globals.css](app/globals.css) `:root` block. Update [lib/data/design-system.ts](lib/data/design-system.ts) so the showcase page reflects reality.
 - **Tweak the design-system page:** [sections/design-system/](sections/design-system/) — each subsection is its own file.
 - **Update the contact form:** [sections/portfolio/Contact.tsx](sections/portfolio/Contact.tsx) and validation in [lib/utils/validateContact.ts](lib/utils/validateContact.ts).
