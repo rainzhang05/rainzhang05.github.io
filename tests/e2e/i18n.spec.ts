@@ -104,6 +104,42 @@ test.describe("Japanese route", () => {
   });
 });
 
+test.describe("geo locale redirect", () => {
+  test("cookie ja on / lands on Japanese", async ({ page, context, baseURL }) => {
+    await context.addCookies([
+      { name: "portfolio.locale", value: "ja", url: `${baseURL}/` },
+    ]);
+    await page.goto("/");
+    await expect(page.locator("html")).toHaveAttribute("lang", "ja");
+    expect(new URL(page.url()).pathname).toBe("/ja");
+  });
+
+  test("cookie en keeps / even with a Japan country header", async ({ page, context, baseURL }) => {
+    await context.addCookies([
+      { name: "portfolio.locale", value: "en", url: `${baseURL}/` },
+    ]);
+    await page.setExtraHTTPHeaders({ "x-vercel-ip-country": "JP" });
+    await page.goto("/");
+    await ready(page);
+    await expect(page.locator("html")).toHaveAttribute("lang", "en");
+    expect(new URL(page.url()).pathname).toBe("/");
+  });
+
+  test("Japan country header without a cookie sends / to /ja", async ({ page }) => {
+    await page.setExtraHTTPHeaders({ "x-vercel-ip-country": "JP" });
+    await page.goto("/");
+    await expect(page.locator("html")).toHaveAttribute("lang", "ja");
+    expect(new URL(page.url()).pathname).toBe("/ja");
+  });
+
+  test("no cookie and no country header keeps / in English", async ({ page }) => {
+    await page.goto("/");
+    await ready(page);
+    await expect(page.locator("html")).toHaveAttribute("lang", "en");
+    expect(new URL(page.url()).pathname).toBe("/");
+  });
+});
+
 test.describe("language toggle", () => {
   test.use({ viewport: { width: 1280, height: 800 } });
 

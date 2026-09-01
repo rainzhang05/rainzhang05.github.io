@@ -176,6 +176,7 @@ Conventions to preserve:
 - `TechTag` and the email/URL links keep literal `font-mono` because their content is Latin in every locale. Translated small labels use `--label-font` instead.
 - `/design-system` is English only and lives under `(en)`.
 - Never add claims the English site does not make (JLPT, Japanese proficiency, visa status, employment status, metrics). A unit test guards a blocklist of these.
+- **Geo redirect:** [middleware.ts](middleware.ts) 307s `/` to `/ja` when `x-vercel-ip-country` is `JP` **and** there is no `portfolio.locale` cookie. The language toggle owns that cookie; do not set it on mere visits to `/ja`, and do not bounce `/ja` back to `/`. Local `next dev` has no country header, so `/` stays English.
 
 ---
 
@@ -195,7 +196,7 @@ Conventions to preserve:
 - **`tsconfig.json` excludes `tests/e2e`** — Playwright uses its own tsconfig. If you add a Playwright test, you don't need to add it to the main TS project.
 - **Don't rely on `window.scrollY` checks** — they're flaky in headless browsers. Use `expect(locator).toBeInViewport()` instead (see [tests/e2e/nav.spec.ts](tests/e2e/nav.spec.ts)).
 - **Wait for the preloader to fully unmount** before interacting with the page: `await page.waitForFunction(() => !document.querySelector("[data-preloader]"))`. Its scroll-lock listeners stay attached until unmount.
-- [tests/e2e/i18n.spec.ts](tests/e2e/i18n.spec.ts) covers the `/ja` route, the language toggle, Japanese typography tokens, a scan for untranslated English on `/ja`, and nav-pill fit at 320–1280px. The nav-fit assertions are the guard against a wider nav label or an extra control overflowing the header gutter — if you add anything to the nav pill, run them.
+- [tests/e2e/i18n.spec.ts](tests/e2e/i18n.spec.ts) covers the `/ja` route, the language toggle, Japanese typography tokens, a scan for untranslated English on `/ja`, nav-pill fit at 320–1280px, and geo/cookie redirects on `/`. The nav-fit assertions are the guard against a wider nav label or an extra control overflowing the header gutter — if you add anything to the nav pill, run them.
 
 ---
 
