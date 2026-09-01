@@ -30,6 +30,15 @@ export const OG_LOCALE: Record<Locale, string> = {
 
 export const SITE_URL = "https://rainzhang.me";
 
+/**
+ * Explicit language choice, written only by the locale toggle. Middleware
+ * honours this over geo so a visitor in Japan can stay on English.
+ */
+export const LOCALE_COOKIE = "portfolio.locale";
+
+/** One year, in seconds. */
+export const LOCALE_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
+
 export function isLocale(value: string): value is Locale {
   return (LOCALES as readonly string[]).includes(value);
 }
