@@ -210,6 +210,16 @@ textarea {
    content is Latin in every locale. Small UI labels that do get translated go
    through `--label-font` instead, so they land on the sans stack here. */
 
+/* The desktop nav appears at 768px, where the section links plus the theme and
+   language toggles are widest relative to the viewport. Tightening link padding
+   across that band keeps the pill inside the header's px-4 gutter; the ≥1024px
+   spacing is unchanged. */
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  :root {
+    --nav-link-px: 0.625rem;
+  }
+}
+
 ::selection {
   background: color-mix(in oklab, var(--accent) 30%, transparent);
   color: var(--text);

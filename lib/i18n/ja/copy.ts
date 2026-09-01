@@ -118,7 +118,9 @@ export const JA_COPY: Copy = {
     tagline:
       "モダンな技術スタックで、実際に使われるシステムを設計から実装まで一貫して開発しています。",
     navigateLabel: "ページ内リンク",
-    contactLabel: "連絡先",
+    // Deliberately not 連絡先 — the footer nav column already uses that label,
+    // and this column is GitHub / LinkedIn / メール / レジュメ.
+    contactLabel: "リンク",
     emailCopied: "メールアドレスをコピーしました",
     copiedBadge: "コピー完了",
     credit: "デザイン・開発:Rain Zhang",

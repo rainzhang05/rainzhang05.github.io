@@ -29,7 +29,9 @@ export function Nav({ activeSection, theme, onToggleTheme }: NavProps) {
   return (
     <>
       <header className="fixed top-4 left-0 right-0 z-40 flex justify-center pointer-events-none px-4">
-        <div className="pointer-events-auto flex items-center gap-1.5 rounded-full border border-[var(--border)] bg-[color-mix(in_oklab,var(--surface)_80%,transparent)] backdrop-blur-xl px-3 py-2 shadow-[0_1px_0_color-mix(in_oklab,white_50%,transparent)_inset,0_12px_30px_-12px_rgba(0,0,0,0.25)]">
+        {/* Mobile keeps tighter padding/gaps than sm+ so the language toggle
+            fits inside the pill down to a 320px viewport. */}
+        <div className="pointer-events-auto flex items-center gap-1 sm:gap-1.5 rounded-full border border-[var(--border)] bg-[color-mix(in_oklab,var(--surface)_80%,transparent)] backdrop-blur-xl px-2 sm:px-3 py-2 shadow-[0_1px_0_color-mix(in_oklab,white_50%,transparent)_inset,0_12px_30px_-12px_rgba(0,0,0,0.25)]">
           <a
             href="#intro"
             onClick={onJump("intro")}
