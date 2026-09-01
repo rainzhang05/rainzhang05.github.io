@@ -97,11 +97,8 @@ export const JA_COPY: Copy = {
       "インターンシップやプロジェクトのご相談はもちろん、フルスタック開発やポスト量子暗号を使った認証について話すだけでも歓迎です。",
     formLabel: "お問い合わせフォーム",
     nameLabel: "お名前",
-    namePlaceholder: "例:山田 太郎",
     emailLabel: "メールアドレス",
-    emailPlaceholder: "you@example.com",
     messageLabel: "メッセージ",
-    messagePlaceholder: "ご用件をご記入ください",
     errors: {
       required: "入力してください",
       invalidEmail: "メールアドレスの形式が正しくありません",

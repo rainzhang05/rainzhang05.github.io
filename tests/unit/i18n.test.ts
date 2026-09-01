@@ -29,12 +29,7 @@ function uniqueSortedPaths(value: unknown): string[] {
 }
 
 /** Strings that are intentionally identical in both locales. */
-const SHARED_VALUES = new Set([
-  "you@example.com",
-  "FEITIAN",
-  "Rain Zhang — Portfolio",
-  "Language",
-]);
+const SHARED_VALUES = new Set(["FEITIAN"]);
 
 function stringLeaves(value: unknown): string[] {
   if (Array.isArray(value)) return value.flatMap(stringLeaves);

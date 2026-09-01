@@ -99,11 +99,8 @@ export const EN_COPY: Copy = {
       "I'd love to connect — whether about an internship, a project, or just to trade notes on full-stack work and post-quantum auth.",
     formLabel: "Contact form",
     nameLabel: "Name",
-    namePlaceholder: "Your name",
     emailLabel: "Email",
-    emailPlaceholder: "you@example.com",
     messageLabel: "Message",
-    messagePlaceholder: "What are you working on?",
     errors: {
       required: "Required",
       invalidEmail: "Invalid email",

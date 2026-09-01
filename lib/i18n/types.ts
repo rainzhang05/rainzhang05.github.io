@@ -91,11 +91,8 @@ export interface Copy {
     intro: string;
     formLabel: string;
     nameLabel: string;
-    namePlaceholder: string;
     emailLabel: string;
-    emailPlaceholder: string;
     messageLabel: string;
-    messagePlaceholder: string;
     errors: {
       required: string;
       invalidEmail: string;
