@@ -23,10 +23,19 @@ describe("Contact form", () => {
     expect(globalThis.fetch).not.toHaveBeenCalled();
   });
 
+  it("labels every field and leaves the inputs free of placeholder text", () => {
+    render(<Contact />);
+    for (const label of ["Name", "Email", "Message"]) {
+      const field = screen.getByLabelText(label);
+      expect(field).toBeInTheDocument();
+      expect(field).not.toHaveAttribute("placeholder");
+    }
+  });
+
   it("shows an inline error for malformed email after the user types into it", async () => {
     const user = userEvent.setup();
     render(<Contact />);
-    const emailInput = screen.getByPlaceholderText("you@example.com");
+    const emailInput = screen.getByLabelText("Email");
     await user.type(emailInput, "not-an-email");
     expect(await screen.findByText("Invalid email")).toBeInTheDocument();
   });
@@ -34,9 +43,9 @@ describe("Contact form", () => {
   it("POSTs to Formspree with form payload and shows success state", async () => {
     const user = userEvent.setup();
     render(<Contact />);
-    await user.type(screen.getByPlaceholderText("Your name"), "Rain");
-    await user.type(screen.getByPlaceholderText("you@example.com"), "rain@example.com");
-    await user.type(screen.getByPlaceholderText("What are you working on?"), "Hi there");
+    await user.type(screen.getByLabelText("Name"), "Rain");
+    await user.type(screen.getByLabelText("Email"), "rain@example.com");
+    await user.type(screen.getByLabelText("Message"), "Hi there");
     await user.click(screen.getByRole("button", { name: /Send message/i }));
 
     await waitFor(() => {

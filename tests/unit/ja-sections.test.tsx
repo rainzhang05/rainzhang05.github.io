@@ -87,12 +87,17 @@ describe("Japanese section rendering", () => {
     );
   });
 
-  it("renders Japanese form labels and placeholders", () => {
+  it("renders Japanese form labels with no placeholder text", () => {
     renderJa(<Contact />);
-    expect(screen.getByLabelText(JA_COPY.contact.nameLabel)).toBeInTheDocument();
-    expect(screen.getByLabelText(JA_COPY.contact.emailLabel)).toBeInTheDocument();
-    expect(screen.getByLabelText(JA_COPY.contact.messageLabel)).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(JA_COPY.contact.namePlaceholder)).toBeInTheDocument();
+    for (const label of [
+      JA_COPY.contact.nameLabel,
+      JA_COPY.contact.emailLabel,
+      JA_COPY.contact.messageLabel,
+    ]) {
+      const field = screen.getByLabelText(label);
+      expect(field).toBeInTheDocument();
+      expect(field).not.toHaveAttribute("placeholder");
+    }
     expect(
       screen.getByRole("button", { name: new RegExp(JA_COPY.contact.submit) })
     ).toBeInTheDocument();

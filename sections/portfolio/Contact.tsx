@@ -96,20 +96,9 @@ export function Contact() {
     name: keyof ContactFormState;
     label: string;
     type: string;
-    placeholder: string;
   }> = [
-    {
-      name: "name",
-      label: copy.contact.nameLabel,
-      type: "text",
-      placeholder: copy.contact.namePlaceholder,
-    },
-    {
-      name: "email",
-      label: copy.contact.emailLabel,
-      type: "email",
-      placeholder: copy.contact.emailPlaceholder,
-    },
+    { name: "name", label: copy.contact.nameLabel, type: "text" },
+    { name: "email", label: copy.contact.emailLabel, type: "email" },
   ];
 
   const errors = validateContact(form);
@@ -158,7 +147,7 @@ export function Contact() {
   const inputClass = (key: keyof ContactFormState) =>
     `w-full bg-transparent border-b ${
       showErr(key) ? "border-red-400" : "border-[var(--border)]"
-    } focus:border-[var(--border-strong)] outline-none focus-visible:outline-none py-2.5 text-[var(--text)] placeholder:text-[var(--text-subtle)] transition-colors`;
+    } focus:border-[var(--border-strong)] outline-none focus-visible:outline-none py-2.5 text-[var(--text)] transition-colors`;
 
   return (
     <section id="contact" data-section-label="contact" className="py-[var(--gap-section)]">
@@ -230,7 +219,6 @@ export function Contact() {
                       type={f.type}
                       value={form[f.name]}
                       onChange={(e) => setForm({ ...form, [f.name]: e.target.value })}
-                      placeholder={f.placeholder}
                       className={inputClass(f.name)}
                       aria-invalid={hasErr}
                       aria-describedby={hasErr ? errorId : undefined}
@@ -252,7 +240,6 @@ export function Contact() {
                   rows={4}
                   value={form.message}
                   onChange={(e) => setForm({ ...form, message: e.target.value })}
-                  placeholder={copy.contact.messagePlaceholder}
                   className={`${inputClass("message")} resize-none`}
                   aria-invalid={!!showErr("message")}
                   aria-describedby={showErr("message") ? "contact-message-error" : undefined}
