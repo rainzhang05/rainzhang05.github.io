@@ -35,7 +35,7 @@ export interface Experience {
   dept: string;
   location: string;
   period: string;
-  tagType: string;
+  tagType: ProjectType;
   summary: string;
   outcomes: string[];
   stack: string[];
