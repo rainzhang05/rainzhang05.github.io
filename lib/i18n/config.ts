@@ -22,6 +22,12 @@ export const HTML_LANG: Record<Locale, string> = {
   ja: "ja",
 };
 
+/** Open Graph locale identifiers. */
+export const OG_LOCALE: Record<Locale, string> = {
+  en: "en_CA",
+  ja: "ja_JP",
+};
+
 export const SITE_URL = "https://rainzhang.me";
 
 export function isLocale(value: string): value is Locale {
