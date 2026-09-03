@@ -30,4 +30,7 @@ export const TECH_ICONS: Record<string, string> = {
   PostgreSQL: "/icons/postgresql.svg",
   Vercel: "/icons/vercel.svg",
   "OAuth 2.0": "/icons/oauth.svg",
+  "Microsoft 365": "/icons/microsoft365.svg",
+  "Microsoft Entra ID": "/icons/entra-id.svg",
+  "Microsoft Graph API": "/icons/microsoft-graph.svg",
 };
