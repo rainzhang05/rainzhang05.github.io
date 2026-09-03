@@ -53,7 +53,6 @@ export interface Copy {
   experience: {
     title: string;
     kicker: string;
-    logoAlt: string;
     scope: string;
     outcomes: string;
     technologies: string;

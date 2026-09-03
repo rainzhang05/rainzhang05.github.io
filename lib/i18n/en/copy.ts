@@ -61,7 +61,6 @@ export const EN_COPY: Copy = {
   experience: {
     title: "Experience",
     kicker: "Roles and the systems I shipped.",
-    logoAlt: "FEITIAN",
     scope: "Scope",
     outcomes: "Key outcomes",
     technologies: "Technologies",

@@ -35,7 +35,17 @@ export interface Experience {
   dept: string;
   location: string;
   period: string;
-  tagType: ProjectType;
+  /** Employment-type pill. Omitted when the role needs no pill. */
+  tagType?: ProjectType;
+  /** Company mark under `/public`. */
+  logo: string;
+  /** Alt text for the mark; structural, so identical across locales. */
+  logoAlt: string;
+  /**
+   * Height utility for the mark, defaulting to `h-6`. Wide wordmarks read
+   * correctly at that height; a square mark needs more to look the same size.
+   */
+  logoHeight?: string;
   summary: string;
   outcomes: string[];
   stack: string[];

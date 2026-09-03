@@ -43,6 +43,8 @@ const JA_EXPERIENCES: Experience[] = [
     location: "中国・北京",
     period: "2025年9月 — 12月",
     tagType: "Internship",
+    logo: "/feitian-logo.svg",
+    logoAlt: "FEITIAN",
     summary:
       "FEITIAN のポスト量子暗号(PQC)関連の取り組みとして、3つのシステムの開発を設計から実装・デプロイまで一貫して担当しました。ユーザー向けの認証デモプラットフォーム、一般公開の Web Authentication 開発者向けツール、Rust で実装した FIDO2 ソフトウェア認証器の3件です。アーキテクチャ設計、フルスタック実装、クラウド・サーバーへのデプロイ、CI/CD パイプラインの構築に加え、ハードウェアエンジニアとの連携も担当しました。",
     outcomes: [

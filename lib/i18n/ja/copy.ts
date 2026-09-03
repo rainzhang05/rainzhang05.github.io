@@ -59,7 +59,6 @@ export const JA_COPY: Copy = {
   experience: {
     title: "職務経験",
     kicker: "担当した業務と、開発したシステム。",
-    logoAlt: "FEITIAN",
     scope: "担当範囲",
     outcomes: "主な成果",
     technologies: "使用技術",

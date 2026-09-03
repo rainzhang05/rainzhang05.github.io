@@ -9,6 +9,8 @@ export const EXPERIENCES: Experience[] = [
     location: "Beijing, China",
     period: "Sep — Dec 2025",
     tagType: "Internship",
+    logo: "/feitian-logo.svg",
+    logoAlt: "FEITIAN",
     summary:
       "Owned end-to-end development of three production systems for FEITIAN's Post-Quantum Cryptography (PQC) initiative: a user-oriented authentication demo platform, a public Web Authentication developer tools platform, and a Rust-based FIDO2 software authenticator. Responsible for architecture, full-stack implementation, cloud/server deployment, CI/CD pipelines, and cross-team coordination with hardware engineers.",
     outcomes: [
