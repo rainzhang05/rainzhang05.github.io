@@ -26,4 +26,8 @@ export const TECH_ICONS: Record<string, string> = {
   "WebAuthn / FIDO2": "/icons/fido2.svg",
   "C/FFI": "/icons/c.png",
   "Linux UHID": "/icons/linux.png",
+  "Node.js": "/icons/nodejs.svg",
+  PostgreSQL: "/icons/postgresql.svg",
+  Vercel: "/icons/vercel.svg",
+  "OAuth 2.0": "/icons/oauth.svg",
 };
