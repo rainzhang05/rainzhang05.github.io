@@ -172,7 +172,8 @@ Conventions to preserve:
 
 - Section `id`s stay in English (`intro`, `about`, …) in both locales — [useScrollSpy](lib/hooks/useScrollSpy.ts) and hash links depend on them, and `LocaleToggle` carries the hash across locales.
 - `validateContact` returns error **codes** (`"required" | "invalid-email"`), mapped to copy in `Contact.tsx`. Do not put user-facing strings back in it.
-- `Project.tagType` / `Experience.tagType` keep the semantic English key; the display label comes from `copy.tagLabels`.
+- `Project.tagType` / `Experience.tagType` keep the semantic English key; the display label comes from `copy.tagLabels`. `Experience.tagType` is **optional** — omit it and no pill renders (used for roles that fit none of the three types).
+- `Experience.logo` / `logoAlt` are structural like `id` and `stack`: identical in both locales, with the mark under `public/`. `Experience.related` may be `[]`, which drops the whole related-work rail and lets the card body run full width.
 - `TechTag` and the email/URL links keep literal `font-mono` because their content is Latin in every locale. Translated small labels use `--label-font` instead.
 - `/design-system` is English only and lives under `(en)`.
 - Never add claims the English site does not make (JLPT, Japanese proficiency, visa status, employment status, metrics). A unit test guards a blocklist of these.
