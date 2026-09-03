@@ -95,7 +95,7 @@ export const EN_COPY: Copy = {
   contact: {
     title: "Let's connect.",
     intro:
-      "I'd love to connect — whether about an internship, a project, or just to trade notes on full-stack work and post-quantum auth.",
+      "I'm always glad to connect. Whether you're reaching out about a role or looking for someone to build a custom website or software, leave a message and I'll get back to you.",
     formLabel: "Contact form",
     nameLabel: "Name",
     emailLabel: "Email",
