@@ -40,7 +40,9 @@ export function Experience({ onOpenProject }: ExperienceProps) {
                       {exp.role}
                     </h3>
                     <p className="text-sm text-[var(--text-muted)] mt-1.5">{exp.org}</p>
-                    <p className="text-xs text-[var(--text-subtle)] mt-1">{exp.dept}</p>
+                    {exp.dept && (
+                      <p className="text-xs text-[var(--text-subtle)] mt-1">{exp.dept}</p>
+                    )}
                   </div>
                 </div>
                 <div className="flex flex-wrap items-center gap-1.5 md:justify-end shrink-0">

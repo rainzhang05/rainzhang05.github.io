@@ -5,7 +5,6 @@ export const EXPERIENCES: Experience[] = [
     id: "mnt-realty",
     role: "Software & IT Systems Specialist",
     org: "MNT Realty Inc.",
-    dept: "Internal Software & IT Systems",
     location: "Vancouver, Canada",
     period: "Aug 2026 — Present",
     logo: "/mnt-realty-logo.svg",

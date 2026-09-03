@@ -32,7 +32,8 @@ export interface Experience {
   id: string;
   role: string;
   org: string;
-  dept: string;
+  /** Team or department line under the org. Omitted when the role has none. */
+  dept?: string;
   location: string;
   period: string;
   /** Employment-type pill. Omitted when the role needs no pill. */

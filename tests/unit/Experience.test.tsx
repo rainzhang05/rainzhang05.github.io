@@ -17,10 +17,20 @@ describe("Experience", () => {
     render(<Experience />);
     for (const exp of EXPERIENCES) {
       expect(screen.getByRole("heading", { level: 3, name: exp.role })).toBeInTheDocument();
-      expect(screen.getByText(exp.dept)).toBeInTheDocument();
       expect(screen.getByText(exp.period)).toBeInTheDocument();
       expect(screen.getByText(exp.location)).toBeInTheDocument();
+      if (exp.dept) expect(screen.getByText(exp.dept)).toBeInTheDocument();
     }
+  });
+
+  it("omits the dept line for an entry that has no department", () => {
+    const { container } = render(<Experience />);
+    expect(MNT.dept).toBeUndefined();
+    expect(FEITIAN.dept).toBeTruthy();
+    // One dept paragraph across both cards — FEITIAN's.
+    const deptLines = container.querySelectorAll("p.text-xs.text-\\[var\\(--text-subtle\\)\\]");
+    expect(deptLines).toHaveLength(1);
+    expect(deptLines[0]).toHaveTextContent(FEITIAN.dept!);
   });
 
   it("renders every outcome as a list item", () => {

@@ -39,7 +39,6 @@ const JA_EXPERIENCES: Experience[] = [
     id: "mnt-realty",
     role: "ソフトウェア・IT システムスペシャリスト",
     org: "MNT Realty Inc.",
-    dept: "社内ソフトウェア・IT システム",
     location: "カナダ・バンクーバー",
     period: "2026年8月 — 現在",
     logo: "/mnt-realty-logo.svg",
