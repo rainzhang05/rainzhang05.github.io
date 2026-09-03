@@ -2,6 +2,47 @@ import type { Experience } from "@/lib/types";
 
 export const EXPERIENCES: Experience[] = [
   {
+    id: "mnt-realty",
+    role: "Software & IT Systems Specialist",
+    org: "MNT Realty Inc.",
+    dept: "Internal Software & IT Systems",
+    location: "Vancouver, Canada",
+    period: "Aug 2026 — Present",
+    logo: "/mnt-realty-logo.svg",
+    logoAlt: "MNT Realty",
+    // Square mark; needs more height than a wordmark to read at the same size.
+    logoHeight: "h-9",
+    summary:
+      "Serve as MNT Realty's primary software and IT systems specialist at a property and strata management company with no in-house engineering team. Independently translate operational requirements into maintainable internal systems — spanning system architecture, full-stack development, authentication and integrations, deployment infrastructure, workflow automation, and AI-assisted tooling — and own each solution from technical decision-making through implementation and deployment.",
+    outcomes: [
+      "Design and develop MNT Control Center, a centralized internal platform consolidating the company's internal tools behind a single application.",
+      "Implement Microsoft 365 organizational authentication and role-based access control so internal applications authenticate against company identity rather than separate credentials.",
+      "Build full-stack internal web applications, selecting the architecture, data model, and integration approach for each based on the operational problem it addresses.",
+      "Develop workflow automation and AI-assisted internal systems for email handling and owner-information retrieval, including company knowledge retrieval for internal AI assistants.",
+      "Manage hosting, deployment, domains, and application infrastructure, including release workflows and environment configuration across internal services.",
+      "Test, maintain, and document the systems I build, keeping them supportable as a single-maintainer codebase.",
+    ],
+    stack: [
+      "Python",
+      "TypeScript",
+      "Next.js",
+      "React.js",
+      "Node.js",
+      "Tailwind CSS",
+      "PostgreSQL",
+      "REST APIs",
+      "Microsoft 365",
+      "Microsoft Entra ID",
+      "Microsoft Graph API",
+      "OAuth 2.0",
+      "Docker",
+      "Vercel",
+      "GitHub Actions",
+      "DNS / Domains",
+    ],
+    related: [],
+  },
+  {
     id: "feitian",
     role: "Full-Stack Engineer Intern",
     org: "FEITIAN Technologies Co., Ltd.",

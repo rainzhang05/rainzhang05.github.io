@@ -100,6 +100,9 @@ describe("Japanese content parity", () => {
       expect(ja.related).toEqual(en.related);
       expect(ja.org).toEqual(en.org);
       expect(ja.tagType).toEqual(en.tagType);
+      expect(ja.logo, `logo for ${ja.id}`).toEqual(en.logo);
+      expect(ja.logoAlt, `logoAlt for ${ja.id}`).toEqual(en.logoAlt);
+      expect(ja.logoHeight, `logoHeight for ${ja.id}`).toEqual(en.logoHeight);
       expect(ja.outcomes.length).toBe(en.outcomes.length);
     }
   });
@@ -191,7 +194,10 @@ describe("Japanese translation coverage", () => {
   });
 
   it("keeps company and school names in their official form", () => {
-    expect(JA_CONTENT.experiences[0].org).toBe("FEITIAN Technologies Co., Ltd.");
+    // Looked up by id, not index — the array is ordered most-recent-first and grows.
+    const byId = (id: string) => JA_CONTENT.experiences.find((e) => e.id === id);
+    expect(byId("feitian")?.org).toBe("FEITIAN Technologies Co., Ltd.");
+    expect(byId("mnt-realty")?.org).toBe("MNT Realty Inc.");
     expect(JA_CONTENT.education.map((e) => e.school)).toEqual([
       "Simon Fraser University",
       "Semiahmoo Secondary",

@@ -67,13 +67,17 @@ describe("Japanese section rendering", () => {
 
   it("renders the Japanese experience labels and outcomes", () => {
     renderJa(<Experience />);
-    const exp = JA_CONTENT.experiences[0];
-    expect(screen.getByRole("heading", { level: 3, name: exp.role })).toBeInTheDocument();
-    expect(screen.getByText(exp.summary)).toBeInTheDocument();
-    expect(screen.getByText(JA_COPY.experience.scope)).toBeInTheDocument();
-    expect(screen.getByText(JA_COPY.experience.outcomes)).toBeInTheDocument();
-    for (const outcome of exp.outcomes) {
-      expect(screen.getByText(outcome)).toBeInTheDocument();
+    // One "担当範囲" / "主な成果" label per entry.
+    const count = JA_CONTENT.experiences.length;
+    expect(screen.getAllByText(JA_COPY.experience.scope)).toHaveLength(count);
+    expect(screen.getAllByText(JA_COPY.experience.outcomes)).toHaveLength(count);
+
+    for (const exp of JA_CONTENT.experiences) {
+      expect(screen.getByRole("heading", { level: 3, name: exp.role })).toBeInTheDocument();
+      expect(screen.getByText(exp.summary)).toBeInTheDocument();
+      for (const outcome of exp.outcomes) {
+        expect(screen.getByText(outcome)).toBeInTheDocument();
+      }
     }
   });
 
@@ -82,9 +86,7 @@ describe("Japanese section rendering", () => {
     for (const project of JA_CONTENT.projects) {
       expect(screen.getByText(project.title)).toBeInTheDocument();
     }
-    expect(screen.getAllByText(JA_COPY.projects.readMore).length).toBe(
-      JA_CONTENT.projects.length
-    );
+    expect(screen.getAllByText(JA_COPY.projects.readMore).length).toBe(JA_CONTENT.projects.length);
   });
 
   it("renders Japanese form labels with no placeholder text", () => {

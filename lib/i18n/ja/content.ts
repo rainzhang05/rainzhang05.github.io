@@ -36,6 +36,47 @@ const JA_FOOTER_ELSEWHERE: FooterElsewhereLink[] = [
 
 const JA_EXPERIENCES: Experience[] = [
   {
+    id: "mnt-realty",
+    role: "ソフトウェア・IT システムスペシャリスト",
+    org: "MNT Realty Inc.",
+    dept: "社内ソフトウェア・IT システム",
+    location: "カナダ・バンクーバー",
+    period: "2026年8月 — 現在",
+    logo: "/mnt-realty-logo.svg",
+    logoAlt: "MNT Realty",
+    // Square mark; needs more height than a wordmark to read at the same size.
+    logoHeight: "h-9",
+    summary:
+      "不動産・ストラータ管理を手がける MNT Realty Inc. で、社内に開発チームがない環境のもと、ソフトウェアと IT システムを一手に担当しています。業務上の要件を保守しやすい社内システムへと自分で落とし込み、システム設計、フルスタック開発、認証と外部サービス連携、デプロイ基盤、業務自動化、AI を活用した社内システムまで、技術的な判断から実装・運用までを一貫して担当しています。",
+    outcomes: [
+      "社内ツールを1つのアプリケーションに集約する社内基盤「MNT Control Center」を設計・開発しています。",
+      "社内アプリケーションが個別の認証情報ではなく会社の ID 基盤で認証されるよう、Microsoft 365 による組織認証と権限管理を実装しています。",
+      "対象となる業務課題に応じてアーキテクチャ・データ設計・連携方式を選定し、社内向けの Web アプリケーションをフルスタックで開発しています。",
+      "メール対応や所有者情報の参照を支援する業務自動化と AI 活用システムを開発し、社内の AI アシスタントが社内情報を検索できる仕組みも整備しています。",
+      "ホスティング、デプロイ、ドメイン、アプリケーション基盤を管理し、社内システムのリリース手順や環境設定も担当しています。",
+      "自分が構築したシステムのテスト・保守・ドキュメント整備を行い、一人でも維持できる状態を保っています。",
+    ],
+    stack: [
+      "Python",
+      "TypeScript",
+      "Next.js",
+      "React.js",
+      "Node.js",
+      "Tailwind CSS",
+      "PostgreSQL",
+      "REST APIs",
+      "Microsoft 365",
+      "Microsoft Entra ID",
+      "Microsoft Graph API",
+      "OAuth 2.0",
+      "Docker",
+      "Vercel",
+      "GitHub Actions",
+      "DNS / Domains",
+    ],
+    related: [],
+  },
+  {
     id: "feitian",
     role: "フルスタックエンジニア インターン",
     org: "FEITIAN Technologies Co., Ltd.",
