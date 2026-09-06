@@ -91,11 +91,18 @@
      --duration-fast: colour and border changes
      --duration-base: expand and collapse (height + opacity)
      --duration-slow: reserved; not used by the current design
+     --duration-enter: the first-screen entrance
      prefers-reduced-motion zeroes all of them (see bottom of this file). */
   --ease-out: cubic-bezier(0.2, 0.6, 0.2, 1);
   --duration-fast: 150ms;
   --duration-base: 220ms;
   --duration-slow: 320ms;
+
+  /* Entrance — the one-off reveal of the first screen, and the cross-fade the
+     language switch plays over the page while the other locale loads. */
+  --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-enter: 620ms;
+  --enter-step: 60ms;
 
   /* Focus */
   --focus-ring-width: 2px;
@@ -162,6 +169,31 @@ html[data-locale='ja'] {
   /* Dates and figures that align in the label column */
   .tabular {
     font-variant-numeric: tabular-nums;
+  }
+}
+
+/* The language pill finishes its slide on the page it lands on: the tree is
+   replaced by the locale change, so this animates from where the pill was
+   towards the position its own class already gives it. */
+@keyframes slide-pill-from-en {
+  from {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-pill-from-ja {
+  from {
+    transform: translateX(100%);
+  }
+}
+
+@layer components {
+  .locale-pill[data-slide-from='en'] {
+    animation: slide-pill-from-en var(--duration-base) var(--ease-out);
+  }
+
+  .locale-pill[data-slide-from='ja'] {
+    animation: slide-pill-from-ja var(--duration-base) var(--ease-out);
   }
 }
 

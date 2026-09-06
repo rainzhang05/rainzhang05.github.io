@@ -97,9 +97,11 @@ const config: Config = {
         fast: 'var(--duration-fast)',
         base: 'var(--duration-base)',
         slow: 'var(--duration-slow)',
+        enter: 'var(--duration-enter)',
       },
       transitionTimingFunction: {
         out: 'var(--ease-out)',
+        enter: 'var(--ease-enter)',
       },
     },
   },
