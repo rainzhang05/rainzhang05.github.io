@@ -30,26 +30,51 @@ afterEach(() => {
 });
 
 describe('ContactForm', () => {
-  it('flags an empty required field once it has been touched', async () => {
+  it('says nothing about a field the visitor has only passed through', async () => {
     const user = userEvent.setup();
-    const { name, email } = setup();
-
-    expect(screen.queryByRole('alert')).toBeNull();
+    const { name, email, message } = setup();
 
     await user.click(name);
     await user.click(email);
+    await user.click(message);
+    await user.click(document.body);
 
-    expect(await screen.findByRole('alert')).toHaveTextContent(copy.required);
+    expect(screen.queryByRole('alert')).toBeNull();
   });
 
-  it('rejects an address that is not an email', async () => {
+  it('flags an empty required field once Send has been pressed', async () => {
     const user = userEvent.setup();
-    const { email, message } = setup();
+    const { submit } = setup();
+
+    expect(screen.queryByRole('alert')).toBeNull();
+
+    await user.click(submit);
+
+    expect((await screen.findAllByRole('alert'))[0]).toHaveTextContent(copy.required);
+  });
+
+  it('rejects an address that is not an email, once Send has been pressed', async () => {
+    const user = userEvent.setup();
+    const { email, submit } = setup();
 
     await user.type(email, 'not-an-address');
-    await user.click(message);
+    expect(screen.queryByRole('alert')).toBeNull();
 
-    expect(await screen.findByRole('alert')).toHaveTextContent(copy.invalidEmail);
+    await user.click(submit);
+
+    expect(await screen.findByText(copy.invalidEmail)).toBeInTheDocument();
+  });
+
+  it('clears an error as soon as the field is corrected', async () => {
+    const user = userEvent.setup();
+    const { name, submit } = setup();
+
+    await user.click(submit);
+    expect(await screen.findAllByText(copy.required)).toHaveLength(3);
+
+    await user.type(name, 'Ada');
+
+    expect(screen.getAllByText(copy.required)).toHaveLength(2);
   });
 
   it('will not submit an invalid form', async () => {

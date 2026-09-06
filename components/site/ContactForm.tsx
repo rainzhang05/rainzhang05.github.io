@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState, type ChangeEvent, type FocusEvent, type FormEvent } from 'react';
+import { useRef, useState, type ChangeEvent, type FormEvent } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
 import { TextAreaField, TextField } from '@/components/ui/Field';
@@ -16,10 +16,15 @@ type Status = 'idle' | 'sending' | 'sent' | 'error';
  * Posts to Formspree as JSON, with the same protections as the previous site:
  * a honeypot field bots fill in, a 15 second abort so a hanging request never
  * leaves the button spinning, and status text in an aria-live region.
+ *
+ * Nothing is marked wrong until Send has been pressed. Colouring a field red
+ * for being empty while someone is still filling the form in is a complaint
+ * about work in progress; after the first attempt the errors do follow every
+ * keystroke, so a correction clears as soon as it is made.
  */
 export function ContactForm({ copy }: { copy: Copy['contact']['form'] }) {
   const [values, setValues] = useState(EMPTY);
-  const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [attempted, setAttempted] = useState(false);
   const [status, setStatus] = useState<Status>('idle');
   const honeypot = useRef('');
 
@@ -33,17 +38,14 @@ export function ContactForm({ copy }: { copy: Copy['contact']['form'] }) {
     message: values.message.trim() ? null : copy.required,
   };
 
-  const shown = (key: keyof typeof errors) => (touched[key] ? errors[key] : null);
+  const shown = (key: keyof typeof errors) => (attempted ? errors[key] : null);
   const change =
     (key: keyof typeof EMPTY) => (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
       setValues((v) => ({ ...v, [key]: e.target.value }));
-  const blur =
-    (key: keyof typeof EMPTY) => (_e: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-      setTouched((t) => ({ ...t, [key]: true }));
 
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setTouched({ name: true, email: true, message: true });
+    setAttempted(true);
     if (errors.name || errors.email || errors.message) return;
 
     setStatus('sending');
@@ -86,7 +88,7 @@ export function ContactForm({ copy }: { copy: Copy['contact']['form'] }) {
             size="sm"
             onClick={() => {
               setValues(EMPTY);
-              setTouched({});
+              setAttempted(false);
               setStatus('idle');
             }}
           >
@@ -119,7 +121,6 @@ export function ContactForm({ copy }: { copy: Copy['contact']['form'] }) {
           error={shown('name')}
           autoComplete="name"
           onChange={change('name')}
-          onBlur={blur('name')}
         />
         <TextField
           label={copy.email}
@@ -129,7 +130,6 @@ export function ContactForm({ copy }: { copy: Copy['contact']['form'] }) {
           error={shown('email')}
           autoComplete="email"
           onChange={change('email')}
-          onBlur={blur('email')}
         />
       </div>
 
@@ -139,7 +139,6 @@ export function ContactForm({ copy }: { copy: Copy['contact']['form'] }) {
         value={values.message}
         error={shown('message')}
         onChange={change('message')}
-        onBlur={blur('message')}
       />
 
       <div className="flex flex-wrap items-center gap-4">

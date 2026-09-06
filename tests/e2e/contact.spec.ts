@@ -17,11 +17,21 @@ test.describe("contact form", () => {
     expect(posted).toBe(false);
   });
 
+  test("says nothing until Send is pressed", async ({ page }) => {
+    await page.goto("/#contact");
+
+    await page.getByLabel("Name").click();
+    await page.getByLabel("Email").fill("not-an-address");
+    await page.getByLabel("Message").click();
+
+    await expect(page.locator("form").getByRole("alert")).toHaveCount(0);
+  });
+
   test("rejects an address that is not an email", async ({ page }) => {
     await page.goto("/#contact");
 
     await page.getByLabel("Email").fill("not-an-address");
-    await page.getByLabel("Message").click();
+    await page.getByRole("button", { name: "Send message" }).click();
 
     await expect(page.getByText(/doesn.t look like an email/i)).toBeVisible();
   });

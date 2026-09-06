@@ -11,7 +11,8 @@ interface FieldProps {
   type?: 'text' | 'email';
   rows?: number;
   onChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-  onBlur: (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  /** Optional: the contact form validates on submit, not on blur. */
+  onBlur?: (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 }
 
 const frame =

@@ -217,6 +217,7 @@ Marks are shown in their original colours and are never tinted or greyscaled. Th
 - Rows are real `<button>`s with `aria-expanded` and `aria-controls` pointing at a `role="region"` panel. Closed panels are `invisible`, so their links leave the tab order.
 - Focus rings are the design system's 2px sage ring on `:focus-visible`.
 - The copy confirmation and the form's sent state are live regions.
+- The contact form validates on submit, not on blur: nothing is marked wrong until Send has been pressed, after which the errors track every keystroke. [Field](components/ui/Field.tsx) still accepts an `onBlur` for anything that wants the older behaviour.
 - The ink scale is ≥ 4.5:1 on ivory.
 
 ---
