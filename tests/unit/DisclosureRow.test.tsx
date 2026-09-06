@@ -48,7 +48,7 @@ describe('DisclosureRow', () => {
   it('hides a closed panel from the tab order', () => {
     renderRow();
 
-    expect(document.getElementById('panel-work-travel')?.className).toContain('invisible');
+    expect(document.getElementById('panel-work-travel')).toHaveAttribute('data-open', 'false');
   });
 
   it('reveals the panel when open', () => {
@@ -56,7 +56,7 @@ describe('DisclosureRow', () => {
 
     const button = screen.getByRole('button', { name: 'Travel advisor' });
     expect(button).toHaveAttribute('aria-expanded', 'true');
-    expect(document.getElementById('panel-work-travel')?.className).toContain('visible');
+    expect(document.getElementById('panel-work-travel')).toHaveAttribute('data-open', 'true');
   });
 
   it('keeps panel content in the DOM while closed, so opening is instant', () => {
@@ -93,7 +93,15 @@ describe('DisclosureRow', () => {
 
     rerender(
       <ul>
-        <DisclosureRow id="a" meta="2025" title="A" summary="s" open onToggle={() => {}} labels={labels}>
+        <DisclosureRow
+          id="a"
+          meta="2025"
+          title="A"
+          summary="s"
+          open
+          onToggle={() => {}}
+          labels={labels}
+        >
           <p>body</p>
         </DisclosureRow>
       </ul>

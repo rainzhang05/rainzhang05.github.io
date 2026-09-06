@@ -31,9 +31,9 @@ interface DisclosureRowProps {
  * The whole header is a click target; the title is the real button, and it
  * carries aria-expanded and aria-controls, so keyboard and screen-reader
  * users get the same affordance. An experience row leads with its company
- * mark, which is what tells the two lists apart at a glance. The panel is in the DOM at all times and
- * animates height and opacity from the motion tokens
- * (--duration-base, --ease-out).
+ * mark, which is what tells the two lists apart at a glance. The panel is in
+ * the DOM at all times and animates height and opacity over --duration-base in
+ * both directions — see .disclosure-panel in globals.css.
  */
 export function DisclosureRow({
   id,
@@ -98,12 +98,8 @@ export function DisclosureRow({
           id={panelId}
           role="region"
           aria-labelledby={buttonId}
-          className={
-            'grid transition-[grid-template-rows,opacity,visibility] duration-base ease-out ' +
-            (open
-              ? 'visible grid-rows-[1fr] opacity-100'
-              : 'invisible grid-rows-[0fr] opacity-0 delay-[var(--duration-base)]')
-          }
+          data-open={open}
+          className="disclosure-panel"
         >
           <div className="min-h-0 overflow-hidden">
             <div className="grid gap-5 pt-6">{children}</div>

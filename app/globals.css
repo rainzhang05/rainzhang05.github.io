@@ -234,6 +234,32 @@ html[data-locale='ja'] {
   }
 }
 
+/* Expand and collapse. The delay belongs to `visibility` alone — on the way
+   out it waits for the row to finish closing before leaving the tab order —
+   so both directions take exactly --duration-base. */
+@layer components {
+  .disclosure-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      grid-template-rows var(--duration-base) var(--ease-out),
+      opacity var(--duration-base) var(--ease-out),
+      visibility 0s linear var(--duration-base);
+  }
+
+  .disclosure-panel[data-open='true'] {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    visibility: visible;
+    transition:
+      grid-template-rows var(--duration-base) var(--ease-out),
+      opacity var(--duration-base) var(--ease-out),
+      visibility 0s;
+  }
+}
+
 /* The language pill finishes its slide on the page it lands on: the tree is
    replaced by the locale change, so this animates from where the pill was
    towards the position its own class already gives it. */

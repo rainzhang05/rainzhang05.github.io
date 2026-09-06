@@ -206,7 +206,7 @@ Marks are shown in their original colours and are never tinted or greyscaled. Th
 
 - **Nothing is hidden waiting for JavaScript.** There is no preloader and no scroll-reveal. The first screen fades and rises in once, through a CSS animation with `animation-fill-mode: both` — no script gates it, nothing below the fold waits on a scroll position, and the whole page is there with JavaScript off. Changing language replaces the tree, so the same animation replays and the new language settles in rather than snapping in.
 - **Fonts** are self-hosted through `next/font/local` with `display: swap`, a preloaded latin subset, a lazily fetched latin-ext subset, and a metric-adjusted fallback — no flash of default text and no reflow. Japanese has no face in the design system: `/ja` uses the reader's system Japanese font rather than downloading one.
-- **Expand/collapse** keeps panel content in the DOM at all times, so opening is instant; the row animates `grid-template-rows` and `opacity` only.
+- **Expand/collapse** keeps panel content in the DOM at all times, so opening is instant; the row animates `grid-template-rows` and `opacity` only. Opening and closing take the same `--duration-base`: the transition delay in `.disclosure-panel` applies to `visibility` alone, which is what keeps a closed panel's links out of the tab order without also holding up the collapse.
 - **Navigation** inside the page is plain anchors with CSS smooth scrolling, so it works before hydration.
 
 ---
