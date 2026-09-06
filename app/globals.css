@@ -2,294 +2,180 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ──────────────────────────────────────────────────────────────
-   Shared design tokens
-   ────────────────────────────────────────────────────────────── */
-
+/*
+ * Rain Zhang design system tokens — the only place raw values live.
+ * Colour, type, spacing, radius and motion. Tailwind reads these
+ * through tailwind.config.ts; tune motion in the "Motion" block below.
+ */
 :root {
-  /* Typography (font CSS vars come from next/font in the root layouts) */
-  --font-display: var(--font-sans);
+  /* Colour — Direction B "Soft Studio" */
+  --paper: #f7f5ef;
+  --surface: #edeae2;
+  --surface-2: #e5e1d7;
+  --sheet: #ffffff;
+  --ink: #2b2a27;
+  --ink-hover: #3e3c38;
+  --ink-2: #5e5b55;
+  --ink-3: #726e67;
+  --rule: #e0ddd5;
+  --rule-strong: #cfcbc2;
+  --sage: #5f7363;
+  --sage-strong: #4e5f52;
+  --sage-tint: #e6ebe5;
+  --clay: #8d5a54;
+  --ochre: #7d6838;
+  --selection: #dce3da;
 
-  /* Latin typography defaults. Every value here matches what the components
-     used to hardcode, so `/` renders identically. The `[lang="ja"]` block
-     further down retunes them for Japanese — that indirection is what keeps
-     locale conditionals out of the JSX. */
-  --label-font: var(--font-mono);
-  --label-transform: uppercase;
-  --label-tracking: 0.15em;
-  --track-loading: 0.35em;
-  --track-display: -0.045em;
-  --track-title: -0.02em;
-  --track-card-title: -0.015em;
-  --track-tight: -0.025em;
-  --leading-title: 1.05;
-  --leading-hero: 1.5;
-  --leading-prose: 1.7;
-  --nav-link-px: 0.875rem;
-
-  /* Radius scale — used everywhere via rounded-[calc(var(--r-*)*1px)] */
-  --r-sm: 10; /* tags, chips, small buttons, inputs */
-  --r-md: 18; /* cards, panels, thumbnails, mobile menu */
-  --r-lg: 28; /* large surfaces */
-
-  /* Spacing (comfy density, locked) */
-  --gap-card: 32px;
-  --gap-section: 120px;
-  --content-max-w: 1200px;
-
-  color-scheme: light dark;
-}
-
-/* ──────────────────────────────────────────────────────────────
-   Per-route accent — scoped via data-route on the page wrapper.
-   Defaults to portfolio (cyan).
-   ────────────────────────────────────────────────────────────── */
-
-:root,
-[data-route="portfolio"] {
-  --accent: #06b6d4;
-  --accent-strong: #0891b2;
-  --accent-soft: #67e8f9;
-}
-
-[data-route="design-system"] {
-  --accent: #14b8a6;
-  --accent-strong: #0d9488;
-  --accent-soft: #5eead4;
-  --gap-section: 100px; /* design-system page overrides */
-}
-
-/* ──────────────────────────────────────────────────────────────
-   Light theme (default when no data-theme attribute)
-   ────────────────────────────────────────────────────────────── */
-
-:root[data-theme="light"],
-:root:not([data-theme]) {
-  --bg: #fafbfc;
-  --surface: #ffffff;
-  --surface-2: #f1f5f9;
-  --text: #0b1220;
-  --text-muted: #475569;
-  --text-subtle: #94a3b8;
-  --border: #e6ebf2;
-  --border-strong: #cbd5e1;
-}
-
-/* ──────────────────────────────────────────────────────────────
-   Dark theme (explicit)
-   ────────────────────────────────────────────────────────────── */
-
-:root[data-theme="dark"] {
-  --bg: #07090d;
-  --surface: #0c1014;
-  --surface-2: #131820;
-  --text: #e6edf6;
-  --text-muted: #94a3b8;
-  --text-subtle: #64748b;
-  --border: #1c2330;
-  --border-strong: #2a3444;
-}
-
-/* ──────────────────────────────────────────────────────────────
-   Dark fallback when no data-theme yet (matches dark theme exactly
-   so there's no flash before the ThemeScript sets the attribute).
-   ────────────────────────────────────────────────────────────── */
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) {
-    --bg: #07090d;
-    --surface: #0c1014;
-    --surface-2: #131820;
-    --text: #e6edf6;
-    --text-muted: #94a3b8;
-    --text-subtle: #64748b;
-    --border: #1c2330;
-    --border-strong: #2a3444;
-  }
-}
-
-/* ──────────────────────────────────────────────────────────────
-   Base
-   ────────────────────────────────────────────────────────────── */
-
-html {
-  scrollbar-gutter: stable;
-}
-
-html,
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--font-sans);
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-body {
-  font-feature-settings: "ss01" 1, "cv11" 1;
-  -webkit-font-smoothing: antialiased;
-}
-
-input,
-textarea {
-  -webkit-user-select: text;
-  -moz-user-select: text;
-  -ms-user-select: text;
-  user-select: text;
-}
-
-.font-mono {
-  font-family: var(--font-mono);
-  font-feature-settings: "calt" 0;
-}
-.font-sans {
-  font-family: var(--font-sans);
-}
-.font-display {
-  font-family: var(--font-display);
-}
-
-/* ──────────────────────────────────────────────────────────────
-   Japanese typography — scoped to the `/ja` root layout's
-   <html lang="ja">. Retunes the tokens above rather than adding
-   locale branches in components.
-   ────────────────────────────────────────────────────────────── */
-
-:root[lang="ja"] {
-  /* Manrope stays first so Latin runs (tech names, "Rain Zhang") keep the
-     English look; only CJK glyphs fall through to the Japanese faces. */
-  --font-jp:
-    var(--font-sans), var(--font-jp-loaded), "Hiragino Sans", "Hiragino Kaku Gothic ProN",
-    "Yu Gothic", "Noto Sans JP", Meiryo, sans-serif;
-
-  /* Uppercase and wide tracking are Latin-display devices; on Japanese they
-     just shred the rhythm. Mono has no CJK coverage at all, so small labels
-     move to the sans stack. */
-  --label-font: var(--font-jp);
-  --label-transform: none;
-  --label-tracking: 0.06em;
-  --track-loading: 0.24em;
-
-  /* Japanese glyphs are full-width and need no optical tightening. */
-  --track-display: -0.01em;
-  --track-title: 0;
-  --track-card-title: 0;
-  --track-tight: 0;
-
-  /* Denser glyphs need more air between lines. */
+  /* Type — Albert Sans only; --font-albert* come from next/font in app/fonts.ts */
+  --font-sans:
+    var(--font-albert), var(--font-albert-ext), system-ui, -apple-system, 'Segoe UI', Helvetica,
+    Arial, sans-serif;
+  /* Japanese has no face in the design system, so /ja borrows the reader's.
+     Add a webfont here (and in app/fonts.ts) if you want one. */
+  --font-sans-jp:
+    var(--font-albert), var(--font-albert-ext), 'Hiragino Kaku Gothic ProN', 'Hiragino Sans',
+    'Yu Gothic', 'Noto Sans JP', Meiryo, system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+  --weight-light: 300;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --text-display-1: 46px;
+  --leading-display-1: 1.14;
+  --tracking-display-1: -0.02em;
+  --text-display-2: 34px;
+  --leading-display-2: 1.2;
+  --tracking-display-2: -0.015em;
+  --text-hero: clamp(34px, 2.6vw + 18px, 46px);
+  --text-title: 24px;
   --leading-title: 1.3;
-  --leading-hero: 1.75;
-  --leading-prose: 1.9;
+  --tracking-title: -0.01em;
+  --text-heading: 18px;
+  --leading-heading: 1.4;
+  --tracking-heading: -0.005em;
+  --text-body-lg: 17px;
+  --leading-body-lg: 1.6;
+  --text-body: 16px;
+  --leading-body: 1.6;
+  --text-body-15: 15px;
+  --text-body-sm: 14.5px;
+  --text-body-14: 14px;
+  --leading-body-sm: 1.55;
+  --text-caption: 13px;
+  --leading-caption: 1.5;
+  --text-label: 12px;
+  --leading-label: 1.4;
+  --tracking-label: 0.08em;
+  --measure: 60ch;
 
-  --nav-link-px: 0.625rem;
+  /* Spacing and layout */
+  --container: 1080px;
+  --gutter: 48px;
+  --gutter-mobile: 24px;
+  --label-col: 160px;
+  --reading-col: 640px;
+  --section-gap: 56px;
+  --hero-pad: 96px;
+
+  /* Radius and shadow */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-pill: 999px;
+  --radius-card: var(--radius-md);
+  --radius-control: var(--radius-md);
+  --radius-button: var(--radius-pill);
+  --shadow-toast: 0 8px 24px -12px rgba(43, 42, 39, 0.2), 0 0 0 1px var(--rule);
+
+  /* Motion — every transition on the site resolves to these three values.
+     --duration-fast: colour and border changes
+     --duration-base: expand and collapse (height + opacity)
+     --duration-slow: reserved; not used by the current design
+     prefers-reduced-motion zeroes all of them (see bottom of this file). */
+  --ease-out: cubic-bezier(0.2, 0.6, 0.2, 1);
+  --duration-fast: 150ms;
+  --duration-base: 220ms;
+  --duration-slow: 320ms;
+
+  /* Focus */
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
 }
 
-:root[lang="ja"],
-:root[lang="ja"] body {
-  font-family: var(--font-jp);
+html[data-locale='ja'] {
+  --font-sans: var(--font-sans-jp);
 }
 
-/* Japanese has no spaces, so wrapping is per-character. `strict` keeps
-   小書き文字 and long vowel marks off the start of a line. `break-word` is the
-   conservative choice over `anywhere`: it only splits a Latin run (a URL, or
-   ML-DSA / ML-KEM) when that run cannot fit a line on its own. */
-:root[lang="ja"] body {
-  line-break: strict;
-  word-break: normal;
-  overflow-wrap: break-word;
-}
-
-/* Without balancing, Japanese headings strand one or two characters on the
-   last line (e.g. お気軽にご連絡くだ / さい。). */
-:root[lang="ja"] h2,
-:root[lang="ja"] h3 {
-  text-wrap: balance;
-}
-
-/* `leading-relaxed` (1.625) is used across the sections for body prose; the
-   Japanese equivalent needs to breathe more. */
-:root[lang="ja"] .leading-relaxed {
-  line-height: 1.85;
-}
-
-/* `TechTag` and the email/URL links keep JetBrains Mono deliberately — their
-   content is Latin in every locale. Small UI labels that do get translated go
-   through `--label-font` instead, so they land on the sans stack here. */
-
-/* The desktop nav appears at 768px, where the section links plus the theme and
-   language toggles are widest relative to the viewport. Tightening link padding
-   across that band keeps the pill inside the header's px-4 gutter; the ≥1024px
-   spacing is unchanged. */
-@media (min-width: 768px) and (max-width: 1023.98px) {
-  :root {
-    --nav-link-px: 0.625rem;
-  }
-}
-
-::selection {
-  background: color-mix(in oklab, var(--accent) 30%, transparent);
-  color: var(--text);
-}
-
-/* Reveal-on-scroll utility (CSS only; no JS observer wired in the prototype) */
-[data-reveal] {
-  opacity: 0;
-  transform: translateY(14px);
-  transition:
-    opacity 0.7s ease-out,
-    transform 0.7s ease-out;
-}
-[data-reveal].is-revealed {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Smooth scroll for hash nav — only when the user hasn't opted out of motion */
-html {
-  scroll-padding-top: 96px;
-}
-
-@media (prefers-reduced-motion: no-preference) {
+@layer base {
   html {
-    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    scrollbar-gutter: stable;
+    scroll-padding-top: var(--gutter-mobile);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
+    -webkit-font-smoothing: antialiased;
+    text-wrap: pretty;
+  }
+
+  a {
+    color: var(--sage);
+    text-decoration: none;
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  a:hover {
+    color: var(--sage-strong);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+
+  ::selection {
+    background: var(--selection);
+    color: var(--ink);
+  }
+
+  :focus-visible {
+    outline: var(--focus-ring-width) solid var(--sage);
+    outline-offset: var(--focus-ring-offset);
+  }
+
+  code,
+  kbd,
+  pre {
+    font-family: var(--font-mono);
+  }
+
+  /* Dates and figures that align in the label column */
+  .tabular {
+    font-variant-numeric: tabular-nums;
   }
 }
 
-[data-route="design-system"] {
-  /* Design system page uses a shorter offset (header height = 60px) */
-  scroll-padding-top: 84px;
+@media print {
+  body {
+    background: #fff;
+  }
 }
 
-/* Focus ring */
-:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-  border-radius: 4px;
-}
-
-/* Scrollbar */
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 8px;
-  border: 2px solid var(--bg);
-  background-clip: padding-box;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--border-strong);
-  border: 2px solid var(--bg);
-  background-clip: padding-box;
-}
-
-/* Global transition timing — matches the prototype's `* { ... }` rule */
-* {
-  transition-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
 }
