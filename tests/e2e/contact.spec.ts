@@ -1,36 +1,82 @@
 import { expect, test } from "@playwright/test";
 
-test("contact form sends to Formspree and shows success state", async ({ page }) => {
-  await page.route("**/formspree.io/**", (route) =>
-    route.fulfill({ status: 200, contentType: "application/json", body: "{}" })
-  );
+const FORMSPREE = "**/formspree.io/**";
 
-  await page.goto("/#contact");
+test.describe("contact form", () => {
+  test("asks for the fields it needs before sending", async ({ page }) => {
+    let posted = false;
+    await page.route(FORMSPREE, async (route) => {
+      posted = true;
+      await route.fulfill({ status: 200, body: "{}" });
+    });
 
-  // Wait for the preloader to dismiss and the contact section to be visible
-  const form = page.locator("#contact form");
-  await form.waitFor({ state: "visible", timeout: 10_000 });
+    await page.goto("/#contact");
+    await page.getByRole("button", { name: "Send message" }).click();
 
-  // Target the visible Name input by its label, avoiding the hidden honeypot
-  const nameInput = form.getByLabel("Name");
-  const emailInput = form.getByLabel("Email");
-  const messageInput = form.getByLabel("Message");
+    await expect(page.locator("form").getByRole("alert").first()).toBeVisible();
+    expect(posted).toBe(false);
+  });
 
-  await nameInput.click();
-  await nameInput.pressSequentially("Rain");
-  await emailInput.click();
-  await emailInput.pressSequentially("rain@example.com");
-  await messageInput.click();
-  await messageInput.pressSequentially("Hello from Playwright!");
+  test("rejects an address that is not an email", async ({ page }) => {
+    await page.goto("/#contact");
 
-  // Submit via the form element directly (rather than clicking the button)
-  // so the test works identically across desktop Chromium/Firefox and mobile
-  // WebKit, where touch-to-click translation around overlay focus rings can
-  // intermittently swallow the click on the submit button.
-  await Promise.all([
-    page.waitForResponse((res) => res.url().includes("formspree.io")),
-    form.evaluate((el) => (el as HTMLFormElement).requestSubmit()),
-  ]);
+    await page.getByLabel("Email").fill("not-an-address");
+    await page.getByLabel("Message").click();
 
-  await expect(page.getByText("Message sent.")).toBeVisible();
+    await expect(page.getByText(/doesn.t look like an email/i)).toBeVisible();
+  });
+
+  test("sends a complete message and confirms it", async ({ page }) => {
+    await page.route(FORMSPREE, async (route) => {
+      expect(route.request().method()).toBe("POST");
+      await route.fulfill({ status: 200, body: "{}" });
+    });
+
+    await page.goto("/#contact");
+    await page.getByLabel("Name").fill("Ada Lovelace");
+    await page.getByLabel("Email").fill("ada@example.com");
+    await page.getByLabel("Message").fill("Hello from a test.");
+    await page.getByRole("button", { name: "Send message" }).click();
+
+    await expect(page.getByText("Message sent")).toBeVisible();
+  });
+
+  test("reports a rejected send", async ({ page }) => {
+    await page.route(FORMSPREE, (route) => route.fulfill({ status: 500, body: "{}" }));
+
+    await page.goto("/#contact");
+    await page.getByLabel("Name").fill("Ada Lovelace");
+    await page.getByLabel("Email").fill("ada@example.com");
+    await page.getByLabel("Message").fill("Hello from a test.");
+    await page.getByRole("button", { name: "Send message" }).click();
+
+    await expect(page.locator("form").getByRole("alert")).toContainText(
+      /Couldn.t reach the server/
+    );
+  });
+
+  test("carries a honeypot that people never see", async ({ page }) => {
+    await page.goto("/#contact");
+
+    const honeypot = page.locator('input[name="confirm_username"]');
+    await expect(honeypot).toHaveCount(1);
+    await expect(honeypot).toHaveAttribute("aria-hidden", "true");
+    await expect(honeypot).toHaveAttribute("tabindex", "-1");
+
+    const box = await honeypot.boundingBox();
+    expect(box, "the honeypot should be parked off-screen").not.toBeNull();
+    expect(box!.x + box!.width).toBeLessThan(0);
+  });
+
+  test("copies the email address", async ({ page, context, browserName }) => {
+    test.skip(browserName !== "chromium", "clipboard permissions are Chromium-only here");
+    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+
+    await page.goto("/");
+    await page.getByRole("button", { name: "Copy email" }).click();
+
+    await expect(page.getByRole("status")).toContainText("Email copied");
+    const clipboard = await page.evaluate(() => navigator.clipboard.readText());
+    expect(clipboard).toBe("rainzhang.zty@gmail.com");
+  });
 });

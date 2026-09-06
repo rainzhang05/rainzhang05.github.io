@@ -1,41 +1,60 @@
 import { expect, test } from "@playwright/test";
 
-test.describe("desktop nav", () => {
-  test.use({ viewport: { width: 1280, height: 800 } });
-
-  test("clicking a nav link scrolls to the section", async ({ page }) => {
+test.describe("navigation", () => {
+  // Below 640px the header links move into the sheet, which has its own test
+  // further down; these two are about the wide header.
+  test("jumps to a section from the header", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto("/");
-    // Wait for the preloader to be fully unmounted from the DOM, not just visually
-    // faded — its scroll-lock listeners are detached at unmount.
-    await page.waitForFunction(() => !document.querySelector("[data-preloader]"), {
-      timeout: 10_000,
-    });
 
-    await page.locator('header a[href="#projects"]').first().click();
+    await page.getByRole("navigation", { name: "Primary" }).getByRole("link", { name: "Contact" }).click();
 
-    // Wait for the projects section to be in view instead of checking scrollY,
-    // since smooth scrolling behavior is unreliable in headless browsers.
-    await expect(page.locator("#projects")).toBeInViewport({ timeout: 10_000 });
+    await expect(page.locator("section#contact")).toBeInViewport();
   });
-});
 
-test.describe("mobile menu", () => {
-  test.use({ viewport: { width: 390, height: 844 } });
-
-  test("opens, navigates, and closes", async ({ page }) => {
+  test("returns to the top from the footer", async ({ page }) => {
     await page.goto("/");
-    // Wait for the preloader to be fully unmounted from the DOM
-    await page.waitForFunction(() => !document.querySelector("[data-preloader]"), {
-      timeout: 10_000,
-    });
 
-    await page.locator('button[aria-label="Open menu"]').click();
-    const menu = page.locator('[aria-hidden="false"]');
-    await expect(menu).toBeVisible();
-    await menu.getByRole("link", { name: "Projects" }).click();
-    // After the click the menu should hide (open=false → aria-hidden=true)
-    await expect(page.locator('[aria-hidden="false"]')).toHaveCount(0);
-    // Verify the projects section is in view
-    await expect(page.locator("#projects")).toBeInViewport({ timeout: 10_000 });
+    await page.getByRole("link", { name: /Back to top/ }).click();
+
+    await expect(page.locator("h1")).toBeInViewport();
+  });
+
+  test("opens the resume in a new tab", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto("/");
+
+    const resume = page
+      .getByRole("navigation", { name: "Primary" })
+      .getByRole("link", { name: "Resume" });
+    await expect(resume).toHaveAttribute("href", "/rain-zhang-resume.pdf");
+    await expect(resume).toHaveAttribute("target", "_blank");
+  });
+
+  test("collapses into a sheet on a narrow viewport", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 800 });
+    await page.goto("/");
+
+    await expect(page.getByRole("navigation", { name: "Primary" })).toBeHidden();
+
+    await page.getByRole("button", { name: "Menu" }).click();
+    const sheet = page.getByRole("dialog", { name: "Menu" });
+    await expect(sheet).toBeVisible();
+
+    await sheet.getByRole("link", { name: "Contact" }).click();
+    await expect(sheet).toBeHidden();
+    await expect(page.locator("section#contact")).toBeInViewport();
+  });
+
+  test("does not scroll sideways at any width", async ({ page }) => {
+    for (const width of [320, 375, 768, 1280]) {
+      await page.setViewportSize({ width, height: 800 });
+      await page.goto("/");
+
+      const overflow = await page.evaluate(
+        () => document.documentElement.scrollWidth - document.documentElement.clientWidth
+      );
+      expect(overflow, `horizontal overflow at ${width}px`).toBeLessThanOrEqual(1);
+    }
   });
 });
