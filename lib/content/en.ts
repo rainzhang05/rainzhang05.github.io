@@ -7,7 +7,7 @@ import type { Copy } from '../types';
 export const en: Copy = {
   locale: 'en',
   meta: {
-    title: 'Rain Zhang — software engineer, Vancouver',
+    title: 'Rain Zhang — Software Engineer, Vancouver',
     description:
       'Third-year computer science student at SFU. I build web systems end to end and look after them once they are live — Python, TypeScript and Rust.',
   },
@@ -62,7 +62,7 @@ export const en: Copy = {
     {
       id: 'exp-mnt',
       dates: 'Aug 2026 – present',
-      role: 'Software and IT systems specialist',
+      role: 'Software and IT Systems Specialist',
       org: 'MNT Realty',
       orgLine: 'MNT Realty · Vancouver, BC',
       mark: {
@@ -111,7 +111,7 @@ export const en: Copy = {
     {
       id: 'exp-feitian',
       dates: 'Sep – Dec 2025',
-      role: 'Full-stack engineer intern',
+      role: 'Full-Stack Engineer Intern',
       org: 'FEITIAN Technologies',
       orgLine: 'FEITIAN Technologies · International Department · Beijing',
       mark: {
@@ -163,7 +163,7 @@ export const en: Copy = {
     {
       id: 'work-webauthn',
       dates: 'Sep – Oct 2025',
-      title: 'WebAuthn developer platform',
+      title: 'WebAuthn Developer Platform',
       summary:
         'A public tool for testing FIDO2/WebAuthn flows, including post-quantum ML-DSA credentials.',
       primary: ['Python', 'Flask', 'JavaScript'],
@@ -220,7 +220,7 @@ export const en: Copy = {
     {
       id: 'work-authenticator',
       dates: 'Oct – Nov 2025',
-      title: 'FIDO2 software authenticator',
+      title: 'FIDO2 Software Authenticator',
       summary:
         'A CTAP2 security key in software. Linux presents it as a USB device, so browsers can test post-quantum credentials without hardware.',
       primary: ['Rust', 'Linux'],
@@ -255,7 +255,7 @@ export const en: Copy = {
     {
       id: 'work-demo',
       dates: 'Nov – Dec 2025',
-      title: 'Authentication demo platform',
+      title: 'Authentication Demo Platform',
       summary: 'A customer-facing site for trying FEITIAN’s passwordless and post-quantum sign-in.',
       primary: ['React', 'Python'],
       quiet: {
@@ -292,7 +292,7 @@ export const en: Copy = {
     {
       id: 'work-travel',
       dates: 'Jan – Apr 2025',
-      title: 'Travel advisor',
+      title: 'Travel Advisor',
       summary:
         'A course project with three classmates: a trip planner that picks a destination from your passport and visas, then fills in hotels, restaurants and an itinerary.',
       primary: ['React', 'Tailwind CSS'],
@@ -316,7 +316,7 @@ export const en: Copy = {
       ],
       image: {
         src: '/projects/travel-advisor.png',
-        alt: 'The travel advisor results page with hotels, restaurants and attractions',
+        alt: 'The Travel Advisor results page with hotels, restaurants and attractions',
         width: 1600,
         height: 800,
       },
@@ -345,7 +345,7 @@ export const en: Copy = {
     {
       id: 'work-site',
       dates: 'Feb 2025 – present',
-      title: 'This website',
+      title: 'This Website',
       summary:
         'Next.js and TypeScript, built on one small design system shared with my resume and cover letter.',
       primary: ['Next.js', 'TypeScript'],
@@ -428,11 +428,11 @@ export const en: Copy = {
     },
   },
   footer: {
-    tagline: 'Full-stack engineer and computer science student in Vancouver.',
+    tagline: 'Full-Stack Engineer and Computer Science Student in Vancouver.',
     navigate: 'Navigate',
     elsewhere: 'Elsewhere',
     backToTop: 'Back to top',
-    credit: 'Designed and built by Rain Zhang',
+    credit: 'Designed and Built by Rain Zhang',
     links: [
       {
         id: 'github',

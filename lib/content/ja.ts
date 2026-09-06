@@ -292,7 +292,7 @@ export const ja: Copy = {
     {
       id: 'work-travel',
       dates: '2025年1月 – 4月',
-      title: 'Travel advisor（旅行プランナー）',
+      title: 'Travel Advisor（旅行プランナー）',
       summary:
         '同級生3人との授業課題。パスポートとビザから行き先を選び、ホテル・レストラン・日程まで組み立てる旅行プランナーです。',
       primary: ['React', 'Tailwind CSS'],
@@ -316,7 +316,7 @@ export const ja: Copy = {
       ],
       image: {
         src: '/projects/travel-advisor.png',
-        alt: 'Travel advisor の結果画面。ホテル・レストラン・観光地の一覧',
+        alt: 'Travel Advisor の結果画面。ホテル・レストラン・観光地の一覧',
         width: 1600,
         height: 800,
       },
