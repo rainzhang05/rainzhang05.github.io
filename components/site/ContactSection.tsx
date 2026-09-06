@@ -12,7 +12,7 @@ import type { Copy } from '@/lib/types';
 /** One labelled row of the contact list, on the same label column as the page. */
 function Channel({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div className="grid grid-cols-[76px_minmax(0,1fr)] items-baseline gap-x-4 gap-y-1">
+    <div className="grid gap-x-4 gap-y-0.5 sm:grid-cols-[76px_minmax(0,1fr)] sm:items-baseline">
       <dt className="text-body-14 text-ink-3">{label}</dt>
       <dd className="m-0 flex flex-wrap items-center gap-x-3 gap-y-1">{children}</dd>
     </div>
