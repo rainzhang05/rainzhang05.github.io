@@ -41,35 +41,37 @@ export function SiteHeader({
   );
 
   return (
-    <header className="enter-fade flex items-center justify-between gap-6 pt-9">
-      {wordmark}
+    <>
+      <header className="enter-fade flex items-center justify-between gap-6 pt-9">
+        {wordmark}
 
-      <div className="hidden items-center gap-7 sm:flex">
-        <nav aria-label="Primary" className="flex gap-7">
-          {links.map((link) => (
-            <a
-              key={link.id}
-              href={link.href}
-              target={link.external ? '_blank' : undefined}
-              rel={link.external ? 'noreferrer' : undefined}
-              className="text-body-14 text-ink-2 no-underline transition-colors duration-fast ease-out hover:text-ink hover:no-underline"
-            >
-              {link.label}
-            </a>
-          ))}
-        </nav>
-        <LocaleSwitch current={locale} />
-      </div>
+        <div className="hidden items-center gap-7 sm:flex">
+          <nav aria-label="Primary" className="flex gap-7">
+            {links.map((link) => (
+              <a
+                key={link.id}
+                href={link.href}
+                target={link.external ? '_blank' : undefined}
+                rel={link.external ? 'noreferrer' : undefined}
+                className="text-body-14 text-ink-2 no-underline transition-colors duration-fast ease-out hover:text-ink hover:no-underline"
+              >
+                {link.label}
+              </a>
+            ))}
+          </nav>
+          <LocaleSwitch current={locale} />
+        </div>
 
-      <button
-        type="button"
-        aria-label="Menu"
-        aria-expanded={open}
-        onClick={() => setOpen(true)}
-        className="inline-flex h-8 w-8 items-center justify-center rounded-pill text-ink-2 transition-colors duration-fast ease-out hover:bg-surface hover:text-ink sm:hidden"
-      >
-        <Icon name="menu" size={20} />
-      </button>
+        <button
+          type="button"
+          aria-label="Menu"
+          aria-expanded={open}
+          onClick={() => setOpen(true)}
+          className="inline-flex h-8 w-8 items-center justify-center rounded-pill text-ink-2 transition-colors duration-fast ease-out hover:bg-surface hover:text-ink sm:hidden"
+        >
+          <Icon name="menu" size={20} />
+        </button>
+      </header>
 
       {open ? (
         <div
@@ -108,6 +110,6 @@ export function SiteHeader({
           </div>
         </div>
       ) : null}
-    </header>
+    </>
   );
 }
