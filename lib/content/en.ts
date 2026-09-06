@@ -408,6 +408,11 @@ export const en: Copy = {
     lead: 'If you’re hiring, or want to talk about any of this, write to me.',
     copy: 'Copy',
     copied: 'Email copied',
+    channels: {
+      email: 'Email',
+      linkedin: 'LinkedIn',
+      github: 'GitHub',
+    },
     form: {
       name: 'Name',
       email: 'Email',

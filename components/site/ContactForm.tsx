@@ -74,12 +74,12 @@ export function ContactForm({ copy }: { copy: Copy['contact']['form'] }) {
 
   if (status === 'sent') {
     return (
-      <div role="status" aria-live="polite" className="px-4 py-8 text-center">
-        <div className="inline-flex h-12 w-12 items-center justify-center rounded-pill bg-sage-tint text-sage-strong">
-          <Icon name="check" size={22} />
+      <div role="status" aria-live="polite" className="py-2">
+        <div className="inline-flex h-10 w-10 items-center justify-center rounded-pill bg-sage-tint text-sage-strong">
+          <Icon name="check" size={20} />
         </div>
-        <h3 className="mb-1 mt-4 text-[20px] font-medium">{copy.sentTitle}</h3>
-        <p className="m-0 text-body-15 text-ink-2">{copy.sentBody}</p>
+        <h3 className="mb-1 mt-4 text-heading font-medium">{copy.sentTitle}</h3>
+        <p className="m-0 max-w-measure text-body-15 text-ink-2">{copy.sentBody}</p>
         <div className="mt-5">
           <Button
             variant="quiet"

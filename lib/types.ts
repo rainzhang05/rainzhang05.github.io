@@ -112,6 +112,8 @@ export interface Copy {
     lead: string;
     copy: string;
     copied: string;
+    /** Row labels down the left of the contact list. */
+    channels: { email: string; linkedin: string; github: string };
     form: {
       name: string;
       email: string;

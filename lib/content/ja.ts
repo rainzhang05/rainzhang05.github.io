@@ -408,6 +408,11 @@ export const ja: Copy = {
     lead: '採用のご連絡でも、ここにある仕事の話でも、お気軽にご連絡ください。',
     copy: 'コピー',
     copied: 'メールアドレスをコピーしました',
+    channels: {
+      email: 'メール',
+      linkedin: 'LinkedIn',
+      github: 'GitHub',
+    },
     form: {
       name: 'お名前',
       email: 'メールアドレス',
