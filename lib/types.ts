@@ -1,156 +1,137 @@
-import type { ReactNode } from "react";
+import type { TechName } from './tech';
 
-export type ThemeMode = "light" | "dark";
-
-export type IconName =
-  | "arrow-up-right"
-  | "arrow-right"
-  | "arrow-down"
-  | "external"
-  | "github"
-  | "linkedin"
-  | "mail"
-  | "file"
-  | "sun"
-  | "moon"
-  | "menu"
-  | "x"
-  | "check";
-
-export interface NavItem {
-  id: string;
-  label: string;
-}
-
-export interface FooterElsewhereLink {
-  href: string;
-  label: string;
-  icon: IconName;
-}
-
-export interface Experience {
-  id: string;
-  role: string;
-  org: string;
-  /** Team or department line under the org. Omitted when the role has none. */
-  dept?: string;
-  location: string;
-  period: string;
-  /** Employment-type pill. Omitted when the role needs no pill. */
-  tagType?: ProjectType;
-  /** Company mark under `/public`. */
-  logo: string;
-  /** Alt text for the mark; structural, so identical across locales. */
-  logoAlt: string;
-  /**
-   * Height utility for the mark, defaulting to `h-6`. Wide wordmarks read
-   * correctly at that height; a square mark needs more to look the same size.
-   */
-  logoHeight?: string;
-  summary: string;
-  outcomes: string[];
-  stack: string[];
-  related: string[];
-}
-
-export interface ProjectImpact {
-  title: string;
-  body: string;
-}
-
-export interface ProjectLinks {
-  live?: string;
-  github?: string;
-}
-
-export type ProjectType = "Personal" | "Academic" | "Internship";
-
-export interface Project {
-  id: string;
-  title: string;
-  summary: string;
-  image?: string;
-  hideThumbnail?: boolean;
-  period: string;
-  role: string;
-  tools: string;
-  stack: string[];
-  cryptoNote: string | null;
-  links: ProjectLinks;
-  impact: ProjectImpact[];
-  tagType: ProjectType;
-  featured?: boolean;
-}
-
-export interface SkillGroup {
+export interface DetailGroup {
+  /** Eyebrow above the group, e.g. "Work". */
   label: string;
   items: string[];
 }
 
-export interface EducationItem {
-  school: string;
-  location: string;
-  period: string;
-  expected: string | null;
-  degree: string;
-  notes: string[];
+export interface CompanyMark {
+  src: string;
+  width: number;
+  height: number;
 }
 
-export interface AboutParagraph {
-  parts: Array<string | { strong: string }>;
-}
-
-export interface DsAccent {
-  name: string;
-  key: string;
-  base: string;
-  strong: string;
-  soft: string;
+export interface Experience {
+  id: string;
+  dates: string;
   role: string;
+  /** Accessible name for the company mark. */
+  org: string;
+  /** Organisation, department and place, joined with middle dots. */
+  orgLine: string;
+  mark?: CompanyMark;
+  summary: string;
+  groups: DetailGroup[];
+  tech: TechName[];
+  /** Project ids opened by the "Related work" links. */
+  related: string[];
 }
 
-export interface DsColor {
-  name: string;
-  var: string;
-  hex: string;
+export interface ProjectSection {
+  label: string;
+  text: string;
 }
 
-export interface DsTypeRow {
-  name: string;
-  size: string;
-  line: string;
-  track: string;
-  weight: string;
-  example: string;
-  className: string;
+export interface ProjectImage {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
 }
 
-export interface DsSpacingRow {
-  token: string;
-  px: number;
+export interface Project {
+  id: string;
+  dates: string;
+  title: string;
+  summary: string;
+  /** One to three marks shown while the row is collapsed. */
+  primary: TechName[];
+  /** The quiet link at the end of the collapsed row. */
+  quiet: { label: string; href: string };
+  sections: ProjectSection[];
+  image?: ProjectImage;
+  stack: TechName[];
+  status: string;
+  links: { label: string; href: string }[];
 }
 
-export interface DsRadiusRow {
-  token: string;
-  soft: number;
-  sharp: number;
+export interface SkillGroup {
+  label: string;
+  items: TechName[];
 }
 
-export interface ContactFormState {
-  name: string;
-  email: string;
-  message: string;
+export interface Education {
+  dates: string;
+  school: string;
+  meta: string;
+  detail: string;
 }
 
-/** Locale-independent validation outcome; mapped to copy at render time. */
-export type ContactErrorCode = "required" | "invalid-email";
-
-export interface ContactErrors {
-  name: ContactErrorCode | null;
-  email: ContactErrorCode | null;
-  message: ContactErrorCode | null;
+export interface NavLink {
+  id: string;
+  label: string;
+  href: string;
+  external?: boolean;
 }
 
-export type ContactStatus = "idle" | "sending" | "sent" | "error";
-
-export type ReactChildrenProps = { children: ReactNode };
+export interface Copy {
+  locale: string;
+  meta: { title: string; description: string };
+  nav: NavLink[];
+  intro: {
+    eyebrow: string;
+    heading: string;
+    body: string;
+    availability: string;
+    resume: string;
+    copyEmail: string;
+    portraitAlt: string;
+  };
+  sections: {
+    experience: string;
+    work: string;
+    otherWork: string;
+    background: string;
+    contact: string;
+  };
+  labels: {
+    technologies: string;
+    relatedWork: string;
+    stack: string;
+    status: string;
+    expand: string;
+    collapse: string;
+  };
+  experiences: Experience[];
+  featured: Project[];
+  other: Project[];
+  education: Education;
+  skills: SkillGroup[];
+  contact: {
+    lead: string;
+    copy: string;
+    copied: string;
+    form: {
+      name: string;
+      email: string;
+      message: string;
+      submit: string;
+      sending: string;
+      sentTitle: string;
+      sentBody: string;
+      another: string;
+      required: string;
+      invalidEmail: string;
+      failed: string;
+    };
+  };
+  footer: {
+    tagline: string;
+    navigate: string;
+    elsewhere: string;
+    backToTop: string;
+    credit: string;
+    links: NavLink[];
+  };
+}
