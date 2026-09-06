@@ -5,7 +5,7 @@ test.describe("home", () => {
     await page.goto("/");
 
     await expect(page.locator("h1")).toHaveCount(1);
-    await expect(page.locator("h1")).toContainText("build web systems");
+    await expect(page.locator("h1")).toContainText("build and maintain web systems");
 
     for (const id of ["experience", "work", "background", "contact"]) {
       await expect(page.locator(`section#${id}`)).toBeVisible();

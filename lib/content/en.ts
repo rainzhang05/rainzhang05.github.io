@@ -9,7 +9,7 @@ export const en: Copy = {
   meta: {
     title: 'Rain Zhang — Software Engineer, Vancouver',
     description:
-      'Third-year computer science student at SFU. I build web systems end to end and look after them once they are live — Python, TypeScript and Rust.',
+      'Third-year computer science student at SFU. I build and maintain web systems, from design through to production — Python, TypeScript and Rust.',
   },
   nav: [
     {
@@ -36,7 +36,7 @@ export const en: Copy = {
   ],
   intro: {
     eyebrow: 'Computer science · Simon Fraser University · Vancouver, BC',
-    heading: 'I build web systems end to end and look after them once they’re live.',
+    heading: 'I build and maintain web systems, from design through to production.',
     body: 'I’m Rain, a third-year computer science student at SFU. In the past year I’ve built and run production systems for a security-key company and a property management firm, mostly in Python, TypeScript and Rust.',
     availability: 'Open to software engineering internships and new-grad roles.',
     resume: 'Download resume',
