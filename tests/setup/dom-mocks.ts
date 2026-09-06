@@ -34,33 +34,34 @@ export function mockMatchMedia(
   let currentMatches = typeof matches === "function" ? false : matches;
 
   const spy = vi.fn((query: string) => {
-    const isMatch = typeof matches === "function" ? matches(query) : currentMatches;
     const addListener = vi.fn((cb: (event: MediaQueryListEvent) => void) => {
       listeners.add(cb);
     });
     const removeListener = vi.fn((cb: (event: MediaQueryListEvent) => void) => {
       listeners.delete(cb);
     });
-    const base = {
-      matches: isMatch,
+    const mql: Record<string, unknown> = {
       media: query,
       onchange: null,
       addListener,
       removeListener,
       dispatchEvent: vi.fn(() => true),
     };
-    if (options.legacy) {
-      return base as unknown as MediaQueryList;
-    }
-    return {
-      ...base,
-      addEventListener: vi.fn((event: string, cb: (event: MediaQueryListEvent) => void) => {
+    if (!options.legacy) {
+      mql.addEventListener = vi.fn((event: string, cb: (event: MediaQueryListEvent) => void) => {
         if (event === "change") listeners.add(cb);
-      }),
-      removeEventListener: vi.fn((event: string, cb: (event: MediaQueryListEvent) => void) => {
+      });
+      mql.removeEventListener = vi.fn((event: string, cb: (event: MediaQueryListEvent) => void) => {
         if (event === "change") listeners.delete(cb);
-      }),
-    } as unknown as MediaQueryList;
+      });
+    }
+    // Live, like a real MediaQueryList: consumers that re-read `.matches`
+    // after a change event must see the new value.
+    Object.defineProperty(mql, "matches", {
+      get: () => (typeof matches === "function" ? matches(query) : currentMatches),
+      enumerable: true,
+    });
+    return mql as unknown as MediaQueryList;
   });
 
   Object.defineProperty(window, "matchMedia", {
@@ -87,95 +88,6 @@ export function mockMatchMedia(
       }
     },
     spy,
-  };
-}
-
-// ---------------------------------------------------------------------------
-// IntersectionObserver
-// ---------------------------------------------------------------------------
-
-export interface MockIntersectionObserverInstance {
-  callback: IntersectionObserverCallback;
-  options?: IntersectionObserverInit;
-  observed: Element[];
-  observe: Mock;
-  unobserve: Mock;
-  disconnect: Mock;
-  takeRecords: Mock;
-}
-
-export interface IntersectionObserverController {
-  trigger(entries: Array<Partial<IntersectionObserverEntry>>, instanceIndex?: number): void;
-  instances(): MockIntersectionObserverInstance[];
-  restore(): void;
-}
-
-type IOTarget = { IntersectionObserver?: typeof IntersectionObserver };
-
-export function mockIntersectionObserver(): IntersectionObserverController {
-  const hadOriginal = "IntersectionObserver" in globalThis;
-  const original = hadOriginal
-    ? (globalThis as IOTarget).IntersectionObserver
-    : undefined;
-  const instances: MockIntersectionObserverInstance[] = [];
-
-  class MockIO implements MockIntersectionObserverInstance {
-    callback: IntersectionObserverCallback;
-    options?: IntersectionObserverInit;
-    observed: Element[] = [];
-    observe: Mock;
-    unobserve: Mock;
-    disconnect: Mock;
-    takeRecords: Mock;
-
-    constructor(cb: IntersectionObserverCallback, options?: IntersectionObserverInit) {
-      this.callback = cb;
-      this.options = options;
-      this.observe = vi.fn((el: Element) => {
-        this.observed.push(el);
-      });
-      this.unobserve = vi.fn((el: Element) => {
-        this.observed = this.observed.filter((e) => e !== el);
-      });
-      this.disconnect = vi.fn(() => {
-        this.observed = [];
-      });
-      this.takeRecords = vi.fn(() => [] as IntersectionObserverEntry[]);
-      instances.push(this);
-    }
-  }
-
-  Object.defineProperty(globalThis, "IntersectionObserver", {
-    value: MockIO,
-    configurable: true,
-    writable: true,
-  });
-
-  return {
-    trigger(entries, instanceIndex = 0) {
-      const inst = instances[instanceIndex];
-      if (!inst) {
-        throw new Error(`No IntersectionObserver instance at index ${instanceIndex}`);
-      }
-      inst.callback(
-        entries as IntersectionObserverEntry[],
-        inst as unknown as IntersectionObserver
-      );
-    },
-    instances() {
-      return instances;
-    },
-    restore() {
-      if (hadOriginal) {
-        Object.defineProperty(globalThis, "IntersectionObserver", {
-          value: original,
-          configurable: true,
-          writable: true,
-        });
-      } else {
-        delete (globalThis as IOTarget).IntersectionObserver;
-      }
-    },
   };
 }
 
@@ -324,51 +236,6 @@ export function mockWindowScrollTo(): SpyController {
     spy,
     restore() {
       window.scrollTo = original;
-    },
-  };
-}
-
-// ---------------------------------------------------------------------------
-// document.fonts
-// ---------------------------------------------------------------------------
-
-export interface FontsController {
-  /** Resolve the pending `document.fonts.ready` promise. */
-  resolve(): void;
-  restore(): void;
-}
-
-type FontsTarget = { fonts?: unknown };
-
-export function mockFonts(): FontsController {
-  const hadOriginal = "fonts" in document;
-  const original = hadOriginal ? (document as FontsTarget).fonts : undefined;
-
-  let resolveReady: (() => void) | null = null;
-  const ready = new Promise<void>((resolve) => {
-    resolveReady = resolve;
-  });
-
-  Object.defineProperty(document, "fonts", {
-    value: { ready },
-    configurable: true,
-    writable: true,
-  });
-
-  return {
-    resolve() {
-      resolveReady?.();
-    },
-    restore() {
-      if (hadOriginal) {
-        Object.defineProperty(document, "fonts", {
-          value: original,
-          configurable: true,
-          writable: true,
-        });
-      } else {
-        delete (document as FontsTarget).fonts;
-      }
     },
   };
 }
