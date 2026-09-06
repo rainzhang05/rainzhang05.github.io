@@ -1,22 +1,22 @@
-import { NextResponse, type NextRequest } from "next/server";
-import { LOCALE_COOKIE, LOCALE_PATH } from "@/lib/i18n/config";
-import { shouldRedirectToJa } from "@/lib/i18n/geo";
+import { NextResponse, type NextRequest } from 'next/server';
+import { localeCookie } from './lib/site';
 
+/**
+ * Visitors in Japan land on /ja once, unless they have already chosen a
+ * language (the switch in the header writes the cookie). Everyone else gets
+ * the English page at "/". Same behaviour as the previous site.
+ */
 export function middleware(request: NextRequest) {
-  const { pathname, search } = request.nextUrl;
-  const cookie = request.cookies.get(LOCALE_COOKIE)?.value ?? null;
-  const country = request.headers.get("x-vercel-ip-country");
+  if (request.cookies.get(localeCookie)?.value) return NextResponse.next();
 
-  if (!shouldRedirectToJa({ pathname, cookie, country })) {
-    return NextResponse.next();
+  if (request.headers.get('x-vercel-ip-country') === 'JP') {
+    const url = request.nextUrl.clone();
+    url.pathname = '/ja';
+    return NextResponse.redirect(url, 307);
   }
 
-  const destination = request.nextUrl.clone();
-  destination.pathname = LOCALE_PATH.ja;
-  destination.search = search;
-  return NextResponse.redirect(destination, 307);
+  return NextResponse.next();
 }
 
-export const config = {
-  matcher: "/",
-};
+/** Only the bare root is ever redirected. */
+export const config = { matcher: '/' };
