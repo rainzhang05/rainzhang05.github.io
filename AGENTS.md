@@ -142,11 +142,16 @@ Three values in the `:root` block of `app/globals.css` drive every transition on
 | Token | Value | Used by |
 | --- | --- | --- |
 | `--duration-fast` | 150ms | every colour, border and background change |
-| `--duration-base` | 220ms | expand / collapse (height + opacity) |
+| `--duration-base` | 220ms | expand / collapse (height + opacity), the language pill |
 | `--duration-slow` | 320ms | unused by this design; kept for the token set |
 | `--ease-out` | `cubic-bezier(.2,.6,.2,1)` | all of the above |
+| `--duration-enter` | 620ms | the first-screen entrance |
+| `--enter-step` | 60ms | one beat of the entrance stagger (`.enter-1` … `.enter-6`) |
+| `--ease-enter` | `cubic-bezier(.16,1,.3,1)` | the entrance; most of the movement is over early |
 
-Change one number there and the whole site changes with it. A `prefers-reduced-motion: reduce` block at the bottom of the same file zeroes all durations, and the two JS scroll nudges in [PortfolioPage.tsx](components/site/PortfolioPage.tsx) check `prefersReducedMotion()` before choosing `smooth`.
+Change one number there and the whole site changes with it. A `prefers-reduced-motion: reduce` block at the bottom of the same file zeroes every duration **and delay**, and the two JS scroll nudges in [PortfolioPage.tsx](components/site/PortfolioPage.tsx) check `prefersReducedMotion()` before choosing `smooth`.
+
+`.enter` (rise and fade) and `.enter-fade` (fade only) are the two entrance classes, both declared in `globals.css` so no component carries a millisecond count. Use `.enter-fade` on anything with a `position: fixed` descendant — a transformed ancestor would become its containing block for the length of the animation, which is why the header uses it and the menu sheet does not move.
 
 ---
 
@@ -198,7 +203,7 @@ Marks are shown in their original colours and are never tinted or greyscaled. Th
 
 ## Loading and performance
 
-- **Nothing is hidden waiting for JavaScript.** There is no preloader and no scroll-reveal; first paint is the finished page, and the content is there without JS at all.
+- **Nothing is hidden waiting for JavaScript.** There is no preloader and no scroll-reveal. The first screen fades and rises in once, through a CSS animation with `animation-fill-mode: both` — no script gates it, nothing below the fold waits on a scroll position, and the whole page is there with JavaScript off. Changing language replaces the tree, so the same animation replays and the new language settles in rather than snapping in.
 - **Fonts** are self-hosted through `next/font/local` with `display: swap`, a preloaded latin subset, a lazily fetched latin-ext subset, and a metric-adjusted fallback — no flash of default text and no reflow. Japanese has no face in the design system: `/ja` uses the reader's system Japanese font rather than downloading one.
 - **Expand/collapse** keeps panel content in the DOM at all times, so opening is instant; the row animates `grid-template-rows` and `opacity` only.
 - **Navigation** inside the page is plain anchors with CSS smooth scrolling, so it works before hydration.

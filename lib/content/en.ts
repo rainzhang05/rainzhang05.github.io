@@ -360,7 +360,7 @@ export const en: Copy = {
         },
         {
           label: 'How it works',
-          text: 'Next.js App Router with static generation, Tailwind reading the system’s tokens, self-hosted Albert Sans, English and Japanese routes. Everything is in the page before it renders; nothing fades in late.',
+          text: 'Next.js App Router with static generation, Tailwind reading the system’s tokens, self-hosted Albert Sans, English and Japanese routes. Everything is in the page before it renders; the first screen settles in once, in CSS, and nothing waits on a script.',
         },
       ],
       stack: ['Next.js', 'TypeScript', 'React', 'Tailwind CSS', 'Vercel', 'GitHub Actions'],

@@ -360,7 +360,7 @@ export const ja: Copy = {
         },
         {
           label: '仕組み',
-          text: 'Next.js App Router の静的生成、デザインシステムのトークンを読む Tailwind、自前で配信する Albert Sans、英語と日本語のルート。表示前にすべてがページに揃っていて、あとから遅れて現れる要素はありません。',
+          text: 'Next.js App Router の静的生成、デザインシステムのトークンを読む Tailwind、自前で配信する Albert Sans、英語と日本語のルート。表示前にすべてがページに揃っていて、最初の画面だけが CSS で一度そっと立ち上がります。スクリプトを待つ要素はありません。',
         },
       ],
       stack: ['Next.js', 'TypeScript', 'React', 'Tailwind CSS', 'Vercel', 'GitHub Actions'],

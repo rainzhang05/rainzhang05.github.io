@@ -172,6 +172,68 @@ html[data-locale='ja'] {
   }
 }
 
+/* The first screen arrives instead of appearing. Pure CSS with `both`, so it
+   needs no JavaScript, cannot leave content hidden if a script fails, and
+   replays by itself when a locale change swaps the tree — which is what makes
+   the text settle into the other language rather than snapping to it. */
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Opacity only, for anything that holds a `position: fixed` descendant: a
+   transformed ancestor would become its containing block mid-animation. */
+@keyframes enter-fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@layer components {
+  .enter {
+    animation: enter var(--duration-enter) var(--ease-enter) both;
+  }
+
+  .enter-fade {
+    animation: enter-fade var(--duration-enter) var(--ease-enter) both;
+  }
+
+  .enter-1 {
+    animation-delay: calc(var(--enter-step) * 1);
+  }
+
+  .enter-2 {
+    animation-delay: calc(var(--enter-step) * 2);
+  }
+
+  .enter-3 {
+    animation-delay: calc(var(--enter-step) * 3);
+  }
+
+  .enter-4 {
+    animation-delay: calc(var(--enter-step) * 4);
+  }
+
+  .enter-5 {
+    animation-delay: calc(var(--enter-step) * 5);
+  }
+
+  .enter-6 {
+    animation-delay: calc(var(--enter-step) * 6);
+  }
+}
+
 /* The language pill finishes its slide on the page it lands on: the tree is
    replaced by the locale change, so this animates from where the pill was
    towards the position its own class already gives it. */
@@ -208,6 +270,8 @@ html[data-locale='ja'] {
   *::before,
   *::after {
     transition-duration: 0.01ms !important;
+    transition-delay: 0.01ms !important;
     animation-duration: 0.01ms !important;
+    animation-delay: 0.01ms !important;
   }
 }

@@ -41,7 +41,7 @@ export function SiteHeader({
   );
 
   return (
-    <header className="flex items-center justify-between gap-6 pt-9">
+    <header className="enter-fade flex items-center justify-between gap-6 pt-9">
       {wordmark}
 
       <div className="hidden items-center gap-7 sm:flex">
