@@ -32,7 +32,7 @@ export function ExperienceSection({ copy, openId, onToggle, onOpenProject }: Pro
             onToggle={onToggle}
             labels={copy.labels}
             subtitle={item.orgLine}
-            aside={<CompanyMark mark={item.mark} alt={item.org} />}
+            leading={<CompanyMark mark={item.mark} alt={item.org} />}
           >
             {item.groups.map((group) => (
               <PanelBlock key={group.label} label={group.label}>

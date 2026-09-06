@@ -15,8 +15,8 @@ interface DisclosureRowProps {
   onToggle: (id: string) => void;
   /** h3 in a section, h4 inside a sub-list. */
   headingLevel?: 'h3' | 'h4';
-  /** Company mark, shown right of the title. */
-  aside?: ReactNode;
+  /** Company mark, in front of the title. Experience rows have one; projects do not. */
+  leading?: ReactNode;
   /** Pills and the quiet link: below the summary, always visible. */
   footer?: ReactNode;
   labels: { expand: string; collapse: string };
@@ -30,7 +30,8 @@ interface DisclosureRowProps {
  *
  * The whole header is a click target; the title is the real button, and it
  * carries aria-expanded and aria-controls, so keyboard and screen-reader
- * users get the same affordance. The panel is in the DOM at all times and
+ * users get the same affordance. An experience row leads with its company
+ * mark, which is what tells the two lists apart at a glance. The panel is in the DOM at all times and
  * animates height and opacity from the motion tokens
  * (--duration-base, --ease-out).
  */
@@ -43,7 +44,7 @@ export function DisclosureRow({
   open,
   onToggle,
   headingLevel = 'h3',
-  aside,
+  leading,
   footer,
   labels,
   children,
@@ -68,7 +69,8 @@ export function DisclosureRow({
           onClick={() => onToggle(id)}
         >
           <div className="min-w-0 flex-1">
-            <Heading className="m-0">
+            <Heading className="m-0 flex flex-wrap items-center gap-x-2.5 gap-y-1">
+              {leading}
               <button
                 id={buttonId}
                 type="button"
@@ -83,7 +85,6 @@ export function DisclosureRow({
             {subtitle ? <p className="mt-0.5 text-body-15 text-ink-2">{subtitle}</p> : null}
             <p className="mt-2.5 max-w-measure text-body-15 text-ink-2">{summary}</p>
           </div>
-          {aside}
           <span aria-hidden="true" className="mt-1 inline-flex">
             <Icon name={open ? 'minus' : 'plus'} size={18} />
           </span>

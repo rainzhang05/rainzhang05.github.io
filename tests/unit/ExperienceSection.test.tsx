@@ -8,7 +8,12 @@ function setup(openId: string | null = null) {
   const onToggle = vi.fn();
   const onOpenProject = vi.fn();
   render(
-    <ExperienceSection copy={en} openId={openId} onToggle={onToggle} onOpenProject={onOpenProject} />
+    <ExperienceSection
+      copy={en}
+      openId={openId}
+      onToggle={onToggle}
+      onOpenProject={onOpenProject}
+    />
   );
   return { onToggle, onOpenProject };
 }
@@ -39,8 +44,25 @@ describe('ExperienceSection', () => {
       .filter((item) => item.mark)
       .forEach((item) => {
         const mark = screen.getByAltText(item.org);
+        const { width, height } = item.mark!;
         expect(mark).toHaveAttribute('src', item.mark!.src);
-        expect(mark).toHaveAttribute('width', String(item.mark!.width));
+        // One cap height for every mark, whatever shape the source file is.
+        expect(mark).toHaveAttribute('height', '20');
+        expect(mark).toHaveAttribute('width', String(Math.round((width / height) * 20)));
+      });
+  });
+
+  it('leads the row with the mark, so work does not read like a project', () => {
+    setup();
+
+    en.experiences
+      .filter((item) => item.mark)
+      .forEach((item) => {
+        const mark = screen.getByAltText(item.org);
+        const title = screen.getByRole('button', { name: item.role });
+
+        expect(mark.parentElement).toBe(title.parentElement);
+        expect(mark.compareDocumentPosition(title)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
       });
   });
 

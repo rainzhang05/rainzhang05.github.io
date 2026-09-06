@@ -195,7 +195,8 @@ Everything a recruiter reads is in [lib/content/en.ts](lib/content/en.ts) and [l
 Two rules, and the ESLint config depends on them:
 
 - **`next/image`** for the portrait (fixed 128px, `priority`) and project screenshots (inside a fixed 16:8 frame, so space is reserved before they load).
-- **Plain `<img>` with explicit `width`/`height`** for technology marks and company logos — they are 12–28px, several are SVG, and this avoids turning on SVG handling in `next/image`. [.eslintrc.json](.eslintrc.json) therefore keeps `@next/next/no-img-element` **off**; do not turn it back on.
+- **Plain `<img>` with explicit `width`/`height`** for technology marks and company logos — they are 12–20px tall, several are SVG, and this avoids turning on SVG handling in `next/image`. [.eslintrc.json](.eslintrc.json) therefore keeps `@next/next/no-img-element` **off**; do not turn it back on.
+- A company `mark` in the content files carries the file's own dimensions; [CompanyMark](components/site/CompanyMark.tsx) renders every one at a shared 20px height and derives the width from that ratio. A square logo and a wordmark four times as wide have to weigh the same when they sit in front of a title.
 
 Marks are shown in their original colours and are never tinted or greyscaled. The SVG logos in `public/logos/` carry their own `<style>` blocks — those blocks are what make them blue, so an "optimisation" pass that strips them will silently turn both logos black. [tests/e2e/assets.spec.ts](tests/e2e/assets.spec.ts) guards this.
 
