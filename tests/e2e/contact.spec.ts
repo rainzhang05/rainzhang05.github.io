@@ -1,6 +1,23 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 
 const FORMSPREE = "**/formspree.io/**";
+
+/**
+ * A hash link scrolls smoothly, so the page is still travelling when goto()
+ * resolves — the glide down to #contact takes well over a second. Filling or
+ * clicking while it moves races Playwright's own scroll-into-view, which is
+ * what made these tests flake on WebKit. Wait for it to land first.
+ */
+async function openContact(page: Page) {
+  await page.goto("/#contact");
+  await page.waitForFunction(() => {
+    const w = window as unknown as { y?: number; still?: number };
+    const y = Math.round(window.scrollY);
+    w.still = y === w.y ? (w.still ?? 0) + 1 : 0;
+    w.y = y;
+    return (w.still ?? 0) > 3;
+  });
+}
 
 test.describe("contact form", () => {
   test("asks for the fields it needs before sending", async ({ page }) => {
@@ -10,7 +27,7 @@ test.describe("contact form", () => {
       await route.fulfill({ status: 200, body: "{}" });
     });
 
-    await page.goto("/#contact");
+    await openContact(page);
     await page.getByRole("button", { name: "Send message" }).click();
 
     await expect(page.locator("form").getByRole("alert").first()).toBeVisible();
@@ -18,7 +35,7 @@ test.describe("contact form", () => {
   });
 
   test("says nothing until Send is pressed", async ({ page }) => {
-    await page.goto("/#contact");
+    await openContact(page);
 
     await page.getByLabel("Name").click();
     await page.getByLabel("Email").fill("not-an-address");
@@ -28,7 +45,7 @@ test.describe("contact form", () => {
   });
 
   test("rejects an address that is not an email", async ({ page }) => {
-    await page.goto("/#contact");
+    await openContact(page);
 
     await page.getByLabel("Email").fill("not-an-address");
     await page.getByRole("button", { name: "Send message" }).click();
@@ -42,7 +59,7 @@ test.describe("contact form", () => {
       await route.fulfill({ status: 200, body: "{}" });
     });
 
-    await page.goto("/#contact");
+    await openContact(page);
     await page.getByLabel("Name").fill("Ada Lovelace");
     await page.getByLabel("Email").fill("ada@example.com");
     await page.getByLabel("Message").fill("Hello from a test.");
@@ -54,7 +71,7 @@ test.describe("contact form", () => {
   test("reports a rejected send", async ({ page }) => {
     await page.route(FORMSPREE, (route) => route.fulfill({ status: 500, body: "{}" }));
 
-    await page.goto("/#contact");
+    await openContact(page);
     await page.getByLabel("Name").fill("Ada Lovelace");
     await page.getByLabel("Email").fill("ada@example.com");
     await page.getByLabel("Message").fill("Hello from a test.");
@@ -66,7 +83,7 @@ test.describe("contact form", () => {
   });
 
   test("carries a honeypot that people never see", async ({ page }) => {
-    await page.goto("/#contact");
+    await openContact(page);
 
     const honeypot = page.locator('input[name="confirm_username"]');
     await expect(honeypot).toHaveCount(1);
