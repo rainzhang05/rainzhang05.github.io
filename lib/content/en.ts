@@ -106,7 +106,7 @@ export const en: Copy = {
         'Vercel',
         'GitHub Actions',
       ],
-      related: [],
+      related: ['work-mnt-platform'],
     },
     {
       id: 'exp-feitian',
@@ -160,6 +160,51 @@ export const en: Copy = {
     },
   ],
   featured: [
+    {
+      id: 'work-mnt-platform',
+      dates: 'Aug 2026 – present',
+      title: 'MNT Realty Platform',
+      summary:
+        'One Next.js application serving three surfaces for a property management company: the public website, an owner portal for residents, and a staff admin console.',
+      primary: ['Next.js', 'TypeScript', 'React'],
+      quiet: {
+        label: 'mntrealty.vercel.app',
+        href: 'https://mntrealty.vercel.app',
+      },
+      sections: [
+        {
+          label: 'What it is',
+          text: 'The platform MNT Realty runs on: a public website for prospective clients, an owner portal where residents of the stratas MNT manages read notices, book amenities and download documents, and an admin console where staff run all of it. Replacing a single 553 KB HTML document that switched between all four audiences with CSS and served everything from one PHP endpoint.',
+        },
+        {
+          label: 'How it works',
+          text: 'Three surfaces, three subdomains, one build. A proxy routes on the host — admin.* to the console, owners.* to the portal — and turns those paths into a not-found page on the public host, so each keeps its own chrome and its own host-only session cookie. Public pages are prerendered; the console and the portal render per request. Every read and write goes through one named data-store contract, one operation per write and one read model per screen, so what staff enter reaches residents at once and the store behind it can be swapped for the drafted PostgreSQL schema without touching a screen.',
+        },
+        {
+          label: 'Technical challenges',
+          text: 'Getting the access model right in one place rather than in every guard: navigation, page guards and the file route all read the same table, and a section outside a viewer’s role is not-found rather than forbidden, so the portal never tells a tenant what an owner can see. Making a strata a real boundary, so nothing about one is reachable while another is open. And keeping MNT’s own business facts — company details, the strata-document fee schedule, the amenity slot template — as versioned data an administrator edits under Settings, rather than literals in the source, with every saved version restorable.',
+        },
+      ],
+      stack: [
+        'Next.js',
+        'React',
+        'TypeScript',
+        'Tailwind CSS',
+        'Node.js',
+        'PostgreSQL',
+        'Vitest',
+        'Vercel',
+        'GitHub Actions',
+      ],
+      status:
+        'The public website, the owner portal and the admin console are all built and deployed; cloud data and backend workflows are next. The source belongs to MNT Realty and is not public.',
+      links: [
+        {
+          label: 'Live site',
+          href: 'https://mntrealty.vercel.app',
+        },
+      ],
+    },
     {
       id: 'work-webauthn',
       dates: 'Sep – Oct 2025',
