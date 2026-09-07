@@ -111,6 +111,15 @@
   --duration-enter: 620ms;
   --enter-step: 60ms;
 
+  /* Section dock — the left rail the header turns into past the first screen.
+     --dock-pitch is centre to centre: 40px is where two adjacent focus rings
+     (32px box + 2px offset + 2px ring on each side) meet without overlapping.
+     --dock-dot is the nominal diameter; lib/dockMotion.ts scales it between
+     0.7 and 1.5 from the pointer's distance along Y. */
+  --dock-hit: 32px;
+  --dock-pitch: 40px;
+  --dock-dot: 10px;
+
   /* Focus */
   --focus-ring-width: 2px;
   --focus-ring-offset: 2px;
@@ -173,9 +182,11 @@ html[data-locale='ja'] {
     outline-offset: var(--focus-ring-offset);
   }
 
-  /* The skip link moves focus to <main tabindex="-1">. That is a landing
-     place, not a control, so it must not draw a ring around the whole page. */
-  main:focus {
+  /* The skip link moves focus to <main tabindex="-1">, and the section dock
+     does the same to each <section>. Those are landing places, not controls,
+     so they must not draw a ring around a whole screen of content. */
+  main:focus,
+  section:focus {
     outline: none;
   }
 
@@ -305,6 +316,119 @@ html[data-locale='ja'] {
       grid-template-rows var(--panel-duration, var(--duration-base)) var(--ease-panel),
       opacity var(--panel-duration, var(--duration-base)) var(--ease-panel),
       visibility 0s;
+  }
+}
+
+/* The section dock. A fixed overlay down the left gutter that the top bar
+   morphs into as it leaves the viewport; below 640px it never exists and the
+   header keeps its menu sheet. Position lives here rather than in JS so the
+   resting state survives iOS Safari's collapsing toolbar — the script only
+   ever writes a transform offset that returns to zero. */
+@layer components {
+  .section-dock {
+    position: fixed;
+    left: 0;
+    top: 50%;
+    z-index: 40;
+    display: none;
+    transform: translateY(-50%);
+    /* The rail spans the height of the column across the whole left edge, so
+       it must not swallow clicks meant for the page beneath it. Only the
+       buttons are targets. */
+    pointer-events: none;
+    /* `layout style` only. `paint` — or an overflow rule — would clip the
+       label as it opens, which is the whole feature. */
+    contain: layout style;
+  }
+
+  /* A media query and not a width read in JavaScript: a JS gate would put a
+     laid-out dock into the pre-hydration HTML at 320px, and this way the gate
+     and Tailwind's sm: breakpoint can never disagree about the scrollbar. */
+  @media (min-width: 640px) {
+    .section-dock[data-shown='true'] {
+      display: block;
+    }
+  }
+
+  .dock-item {
+    display: grid;
+    grid-template-columns: var(--dock-hit) 0fr;
+    align-items: center;
+    width: max-content;
+    height: var(--dock-pitch);
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: transparent;
+    color: var(--ink-2);
+    cursor: pointer;
+    pointer-events: auto;
+    transition:
+      grid-template-columns var(--duration-base) var(--ease-out),
+      background-color var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out);
+  }
+
+  /* Hover is gated on real hover hardware; focus is not. The script separately
+     ignores any pointer that is not a mouse, because a touchscreen laptop
+     answers yes to this query and still sends a finger a pointermove. */
+  @media (hover: hover) and (pointer: fine) {
+    .dock-item:hover {
+      grid-template-columns: var(--dock-hit) 1fr;
+      background: var(--surface);
+      color: var(--ink);
+    }
+  }
+
+  .dock-item:focus-visible {
+    grid-template-columns: var(--dock-hit) 1fr;
+    background: var(--surface);
+    color: var(--ink);
+  }
+
+  .dock-dot {
+    justify-self: center;
+    width: var(--dock-dot);
+    height: var(--dock-dot);
+    border: 1px solid var(--ink-3);
+    border-radius: var(--radius-pill);
+    /* The resting size, and the only size a reduced-motion visitor ever sees:
+       the script does not run at all under `reduce`, so nothing overwrites it. */
+    transform: scale(0.7);
+    transition:
+      background-color var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out);
+  }
+
+  /* Filled disc against hollow ring, so the current section is not signalled by
+     colour alone — and because --rule-strong on --paper is 1.48:1, well under
+     the 3:1 a control's own shape has to clear. */
+  .dock-item[data-active='true'] .dock-dot {
+    background: var(--sage);
+    border-color: var(--sage);
+  }
+
+  /* Unlike .disclosure-panel this must NOT use visibility: the clipped text is
+     the button's accessible name, not a hidden control. min-width and nowrap
+     are both load-bearing — without them the track refuses to collapse to 0fr
+     and the word re-wraps on every frame. */
+  .dock-label {
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-align: left;
+  }
+
+  .dock-label > span {
+    display: block;
+    padding-right: 14px;
+    padding-left: 2px;
+    font-size: var(--text-label);
+    line-height: var(--leading-label);
+    letter-spacing: var(--tracking-label);
+    font-weight: var(--weight-medium);
+    text-transform: uppercase;
   }
 }
 
