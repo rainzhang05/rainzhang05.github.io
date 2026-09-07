@@ -112,6 +112,7 @@ export function PortfolioPage({ copy, locale }: { copy: Copy; locale: Locale }) 
     <>
       <div
         id="top"
+        tabIndex={-1}
         className="mx-auto box-border w-full max-w-container px-gutter-mobile sm:px-gutter"
       >
         <a

@@ -96,6 +96,7 @@ export interface Copy {
     copyEmail: string;
   };
   sections: {
+    intro: string;
     experience: string;
     work: string;
     otherWork: string;

@@ -35,7 +35,7 @@ describe('PortfolioPage', () => {
     const { container } = render(<PortfolioPage copy={en} locale="en" />);
 
     const ids = Array.from(container.querySelectorAll('main section')).map((s) => s.id);
-    expect(ids).toEqual(['', 'experience', 'work', 'background', 'contact']);
+    expect(ids).toEqual(['intro', 'experience', 'work', 'background', 'contact']);
   });
 
   it('gives the header a target to scroll back to', () => {

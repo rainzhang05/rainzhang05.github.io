@@ -44,6 +44,7 @@ export const en: Copy = {
     copyEmail: 'Copy email',
   },
   sections: {
+    intro: 'Introduction',
     experience: 'Experience',
     work: 'Selected Work',
     otherWork: 'Other Work',

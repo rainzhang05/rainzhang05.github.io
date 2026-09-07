@@ -44,6 +44,7 @@ export const ja: Copy = {
     copyEmail: 'メールアドレスをコピー',
   },
   sections: {
+    intro: 'はじめに',
     experience: '経歴',
     work: '主な制作物',
     otherWork: 'その他の制作物',

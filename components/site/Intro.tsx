@@ -6,7 +6,7 @@ import type { Copy } from '@/lib/types';
 
 export function Intro({ copy, onCopyEmail }: { copy: Copy['intro']; onCopyEmail: () => void }) {
   return (
-    <section className="pb-20 pt-hero">
+    <section tabIndex={-1} id="intro" className="pb-20 pt-hero">
       <div className="max-w-[62ch]">
         <div className="enter enter-1">
           <Eyebrow>{copy.eyebrow}</Eyebrow>

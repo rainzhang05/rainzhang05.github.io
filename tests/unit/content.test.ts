@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { content, en, ja } from '@/lib/content';
 import { TECH_ICONS, type TechName } from '@/lib/tech';
-import { sectionLinks } from '@/lib/sectionLinks';
+import { sectionLinks, targetId } from '@/lib/sectionLinks';
 import { locales } from '@/lib/site';
 import type { Copy, Project } from '@/lib/types';
 
@@ -81,11 +81,25 @@ describe.each(locales)('%s content', (locale) => {
 
   it('points the dock and the footer at every section, in document order', () => {
     expect(sectionLinks(copy).map((n) => n.id)).toEqual([
+      'intro',
       'experience',
       'work',
       'background',
       'contact',
     ]);
+  });
+
+  it('watches the intro section but sends Introduction to the top of the page', () => {
+    const intro = sectionLinks(copy)[0];
+
+    // #top wraps the whole page, so it can never be the observed element — it
+    // always intersects. #intro is a real section an observer can answer for.
+    expect(intro.id).toBe('intro');
+    expect(intro.href).toBe('#top');
+    expect(targetId(intro)).toBe('top');
+    sectionLinks(copy)
+      .slice(1)
+      .forEach((link) => expect(targetId(link)).toBe(link.id));
   });
 
   it('names the section dock something the header nav does not answer to', () => {
