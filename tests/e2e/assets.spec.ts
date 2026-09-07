@@ -46,7 +46,7 @@ test.describe("static assets", () => {
   });
 
   test("serves the favicon", async ({ request }) => {
-    const response = await request.get("/icon.ico");
+    const response = await request.get("/icon.svg");
     expect(response.status()).toBe(200);
   });
 });

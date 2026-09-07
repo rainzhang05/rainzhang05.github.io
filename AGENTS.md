@@ -47,7 +47,7 @@ app/
                            The only file in the repo with raw values.
   fonts.ts                 Albert Sans, self-hosted through next/font/local
   fonts/*.woff2            The four font files (upright/italic x latin/latin-ext)
-  icon.ico                 Favicon, applied to every route
+  icon.svg                 Favicon, applied to every route
   [locale]/
     layout.tsx             Root layout: <html lang>, fonts, metadata, generateStaticParams
     page.tsx               Renders <PortfolioPage> with that language's content
