@@ -520,6 +520,11 @@ html[data-locale='ja'] {
       background: var(--surface);
       color: var(--ink);
     }
+
+    .dock-item:hover .dock-label > span,
+    .dock-item[data-open='true'] .dock-label > span {
+      opacity: 1;
+    }
   }
 
   /* Keyboard, unconditionally: :focus-visible is not a pointer state, so it is
@@ -529,6 +534,10 @@ html[data-locale='ja'] {
     grid-template-columns: var(--dock-hit) 1fr;
     background: var(--surface);
     color: var(--ink);
+  }
+
+  .dock-item:focus-visible .dock-label > span {
+    opacity: 1;
   }
 
   .dock-dot {
@@ -578,7 +587,12 @@ html[data-locale='ja'] {
     text-align: left;
   }
 
+  /* The text fades up as the track opens rather than being uncovered by the
+     moving clip edge, which reads as a wipe. opacity, not visibility: this
+     span is the button's accessible name and has to stay in the tree. */
   .dock-label > span {
+    opacity: 0;
+    transition: opacity var(--duration-base) var(--ease-out);
     display: block;
     padding-right: 14px;
     padding-left: 2px;
