@@ -1,7 +1,7 @@
 import type { CompanyMark as Mark } from '@/lib/types';
 
 /** Every mark reads at the same cap height, whatever shape the file is. */
-const HEIGHT = 20;
+const HEIGHT = 18;
 
 /**
  * Company marks stay in their original colours, at a shared height rather

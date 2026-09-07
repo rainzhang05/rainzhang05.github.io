@@ -47,8 +47,8 @@ describe('ExperienceSection', () => {
         const { width, height } = item.mark!;
         expect(mark).toHaveAttribute('src', item.mark!.src);
         // One cap height for every mark, whatever shape the source file is.
-        expect(mark).toHaveAttribute('height', '20');
-        expect(mark).toHaveAttribute('width', String(Math.round((width / height) * 20)));
+        expect(mark).toHaveAttribute('height', '18');
+        expect(mark).toHaveAttribute('width', String(Math.round((width / height) * 18)));
       });
   });
 
