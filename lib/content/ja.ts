@@ -35,7 +35,7 @@ export const ja: Copy = {
     },
   ],
   intro: {
-    eyebrow: 'コンピュータサイエンス · サイモンフレーザー大学 · バンクーバー（BC州）',
+    eyebrow: 'コンピュータサイエンス · サイモンフレーザー大学 · バンクーバー（カナダ BC州）',
     heading: 'Web システムの設計から本番運用まで、一貫して担当しています。',
     body: 'Rain Zhang です。サイモンフレーザー大学でコンピュータサイエンスを学ぶ3年生です。この1年は、セキュリティキーの会社と不動産管理会社で実際に運用されるシステムを、主に Python・TypeScript・Rust で開発し、運用してきました。',
     availability: 'ソフトウェアエンジニアのインターンシップおよび新卒採用を探しています。',
@@ -64,7 +64,7 @@ export const ja: Copy = {
       dates: '2026年8月 – 現在',
       role: 'ソフトウェア・IT システム担当',
       org: 'MNT Realty',
-      orgLine: 'MNT Realty · バンクーバー（BC州）',
+      orgLine: 'MNT Realty · バンクーバー（カナダ BC州）',
       mark: {
         src: '/logos/mnt-realty.svg',
         width: 28,
@@ -112,8 +112,8 @@ export const ja: Copy = {
       id: 'exp-feitian',
       dates: '2025年9月 – 12月',
       role: 'フルスタックエンジニア（インターン）',
-      org: '飛天ジャパン株式会社',
-      orgLine: '飛天ジャパン株式会社 · 国際部 · 北京',
+      org: '飛天ジャパン',
+      orgLine: '飛天ジャパン · 国際部 · 北京（中国）',
       mark: {
         src: '/logos/feitian.svg',
         width: 88,
@@ -421,7 +421,7 @@ export const ja: Copy = {
   education: {
     dates: '2023年9月 – 2027年4月',
     school: 'サイモンフレーザー大学',
-    meta: 'コンピュータサイエンス学士 · バーナビー（BC州）· 2027年4月卒業見込み',
+    meta: 'コンピュータサイエンス学士 · バンクーバー（カナダ BC州）· 2027年4月卒業見込み',
     detail: 'CGPA 3.44 / 4.33。2024年秋学期と2025年夏学期に Dean’s Honour Roll。',
   },
   skills: [

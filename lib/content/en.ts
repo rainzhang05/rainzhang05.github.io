@@ -35,7 +35,7 @@ export const en: Copy = {
     },
   ],
   intro: {
-    eyebrow: 'Computer science · Simon Fraser University · Vancouver, BC',
+    eyebrow: 'Computer science · Simon Fraser University · Vancouver, BC, Canada',
     heading: 'I build and maintain web systems, from design through to production.',
     body: 'I’m Rain, a third-year computer science student at SFU. In the past year I’ve built and run production systems for a security-key company and a property management firm, mostly in Python, TypeScript and Rust.',
     availability: 'Open to software engineering internships and new-grad roles.',
@@ -64,7 +64,7 @@ export const en: Copy = {
       dates: 'Aug 2026 – present',
       role: 'Software and IT Systems Specialist',
       org: 'MNT Realty',
-      orgLine: 'MNT Realty · Vancouver, BC',
+      orgLine: 'MNT Realty · Vancouver, BC, Canada',
       mark: {
         src: '/logos/mnt-realty.svg',
         width: 28,
@@ -113,7 +113,7 @@ export const en: Copy = {
       dates: 'Sep – Dec 2025',
       role: 'Full-Stack Engineer Intern',
       org: 'FEITIAN Technologies',
-      orgLine: 'FEITIAN Technologies · International Department · Beijing',
+      orgLine: 'FEITIAN Technologies · International Department · Beijing, China',
       mark: {
         src: '/logos/feitian.svg',
         width: 88,
@@ -421,7 +421,7 @@ export const en: Copy = {
   education: {
     dates: 'Sep 2023 – Apr 2027',
     school: 'Simon Fraser University',
-    meta: 'BSc, Computer Science · Burnaby, BC · graduating April 2027',
+    meta: 'BSc, Computer Science · Vancouver, BC, Canada · graduating April 2027',
     detail: 'CGPA 3.44 / 4.33. Dean’s Honour Roll in Fall 2024 and Summer 2025.',
   },
   skills: [
