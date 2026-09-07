@@ -673,8 +673,11 @@ html[data-locale='ja'] {
   }
 
   .resume-aside {
+    /* Stacked rather than beside, so the rule and the gutter that separated
+       the two columns are replaced by the space between two sections. */
     border: 0;
     padding-left: 0;
+    margin-top: var(--section-gap);
   }
 
   /* On paper there is nothing to expand, and a closed panel is the detail
