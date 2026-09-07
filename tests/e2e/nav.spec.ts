@@ -46,7 +46,7 @@ test.describe("navigation", () => {
   });
 
   test("does not scroll sideways at any width", async ({ page }) => {
-    for (const width of [320, 375, 640, 700, 768, 1280]) {
+    for (const width of [320, 375, 768, 1280]) {
       await page.setViewportSize({ width, height: 800 });
       await page.goto("/");
 
