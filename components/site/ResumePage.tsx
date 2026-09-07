@@ -54,13 +54,13 @@ export function ResumePage({
       </div>
 
       <main id="main" tabIndex={-1} className="mx-auto w-full max-w-resume pb-4 pt-hero">
-        <header className="enter enter-1 flex flex-wrap items-end justify-between gap-x-10 gap-y-4 border-b border-rule pb-6">
-          <div className="min-w-0">
+        <header className="enter enter-1 flex flex-wrap items-end justify-between gap-x-8 gap-y-4 border-b border-rule pb-6">
+          <div className="min-w-0 flex-1 basis-[420px]">
             <h1 className="m-0 text-display-2 font-normal">{site.name}</h1>
-            <p className="mt-1.5 max-w-[46ch] text-body-lg text-ink-2">{resume.tagline}</p>
+            <p className="mt-1.5 text-body-lg text-ink-2">{resume.tagline}</p>
           </div>
 
-          <div className="grid gap-0.5 text-caption text-ink-2 sm:justify-items-end sm:text-right">
+          <div className="grid flex-none gap-0.5 text-caption text-ink-2 sm:justify-items-end sm:text-right">
             {resume.contact.map((line) => (
               <MetaLine key={line[0].text} parts={line} className="text-caption text-ink-2" />
             ))}
