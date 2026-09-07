@@ -440,7 +440,7 @@ export const en: Copy = {
     dates: 'Sep 2023 – Apr 2027',
     school: 'Simon Fraser University',
     meta: 'BSc, Computer Science · Burnaby, BC · graduating April 2027',
-    detail: 'CGPA 3.43 / 4.33. Dean’s Honour Roll in Fall 2024 and Summer 2025.',
+    detail: 'CGPA 3.44 / 4.33. Dean’s Honour Roll in Fall 2024 and Summer 2025.',
   },
   skills: [
     {

@@ -440,7 +440,7 @@ export const ja: Copy = {
     dates: '2023年9月 – 2027年4月',
     school: 'サイモンフレーザー大学',
     meta: 'コンピュータサイエンス学士 · バーナビー（BC州）· 2027年4月卒業見込み',
-    detail: 'CGPA 3.43 / 4.33。2024年秋学期と2025年夏学期に Dean’s Honour Roll。',
+    detail: 'CGPA 3.44 / 4.33。2024年秋学期と2025年夏学期に Dean’s Honour Roll。',
   },
   skills: [
     {
