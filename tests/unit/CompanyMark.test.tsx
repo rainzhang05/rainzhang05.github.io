@@ -36,13 +36,13 @@ describe('CompanyMark', () => {
   it('applies an optical scale when a mark needs to sit larger', () => {
     render(
       <CompanyMark
-        mark={{ src: '/logos/mnt-realty.svg', width: 28, height: 28, scale: 1.12 }}
+        mark={{ src: '/logos/mnt-realty.svg', width: 28, height: 28, scale: 1.45 }}
         alt="MNT Realty"
       />
     );
 
     const mark = screen.getByAltText('MNT Realty');
-    expect(mark).toHaveAttribute('height', '20');
-    expect(mark).toHaveAttribute('width', '20');
+    expect(mark).toHaveAttribute('height', '26');
+    expect(mark).toHaveAttribute('width', '26');
   });
 });

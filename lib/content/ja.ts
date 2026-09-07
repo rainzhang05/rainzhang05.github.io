@@ -67,7 +67,7 @@ export const ja: Copy = {
         src: '/logos/mnt-realty.svg',
         width: 28,
         height: 28,
-        scale: 1.12,
+        scale: 1.45,
       },
       summary:
         '不動産・ストラータ管理会社で唯一のエンジニアです。社内業務の基盤となるシステムを開発・運用し、Microsoft 365 のアカウントやデータと連携させています。',
