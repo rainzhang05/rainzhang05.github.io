@@ -90,7 +90,7 @@
   /* Motion — every transition on the site resolves to these three values.
      --duration-fast: colour and border changes
      --duration-base: expand and collapse (height + opacity)
-     --duration-slow: reserved; not used by the current design
+     --duration-slow: the section dock's active fill
      --duration-enter: the first-screen entrance
      prefers-reduced-motion zeroes all of them (see bottom of this file). */
   --ease-out: cubic-bezier(0.2, 0.6, 0.2, 1);
@@ -111,18 +111,60 @@
   --duration-enter: 620ms;
   --enter-step: 60ms;
 
-  /* Section dock — the left rail the header turns into past the first screen.
-     --dock-pitch is centre to centre: 40px is where two adjacent focus rings
-     (32px box + 2px offset + 2px ring on each side) meet without overlapping.
-     --dock-dot is the nominal diameter; lib/dockMotion.ts scales it between
-     0.7 and 1.5 from the pointer's distance along Y. */
-  --dock-hit: 32px;
+  /* Section dock — the left rail that appears once the top bar has gone.
+     --dock-pitch is centre to centre and is also the button's own height, so n
+     bubbles are exactly n x pitch tall and centre i sits at (i + 0.5) x pitch.
+     It is the one value lib/dockMotion.ts is tuned to: SPREAD is 0.95 x pitch,
+     so retuning pitch means retuning SPREAD.
+     --dock-hit is the collapsed button's width, the dot's track; the label
+     opens to its right. --dock-inset holds the column off the viewport edge
+     and is what the spine measures its x from.
+     The pair steps at 1176px, which is where the container stops growing
+     (1080 + 2 x 48) and the gutter starts widening. Below it the content
+     column begins at exactly 48px, so the rail's box has to end there:
+     12 + 36 = 48. Above it there is room for a 44px target and 4px more
+     inset: 16 + 44 = 60, dot centre 38. A media query and not a width read in
+     JavaScript, for the same reason the 640px gate is one.
+     --dock-rise is how far a bubble travels on its way in — the same 10px the
+     first screen rises, deliberately.
+     --dock-reach is how far right of the rail the pointer is felt. It is a
+     maximum: SectionDock clamps it to the gutter that actually exists, so the
+     lens never wakes for a pointer that is over the prose. */
+  --dock-hit: 36px;
   --dock-pitch: 40px;
   --dock-dot: 10px;
+  --dock-inset: 12px;
+  --dock-rise: 10px;
+  --dock-reach: 120px;
+
+  /* The dock's entrance is its own beat, not the first screen's.
+     --duration-enter (620ms) is tuned for a 46px heading; on a 10px rise of a
+     10px dot, --ease-enter spends its last 400ms moving under a pixel and a
+     half, and with a stagger on top the column would not look finished until
+     740ms after the threshold — while the page is still moving.
+     --dock-step is the dock's own stagger, not --enter-step: at 60ms against a
+     420ms travel on a curve as front-loaded as --ease-enter, all five beats
+     overlap and the column reads as one fade rather than a cascade from the
+     middle out. 90ms separates them enough to see the order.
+     --duration-dock-all is --duration-dock + 2 x --dock-step, written out
+     rather than calc'd: it is the spine's own duration, so its tips reach the
+     outermost slots as the outermost bubbles land on them, and it is the delay
+     on the rail's visibility, so the exit is never cut short. Retune it if the
+     column stops having five items. */
+  --duration-dock: 420ms;
+  --dock-step: 90ms;
+  --duration-dock-all: 600ms;
 
   /* Focus */
   --focus-ring-width: 2px;
   --focus-ring-offset: 2px;
+}
+
+@media (min-width: 1176px) {
+  :root {
+    --dock-hit: 44px;
+    --dock-inset: 16px;
+  }
 }
 
 html[data-locale='ja'] {
@@ -186,7 +228,8 @@ html[data-locale='ja'] {
      does the same to each <section>. Those are landing places, not controls,
      so they must not draw a ring around a whole screen of content. */
   main:focus,
-  section:focus {
+  section:focus,
+  #top:focus {
     outline: none;
   }
 
@@ -319,11 +362,15 @@ html[data-locale='ja'] {
   }
 }
 
-/* The section dock. A fixed overlay down the left gutter that the top bar
-   morphs into as it leaves the viewport; below 640px it never exists and the
-   header keeps its menu sheet. Position lives here rather than in JS so the
-   resting state survives iOS Safari's collapsing toolbar — the script only
-   ever writes a transform offset that returns to zero. */
+/* The section dock. A fixed rail down the left gutter that appears once the
+   top bar has scrolled away; below 640px it never exists and the header keeps
+   its menu sheet.
+   The entrance is entirely CSS: crossing the threshold flips one attribute and
+   the transitions below do the rest, so reversal is whatever an interrupted
+   transition naturally does and there is no second code path. JavaScript
+   writes exactly four things — data-shown on the rail, data-active and
+   data-open on each button, and scale() on each dot — and owns none of the
+   properties declared here. */
 @layer components {
   .section-dock {
     position: fixed;
@@ -331,25 +378,93 @@ html[data-locale='ja'] {
     top: 50%;
     z-index: 40;
     display: none;
+    padding-left: var(--dock-inset);
+    /* The centring translate is the rail's only transform and is never
+       animated: the entrance moves ::before and .dock-item instead, so no
+       later edit can drop the -50% and send the column half a screen down. */
     transform: translateY(-50%);
     /* The rail spans the height of the column across the whole left edge, so
        it must not swallow clicks meant for the page beneath it. Only the
-       buttons are targets. */
+       buttons are targets, and only while the rail is shown. */
     pointer-events: none;
     /* `layout style` only. `paint` — or an overflow rule — would clip the
-       label as it opens, which is the whole feature. */
+       label as it opens, which is the whole feature. `layout` also makes this
+       a stacking context, which is what keeps the spine's z-index: -1 from
+       escaping behind the page. */
     contain: layout style;
+    /* Hidden, not display:none. A display flip has no previous computed value
+       to transition from, so the whole entrance would snap; a visibility flip
+       keeps both endpoints — a visibility:hidden element still generates a
+       box, still resolves styles and still runs transitions — while taking the
+       rail out of hit-testing, out of the accessibility tree and out of the
+       tab order. The delay belongs to visibility alone and is the full
+       sequence: on the way out it waits for the last bubble to finish. */
+    visibility: hidden;
+    transition: visibility 0s linear var(--duration-dock-all);
   }
 
   /* A media query and not a width read in JavaScript: a JS gate would put a
      laid-out dock into the pre-hydration HTML at 320px, and this way the gate
      and Tailwind's sm: breakpoint can never disagree about the scrollbar. */
   @media (min-width: 640px) {
-    .section-dock[data-shown='true'] {
+    .section-dock {
       display: block;
     }
   }
 
+  .section-dock[data-shown='true'] {
+    visibility: visible;
+    transition: visibility 0s;
+  }
+
+  /* The spine: one hairline behind the column, drawn from the middle outward
+     and left in place. It runs from the first bubble's centre to the last —
+     half a pitch inset at each end — so its tips finish underneath the
+     outermost dots instead of sticking out past them, and it needs no count of
+     the items to do it. It persists rather than fading, because scaleY(1) ->
+     scaleY(0) about a centre origin *is* the inverted gesture: the exit furls
+     it inward from both ends for free, with no second rule.
+     A pseudo-element and not a node, so there is no role, no name and no
+     aria-hidden for a later edit to drop. */
+  .section-dock::before {
+    content: '';
+    position: absolute;
+    /* Behind the bubbles. The rail is a stacking context (contain: layout), so
+       -1 cannot reach the page. */
+    z-index: -1;
+    top: calc(var(--dock-pitch) / 2);
+    bottom: calc(var(--dock-pitch) / 2);
+    left: calc(var(--dock-inset) + (var(--dock-hit) - 1px) / 2);
+    width: 1px;
+    background: var(--rule);
+    transform: scaleY(0);
+    transform-origin: 50% 50%;
+    transition: transform var(--duration-dock-all) var(--ease-enter);
+  }
+
+  .section-dock[data-shown='true']::before {
+    transform: scaleY(1);
+  }
+
+  /* The bubbles. transform and opacity only. All five rise from --dock-rise
+     below their slot rather than spilling outward from the middle: the spine
+     already supplies the outward vector, and two things expanding from one
+     point at once mush.
+     --dock-d is the item's distance from the middle of the column in whole
+     steps and --dock-d-out is that inverted; SectionDock writes both, because
+     CSS cannot count its siblings. For five items they are 2,1,0,1,2 and
+     0,1,2,1,0 — so the entrance runs middle outward and the exit runs outside
+     in, from one attribute flip.
+     transition-delay is read from the state being transitioned *into*, which
+     is why the exit's delays live on the base rule and the entrance's on the
+     [data-shown='true'] rule and not the other way round. Longhands and not
+     the shorthand, so that inversion is a one-declaration diff. The delay list
+     is positionally bound to transition-property: keep opacity and transform
+     first in both, or the stagger silently attaches to the label track.
+     pointer-events is not transitionable, so it flips on the instant of the
+     attribute change: a bubble is clickable from the first frame of the
+     entrance and dead from the first frame of the exit, instead of catching
+     ghost clicks while its opacity sits near zero on the way out. */
   .dock-item {
     display: grid;
     grid-template-columns: var(--dock-hit) 0fr;
@@ -363,24 +478,53 @@ html[data-locale='ja'] {
     background: transparent;
     color: var(--ink-2);
     cursor: pointer;
-    pointer-events: auto;
-    transition:
-      grid-template-columns var(--duration-base) var(--ease-out),
-      background-color var(--duration-fast) var(--ease-out),
-      color var(--duration-fast) var(--ease-out);
+    pointer-events: none;
+    opacity: 0;
+    transform: translate3d(0, var(--dock-rise), 0);
+    transition-property: opacity, transform, grid-template-columns, background-color, color;
+    transition-duration:
+      var(--duration-dock), var(--duration-dock), var(--duration-base), var(--duration-fast),
+      var(--duration-fast);
+    transition-timing-function:
+      var(--ease-enter), var(--ease-enter), var(--ease-out), var(--ease-out), var(--ease-out);
+    transition-delay:
+      calc(var(--dock-step) * var(--dock-d-out, 0)), calc(var(--dock-step) * var(--dock-d-out, 0)),
+      0s, 0s, 0s;
   }
 
-  /* Hover is gated on real hover hardware; focus is not. The script separately
-     ignores any pointer that is not a mouse, because a touchscreen laptop
-     answers yes to this query and still sends a finger a pointermove. */
+  .section-dock[data-shown='true'] .dock-item {
+    pointer-events: auto;
+    opacity: 1;
+    /* translate3d and not `none`: it guarantees a composited layer on old
+       WebKit without will-change, and holds the button in the same paint group
+       as the spine. */
+    transform: translate3d(0, 0, 0);
+    transition-delay:
+      calc(var(--dock-step) * var(--dock-d, 0)), calc(var(--dock-step) * var(--dock-d, 0)), 0s, 0s,
+      0s;
+  }
+
+  /* Two gates, and neither subsumes the other. The script's own gate
+     (pointerType !== 'mouse') decides which pointer may set data-open; this
+     query decides which hardware may render it — a tap on a touchscreen laptop
+     answers yes to the query and must not open a capsule.
+     :hover is kept alongside the attribute rather than replaced by it. It is
+     the distance-zero case of the same test, so it adds nothing while the
+     script runs, and it is the entire behaviour before hydration, with
+     JavaScript off, and under prefers-reduced-motion, where the frame loop
+     never starts and nothing ever writes data-open. */
   @media (hover: hover) and (pointer: fine) {
-    .dock-item:hover {
+    .dock-item:hover,
+    .dock-item[data-open='true'] {
       grid-template-columns: var(--dock-hit) 1fr;
       background: var(--surface);
       color: var(--ink);
     }
   }
 
+  /* Keyboard, unconditionally: :focus-visible is not a pointer state, so it is
+     not gated on hover hardware, and the script never writes data-open from a
+     focus event. */
   .dock-item:focus-visible {
     grid-template-columns: var(--dock-hit) 1fr;
     background: var(--surface);
@@ -393,20 +537,34 @@ html[data-locale='ja'] {
     height: var(--dock-dot);
     border: 1px solid var(--ink-3);
     border-radius: var(--radius-pill);
+    background: transparent;
+    /* The active fill is an inset spread, not a background. It grows inward
+       from the ring until the ring has closed into a disc, so the state change
+       has a direction and a shape, and every frame of it is a fully opaque
+       sage annulus at 4.68:1 on paper — a background fading up from
+       transparent passes through about 1.6:1 halfway, where the state is
+       genuinely ambiguous. box-shadow is paint-only, so unlike border-width
+       this touches no layout. */
+    box-shadow: inset 0 0 0 0 var(--sage);
     /* The resting size, and the only size a reduced-motion visitor ever sees:
-       the script does not run at all under `reduce`, so nothing overwrites it. */
+       the frame loop does not run under `reduce`, so nothing overwrites it.
+       transform here has exactly one writer — the frame loop, which writes a
+       complete scale() every frame. No state selector may add a second
+       transform to this element, and there is deliberately no
+       `transition: transform`, which would stack a second easing on a value
+       already eased by TAU and add fixed lag on top of it. */
     transform: scale(0.7);
     transition:
-      background-color var(--duration-fast) var(--ease-out),
-      border-color var(--duration-fast) var(--ease-out);
+      box-shadow var(--duration-slow) var(--ease-panel),
+      border-color var(--duration-slow) var(--ease-panel);
   }
 
   /* Filled disc against hollow ring, so the current section is not signalled by
      colour alone — and because --rule-strong on --paper is 1.48:1, well under
      the 3:1 a control's own shape has to clear. */
   .dock-item[data-active='true'] .dock-dot {
-    background: var(--sage);
     border-color: var(--sage);
+    box-shadow: inset 0 0 0 calc(var(--dock-dot) / 2) var(--sage);
   }
 
   /* Unlike .disclosure-panel this must NOT use visibility: the clipped text is
@@ -429,6 +587,26 @@ html[data-locale='ja'] {
     letter-spacing: var(--tracking-label);
     font-weight: var(--weight-medium);
     text-transform: uppercase;
+  }
+
+  /* The first frame after hydration, and nothing else.
+     A page opened deep or refreshed mid-scroll must arrive already docked, not
+     animate in — the reader never crossed the threshold, they landed past it.
+     A freshly inserted node has no before-change style, so in principle the
+     first flip of data-shown would start no transition; but measure() calls
+     getComputedStyle() for the dock tokens *before* tick() flips the
+     attribute, and that resolves style once with data-shown="false". That
+     resolution is a before-change style, and every transition would run.
+     So the layout effect renders the rail with data-immediate, paints the
+     correct state, and clears it on the next frame.
+     This block must stay last in the layer: it ties with
+     .section-dock[data-shown='true'] on specificity, so source order is what
+     makes it win. */
+  .section-dock[data-immediate='true'],
+  .section-dock[data-immediate='true']::before,
+  .section-dock[data-immediate='true'] .dock-item,
+  .section-dock[data-immediate='true'] .dock-dot {
+    transition: none;
   }
 }
 
