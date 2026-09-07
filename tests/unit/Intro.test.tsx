@@ -14,11 +14,11 @@ describe('Intro', () => {
     expect(headings[0]).toHaveTextContent(en.intro.heading);
   });
 
-  it('states availability and the eyebrow', () => {
+  it('states the eyebrow and the body copy', () => {
     render(<Intro copy={en.intro} onCopyEmail={() => {}} />);
 
     expect(screen.getByText(en.intro.eyebrow)).toBeInTheDocument();
-    expect(screen.getByText(en.intro.availability)).toBeInTheDocument();
+    expect(screen.getByText(en.intro.body)).toBeInTheDocument();
   });
 
   it('links the resume at the path it is served from', () => {
@@ -30,13 +30,10 @@ describe('Intro', () => {
     );
   });
 
-  it('renders the portrait at its real size with a real alt', () => {
+  it('carries no image — the hero is type only', () => {
     const { container } = render(<Intro copy={en.intro} onCopyEmail={() => {}} />);
-    const portrait = container.querySelector('img');
 
-    expect(portrait).toHaveAttribute('alt', en.intro.portraitAlt);
-    expect(portrait).toHaveAttribute('width', '128');
-    expect(portrait).toHaveAttribute('height', '128');
+    expect(container.querySelector('img')).toBeNull();
   });
 
   it('hands the copy-email action back to the page', async () => {

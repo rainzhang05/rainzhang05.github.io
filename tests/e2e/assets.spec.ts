@@ -5,7 +5,6 @@ import { expect, test } from "@playwright/test";
  * These serve straight from public/, so a rename or a missed file is a 404.
  */
 const files = [
-  "/portrait.png",
   "/rain-zhang-resume.pdf",
   "/logos/feitian.svg",
   "/logos/mnt-realty.svg",

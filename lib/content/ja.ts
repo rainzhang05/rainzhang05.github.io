@@ -38,10 +38,8 @@ export const ja: Copy = {
     eyebrow: 'コンピュータサイエンス · サイモンフレーザー大学 · バンクーバー（カナダ BC州）',
     heading: 'Web システムの設計から本番運用まで、一貫して担当しています。',
     body: 'Rain Zhang です。サイモンフレーザー大学でコンピュータサイエンスを学ぶ3年生です。この1年は、セキュリティキーの会社と不動産管理会社で実際に運用されるシステムを、主に Python・TypeScript・Rust で開発し、運用してきました。',
-    availability: 'ソフトウェアエンジニアのインターンシップおよび新卒採用を探しています。',
     resume: '履歴書をダウンロード',
     copyEmail: 'メールアドレスをコピー',
-    portraitAlt: 'Rain Zhang',
   },
   sections: {
     experience: '経歴',

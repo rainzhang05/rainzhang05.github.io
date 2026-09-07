@@ -38,10 +38,8 @@ export const en: Copy = {
     eyebrow: 'Computer science · Simon Fraser University · Vancouver, BC, Canada',
     heading: 'I build and maintain web systems, from design through to production.',
     body: 'I’m Rain, a third-year computer science student at SFU. In the past year I’ve built and run production systems for a security-key company and a property management firm, mostly in Python, TypeScript and Rust.',
-    availability: 'Open to software engineering internships and new-grad roles.',
     resume: 'Download resume',
     copyEmail: 'Copy email',
-    portraitAlt: 'Rain Zhang',
   },
   sections: {
     experience: 'Experience',

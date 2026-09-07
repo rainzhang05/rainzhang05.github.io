@@ -76,7 +76,6 @@ lib/
 middleware.ts              One-time /ja redirect for visitors in Japan
 
 public/
-  portrait.png             Hero portrait
   rain-zhang-resume.pdf    Linked from the header, the hero and the footer
   logos/                   Company marks (feitian.svg, mnt-realty.svg)
   projects/                Project screenshots
@@ -194,7 +193,7 @@ Everything a recruiter reads is in [lib/content/en.ts](lib/content/en.ts) and [l
 
 Two rules, and the ESLint config depends on them:
 
-- **`next/image`** for the portrait (fixed 128px, `priority`) and project screenshots (inside a fixed 16:8 frame, so space is reserved before they load).
+- **`next/image`** for project screenshots (inside a fixed 16:8 frame, so space is reserved before they load). The hero is type only — it carries no image.
 - **Plain `<img>` with explicit `width`/`height`** for technology marks and company logos — they are 12–20px tall, several are SVG, and this avoids turning on SVG handling in `next/image`. [.eslintrc.json](.eslintrc.json) therefore keeps `@next/next/no-img-element` **off**; do not turn it back on.
 - A company `mark` in the content files carries the file's own dimensions; [CompanyMark](components/site/CompanyMark.tsx) renders every one at a shared 20px height and derives the width from that ratio. A square logo and a wordmark four times as wide have to weigh the same when they sit in front of a title.
 

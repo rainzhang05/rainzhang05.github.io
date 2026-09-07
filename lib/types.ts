@@ -82,10 +82,8 @@ export interface Copy {
     eyebrow: string;
     heading: string;
     body: string;
-    availability: string;
     resume: string;
     copyEmail: string;
-    portraitAlt: string;
   };
   sections: {
     experience: string;
