@@ -207,7 +207,7 @@ export const en: Copy = {
     },
     {
       id: 'work-webauthn',
-      dates: 'Sep – Oct 2025',
+      dates: 'Sep 2025 – present',
       title: 'WebAuthn Developer Platform',
       summary:
         'A public tool for testing FIDO2/WebAuthn flows, including post-quantum ML-DSA credentials.',

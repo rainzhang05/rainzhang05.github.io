@@ -207,7 +207,7 @@ export const ja: Copy = {
     },
     {
       id: 'work-webauthn',
-      dates: '2025年9月 – 10月',
+      dates: '2025年9月 – 現在',
       title: 'WebAuthn 開発者向けプラットフォーム',
       summary:
         'FIDO2/WebAuthn の動作を試すための公開ツール。耐量子計算機暗号 ML-DSA の資格情報にも対応しています。',
