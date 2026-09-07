@@ -1,8 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 
 const DESKTOP = { width: 1440, height: 900 };
-/** An item with no morph offset left to apply, as the browser spells it back. */
-const REST = "translate3d(0px,0px,0px)";
 
 /** goto, then wait for hydration to put the dock in the DOM — it is a client
  *  component, so it is not in the served HTML. */
@@ -11,107 +9,139 @@ async function open(page: Page, url = "/") {
   await page.locator(".section-dock").waitFor({ state: "attached" });
 }
 
-/** Scroll there, then let the dock's frame loop come to rest, so a sample is
- *  the settled state and not a frame of the magnifier easing. */
+/**
+ * Scroll there, then poll until the drawn state has been identical for several
+ * consecutive frames. The entrance is a 540ms CSS sequence and the lens glides
+ * between sections on a 0.32s time constant, so this is a self-calibrating
+ * "everything has finished" detector — never a wall-clock guess.
+ */
 async function settleAt(page: Page, y: number) {
   return page.evaluate(async (top) => {
     const nav = document.querySelector<HTMLElement>(".section-dock");
     if (!nav) return null;
     const items = [...nav.querySelectorAll<HTMLElement>(".dock-item")];
     const dots = [...nav.querySelectorAll<HTMLElement>(".dock-dot")];
-    // The drawn motion, without `shown` — that one is hysteretic on purpose,
-    // so it is the one thing that is meant to differ between directions.
     const read = () =>
       JSON.stringify({
-        opacity: nav.style.opacity,
-        items: items.map((i) => i.style.transform.replace(/\s+/g, "")),
+        visibility: getComputedStyle(nav).visibility,
+        opacity: items.map((i) => getComputedStyle(i).opacity),
         dots: dots.map((d) => d.style.transform.replace(/\s+/g, "")),
-        active: items.findIndex((i) => i.dataset.active === "true"),
       });
 
     window.scrollTo({ top, behavior: "instant" });
 
     let previous = "";
     let stable = 0;
-    for (let i = 0; i < 120 && (i < 24 || stable < 4); i += 1) {
+    for (let i = 0; i < 300 && (i < 40 || stable < 6); i += 1) {
       await new Promise((r) => requestAnimationFrame(() => r(null)));
       const now = read();
       stable = now === previous ? stable + 1 : 0;
       previous = now;
     }
+
     return {
-      motion: previous.replace(/,"active":-?\d+/, ""),
-      active: items.findIndex((i) => i.dataset.active === "true"),
+      motion: previous,
       shown: nav.dataset.shown,
-      opacity: nav.style.opacity,
-      items: items.map((i) => i.style.transform.replace(/\s+/g, "")),
+      visibility: getComputedStyle(nav).visibility,
+      opacity: items.map((i) => getComputedStyle(i).opacity),
       dots: dots.map((d) => d.style.transform.replace(/\s+/g, "")),
+      active: items.findIndex((i) => i.dataset.active === "true"),
+      open: items.findIndex((i) => i.dataset.open === "true"),
     };
   }, y);
 }
 
+const allVisible = (opacity: string[] | undefined) =>
+  (opacity ?? []).length === 5 && (opacity ?? []).every((o) => Number(o) === 1);
+
 test.describe("section dock", () => {
-  test("is absent at the top and formed once the bar has gone", async ({ page }) => {
+  test("is out of the way at the top and fully formed once the bar has gone", async ({ page }) => {
     await page.setViewportSize(DESKTOP);
     await open(page);
 
     const top = await settleAt(page, 0);
     expect(top?.shown).toBe("false");
+    // The real claim: not merely transparent, but out of hit-testing, out of
+    // the tab order and out of the accessibility tree.
+    expect(top?.visibility).toBe("hidden");
 
     const docked = await settleAt(page, 900);
     expect(docked?.shown).toBe("true");
-    expect(docked?.opacity).toBe("1");
-    // State C: every item has returned to the position CSS gives it.
-    expect(docked?.items).toEqual([REST, REST, REST, REST]);
+    expect(docked?.visibility).toBe("visible");
+    expect(allVisible(docked?.opacity)).toBe(true);
   });
 
-  test("retraces exactly when scrolled back up", async ({ page }) => {
+  test("unfurls its spine and lifts the bubbles in from the middle outward", async ({ page }) => {
     await page.setViewportSize(DESKTOP);
     await open(page);
+    await settleAt(page, 900);
 
-    const positions = [0, 40, 60, 90, 140, 200, 280, 360, 440, 520, 620, 760];
-
-    const down: (string | undefined)[] = [];
-    for (const y of positions) down.push((await settleAt(page, y))?.motion);
-
-    const up: (string | undefined)[] = [];
-    for (const y of [...positions].reverse()) up.push((await settleAt(page, y))?.motion);
-    up.reverse();
-
-    // Not a fade-out and a fade-in: the same motion, run backwards.
-    expect(up).toEqual(down);
-  });
-
-  test("holds its visibility across a boundary instead of flickering", async ({ page }) => {
-    await page.setViewportSize(DESKTOP);
-    await open(page);
-
-    // 40px sits inside the band: coming up from rest it has not appeared yet,
-    // and coming back down it has not left.
-    await settleAt(page, 0);
-    expect((await settleAt(page, 40))?.shown).toBe("false");
-
-    await settleAt(page, 400);
-    expect((await settleAt(page, 40))?.shown).toBe("true");
-  });
-
-  test("magnifies the current section's bubble, and its neighbours less", async ({ page }) => {
-    await page.setViewportSize(DESKTOP);
-    await open(page);
-    const state = await settleAt(page, 900);
-
-    const scales = (state?.dots ?? []).map((t) => Number(/scale\(([\d.]+)\)/.exec(t)?.[1] ?? 0));
-    const focused = scales[state?.active ?? 0];
-
-    expect(focused).toBeCloseTo(1.5, 2);
-    scales.forEach((s, i) => {
-      if (i !== state?.active) expect(s).toBeLessThan(focused - 0.4);
+    const choreography = await page.evaluate(() => {
+      const nav = document.querySelector<HTMLElement>(".section-dock")!;
+      const items = [...nav.querySelectorAll<HTMLElement>(".dock-item")];
+      const first = getComputedStyle(items[0]);
+      return {
+        spine: getComputedStyle(nav, "::before").transform,
+        property: first.transitionProperty,
+        steps: items.map((i) => i.style.getPropertyValue("--dock-d").trim()),
+        stepsOut: items.map((i) => i.style.getPropertyValue("--dock-d-out").trim()),
+        delays: items.map((i) => getComputedStyle(i).transitionDelay.split(",")[0].trim()),
+      };
     });
+
+    // The declaration, not a mid-flight sample: a fraction of a transition is
+    // timing-dependent and would flake.
+    expect(choreography.property).toContain("opacity");
+    expect(choreography.property).toContain("transform");
+    expect(choreography.steps).toEqual(["2", "1", "0", "1", "2"]);
+    expect(choreography.stepsOut).toEqual(["0", "1", "2", "1", "0"]);
+    // Entering, the middle bubble goes first and the ends go last.
+    expect(choreography.delays[2]).toBe("0s");
+    expect(choreography.delays[0]).toBe(choreography.delays[4]);
+    expect(choreography.delays[0]).not.toBe("0s");
+    // The spine is drawn, not collapsed. scaleY(0) would end ",0,0,0)".
+    expect(choreography.spine).not.toBe("none");
+    expect(choreography.spine).toContain("matrix(1, 0, 0, 1");
   });
 
-  test("lands in the final state when a fling crosses every threshold at once", async ({
-    page,
-  }) => {
+  test("settles into the same state whichever direction it arrives from", async ({ page }) => {
+    await page.setViewportSize(DESKTOP);
+    await open(page);
+
+    await settleAt(page, 0);
+    const fromAbove = await settleAt(page, 900);
+
+    await settleAt(page, 4000);
+    const fromBelow = await settleAt(page, 900);
+
+    expect(fromBelow?.motion).toEqual(fromAbove?.motion);
+    expect(fromBelow?.active).toBe(fromAbove?.active);
+  });
+
+  test("holds its visibility across the boundary instead of flickering", async ({ page }) => {
+    await page.setViewportSize(DESKTOP);
+    await open(page);
+
+    // Derive the probe from the real threshold rather than hardcoding it.
+    const probe = await page.evaluate(() => {
+      const header = document.querySelector("header") as HTMLElement;
+      let y = 0;
+      let node: HTMLElement | null = header;
+      while (node) {
+        y += node.offsetTop;
+        node = node.offsetParent as HTMLElement | null;
+      }
+      return y + header.offsetHeight + 16; // inside the 8..24 band
+    });
+
+    await settleAt(page, 0);
+    expect((await settleAt(page, probe))?.shown).toBe("false");
+
+    await settleAt(page, 900);
+    expect((await settleAt(page, probe))?.shown).toBe("true");
+  });
+
+  test("arrives fully formed after a fling past every section", async ({ page }) => {
     await page.setViewportSize(DESKTOP);
     await open(page);
 
@@ -119,16 +149,16 @@ test.describe("section dock", () => {
     const flung = await settleAt(page, 4000);
 
     expect(flung?.shown).toBe("true");
-    expect(flung?.opacity).toBe("1");
-    expect(flung?.items.every((t) => t === REST)).toBe(true);
+    expect(allVisible(flung?.opacity)).toBe(true);
   });
 
-  test("is already formed when the page is refreshed mid-scroll", async ({ page }) => {
+  test("is already formed, and never animates, when the page loads past the threshold", async ({
+    page,
+  }) => {
     await page.setViewportSize(DESKTOP);
 
-    // Put the page past T4 before React hydrates, which is what a refresh
-    // mid-page or a restored session does. Scroll restoration on reload is not
-    // reliable across engines under automation, so drive it explicitly.
+    // Put the page past the threshold before React hydrates, which is what a
+    // refresh mid-page or a restored session does.
     await page.addInitScript(() => {
       document.addEventListener("DOMContentLoaded", () =>
         window.scrollTo({ top: 1500, behavior: "instant" })
@@ -137,34 +167,32 @@ test.describe("section dock", () => {
     await page.goto("/");
     await page.locator(".section-dock").waitFor({ state: "attached" });
 
+    // Read at a moment when the correct answer is definitionally the endpoint:
+    // if the entrance were running, opacity would still be climbing here.
     const first = await page.evaluate(() => {
-      const nav = document.querySelector<HTMLElement>(".section-dock");
+      const nav = document.querySelector<HTMLElement>(".section-dock")!;
+      const items = [...nav.querySelectorAll<HTMLElement>(".dock-item")];
       return {
         scrollY: Math.round(window.scrollY),
-        shown: nav?.dataset.shown,
-        opacity: nav?.style.opacity,
-        items: [...(nav?.querySelectorAll<HTMLElement>(".dock-item") ?? [])].map((i) =>
-          i.style.transform.replace(/\s+/g, "")
-        ),
+        shown: nav.dataset.shown,
+        visibility: getComputedStyle(nav).visibility,
+        opacity: items.map((i) => getComputedStyle(i).opacity),
       };
     });
 
     expect(first.scrollY).toBeGreaterThan(1000);
     expect(first.shown).toBe("true");
-    expect(first.opacity).toBe("1");
-    expect(first.items.every((t) => t === REST)).toBe(true);
+    expect(first.visibility).toBe("visible");
+    expect(allVisible(first.opacity)).toBe(true);
   });
 
   test("settles into the dock after a hash link glides down the page", async ({ page }) => {
     await page.setViewportSize(DESKTOP);
     await open(page, "/#contact");
 
-    // A hash link smooth-scrolls, which is the site's existing behaviour, so
-    // the dock forms along the way rather than on arrival. Let the glide land
-    // before sampling — scrolling it ourselves would cut it short.
     // #contact is the last section and the page runs out of scroll before its
     // top reaches the viewport top, so wait for the glide to stop rather than
-    // for a position.
+    // for a position. Scrolling it ourselves would cut it short.
     await page.waitForFunction(() => {
       const w = window as unknown as { __y?: number; __still?: number };
       const y = Math.round(window.scrollY);
@@ -175,15 +203,21 @@ test.describe("section dock", () => {
 
     const state = await settleAt(page, await page.evaluate(() => window.scrollY));
     expect(state?.shown).toBe("true");
-    expect(state?.items.every((t) => t === REST)).toBe(true);
-    expect(state?.active).toBe(3);
+    expect(allVisible(state?.opacity)).toBe(true);
+    expect(state?.active).toBe(4);
   });
 
   test("tracks the section being read", async ({ page }) => {
     await page.setViewportSize(DESKTOP);
     await open(page);
 
-    for (const [index, id] of ["experience", "work", "background", "contact"].entries()) {
+    // Introduction's own top is 64, which sits in the band where the dock is
+    // still hidden, so it is checked from the first place the dock exists.
+    const intro = await settleAt(page, 200);
+    expect(intro?.active, "active while still in the intro").toBe(0);
+
+    const ids = ["experience", "work", "background", "contact"];
+    for (const [offset, id] of ids.entries()) {
       // Land with the section's top just above the 45% line, whatever its height.
       const target = await page.evaluate((section) => {
         const el = document.getElementById(section);
@@ -192,7 +226,7 @@ test.describe("section dock", () => {
         return Math.max(0, top - document.documentElement.clientHeight * 0.45 + 10);
       }, id);
       const state = await settleAt(page, target);
-      expect(state?.active, `active while reading #${id}`).toBe(index);
+      expect(state?.active, `active while reading #${id}`).toBe(offset + 1);
     }
   });
 
@@ -204,55 +238,109 @@ test.describe("section dock", () => {
     const dock = page.getByRole("navigation", { name: "On this page" });
     await dock.getByRole("button", { name: "Contact" }).click();
 
-    // Watch the whole glide, not just where it ends: the click starts a smooth
-    // scroll that fires the scroll handler continuously, and the focus index
-    // must sit on the destination the entire way rather than sweeping through
-    // Work and Background en route.
+    // Watch the whole glide: the click starts a smooth scroll that fires the
+    // scroll handler continuously, and the focus index must sit on the
+    // destination the whole way rather than sweeping through the sections.
     const trace = await page.evaluate(async () => {
       const nav = document.querySelector<HTMLElement>(".section-dock")!;
       const items = [...nav.querySelectorAll<HTMLElement>(".dock-item")];
-      const seen: { active: number; shown?: string; rest: boolean }[] = [];
+      const seen: { active: number; shown?: string }[] = [];
       for (let i = 0; i < 60; i += 1) {
         await new Promise((r) => requestAnimationFrame(() => r(null)));
         seen.push({
           active: items.findIndex((it) => it.dataset.active === "true"),
           shown: nav.dataset.shown,
-          rest: items.every((it) => /translate3d\(0px,\s*0px,\s*0px\)/.test(it.style.transform)),
         });
       }
       return seen;
     });
 
-    expect(new Set(trace.map((t) => t.active))).toEqual(new Set([3]));
+    expect(new Set(trace.map((t) => t.active))).toEqual(new Set([4]));
     expect(trace.every((t) => t.shown === "true")).toBe(true);
-    // And the dock does not morph on the way: it stays formed throughout.
-    expect(trace.every((t) => t.rest)).toBe(true);
 
     await expect(page.locator("section#contact")).toBeInViewport();
+  });
+
+  test("returns to the top of the page, and retires when it gets there", async ({ page }) => {
+    await page.setViewportSize(DESKTOP);
+    await open(page);
+    await settleAt(page, 1200);
+
+    await page
+      .getByRole("navigation", { name: "On this page" })
+      .getByRole("button", { name: "Introduction" })
+      .click();
+
+    await page.waitForFunction(() => window.scrollY === 0);
+    await expect(page.locator("h1")).toBeInViewport();
+
+    // Landing at 0 is below the hide threshold, so the dock dismisses itself.
+    await expect
+      .poll(async () =>
+        page.evaluate(() => document.querySelector<HTMLElement>(".section-dock")?.dataset.shown)
+      )
+      .toBe("false");
+  });
+
+  test("opens the label as the pointer approaches from the right", async ({ page }) => {
+    await page.setViewportSize(DESKTOP);
+    await open(page);
+    const supported = await page.evaluate(
+      () => matchMedia("(hover: hover) and (pointer: fine)").matches
+    );
+    test.skip(!supported, "no hover hardware");
+    await settleAt(page, 900);
+
+    const geometry = await page.evaluate(() => {
+      const nav = document.querySelector<HTMLElement>(".section-dock")!;
+      const item = nav.querySelector<HTMLElement>(".dock-item")!;
+      const box = item.getBoundingClientRect();
+      const style = getComputedStyle(document.documentElement);
+      const inset = parseFloat(style.getPropertyValue("--dock-inset"));
+      const hit = parseFloat(style.getPropertyValue("--dock-hit"));
+      return { right: inset + hit, y: box.top + box.height / 2 };
+    });
+
+    // Well clear of the button, still inside the reach.
+    await page.mouse.move(geometry.right + 70, geometry.y);
+    await expect
+      .poll(async () =>
+        page.evaluate(() => document.querySelector<HTMLElement>(".dock-item")?.dataset.open)
+      )
+      .toBe("true");
+
+    // And nothing extra became clickable on the way: proximity is a
+    // measurement, not a hit target.
+    const underneath = await page.evaluate((x) => {
+      const el = document.elementFromPoint(x, 200);
+      return el?.closest(".section-dock") === null;
+    }, geometry.right + 70);
+    expect(underneath).toBe(true);
   });
 
   test("expands a label rightward on hover", async ({ page }) => {
     await page.setViewportSize(DESKTOP);
     await open(page);
-    // The capsule is gated behind (hover: hover) and (pointer: fine) on purpose,
-    // so there is nothing to assert on a touch-emulated project.
-    test.skip(
-      !(await page.evaluate(() => matchMedia("(hover: hover) and (pointer: fine)").matches)),
-      "no hover hardware"
+    const supported = await page.evaluate(
+      () => matchMedia("(hover: hover) and (pointer: fine)").matches
     );
+    test.skip(!supported, "no hover hardware");
     await settleAt(page, 900);
 
     const item = page
       .getByRole("navigation", { name: "On this page" })
       .getByRole("button", { name: "Background" });
 
-    const collapsed = await item.evaluate((el) => el.getBoundingClientRect().width);
-    await item.hover();
-    await page.waitForTimeout(400);
-    const expanded = await item.evaluate((el) => el.getBoundingClientRect().width);
+    const hit = await page.evaluate(() =>
+      parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--dock-hit"))
+    );
+    const width = () => item.evaluate((el) => el.getBoundingClientRect().width);
 
-    expect(collapsed).toBeLessThan(40);
-    expect(expanded).toBeGreaterThan(collapsed + 40);
+    const collapsed = await width();
+    await item.hover();
+    await expect.poll(width).toBeGreaterThan(collapsed + 40);
+
+    expect(collapsed).toBeCloseTo(hit, 0);
   });
 
   test("keeps its label in the accessible name while collapsed", async ({ page }) => {
@@ -261,7 +349,7 @@ test.describe("section dock", () => {
     await settleAt(page, 900);
 
     const dock = page.getByRole("navigation", { name: "On this page" });
-    for (const name of ["Experience", "Selected Work", "Background", "Contact"]) {
+    for (const name of ["Introduction", "Experience", "Selected Work", "Background", "Contact"]) {
       await expect(dock.getByRole("button", { name })).toBeAttached();
     }
   });
@@ -271,7 +359,6 @@ test.describe("section dock", () => {
     await open(page);
     await settleAt(page, 900);
 
-    // A row on the far left of the content column, with the dock overlaying.
     await page.locator("#button-exp-mnt").click();
     await expect(page.locator("#panel-exp-mnt")).toBeVisible();
   });
@@ -284,22 +371,20 @@ test.describe("section dock", () => {
     await expect(page.getByRole("navigation", { name: "On this page" })).toBeHidden();
   });
 
-  test("skips the morph entirely when the visitor asks for reduced motion", async ({ page }) => {
+  test("appears without animating when the visitor asks for reduced motion", async ({ page }) => {
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.setViewportSize(DESKTOP);
     await open(page);
 
-    const parked = await settleAt(page, 300);
     const docked = await settleAt(page, 900);
 
-    // Still useful — it appears and it tracks the section — but nothing moves:
-    // no transform is ever written, so the dots keep their resting CSS size.
+    // Still useful — it appears and it tracks the section — but the frame loop
+    // never runs, so no dot is ever given a size. The global !important reset
+    // handles the CSS half; this is the half it cannot reach.
     expect(docked?.shown).toBe("true");
-    expect(docked?.opacity).toBe("1");
-    expect(parked?.items.every((t) => t === "")).toBe(true);
-    expect(docked?.items.every((t) => t === "")).toBe(true);
+    expect(docked?.visibility).toBe("visible");
     expect(docked?.dots.every((t) => t === "")).toBe(true);
-    expect(docked?.active).toBe(1);
+    expect(docked?.active).toBe(2);
   });
 
   test("adds no horizontal overflow once formed", async ({ page }) => {
