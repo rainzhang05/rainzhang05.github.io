@@ -26,9 +26,8 @@ export function ContactSection({ copy, onCopyEmail }: { copy: Copy; onCopyEmail:
     <section id="contact" className="scroll-mt-6 pt-section">
       <SectionHeading>{copy.sections.contact}</SectionHeading>
 
-      <div className="flex flex-wrap items-start gap-x-8 gap-y-2 pt-6">
-        <span aria-hidden="true" className="hidden flex-none sm:block sm:w-label" />
-        <div className="grid min-w-0 flex-1 basis-[420px] items-start gap-x-gutter gap-y-10 md:grid-cols-2">
+      <div className="pt-6">
+        <div className="grid items-start gap-x-gutter gap-y-10 md:grid-cols-2">
           <div className="min-w-0">
             <p className="m-0 max-w-measure text-body-lg">{copy.contact.lead}</p>
             <dl className="m-0 mt-6 grid gap-2.5 p-0 text-body-15">
