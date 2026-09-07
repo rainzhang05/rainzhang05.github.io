@@ -112,8 +112,8 @@ export const ja: Copy = {
       id: 'exp-feitian',
       dates: '2025年9月 – 12月',
       role: 'フルスタックエンジニア（インターン）',
-      org: 'FEITIAN Technologies',
-      orgLine: 'FEITIAN Technologies · 国際部 · 北京',
+      org: '飛天誠信科技（FEITIAN Technologies）',
+      orgLine: '飛天誠信科技（FEITIAN Technologies）· 国際部 · 北京',
       mark: {
         src: '/logos/feitian.svg',
         width: 88,
@@ -219,7 +219,7 @@ export const ja: Copy = {
       sections: [
         {
           label: '概要',
-          text: 'FIDO2 を使って開発する人のための Flask アプリケーションです。実機または仮想の認証器で登録・サインインし、WebAuthn のリクエストを JSON のまま編集し、返ってきたデータを読み解き、FIDO Alliance のメタデータから任意の認証器を調べられます。FEITIAN でのインターン中に作り、今も保守しています。',
+          text: 'FIDO2 を使って開発する人のための Flask アプリケーションです。実機または仮想の認証器で登録・サインインし、WebAuthn のリクエストを JSON のまま編集し、返ってきたデータを読み解き、FIDO Alliance のメタデータから任意の認証器を調べられます。飛天誠信科技でのインターン中に作り、今も保守しています。',
         },
         {
           label: '仕組み',
@@ -301,7 +301,7 @@ export const ja: Copy = {
       id: 'work-demo',
       dates: '2025年11月 – 12月',
       title: '認証デモプラットフォーム',
-      summary: 'FEITIAN のパスワードレス認証と耐量子計算機暗号を試せる、顧客向けのサイトです。',
+      summary: '飛天誠信科技のパスワードレス認証と耐量子計算機暗号を試せる、顧客向けのサイトです。',
       primary: ['React', 'Python'],
       quiet: {
         label: 'demo.ftsafe.com',
@@ -310,7 +310,7 @@ export const ja: Copy = {
       sections: [
         {
           label: '概要',
-          text: 'FEITIAN の顧客と営業チームのためのデモです。開発者向けプラットフォームがエンジニア向けなのに対し、こちらは製品を検討している人向けです。仕様書を読まなくても、セキュリティキーを登録し、サインインし、耐量子計算機暗号の資格情報が動く様子を確かめられます。',
+          text: '飛天誠信科技の顧客と営業チームのためのデモです。開発者向けプラットフォームがエンジニア向けなのに対し、こちらは製品を検討している人向けです。仕様書を読まなくても、セキュリティキーを登録し、サインインし、耐量子計算機暗号の資格情報が動く様子を確かめられます。',
         },
         {
           label: '仕組み',
@@ -324,7 +324,7 @@ export const ja: Copy = {
         height: 800,
       },
       stack: ['React', 'JavaScript', 'Python', 'Flask', 'WebAuthn / FIDO2', 'ML-DSA', 'liboqs'],
-      status: 'demo.ftsafe.com で公開中。ソースコードは FEITIAN のもので、公開されていません。',
+      status: 'demo.ftsafe.com で公開中。ソースコードは飛天誠信科技のもので、公開されていません。',
       links: [
         {
           label: '公開サイト',
