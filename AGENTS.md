@@ -137,7 +137,7 @@ import type { Project } from "@/lib/types";
 
 [app/globals.css](app/globals.css) is the **only** file with raw values — colours, type sizes, spacing, radii and motion. [tailwind.config.ts](tailwind.config.ts) maps every token to a Tailwind name, so components write `text-ink-2`, `border-rule`, `duration-base`, `pt-section` — never a hex code or a millisecond count.
 
-- **Dock:** `--dock-hit` (32 — the bubble's hit box), `--dock-pitch` (40 — centre to centre, the width at which two focus rings meet without overlapping) and `--dock-dot` (10 — the nominal diameter, scaled between 0.7 and 1.5 by [lib/dockMotion.ts](lib/dockMotion.ts)).
+- **Dock:** `--dock-pitch` (40 — centre to centre, and the button's own height, so n bubbles are exactly n x pitch tall; `SPREAD` in [lib/dockMotion.ts](lib/dockMotion.ts) is 0.95 x this, so retuning one means retuning the other), `--dock-dot` (10 — the nominal diameter, scaled between 0.7 and 1.5 by the lens), `--dock-rise` (10 — the travel on the way in, the same distance the first screen rises) and `--dock-reach` (120 — how far right of the rail a pointer is felt, clamped at runtime to the gutter that actually exists). `--dock-hit` and `--dock-inset` **step at 1176px**: 36/12 below it, where the content column starts at exactly 48px and the rail's box has to end there, and 44/16 above it, where the gutter has room. That step is a media query, not a width read in JavaScript, for the same reason the 640px gate is one.
 - **Colour:** `--paper`, `--sheet`, `--surface`, `--surface-2`; ink scale `--ink`, `--ink-hover`, `--ink-2`, `--ink-3`; rules `--rule`, `--rule-strong`; accent `--sage`, `--sage-strong`, `--sage-tint`; and two semantic colours, `--clay` (errors) and `--ochre`.
 - **Type:** one family. `--font-sans` is Albert Sans from [app/fonts.ts](app/fonts.ts); `--font-sans-jp` is a system Japanese stack that `html[data-locale='ja']` swaps in. The size scale runs `--text-label` (12) through `--text-hero`.
 - **Spacing and layout:** `--container` (1080), `--gutter` / `--gutter-mobile`, `--label-col` (160 — the date column), `--reading-col`, `--section-gap`, `--hero-pad`.
@@ -151,11 +151,14 @@ Three values in the `:root` block of `app/globals.css` drive every transition on
 | --- | --- | --- |
 | `--duration-fast` | 150ms | every colour, border and background change |
 | `--duration-base` | 220ms | the language pill; the fallback before a panel is measured |
-| `--duration-slow` | 320ms | unused by this design; kept for the token set |
+| `--duration-slow` | 320ms | the section dock's active fill, closing a ring into a disc |
 | `--ease-out` | `cubic-bezier(.2,.6,.2,1)` | all of the above |
 | `--panel-speed` | 2000 | expand / collapse, in **pixels per second** — not a duration |
 | `--ease-panel` | `cubic-bezier(.32,.72,0,1)` | expand / collapse; immediate start, long decelerate |
 | `--duration-enter` | 620ms | the first-screen entrance |
+| `--duration-dock` | 420ms | one section-dock bubble's rise and fade |
+| `--dock-step` | 90ms | the dock's stagger. **Not `--enter-step`:** at 60ms against a 420ms travel on a curve as front-loaded as `--ease-enter`, all five beats overlap and the column reads as one fade rather than a cascade |
+| `--duration-dock-all` | 600ms | `--duration-dock` + 2 x `--dock-step` — the spine's own draw, and the delay on the rail's `visibility` so the exit is never cut short |
 | `--enter-step` | 60ms | one beat of the entrance stagger (`.enter-1` … `.enter-6`) |
 | `--ease-enter` | `cubic-bezier(.16,1,.3,1)` | the entrance; most of the movement is over early |
 
@@ -172,6 +175,8 @@ Change one number there and the whole site changes with it. A `prefers-reduced-m
 intro → Experience → Selected work → Other work → Background (education and skills) → Contact → footer.
 
 Section `id`s are English in both locales (`experience`, `work`, `background`, `contact`, plus `top`) because hash links and the footer nav depend on them. Only the labels are translated. A unit test asserts every in-page `href` — the header nav plus [sectionLinks](lib/sectionLinks.ts), which the footer and the dock share — points at a section the page actually renders.
+
+In `sectionLinks`, **`id` is the element the dock watches and `href` is where the link goes**, and for Introduction they differ: it watches `#intro` (a real section an `IntersectionObserver` can answer for) and goes to `#top` (the document top, where the wordmark and the footer's "Back to top" also go). `#top` can never be the watched element — it wraps the whole page, so it always intersects and would pin the active section to the first one forever. Use `targetId(link)` to navigate, never `link.id`.
 
 `copy.nav` is the header's list and includes the resume PDF but not Background; `sectionLinks(copy)` is the four real sections. They are different sets on purpose, and no filter of one produces the other.
 
@@ -225,7 +230,9 @@ Marks are shown in their original colours and are never tinted or greyscaled. Th
 - **Expand/collapse** keeps panel content in the DOM at all times, so opening is instant; the row animates `grid-template-rows` and `opacity` only. The transition delay in `.disclosure-panel` applies to `visibility` alone, which is what keeps a closed panel's links out of the tab order without also holding up the collapse.
 - **Panels are given a speed, not a duration.** Content heights run from about 600px to over 1200px, so one duration made the tall rows move at twice the rate of the short ones. [DisclosureRow](components/site/DisclosureRow.tsx) measures its own content with a `ResizeObserver` and sets `--panel-duration` from `--panel-speed` (see [lib/panelMotion.ts](lib/panelMotion.ts)); every row then opens and closes at 2000px/s, in both directions, starting immediately. Change `--panel-speed` to retune all of them at once — never hard-code a duration on a panel.
 - **Navigation** in the header and the footer is plain anchors with CSS smooth scrolling, so it works before hydration. `scroll-padding-top` is `0` and no section carries a `scroll-mt-*`, so a jump lands on the section's own top edge; give either one a value and the tail of the previous section stays on screen. The dock's buttons go through `scrollToSection` in [PortfolioPage](components/site/PortfolioPage.tsx), which uses the same `window.scrollTo` idiom at offset 0 and then moves focus into the section — a button, unlike an anchor, does not move the focus starting point by itself.
-- **The dock is driven by one number.** Everything it draws is a pure function of `window.scrollY`, so scrolling up retraces the way down through the same code rather than playing a second animation, and a fling past every threshold in one frame lands in the right state. It reads landmarks with `offsetTop` rather than `getBoundingClientRect`, because `#experience` carries `.enter` and is transform-offset by 10px for the first second after paint. Under `prefers-reduced-motion` the frame loop never starts at all: the CSS `!important` duration reset cannot touch a transform written from JavaScript.
+- **The dock's entrance is CSS, not JavaScript.** Crossing the threshold flips one attribute and the transitions in `globals.css` unfurl the spine and lift the bubbles in from the middle outward; scrolling back up flips it again and an interrupted transition reverses itself, outside-in. Nothing is scroll-scrubbed, which is what keeps the motion at its own speed rather than the trackpad's. JavaScript owns exactly four things — `data-shown` on the rail, `data-active` and `data-open` on each button, and the lens `scale()` on each dot — and none of the properties those drive.
+- **Two things about the dock will silently break if you change them.** It is hidden with `visibility`, never `display`: a `display` flip has no before-change style, so the whole entrance would snap (`display: none` is only the sub-640px gate). And the first paint after hydration carries `data-immediate`, which sets `transition: none` — because `measure()` calls `getComputedStyle` for the dock tokens *before* the attribute flips, and that resolution is a before-change style a deep-linked load would otherwise animate from.
+- **The dock reads landmarks with `offsetTop`**, never `getBoundingClientRect`, because `#experience` carries `.enter` and is transform-offset by 10px for the first second after paint. Under `prefers-reduced-motion` the frame loop never starts: the CSS `!important` duration reset cannot touch a transform written from JavaScript, so the lens has to opt out in JavaScript too.
 
 ---
 
