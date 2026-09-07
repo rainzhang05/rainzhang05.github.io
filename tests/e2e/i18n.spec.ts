@@ -25,7 +25,7 @@ test.describe("languages", () => {
   test("switches language and remembers the choice", async ({ page, context }) => {
     await page.goto("/");
 
-    await (await languageSwitch(page)).getByRole("radio", { name: "JA" }).click();
+    await (await languageSwitch(page)).getByRole("radio", { name: "日本語" }).click();
     await page.waitForURL("**/ja");
 
     await expect(page.locator("html")).toHaveAttribute("lang", "ja");
@@ -46,7 +46,7 @@ test.describe("languages", () => {
     await page.goto("/ja");
 
     const group = await languageSwitch(page);
-    await expect(group.getByRole("radio", { name: "JA" })).toHaveAttribute("aria-checked", "true");
+    await expect(group.getByRole("radio", { name: "日本語" })).toHaveAttribute("aria-checked", "true");
   });
 
   test("declares both languages to search engines", async ({ page }) => {
@@ -59,7 +59,7 @@ test.describe("languages", () => {
   test("translates the interface, not just the prose", async ({ page }) => {
     await page.goto("/ja");
 
-    const untranslated = ["Experience", "Selected Work", "Background", "Contact", "Download Resume"];
+    const untranslated = ["Experience", "Selected Work", "Background", "Contact", "Resume"];
     const body = (await page.locator("main").innerText()).toLowerCase();
 
     for (const phrase of untranslated) {
