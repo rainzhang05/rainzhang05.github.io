@@ -23,7 +23,7 @@ export function ContactSection({ copy, onCopyEmail }: { copy: Copy; onCopyEmail:
   const { channels } = copy.contact;
 
   return (
-    <section id="contact" className="pt-section">
+    <section tabIndex={-1} id="contact" className="pt-section">
       <SectionHeading>{copy.sections.contact}</SectionHeading>
 
       <div className="pt-6">

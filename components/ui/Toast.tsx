@@ -1,6 +1,7 @@
 import { Icon } from './Icon';
 
-/** The only element ever fixed to the viewport, and only while it shows. */
+/** Fixed to the viewport, and only while it shows. Sits above the section
+ *  dock, which is the page's other fixed element. */
 export function Toast({ message }: { message: string }) {
   return (
     <div

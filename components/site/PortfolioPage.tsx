@@ -1,6 +1,7 @@
 'use client';
 
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
+import { SectionDock } from './SectionDock';
 import { SiteHeader } from './SiteHeader';
 import { SiteFooter } from './SiteFooter';
 import { Intro } from './Intro';
@@ -9,6 +10,7 @@ import { WorkSection } from './WorkSection';
 import { BackgroundSection } from './BackgroundSection';
 import { ContactSection } from './ContactSection';
 import { Toast } from '@/components/ui/Toast';
+import { sectionLinks } from '@/lib/sectionLinks';
 import { prefersReducedMotion } from '@/lib/useReducedMotion';
 import { site, type Locale } from '@/lib/site';
 import type { Copy } from '@/lib/types';
@@ -72,6 +74,29 @@ export function PortfolioPage({ copy, locale }: { copy: Copy; locale: Locale }) 
     }, 60);
   }, []);
 
+  const dockLinks = useMemo(() => sectionLinks(copy), [copy]);
+
+  /**
+   * Jump to a section from the dock. Same window.scrollTo idiom as the two row
+   * nudges above, but with no offset: scroll-padding-top is 0, so a jump is
+   * meant to land on the section's own top edge.
+   *
+   * The dock is made of buttons rather than anchors, and a button does not move
+   * the sequential focus navigation starting point the way an anchor does — so
+   * put it there by hand, or the next Tab resumes at the dock and a screen
+   * reader never follows.
+   */
+  const scrollToSection = useCallback((id: string) => {
+    const section = document.getElementById(id);
+    if (!section) return;
+    window.scrollTo({
+      top: Math.max(0, window.scrollY + section.getBoundingClientRect().top),
+      behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+    });
+    section.focus({ preventScroll: true });
+    window.history.replaceState(null, '', '#' + id);
+  }, []);
+
   const copyEmail = useCallback(async () => {
     try {
       await navigator.clipboard.writeText(site.email);
@@ -110,6 +135,7 @@ export function PortfolioPage({ copy, locale }: { copy: Copy; locale: Locale }) 
         </main>
         <SiteFooter copy={copy} />
       </div>
+      <SectionDock links={dockLinks} label={copy.labels.sectionNav} onNavigate={scrollToSection} />
       {toast ? <Toast message={toast} /> : null}
     </>
   );

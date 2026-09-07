@@ -87,7 +87,7 @@ function ProjectRow({
 
 export function WorkSection({ copy, openId, onToggle }: Props) {
   return (
-    <section id="work" className="pt-section">
+    <section tabIndex={-1} id="work" className="pt-section">
       <SectionHeading>{copy.sections.work}</SectionHeading>
       <ul className="m-0 list-none p-0">
         {copy.featured.map((project) => (
