@@ -49,12 +49,22 @@ const nextConfig = {
     formats: ['image/webp'],
   },
   async rewrites() {
-    // English lives at "/" while sharing one [locale] tree with Japanese.
-    return [{ source: '/', destination: '/en' }];
+    // English lives at "/" while sharing one [locale] tree with Japanese. The
+    // rewrite is also what keeps "/resume" from being read as the [locale]
+    // segment and 404ing under dynamicParams: false.
+    return [
+      { source: '/', destination: '/en' },
+      { source: '/resume', destination: '/en/resume' },
+    ];
   },
   async redirects() {
     // "/en" is an implementation detail; keep one canonical URL per language.
-    return [{ source: '/en', destination: '/', permanent: true }];
+    // One entry per route rather than "/en/:path*", which would turn a clean
+    // 404 into a redirect to another 404.
+    return [
+      { source: '/en', destination: '/', permanent: true },
+      { source: '/en/resume', destination: '/resume', permanent: true },
+    ];
   },
   async headers() {
     // Declared here rather than in vercel.json so `next start` and the
