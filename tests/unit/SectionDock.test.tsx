@@ -29,6 +29,7 @@ describe("SectionDock", () => {
     const buttons = within(dock).getAllByRole("button");
 
     expect(buttons.map((b) => b.textContent)).toEqual([
+      "Introduction",
       "Experience",
       "Selected Work",
       "Background",
@@ -68,6 +69,42 @@ describe("SectionDock", () => {
     expect(onNavigate).toHaveBeenCalledTimes(1);
   });
 
+  it("sends the Introduction bubble to the top, not to the section it watches", async () => {
+    const user = userEvent.setup();
+    const { onNavigate } = render_();
+
+    const dock = screen.getByRole("navigation", { name: "On this page" });
+    await user.click(within(dock).getByRole("button", { name: "Introduction" }));
+
+    expect(onNavigate).toHaveBeenCalledWith("top");
+  });
+
+  it("hands CSS the stagger order, counting out from the middle of the column", () => {
+    render_();
+
+    const dock = screen.getByRole("navigation", { name: "On this page" });
+    const steps = within(dock)
+      .getAllByRole("button")
+      .map((b) => b.getAttribute("style") ?? "");
+
+    // Five bubbles: the entrance runs 2,1,0,1,2 from the middle outward and the
+    // exit runs 0,1,2,1,0 from the outside in. CSS cannot count its siblings.
+    expect(steps.map((s) => /--dock-d:\s*([\d.]+)/.exec(s)?.[1])).toEqual([
+      "2",
+      "1",
+      "0",
+      "1",
+      "2",
+    ]);
+    expect(steps.map((s) => /--dock-d-out:\s*([\d.]+)/.exec(s)?.[1])).toEqual([
+      "0",
+      "1",
+      "2",
+      "1",
+      "0",
+    ]);
+  });
+
   it("renders nothing at all when there are no sections to point at", () => {
     render(<SectionDock links={[]} label={en.labels.sectionNav} onNavigate={vi.fn()} />);
 
@@ -81,6 +118,7 @@ describe("SectionDock", () => {
 
     const dock = screen.getByRole("navigation", { name: ja.labels.sectionNav });
     expect(within(dock).getAllByRole("button").map((b) => b.textContent)).toEqual([
+      ja.sections.intro,
       ja.sections.experience,
       ja.sections.work,
       ja.sections.background,
