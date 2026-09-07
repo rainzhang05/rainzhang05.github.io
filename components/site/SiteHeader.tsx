@@ -1,24 +1,36 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Icon } from '@/components/ui/Icon';
 import { LocaleSwitch } from './LocaleSwitch';
-import type { Locale } from '@/lib/site';
+import { localeHome, type Locale } from '@/lib/site';
 import type { NavLink } from '@/lib/types';
 
 /**
- * Static header: never sticky, no background, no border. Under 720px the
- * links move into a full-page sheet. Navigation is plain anchors, so it
- * works before JavaScript loads and smooth scrolling comes from CSS.
+ * Static header: never sticky, no background, no border. Under 640px the
+ * links move into a full-page sheet. In-page navigation is plain anchors, so
+ * it works before JavaScript loads and smooth scrolling comes from CSS; a link
+ * to another route goes through next/link so that route is prefetched.
+ *
+ * `homeHref` is what an in-page hash hangs off. It is empty on the home page,
+ * where "#work" means this page, and the home page's address anywhere else.
  */
 export function SiteHeader({
   name,
   links,
   locale,
+  homeHref = '',
+  localeHrefs = localeHome,
+  currentId,
 }: {
   name: string;
   links: NavLink[];
   locale: Locale;
+  homeHref?: string;
+  localeHrefs?: Record<Locale, string>;
+  /** The nav entry for the page being read, marked aria-current. */
+  currentId?: string;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -33,12 +45,32 @@ export function SiteHeader({
 
   const wordmark = (
     <a
-      href="#top"
+      href={homeHref + '#top'}
       className="no-copy text-body-14 font-medium tracking-[-0.005em] text-ink no-underline transition-colors duration-fast ease-out hover:text-ink-2 hover:no-underline"
     >
       {name}
     </a>
   );
+
+  /** An in-page hash, another route, or somewhere off the site. */
+  function navLink(link: NavLink, className: string, onClick?: () => void) {
+    const shared = {
+      'aria-current': (link.id === currentId ? 'page' : undefined) as 'page' | undefined,
+      className,
+      onClick,
+      children: link.label,
+    };
+
+    if (link.href.startsWith('#')) {
+      return <a key={link.id} href={homeHref + link.href} {...shared} />;
+    }
+
+    if (link.external) {
+      return <a key={link.id} href={link.href} target="_blank" rel="noreferrer" {...shared} />;
+    }
+
+    return <Link key={link.id} href={link.href} {...shared} />;
+  }
 
   return (
     <>
@@ -47,19 +79,14 @@ export function SiteHeader({
 
         <div className="hidden items-center gap-7 sm:flex">
           <nav aria-label="Primary" className="flex gap-7">
-            {links.map((link) => (
-              <a
-                key={link.id}
-                href={link.href}
-                target={link.external ? '_blank' : undefined}
-                rel={link.external ? 'noreferrer' : undefined}
-                className="no-copy text-body-14 text-ink-2 no-underline transition-colors duration-fast ease-out hover:text-ink hover:no-underline"
-              >
-                {link.label}
-              </a>
-            ))}
+            {links.map((link) =>
+              navLink(
+                link,
+                'no-copy text-body-14 text-ink-2 no-underline transition-colors duration-fast ease-out hover:text-ink hover:no-underline aria-[current]:text-ink'
+              )
+            )}
           </nav>
-          <LocaleSwitch current={locale} />
+          <LocaleSwitch current={locale} hrefs={localeHrefs} />
         </div>
 
         <button
@@ -92,21 +119,16 @@ export function SiteHeader({
             </button>
           </div>
           <nav aria-label="Primary" className="mt-10 border-t border-rule">
-            {links.map((link) => (
-              <a
-                key={link.id}
-                href={link.href}
-                target={link.external ? '_blank' : undefined}
-                rel={link.external ? 'noreferrer' : undefined}
-                onClick={() => setOpen(false)}
-                className="no-copy block border-b border-rule py-4 text-display-2 font-normal text-ink-2 no-underline transition-colors duration-fast ease-out hover:text-ink hover:no-underline"
-              >
-                {link.label}
-              </a>
-            ))}
+            {links.map((link) =>
+              navLink(
+                link,
+                'no-copy block border-b border-rule py-4 text-display-2 font-normal text-ink-2 no-underline transition-colors duration-fast ease-out hover:text-ink hover:no-underline aria-[current]:text-ink',
+                () => setOpen(false)
+              )
+            )}
           </nav>
           <div className="mt-8">
-            <LocaleSwitch current={locale} />
+            <LocaleSwitch current={locale} hrefs={localeHrefs} />
           </div>
         </div>
       ) : null}

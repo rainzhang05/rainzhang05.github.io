@@ -3,8 +3,15 @@ import { sectionLinks } from '@/lib/sectionLinks';
 import { site } from '@/lib/site';
 import type { Copy } from '@/lib/types';
 
-/** Three columns behind a hairline, 96px below the content. */
-export function SiteFooter({ copy }: { copy: Copy }) {
+/**
+ * Three columns behind a hairline, 96px below the content.
+ *
+ * `sectionBase` is what the in-page hashes hang off — empty on the home page,
+ * and the home page's address on any other route, where "#work" would
+ * otherwise point at a section this page does not have. It applies to "Back to
+ * top" as well as the Navigate column.
+ */
+export function SiteFooter({ copy, sectionBase = '' }: { copy: Copy; sectionBase?: string }) {
   const year = new Date().getFullYear();
   const linkClass =
     'no-copy inline-flex items-center gap-2 text-body-14 text-ink-2 no-underline transition-colors duration-fast ease-out hover:text-ink hover:no-underline';
@@ -30,7 +37,7 @@ export function SiteFooter({ copy }: { copy: Copy }) {
             className="mt-3.5 grid grid-cols-[repeat(2,max-content)] gap-x-8 gap-y-2.5"
           >
             {sectionLinks(copy).map((link) => (
-              <a key={link.id} href={link.href} className={linkClass}>
+              <a key={link.id} href={sectionBase + link.href} className={linkClass}>
                 {link.label}
               </a>
             ))}
@@ -50,9 +57,7 @@ export function SiteFooter({ copy }: { copy: Copy }) {
               >
                 {link.id === 'resume' ? <Icon name="file-text" size={14} /> : null}
                 {link.label}
-                {link.external && link.id !== 'resume' ? (
-                  <Icon name="arrow-up-right" size={13} />
-                ) : null}
+                {link.external ? <Icon name="arrow-up-right" size={13} /> : null}
               </a>
             ))}
           </div>
@@ -64,7 +69,7 @@ export function SiteFooter({ copy }: { copy: Copy }) {
           {copy.footer.credit} · © {year}
         </span>
         <a
-          href="#top"
+          href={sectionBase + '#top'}
           className="no-copy inline-flex items-center gap-1.5 text-caption text-ink-2 no-underline transition-colors duration-fast ease-out hover:text-ink hover:no-underline"
         >
           {copy.footer.backToTop}

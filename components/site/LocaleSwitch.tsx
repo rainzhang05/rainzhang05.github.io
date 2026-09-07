@@ -25,6 +25,9 @@ function cameFrom(): Locale | null {
  * writes the cookie the middleware reads, so the geo redirect never
  * overrides a deliberate choice.
  *
+ * On a page that exists in both languages the switch is handed that page's two
+ * addresses, so choosing a language keeps the reader where they were.
+ *
  * The selected pill is one element that slides between the labels rather than
  * a background that jumps. Changing language changes the root layout's params,
  * so React replaces the whole tree and any slide begun on the click is cut off
@@ -32,7 +35,14 @@ function cameFrom(): Locale | null {
  * globals.css animates it *from* the label the visitor just left — a keyframe
  * rather than a transition, because it has to be certain to run on mount.
  */
-export function LocaleSwitch({ current }: { current: Locale }) {
+export function LocaleSwitch({
+  current,
+  hrefs = localeHome,
+}: {
+  current: Locale;
+  /** Where each language goes. Defaults to the two home pages. */
+  hrefs?: Record<Locale, string>;
+}) {
   const [target, setTarget] = useState<Locale>(current);
   const [slideFrom, setSlideFrom] = useState<Locale | null>(null);
 
@@ -70,7 +80,7 @@ export function LocaleSwitch({ current }: { current: Locale }) {
       {locales.map((locale) => (
         <Link
           key={locale}
-          href={localeHome[locale]}
+          href={hrefs[locale]}
           role="radio"
           aria-checked={locale === current}
           onClick={() => remember(locale)}
