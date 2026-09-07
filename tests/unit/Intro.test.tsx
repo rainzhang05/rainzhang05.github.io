@@ -3,11 +3,11 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Intro } from '@/components/site/Intro';
 import { en } from '@/lib/content';
-import { site } from '@/lib/site';
+import { resumePage } from '@/lib/site';
 
 describe('Intro', () => {
   it('carries the page heading', () => {
-    render(<Intro copy={en.intro} onCopyEmail={() => {}} />);
+    render(<Intro copy={en.intro} resumeHref={resumePage.en} onCopyEmail={() => {}} />);
 
     const headings = screen.getAllByRole('heading', { level: 1 });
     expect(headings).toHaveLength(1);
@@ -15,23 +15,24 @@ describe('Intro', () => {
   });
 
   it('states the eyebrow and the body copy', () => {
-    render(<Intro copy={en.intro} onCopyEmail={() => {}} />);
+    render(<Intro copy={en.intro} resumeHref={resumePage.en} onCopyEmail={() => {}} />);
 
     expect(screen.getByText(en.intro.eyebrow)).toBeInTheDocument();
     expect(screen.getByText(en.intro.body)).toBeInTheDocument();
   });
 
-  it('links the resume at the path it is served from', () => {
-    render(<Intro copy={en.intro} onCopyEmail={() => {}} />);
+  it('sends the resume button to the resume page, not the PDF', () => {
+    render(<Intro copy={en.intro} resumeHref={resumePage.en} onCopyEmail={() => {}} />);
 
-    expect(screen.getByRole('link', { name: en.intro.resume })).toHaveAttribute(
-      'href',
-      site.resumeHref
-    );
+    const resume = screen.getByRole('link', { name: en.intro.resume });
+
+    expect(resume).toHaveAttribute('href', resumePage.en);
+    expect(resume).not.toHaveAttribute('href', expect.stringContaining('.pdf'));
+    expect(resume).not.toHaveAttribute('target');
   });
 
   it('carries no image — the hero is type only', () => {
-    const { container } = render(<Intro copy={en.intro} onCopyEmail={() => {}} />);
+    const { container } = render(<Intro copy={en.intro} resumeHref={resumePage.en} onCopyEmail={() => {}} />);
 
     expect(container.querySelector('img')).toBeNull();
   });
@@ -39,7 +40,7 @@ describe('Intro', () => {
   it('hands the copy-email action back to the page', async () => {
     const onCopyEmail = vi.fn();
     const user = userEvent.setup();
-    render(<Intro copy={en.intro} onCopyEmail={onCopyEmail} />);
+    render(<Intro copy={en.intro} resumeHref={resumePage.en} onCopyEmail={onCopyEmail} />);
 
     await user.click(screen.getByRole('button', { name: en.intro.copyEmail }));
 

@@ -32,15 +32,14 @@ export const ja: Copy = {
     {
       id: 'resume',
       label: '履歴書',
-      href: '/rain-zhang-resume.pdf',
-      external: true,
+      href: '/ja/resume',
     },
   ],
   intro: {
     eyebrow: 'コンピュータサイエンス · サイモンフレーザー大学 · バンクーバー、BC州、カナダ',
     heading: 'Web システムの設計から本番運用まで、一貫して担当しています。',
     body: 'Rain Zhang です。サイモンフレーザー大学でコンピュータサイエンスを学ぶ3年生です。この1年は、セキュリティキーの会社と不動産管理会社で実際に運用されるシステムを、主に Python・TypeScript・Rust で開発し、運用してきました。',
-    resume: '履歴書をダウンロード',
+    resume: '履歴書',
     copyEmail: 'メールアドレスをコピー',
   },
   sections: {
@@ -497,9 +496,8 @@ export const ja: Copy = {
       },
       {
         id: 'resume',
-        label: '履歴書（PDF）',
-        href: '/rain-zhang-resume.pdf',
-        external: true,
+        label: '履歴書',
+        href: '/ja/resume',
       },
     ],
   },

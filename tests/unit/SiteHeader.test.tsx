@@ -22,12 +22,30 @@ describe('SiteHeader', () => {
     });
   });
 
-  it('opens external nav links in a new tab and in-page ones in place', () => {
+  it('keeps every nav link in this tab — nothing opens a new one', () => {
     render_();
 
     const nav = screen.getByRole('navigation', { name: 'Primary' });
-    expect(within(nav).getByRole('link', { name: 'Resume' })).toHaveAttribute('target', '_blank');
-    expect(within(nav).getByRole('link', { name: 'Experience' })).not.toHaveAttribute('target');
+    en.nav.forEach((link) => {
+      expect(within(nav).getByRole('link', { name: link.label })).not.toHaveAttribute('target');
+    });
+  });
+
+  it('hangs in-page links off the page it is given, and marks the current one', () => {
+    render(
+      <SiteHeader name="Rain Zhang" links={en.nav} locale="en" homeHref="/" currentId="resume" />
+    );
+
+    const nav = screen.getByRole('navigation', { name: 'Primary' });
+    expect(within(nav).getByRole('link', { name: 'Experience' })).toHaveAttribute(
+      'href',
+      '/#experience'
+    );
+    expect(screen.getAllByRole('link', { name: 'Rain Zhang' })[0]).toHaveAttribute('href', '/#top');
+    expect(within(nav).getByRole('link', { name: 'Resume' })).toHaveAttribute(
+      'aria-current',
+      'page'
+    );
   });
 
   it('starts with the mobile sheet closed', () => {

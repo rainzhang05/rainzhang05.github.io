@@ -2,16 +2,25 @@ import { describe, expect, it } from 'vitest';
 import { content, en, ja } from '@/lib/content';
 import { TECH_ICONS, type TechName } from '@/lib/tech';
 import { sectionLinks, targetId } from '@/lib/sectionLinks';
-import { locales } from '@/lib/site';
+import { locales, resumePage } from '@/lib/site';
 import type { Copy, Project } from '@/lib/types';
 
 const allProjects = (copy: Copy): Project[] => [...copy.featured, ...copy.other];
 
+/**
+ * A route that exists in both languages differs by exactly the "/ja" prefix,
+ * so drop it before comparing. Everything else about a link — which id it
+ * belongs to, whether it leaves the site — still has to match, and the test
+ * below pins the prefix itself so this cannot hide a Japanese link pointing at
+ * the English page.
+ */
+const unprefix = (href: string) => (href.startsWith('/ja/') ? href.slice(3) : href);
+
 /** Everything structural: ids, links and technology names must be identical. */
 const shape = (copy: Copy) => ({
-  nav: copy.nav.map((n) => [n.id, n.href, n.external ?? false]),
+  nav: copy.nav.map((n) => [n.id, unprefix(n.href), n.external ?? false]),
   sectionLinks: sectionLinks(copy).map((n) => [n.id, n.href]),
-  footerLinks: copy.footer.links.map((n) => [n.id, n.href, n.external ?? false]),
+  footerLinks: copy.footer.links.map((n) => [n.id, unprefix(n.href), n.external ?? false]),
   experiences: copy.experiences.map((e) => [e.id, e.tech, e.related, e.mark?.src ?? null]),
   featured: copy.featured.map((p) => [p.id, p.primary, p.stack, p.image?.src ?? null]),
   other: copy.other.map((p) => [p.id, p.primary, p.stack, p.image?.src ?? null]),
@@ -108,9 +117,23 @@ describe.each(locales)('%s content', (locale) => {
     expect(copy.labels.sectionNav.toLowerCase()).not.toContain('navigation');
   });
 
-  it('links the resume at the path the PDF is served from', () => {
-    const resume = copy.nav.find((n) => n.id === 'resume');
-    expect(resume?.href).toBe('/rain-zhang-resume.pdf');
+  it('sends every resume link to the resume page for this language', () => {
+    const nav = copy.nav.find((n) => n.id === 'resume');
+    const footer = copy.footer.links.find((n) => n.id === 'resume');
+
+    [nav, footer].forEach((link) => {
+      expect(link?.href).toBe(resumePage[locale]);
+      expect(link?.href).not.toMatch(/\.pdf$/);
+      expect(link?.external ?? false).toBe(false);
+    });
+  });
+
+  it('calls the resume the same thing everywhere it is named', () => {
+    const label = locale === 'en' ? 'Resume' : '履歴書';
+
+    expect(copy.nav.find((n) => n.id === 'resume')?.label).toBe(label);
+    expect(copy.footer.links.find((n) => n.id === 'resume')?.label).toBe(label);
+    expect(copy.intro.resume).toBe(label);
   });
 });
 

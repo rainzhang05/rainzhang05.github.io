@@ -33,10 +33,9 @@ describe('SiteFooter', () => {
   it('offers the resume and a mailto', () => {
     render(<SiteFooter copy={en} />);
 
-    expect(screen.getByRole('link', { name: /Resume/ })).toHaveAttribute(
-      'href',
-      '/rain-zhang-resume.pdf'
-    );
+    const resume = screen.getByRole('link', { name: 'Resume' });
+    expect(resume).toHaveAttribute('href', '/resume');
+    expect(resume).not.toHaveAttribute('target');
     expect(screen.getAllByRole('link', { name: new RegExp(site.email) })[0]).toHaveAttribute(
       'href',
       `mailto:${site.email}`

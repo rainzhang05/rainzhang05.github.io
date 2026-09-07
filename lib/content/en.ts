@@ -32,15 +32,14 @@ export const en: Copy = {
     {
       id: 'resume',
       label: 'Resume',
-      href: '/rain-zhang-resume.pdf',
-      external: true,
+      href: '/resume',
     },
   ],
   intro: {
     eyebrow: 'Computer science · Simon Fraser University · Vancouver, BC, Canada',
     heading: 'I build and maintain web systems, from design through to production.',
     body: 'I’m Rain, a third-year computer science student at SFU. In the past year I’ve built and run production systems for a security-key company and a property management firm, mostly in Python, TypeScript and Rust.',
-    resume: 'Download Resume',
+    resume: 'Resume',
     copyEmail: 'Copy email',
   },
   sections: {
@@ -497,9 +496,8 @@ export const en: Copy = {
       },
       {
         id: 'resume',
-        label: 'Resume (PDF)',
-        href: '/rain-zhang-resume.pdf',
-        external: true,
+        label: 'Resume',
+        href: '/resume',
       },
     ],
   },

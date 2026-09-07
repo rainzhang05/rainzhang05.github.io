@@ -12,7 +12,7 @@ import { ContactSection } from './ContactSection';
 import { Toast } from '@/components/ui/Toast';
 import { sectionLinks } from '@/lib/sectionLinks';
 import { prefersReducedMotion } from '@/lib/useReducedMotion';
-import { site, type Locale } from '@/lib/site';
+import { resumePage, site, type Locale } from '@/lib/site';
 import type { Copy } from '@/lib/types';
 
 /**
@@ -123,7 +123,7 @@ export function PortfolioPage({ copy, locale }: { copy: Copy; locale: Locale }) 
         </a>
         <SiteHeader name={site.name} links={copy.nav} locale={locale} />
         <main id="main" tabIndex={-1}>
-          <Intro copy={copy.intro} onCopyEmail={copyEmail} />
+          <Intro copy={copy.intro} resumeHref={resumePage[locale]} onCopyEmail={copyEmail} />
           <ExperienceSection
             copy={copy}
             openId={openExperience}
