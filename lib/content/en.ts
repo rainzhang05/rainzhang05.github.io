@@ -475,7 +475,7 @@ export const en: Copy = {
     navigate: 'Navigate',
     elsewhere: 'Elsewhere',
     backToTop: 'Back to top',
-    credit: 'Designed and Built in Vancouver',
+    credit: 'Designed and Built by Rain Zhang',
     links: [
       {
         id: 'github',

@@ -475,7 +475,7 @@ export const ja: Copy = {
     navigate: 'ページ内',
     elsewhere: 'その他',
     backToTop: 'ページ上部へ',
-    credit: 'バンクーバーで設計と開発',
+    credit: 'デザインと開発 Rain Zhang',
     links: [
       {
         id: 'github',

@@ -65,7 +65,7 @@ export function SiteFooter({ copy }: { copy: Copy }) {
 
       <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-rule pb-10 pt-5 text-caption text-ink-3">
         <span>
-          © {year} {site.name} · {copy.footer.credit}
+          {copy.footer.credit} · © {year}
         </span>
         <a
           href="#top"

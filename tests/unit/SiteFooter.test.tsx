@@ -43,10 +43,11 @@ describe('SiteFooter', () => {
     );
   });
 
-  it('dates the copyright to the current year', () => {
+  it('dates the copyright to the current year, naming Rain once', () => {
     const { container } = render(<SiteFooter copy={en} />);
 
-    expect(container).toHaveTextContent(`© ${new Date().getFullYear()} ${site.name}`);
+    expect(container).toHaveTextContent(`${en.footer.credit} · © ${new Date().getFullYear()}`);
+    expect(en.footer.credit).toContain(site.name);
   });
 
   it('offers a way back to the top', () => {
