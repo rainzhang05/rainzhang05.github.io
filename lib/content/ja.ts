@@ -156,7 +156,7 @@ export const ja: Copy = {
         'ML-DSA',
         'liboqs',
       ],
-      related: ['work-webauthn', 'work-authenticator', 'work-demo'],
+      related: ['work-webauthn', 'work-demo', 'work-authenticator'],
     },
   ],
   featured: [
@@ -263,41 +263,6 @@ export const ja: Copy = {
       ],
     },
     {
-      id: 'work-authenticator',
-      dates: '2025年10月 – 11月',
-      title: 'FIDO2 ソフトウェア認証器',
-      summary:
-        'ソフトウェアで動く CTAP2 セキュリティキー。Linux が USB 機器として見せるため、ハードウェアなしで耐量子計算機暗号の資格情報を試せます。',
-      primary: ['Rust', 'Linux'],
-      quiet: {
-        label: 'リポジトリ',
-        href: 'https://github.com/feitiantech/fidosoftwareauthenticator',
-      },
-      sections: [
-        {
-          label: '概要',
-          text: '鍵の実機を使わずに FIDO2 セキュリティキーとして振る舞う Rust のワークスペースです。ハードウェアが揃う前から、社内のエンジニアや取引先が ML-DSA の資格情報に対して開発できるようにするために作りました。自分のリポジトリから始まり、現在は FeitianTech のもとで保守されています。',
-        },
-        {
-          label: '仕組み',
-          text: '認証器の中核は Trussed フレームワークと littlefs2 上に CTAP2.1 を実装しています。資格情報の管理、PIN/UV プロトコル1と2、リセットに対応します。ランナーが Linux の uhid で仮想 USB HID デバイスを登録し CTAPHID を話すため、Chrome・Firefox・libfido2 からは普通のキーとして見えます。ES256 と ML-DSA-44・-65・-87 を提示し、attach・detach・status・reset・pin を備えた小さなコマンドラインツール（常駐も可能）が付きます。',
-        },
-        {
-          label: '難しかったところ',
-          text: '実際のブラウザが受け入れる水準まで、HID 転送と CTAP のステートマシンを正しくすること。従来の暗号のために作られた CTAP と COSE の構造に、耐量子計算機暗号の鍵を収めること。最初の版は C の FFI 経由で liboqs を呼んでいましたが、のちに純 Rust の fips204 に移し、秘密鍵は破棄時に消去しています。',
-        },
-      ],
-      stack: ['Rust', 'Linux UHID', 'Trussed', 'littlefs2', 'CTAP2.1', 'fips204', 'liboqs', 'clap'],
-      status:
-        'Linux 上で動作し、開発者向けプラットフォームと合わせて使われています。CI では rustfmt・clippy・テストを実行しています。',
-      links: [
-        {
-          label: 'リポジトリ',
-          href: 'https://github.com/feitiantech/fidosoftwareauthenticator',
-        },
-      ],
-    },
-    {
       id: 'work-demo',
       dates: '2025年11月 – 12月',
       title: '認証デモプラットフォーム',
@@ -332,8 +297,91 @@ export const ja: Copy = {
         },
       ],
     },
+    {
+      id: 'work-authenticator',
+      dates: '2025年10月 – 11月',
+      title: 'FIDO2 ソフトウェア認証器',
+      summary:
+        'ソフトウェアで動く CTAP2 セキュリティキー。Linux が USB 機器として見せるため、ハードウェアなしで耐量子計算機暗号の資格情報を試せます。',
+      primary: ['Rust', 'Linux'],
+      quiet: {
+        label: 'リポジトリ',
+        href: 'https://github.com/feitiantech/fidosoftwareauthenticator',
+      },
+      sections: [
+        {
+          label: '概要',
+          text: '鍵の実機を使わずに FIDO2 セキュリティキーとして振る舞う Rust のワークスペースです。ハードウェアが揃う前から、社内のエンジニアや取引先が ML-DSA の資格情報に対して開発できるようにするために作りました。自分のリポジトリから始まり、現在は FeitianTech のもとで保守されています。',
+        },
+        {
+          label: '仕組み',
+          text: '認証器の中核は Trussed フレームワークと littlefs2 上に CTAP2.1 を実装しています。資格情報の管理、PIN/UV プロトコル1と2、リセットに対応します。ランナーが Linux の uhid で仮想 USB HID デバイスを登録し CTAPHID を話すため、Chrome・Firefox・libfido2 からは普通のキーとして見えます。ES256 と ML-DSA-44・-65・-87 を提示し、attach・detach・status・reset・pin を備えた小さなコマンドラインツール（常駐も可能）が付きます。',
+        },
+        {
+          label: '難しかったところ',
+          text: '実際のブラウザが受け入れる水準まで、HID 転送と CTAP のステートマシンを正しくすること。従来の暗号のために作られた CTAP と COSE の構造に、耐量子計算機暗号の鍵を収めること。最初の版は C の FFI 経由で liboqs を呼んでいましたが、のちに純 Rust の fips204 に移し、秘密鍵は破棄時に消去しています。',
+        },
+      ],
+      stack: ['Rust', 'Linux UHID', 'Trussed', 'littlefs2', 'CTAP2.1', 'fips204', 'liboqs', 'clap'],
+      status:
+        'Linux 上で動作し、開発者向けプラットフォームと合わせて使われています。CI では rustfmt・clippy・テストを実行しています。',
+      links: [
+        {
+          label: 'リポジトリ',
+          href: 'https://github.com/feitiantech/fidosoftwareauthenticator',
+        },
+      ],
+    },
   ],
   other: [
+    {
+      id: 'work-site',
+      dates: '2025年2月 – 現在',
+      title: 'Personal Portfolio Website（個人ポートフォリオサイト）',
+      summary:
+        '英語と日本語の2言語で静的生成しているポートフォリオ。履歴書やカバーレターと共通の、小さなデザインシステムの上に作っています。',
+      primary: ['Next.js', 'TypeScript'],
+      quiet: {
+        label: 'rainzhang.me',
+        href: 'https://rainzhang.me',
+      },
+      sections: [
+        {
+          label: '概要',
+          text: 'rainzhang.me で公開しているポートフォリオです。1ページを2言語で、専用のデザインシステムの上に作っています。書体は1つ、生成りの紙色、アクセント色は1色、枠線と影は使いません。履歴書とカバーレターも同じシステムなので、採用担当者が目にするものすべてが同じ手ざわりになります。',
+        },
+        {
+          label: '仕組み',
+          text: 'Next.js App Router が、型付けした1つのコンテンツモデルから両言語をビルド時に静的生成します。/en と /ja は構造が完全に同じで、異なるのは文章だけです。Tailwind は生の値ではなくデザインシステムのトークンを読み、Albert Sans は next/font で自前配信し、ミドルウェアが日本からの初回訪問者を日本語ルートへ送ります（本人が選び直した場合を除きます）。',
+        },
+        {
+          label: '主な機能',
+          text: '経歴と制作物の行はその場で開き、言語スイッチのピルは英語と日本語のあいだを滑り、最初の画面は CSS だけで立ち上がります。問い合わせフォームは honeypot とタイムアウトを備えて Formspree に送信し、メールアドレスはワンクリックでコピーできます。すべて JavaScript なしで描画され、動きはすべて prefers-reduced-motion に従います。',
+        },
+      ],
+      stack: [
+        'Next.js',
+        'TypeScript',
+        'React',
+        'Tailwind CSS',
+        'Playwright',
+        'Vitest',
+        'Vercel',
+        'GitHub Actions',
+      ],
+      status:
+        'rainzhang.me で公開中。Vitest のユニットテストと、Chromium・Firefox・Safari・モバイルを横断する Playwright の E2E テストを CI で実行しています。',
+      links: [
+        {
+          label: '公開サイト',
+          href: 'https://rainzhang.me',
+        },
+        {
+          label: 'リポジトリ',
+          href: 'https://github.com/rainzhang05/rainzhang05.github.io',
+        },
+      ],
+    },
     {
       id: 'work-travel',
       dates: '2025年1月 – 4月',
@@ -384,54 +432,6 @@ export const ja: Copy = {
         {
           label: 'リポジトリ',
           href: 'https://github.com/f4ncy1zach/travel-advisor',
-        },
-      ],
-    },
-    {
-      id: 'work-site',
-      dates: '2025年2月 – 現在',
-      title: 'Personal Portfolio Website（個人ポートフォリオサイト）',
-      summary:
-        '英語と日本語の2言語で静的生成しているポートフォリオ。履歴書やカバーレターと共通の、小さなデザインシステムの上に作っています。',
-      primary: ['Next.js', 'TypeScript'],
-      quiet: {
-        label: 'rainzhang.me',
-        href: 'https://rainzhang.me',
-      },
-      sections: [
-        {
-          label: '概要',
-          text: 'rainzhang.me で公開しているポートフォリオです。1ページを2言語で、専用のデザインシステムの上に作っています。書体は1つ、生成りの紙色、アクセント色は1色、枠線と影は使いません。履歴書とカバーレターも同じシステムなので、採用担当者が目にするものすべてが同じ手ざわりになります。',
-        },
-        {
-          label: '仕組み',
-          text: 'Next.js App Router が、型付けした1つのコンテンツモデルから両言語をビルド時に静的生成します。/en と /ja は構造が完全に同じで、異なるのは文章だけです。Tailwind は生の値ではなくデザインシステムのトークンを読み、Albert Sans は next/font で自前配信し、ミドルウェアが日本からの初回訪問者を日本語ルートへ送ります（本人が選び直した場合を除きます）。',
-        },
-        {
-          label: '主な機能',
-          text: '経歴と制作物の行はその場で開き、言語スイッチのピルは英語と日本語のあいだを滑り、最初の画面は CSS だけで立ち上がります。問い合わせフォームは honeypot とタイムアウトを備えて Formspree に送信し、メールアドレスはワンクリックでコピーできます。すべて JavaScript なしで描画され、動きはすべて prefers-reduced-motion に従います。',
-        },
-      ],
-      stack: [
-        'Next.js',
-        'TypeScript',
-        'React',
-        'Tailwind CSS',
-        'Playwright',
-        'Vitest',
-        'Vercel',
-        'GitHub Actions',
-      ],
-      status:
-        'rainzhang.me で公開中。Vitest のユニットテストと、Chromium・Firefox・Safari・モバイルを横断する Playwright の E2E テストを CI で実行しています。',
-      links: [
-        {
-          label: '公開サイト',
-          href: 'https://rainzhang.me',
-        },
-        {
-          label: 'リポジトリ',
-          href: 'https://github.com/rainzhang05/rainzhang05.github.io',
         },
       ],
     },

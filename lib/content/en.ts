@@ -156,7 +156,7 @@ export const en: Copy = {
         'ML-DSA',
         'liboqs',
       ],
-      related: ['work-webauthn', 'work-authenticator', 'work-demo'],
+      related: ['work-webauthn', 'work-demo', 'work-authenticator'],
     },
   ],
   featured: [
@@ -263,41 +263,6 @@ export const en: Copy = {
       ],
     },
     {
-      id: 'work-authenticator',
-      dates: 'Oct – Nov 2025',
-      title: 'FIDO2 Software Authenticator',
-      summary:
-        'A CTAP2 security key in software. Linux presents it as a USB device, so browsers can test post-quantum credentials without hardware.',
-      primary: ['Rust', 'Linux'],
-      quiet: {
-        label: 'Repository',
-        href: 'https://github.com/feitiantech/fidosoftwareauthenticator',
-      },
-      sections: [
-        {
-          label: 'What it is',
-          text: 'A Rust workspace that behaves like a FIDO2 security key without the key. It exists so FEITIAN’s engineers and partners could develop against ML-DSA credentials before the hardware was ready. It started as my own repository and is now maintained under FeitianTech.',
-        },
-        {
-          label: 'How it works',
-          text: 'An authenticator core implements CTAP2.1 on the Trussed framework with littlefs2 storage: credential management, PIN/UV protocols 1 and 2, and reset. A runner registers a virtual USB HID device through Linux uhid and speaks CTAPHID, so Chrome, Firefox and libfido2 see an ordinary key. It advertises ES256 and ML-DSA-44, -65 and -87, and ships a small command-line tool (attach, detach, status, reset, pin) that can run as a daemon.',
-        },
-        {
-          label: 'What was hard',
-          text: 'Getting the HID transport and the CTAP state machine right enough that real browsers accept it. Fitting post-quantum keys into CTAP and COSE structures made for classical ones. The first version called liboqs over a C FFI; it later moved to the pure-Rust fips204 crate, with secret keys zeroised on drop.',
-        },
-      ],
-      stack: ['Rust', 'Linux UHID', 'Trussed', 'littlefs2', 'CTAP2.1', 'fips204', 'liboqs', 'clap'],
-      status:
-        'Works on Linux and is used alongside the developer platform. CI runs rustfmt, clippy and the test suite.',
-      links: [
-        {
-          label: 'Repository',
-          href: 'https://github.com/feitiantech/fidosoftwareauthenticator',
-        },
-      ],
-    },
-    {
       id: 'work-demo',
       dates: 'Nov – Dec 2025',
       title: 'Authentication Demo Platform',
@@ -332,8 +297,91 @@ export const en: Copy = {
         },
       ],
     },
+    {
+      id: 'work-authenticator',
+      dates: 'Oct – Nov 2025',
+      title: 'FIDO2 Software Authenticator',
+      summary:
+        'A CTAP2 security key in software. Linux presents it as a USB device, so browsers can test post-quantum credentials without hardware.',
+      primary: ['Rust', 'Linux'],
+      quiet: {
+        label: 'Repository',
+        href: 'https://github.com/feitiantech/fidosoftwareauthenticator',
+      },
+      sections: [
+        {
+          label: 'What it is',
+          text: 'A Rust workspace that behaves like a FIDO2 security key without the key. It exists so FEITIAN’s engineers and partners could develop against ML-DSA credentials before the hardware was ready. It started as my own repository and is now maintained under FeitianTech.',
+        },
+        {
+          label: 'How it works',
+          text: 'An authenticator core implements CTAP2.1 on the Trussed framework with littlefs2 storage: credential management, PIN/UV protocols 1 and 2, and reset. A runner registers a virtual USB HID device through Linux uhid and speaks CTAPHID, so Chrome, Firefox and libfido2 see an ordinary key. It advertises ES256 and ML-DSA-44, -65 and -87, and ships a small command-line tool (attach, detach, status, reset, pin) that can run as a daemon.',
+        },
+        {
+          label: 'What was hard',
+          text: 'Getting the HID transport and the CTAP state machine right enough that real browsers accept it. Fitting post-quantum keys into CTAP and COSE structures made for classical ones. The first version called liboqs over a C FFI; it later moved to the pure-Rust fips204 crate, with secret keys zeroised on drop.',
+        },
+      ],
+      stack: ['Rust', 'Linux UHID', 'Trussed', 'littlefs2', 'CTAP2.1', 'fips204', 'liboqs', 'clap'],
+      status:
+        'Works on Linux and is used alongside the developer platform. CI runs rustfmt, clippy and the test suite.',
+      links: [
+        {
+          label: 'Repository',
+          href: 'https://github.com/feitiantech/fidosoftwareauthenticator',
+        },
+      ],
+    },
   ],
   other: [
+    {
+      id: 'work-site',
+      dates: 'Feb 2025 – present',
+      title: 'Personal Portfolio Website',
+      summary:
+        'A statically generated portfolio in English and Japanese, built on one small design system shared with my resume and cover letter.',
+      primary: ['Next.js', 'TypeScript'],
+      quiet: {
+        label: 'rainzhang.me',
+        href: 'https://rainzhang.me',
+      },
+      sections: [
+        {
+          label: 'What it is',
+          text: 'My portfolio, at rainzhang.me. One scrolling page in two languages, on its own design system: one typeface, ivory paper, one accent, no borders or shadows. The resume and cover letter use the same system, so everything a recruiter sees from me comes from one hand.',
+        },
+        {
+          label: 'How it works',
+          text: 'Next.js App Router prerenders both languages at build time from one typed content model, so /en and /ja stay structurally identical and only the prose differs. Tailwind reads the design system’s tokens rather than raw values, Albert Sans is self-hosted through next/font, and middleware sends a first-time visitor in Japan to the Japanese route unless they have chosen otherwise.',
+        },
+        {
+          label: 'Features',
+          text: 'Experience and project rows expand in place, a language switch whose pill slides between English and Japanese, a first-screen entrance in pure CSS, a contact form that posts to Formspree behind a honeypot and a request timeout, and a copy-to-clipboard email. Everything renders without JavaScript and every duration honours prefers-reduced-motion.',
+        },
+      ],
+      stack: [
+        'Next.js',
+        'TypeScript',
+        'React',
+        'Tailwind CSS',
+        'Playwright',
+        'Vitest',
+        'Vercel',
+        'GitHub Actions',
+      ],
+      status:
+        'Live at rainzhang.me. Unit tests in Vitest and an end-to-end suite in Playwright across Chromium, Firefox, Safari and mobile run in CI.',
+      links: [
+        {
+          label: 'Live site',
+          href: 'https://rainzhang.me',
+        },
+        {
+          label: 'Repository',
+          href: 'https://github.com/rainzhang05/rainzhang05.github.io',
+        },
+      ],
+    },
     {
       id: 'work-travel',
       dates: 'Jan – Apr 2025',
@@ -384,54 +432,6 @@ export const en: Copy = {
         {
           label: 'Repository',
           href: 'https://github.com/f4ncy1zach/travel-advisor',
-        },
-      ],
-    },
-    {
-      id: 'work-site',
-      dates: 'Feb 2025 – present',
-      title: 'Personal Portfolio Website',
-      summary:
-        'A statically generated portfolio in English and Japanese, built on one small design system shared with my resume and cover letter.',
-      primary: ['Next.js', 'TypeScript'],
-      quiet: {
-        label: 'rainzhang.me',
-        href: 'https://rainzhang.me',
-      },
-      sections: [
-        {
-          label: 'What it is',
-          text: 'My portfolio, at rainzhang.me. One scrolling page in two languages, on its own design system: one typeface, ivory paper, one accent, no borders or shadows. The resume and cover letter use the same system, so everything a recruiter sees from me comes from one hand.',
-        },
-        {
-          label: 'How it works',
-          text: 'Next.js App Router prerenders both languages at build time from one typed content model, so /en and /ja stay structurally identical and only the prose differs. Tailwind reads the design system’s tokens rather than raw values, Albert Sans is self-hosted through next/font, and middleware sends a first-time visitor in Japan to the Japanese route unless they have chosen otherwise.',
-        },
-        {
-          label: 'Features',
-          text: 'Experience and project rows expand in place, a language switch whose pill slides between English and Japanese, a first-screen entrance in pure CSS, a contact form that posts to Formspree behind a honeypot and a request timeout, and a copy-to-clipboard email. Everything renders without JavaScript and every duration honours prefers-reduced-motion.',
-        },
-      ],
-      stack: [
-        'Next.js',
-        'TypeScript',
-        'React',
-        'Tailwind CSS',
-        'Playwright',
-        'Vitest',
-        'Vercel',
-        'GitHub Actions',
-      ],
-      status:
-        'Live at rainzhang.me. Unit tests in Vitest and an end-to-end suite in Playwright across Chromium, Firefox, Safari and mobile run in CI.',
-      links: [
-        {
-          label: 'Live site',
-          href: 'https://rainzhang.me',
-        },
-        {
-          label: 'Repository',
-          href: 'https://github.com/rainzhang05/rainzhang05.github.io',
         },
       ],
     },
