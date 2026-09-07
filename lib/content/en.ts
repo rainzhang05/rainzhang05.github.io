@@ -59,7 +59,7 @@ export const en: Copy = {
   experiences: [
     {
       id: 'exp-mnt',
-      dates: 'Aug 2026 – present',
+      dates: 'Aug 2026 – Present',
       role: 'Software and IT Systems Specialist',
       org: 'MNT Realty',
       orgLine: 'MNT Realty · Vancouver, BC, Canada',
@@ -160,7 +160,7 @@ export const en: Copy = {
   featured: [
     {
       id: 'work-mnt-platform',
-      dates: 'Aug 2026 – present',
+      dates: 'Aug 2026 – Present',
       title: 'MNT Realty Platform',
       summary:
         'One Next.js application serving three surfaces for a property management company: the public website, an owner portal for residents, and a staff admin console.',
@@ -207,7 +207,7 @@ export const en: Copy = {
     },
     {
       id: 'work-webauthn',
-      dates: 'Sep 2025 – present',
+      dates: 'Sep 2025 – Present',
       title: 'WebAuthn Developer Platform',
       summary:
         'A public tool for testing FIDO2/WebAuthn flows, including post-quantum ML-DSA credentials.',
@@ -324,7 +324,7 @@ export const en: Copy = {
   other: [
     {
       id: 'work-site',
-      dates: 'Feb 2025 – present',
+      dates: 'Feb 2025 – Present',
       title: 'Personal Portfolio Website',
       summary:
         'A statically generated portfolio in English and Japanese, built on one small design system shared with my resume and cover letter.',
