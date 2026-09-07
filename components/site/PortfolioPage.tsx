@@ -89,8 +89,14 @@ export function PortfolioPage({ copy, locale }: { copy: Copy; locale: Locale }) 
         id="top"
         className="mx-auto box-border w-full max-w-container px-gutter-mobile sm:px-gutter"
       >
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-control focus:bg-sheet focus:px-4 focus:py-2 focus:text-body-14 focus:text-ink focus:no-underline focus:shadow-toast"
+        >
+          {copy.labels.skipToContent}
+        </a>
         <SiteHeader name={site.name} links={copy.nav} locale={locale} />
-        <main>
+        <main id="main" tabIndex={-1}>
           <Intro copy={copy.intro} onCopyEmail={copyEmail} />
           <ExperienceSection
             copy={copy}
