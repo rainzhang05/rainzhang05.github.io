@@ -58,6 +58,7 @@ export const en: Copy = {
     expand: 'Show details',
     collapse: 'Hide details',
     skipToContent: 'Skip to content',
+    sectionNav: 'On this page',
   },
   experiences: [
     {

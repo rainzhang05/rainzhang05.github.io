@@ -58,6 +58,7 @@ export const ja: Copy = {
     expand: '詳細を表示',
     collapse: '詳細を閉じる',
     skipToContent: '本文へスキップ',
+    sectionNav: 'このページの内容',
   },
   experiences: [
     {

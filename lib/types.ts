@@ -110,6 +110,8 @@ export interface Copy {
     expand: string;
     collapse: string;
     skipToContent: string;
+    /** Accessible name for the section dock. Must not collide with "Primary". */
+    sectionNav: string;
   };
   experiences: Experience[];
   featured: Project[];

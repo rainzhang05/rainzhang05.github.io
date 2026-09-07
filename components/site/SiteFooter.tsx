@@ -1,4 +1,5 @@
 import { Icon } from '@/components/ui/Icon';
+import { sectionLinks } from '@/lib/sectionLinks';
 import { site } from '@/lib/site';
 import type { Copy } from '@/lib/types';
 
@@ -28,12 +29,7 @@ export function SiteFooter({ copy }: { copy: Copy }) {
             aria-label="Footer"
             className="mt-3.5 grid grid-cols-[repeat(2,max-content)] gap-x-8 gap-y-2.5"
           >
-            {[
-              { id: 'experience', label: copy.sections.experience, href: '#experience' },
-              { id: 'work', label: copy.sections.work, href: '#work' },
-              { id: 'background', label: copy.sections.background, href: '#background' },
-              { id: 'contact', label: copy.sections.contact, href: '#contact' },
-            ].map((link) => (
+            {sectionLinks(copy).map((link) => (
               <a key={link.id} href={link.href} className={linkClass}>
                 {link.label}
               </a>

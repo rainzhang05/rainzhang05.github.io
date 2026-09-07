@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { content, en, ja } from '@/lib/content';
 import { TECH_ICONS, type TechName } from '@/lib/tech';
+import { sectionLinks } from '@/lib/sectionLinks';
 import { locales } from '@/lib/site';
 import type { Copy, Project } from '@/lib/types';
 
@@ -9,6 +10,7 @@ const allProjects = (copy: Copy): Project[] => [...copy.featured, ...copy.other]
 /** Everything structural: ids, links and technology names must be identical. */
 const shape = (copy: Copy) => ({
   nav: copy.nav.map((n) => [n.id, n.href, n.external ?? false]),
+  sectionLinks: sectionLinks(copy).map((n) => [n.id, n.href]),
   footerLinks: copy.footer.links.map((n) => [n.id, n.href, n.external ?? false]),
   experiences: copy.experiences.map((e) => [e.id, e.tech, e.related, e.mark?.src ?? null]),
   featured: copy.featured.map((p) => [p.id, p.primary, p.stack, p.image?.src ?? null]),
@@ -69,10 +71,27 @@ describe.each(locales)('%s content', (locale) => {
 
   it('anchors every in-page nav link at a section the page renders', () => {
     const sections = new Set(['experience', 'work', 'background', 'contact', 'top']);
-    const inPage = copy.nav.filter((n) => n.href.startsWith('#'));
+    // The header, the footer and the section dock all navigate in-page; the
+    // last two share sectionLinks(), so this covers every one of them.
+    const inPage = [...copy.nav, ...sectionLinks(copy)].filter((n) => n.href.startsWith('#'));
 
     expect(inPage.length).toBeGreaterThan(0);
     inPage.forEach((n) => expect(sections.has(n.href.slice(1))).toBe(true));
+  });
+
+  it('points the dock and the footer at every section, in document order', () => {
+    expect(sectionLinks(copy).map((n) => n.id)).toEqual([
+      'experience',
+      'work',
+      'background',
+      'contact',
+    ]);
+  });
+
+  it('names the section dock something the header nav does not answer to', () => {
+    expect(copy.labels.sectionNav).toBeTruthy();
+    expect(copy.labels.sectionNav).not.toBe('Primary');
+    expect(copy.labels.sectionNav.toLowerCase()).not.toContain('navigation');
   });
 
   it('links the resume at the path the PDF is served from', () => {
