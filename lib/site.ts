@@ -3,7 +3,6 @@ export const site = {
   name: 'Rain Zhang',
   url: 'https://rainzhang.me',
   email: 'rainzhang.zty@gmail.com',
-  resumeHref: '/rain-zhang-resume.pdf',
   /** Share card, 1200x630. Served from public/. */
   ogImage: '/og.png',
   /** Mirrors --paper in app/globals.css; tests/unit/site.test.ts keeps them equal. */
@@ -24,3 +23,14 @@ export type Locale = (typeof locales)[number];
 
 export const localeCookie = 'portfolio.locale';
 export const localeHome: Record<Locale, string> = { en: '/', ja: '/ja' };
+
+/**
+ * The resume, in two parts. Each language has its own PDF and its own page:
+ * the page is what every "Resume" link on the site opens, and the PDF is
+ * downloaded from that page and nowhere else.
+ */
+export const resumePage: Record<Locale, string> = { en: '/resume', ja: '/ja/resume' };
+export const resumeFile: Record<Locale, string> = {
+  en: '/rain-zhang-resume.pdf',
+  ja: '/rain-zhang-resume-ja.pdf',
+};

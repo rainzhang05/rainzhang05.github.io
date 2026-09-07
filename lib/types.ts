@@ -148,3 +148,59 @@ export interface Copy {
     links: NavLink[];
   };
 }
+
+/**
+ * The resume page. A verbatim transcription of the PDF for that language —
+ * two independently written documents, not a translation of one another and
+ * not derived from the portfolio's own experiences, projects or skills, which
+ * say different things. Nothing here is reworded, added or left out; if the
+ * PDF changes, this changes with it.
+ */
+
+/** One segment of a middle-dot separated line. `href` makes it a link. */
+export interface ResumePart {
+  text: string;
+  href?: string;
+}
+
+/** A role or a project: title, a meta line, a date range, and its bullets. */
+export interface ResumeEntry {
+  id: string;
+  title: string;
+  /** The organisation line, or a project's stack and links. */
+  meta: ResumePart[];
+  dates: string;
+  bullets: string[];
+}
+
+/** One labelled group in the skills column, its items left as written. */
+export interface ResumeGroup {
+  id: string;
+  label: string;
+  items: string;
+}
+
+export interface ResumeCopy {
+  locale: string;
+  meta: {
+    title: string;
+    description: string;
+  };
+  /** The line under the name. */
+  tagline: string;
+  /** The masthead's right-hand block, one array per line. */
+  contact: ResumePart[][];
+  /** The one string here the PDF does not contain. */
+  download: string;
+  headings: {
+    experience: string;
+    projects: string;
+    skills: string;
+    education: string;
+  };
+  experience: ResumeEntry[];
+  projects: ResumeEntry[];
+  skills: ResumeGroup[];
+  /** The education block, one line each, as the PDF sets them. */
+  education: string[];
+}
