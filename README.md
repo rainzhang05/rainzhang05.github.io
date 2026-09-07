@@ -13,12 +13,12 @@ As a university student actively seeking internship opportunities and profession
 
 ## The site
 
-One scrolling page, in two languages:
+Two pages, each in two languages:
 
-- `/` — English
-- `/ja` — Japanese
-
-intro → Experience → Selected work → Other work → Background → Contact.
+- `/` and `/ja` — one scrolling page:
+  intro → Experience → Selected work → Other work → Background → Contact.
+- `/resume` and `/ja/resume` — my resume, readable in the page, with the PDF a
+  download away.
 
 It is built on a small design system of my own: one typeface, ivory paper, one
 accent, no borders or shadows, and a single interaction — rows that open in

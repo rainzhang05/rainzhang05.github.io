@@ -29,7 +29,7 @@ That's it. No body. No trailer. No `--amend` on already-pushed commits.
 ## Project at a glance
 
 - **What it is:** Rain Zhang's personal portfolio website (live at https://rainzhang.me).
-- **Two routes:** `/` (English) and `/ja` (Japanese) — the same single scrolling page in two languages. There is no third route.
+- **Four routes, two pages:** `/` and `/ja` are the same single scrolling page in two languages; `/resume` and `/ja/resume` are the resume, also the same page in two languages. There is no fifth route.
 - **Framework:** Next.js 15 App Router + React 18 + TypeScript (strict) + Tailwind CSS 3.
 - **Deployed on:** Vercel (`vercel.json` pins `framework: nextjs`).
 - **Forms:** Contact form posts to Formspree. The endpoint lives in [lib/site.ts](lib/site.ts) and can be overridden with `NEXT_PUBLIC_FORMSPREE_ENDPOINT`.
@@ -53,15 +53,18 @@ app/
   [locale]/
     layout.tsx             Root layout: <html lang>, fonts, metadata, generateStaticParams
     page.tsx               Renders <PortfolioPage> with that language's content
+    resume/page.tsx        Renders <ResumePage> with that language's resume
 
 components/
   ui/                      Primitives with no knowledge of the site: Icon, Eyebrow, TechTag,
                            TextLink, Button, Toast, Field
   site/                    The page itself:
     PortfolioPage.tsx      The shell — all interactive state lives here and nowhere else
-    SiteHeader.tsx         Static header, menu sheet under 640px, EN/JA switch
+    SiteHeader.tsx         Static header, menu sheet under 640px, EN / 日本語 switch
     SectionDock.tsx        The left rail the header morphs into past the first screen
-    Intro.tsx              Hero: eyebrow, heading, availability, resume + copy email
+    Intro.tsx              Hero: eyebrow, heading, body, resume + copy email
+    ResumePage.tsx         The resume page: masthead, download, two columns
+    ResumeEntry.tsx        One role or project on the resume, and its meta line
     DisclosureRow.tsx      The one expand/collapse row, shared by experience and work
     ExperienceSection.tsx / WorkSection.tsx / BackgroundSection.tsx
     ContactSection.tsx / ContactForm.tsx
@@ -72,19 +75,22 @@ lib/
   sectionLinks.ts          The four in-page sections, shared by the footer and the dock
 
 lib/
-  site.ts                  Email, links, resume path, Formspree endpoint, locales, cookie name
+  site.ts                  Email, links, resume routes and PDFs, Formspree endpoint, locales, cookie
   types.ts                 The content model (Copy, Experience, Project, SkillGroup, …)
   tech.ts                  Technology name -> mark file in public/tech
   content/en.ts            All English copy and content
   content/ja.ts            All Japanese copy and content
-  content/index.ts         Assembles both into Record<Locale, Copy>
+  content/resume.en.ts     The English resume, transcribed verbatim from its PDF
+  content/resume.ja.ts     The Japanese resume, transcribed verbatim from its PDF
+  content/index.ts         Assembles both into Record<Locale, Copy>, and the resumes
   useReducedMotion.ts      Hook + a plain function for the two JS scroll nudges
   panelMotion.ts           Expand/collapse duration from content height and --panel-speed
 
 middleware.ts              One-time /ja redirect for visitors in Japan
 
 public/
-  rain-zhang-resume.pdf    Linked from the header, the hero and the footer
+  rain-zhang-resume.pdf    English resume; downloaded from /resume and nowhere else
+  rain-zhang-resume-ja.pdf Japanese resume; downloaded from /ja/resume
   logos/                   Company marks (feitian.svg, mnt-realty.svg)
   projects/                Project screenshots
   tech/                    Technology marks, looked up by lib/tech.ts
@@ -174,11 +180,13 @@ Change one number there and the whole site changes with it. A `prefers-reduced-m
 
 intro → Experience → Selected work → Other work → Background (education and skills) → Contact → footer.
 
+`/resume` and `/ja/resume` are the second page: masthead → Download PDF → Experience and Projects beside Skills and Education. It carries the site's header and footer but no section dock, and its in-page links point back at the home page — `SiteHeader` takes a `homeHref` and `SiteFooter` a `sectionBase` for exactly that, empty on the home page and `localeHome[locale]` on the resume.
+
 Section `id`s are English in both locales (`experience`, `work`, `background`, `contact`, plus `top`) because hash links and the footer nav depend on them. Only the labels are translated. A unit test asserts every in-page `href` — the header nav plus [sectionLinks](lib/sectionLinks.ts), which the footer and the dock share — points at a section the page actually renders.
 
 In `sectionLinks`, **`id` is the element the dock watches and `href` is where the link goes**, and for Introduction they differ: it watches `#intro` (a real section an `IntersectionObserver` can answer for) and goes to `#top` (the document top, where the wordmark and the footer's "Back to top" also go). `#top` can never be the watched element — it wraps the whole page, so it always intersects and would pin the active section to the first one forever. Use `targetId(link)` to navigate, never `link.id`.
 
-`copy.nav` is the header's list and includes the resume PDF but not Background; `sectionLinks(copy)` is the four real sections. They are different sets on purpose, and no filter of one produces the other.
+`copy.nav` is the header's list and includes the resume page but not Background; `sectionLinks(copy)` is the five real sections. They are different sets on purpose, and no filter of one produces the other.
 
 ---
 
@@ -187,8 +195,9 @@ In `sectionLinks`, **`id` is the element the dock watches and `href` is where th
 Both languages come from one `app/[locale]` tree:
 
 - `generateStaticParams` prerenders `en` and `ja`; `dynamicParams = false`, so anything else 404s.
-- `/` is rewritten to `/en` internally and `/en` redirects to `/` (both in [next.config.mjs](next.config.mjs)), so each language has exactly one canonical URL. Redirects are evaluated before rewrites, so there is no loop.
-- [middleware.ts](middleware.ts) 307s `/` to `/ja` when `x-vercel-ip-country` is `JP` **and** there is no `portfolio.locale` cookie. [LocaleSwitch](components/site/LocaleSwitch.tsx) owns that cookie — it writes it on click, after which the redirect never fires again. Do not set it on mere visits to `/ja`, and do not bounce `/ja` back to `/`. Local `next dev` has no country header, so `/` stays English.
+- `/` is rewritten to `/en` internally and `/en` redirects to `/`, and `/resume` and `/en/resume` are the same pair (both in [next.config.mjs](next.config.mjs)), so each language has exactly one canonical URL per page. Redirects are evaluated before rewrites and a rewrite does not re-enter them, so there is no loop. The rewrite is also what stops `/resume` being read as the `[locale]` segment and 404ing under `dynamicParams: false` — add a route here and it needs its own pair.
+- **A nested page's metadata replaces the layout's one key at a time.** `app/[locale]/resume/page.tsx` restates `alternates`, `openGraph` and `twitter` in full; drop one and the resume page silently advertises the home page's canonical URL and `og:url`.
+- [middleware.ts](middleware.ts) 307s `/` to `/ja` and `/resume` to `/ja/resume` when `x-vercel-ip-country` is `JP` **and** there is no `portfolio.locale` cookie. Its matcher is an explicit list, never a pattern: a catch-all would match `/ja` and redirect it to itself. [LocaleSwitch](components/site/LocaleSwitch.tsx) owns that cookie — it writes it on click, after which the redirect never fires again. Do not set it on mere visits to `/ja`, and do not bounce `/ja` back to `/`. Local `next dev` has no country header, so `/` stays English.
 - The switch uses `next/link`, so the other language is prefetched and both routes stay crawlable.
 
 There is **no `app/layout.tsx`** and no locale React context. `app/[locale]/layout.tsx` is the root layout, which is what makes `<html lang>` and `data-locale` actually change per route. Content is passed down as a plain `copy` prop from the page — no `locale === "ja" ? … : …` anywhere in JSX.
@@ -202,8 +211,9 @@ Everything a recruiter reads is in [lib/content/en.ts](lib/content/en.ts) and [l
 - **Adding a project** is one object in `featured` or `other`; the row, the panel, the pills and the links all follow. `links` (live site, repository) render on the collapsed row beside the pills, never inside the panel. Screenshots go in `/public/projects/`, at roughly 2980×1530 to match the existing three.
 - **Adding an experience** is one object in `experiences`. `mark` is optional — omit it and no logo renders. `related` may be `[]`, which drops the related-work block.
 - **Technology pills** are looked up by name in [lib/tech.ts](lib/tech.ts). A name mapped to `null` still renders as a plain pill, so nothing breaks if a mark is missing. Adding one: drop the file in `/public/tech/` and add a line to `TECH_ICONS`.
-- **Edit both locales.** [tests/unit/content.test.ts](tests/unit/content.test.ts) fails if ids, hrefs, technology arrays, marks or skill items drift apart between `en` and `ja`, so you cannot forget one. Only prose differs.
-- **Never add claims the English page does not make** — JLPT levels, language proficiency, visa or residency status. The same test guards a blocklist of these in *both* locales.
+- **Edit both locales.** [tests/unit/content.test.ts](tests/unit/content.test.ts) fails if ids, hrefs, technology arrays, marks or skill items drift apart between `en` and `ja`, so you cannot forget one. Only prose differs. A resume href is the one exception: `/resume` and `/ja/resume` legitimately differ, so `shape()` strips the `/ja` prefix before comparing and a separate test pins the prefix itself.
+- **The resume is a transcription, not content you write.** [lib/content/resume.en.ts](lib/content/resume.en.ts) and [resume.ja.ts](lib/content/resume.ja.ts) are the two PDFs in `public/`, word for word and in their own order — nothing added, reworded or left out. They are deliberately *not* derived from `copy.experiences` / `featured` / `skills` / `education`, which say different things, and they are outside `Copy` so the home page does not ship them. Change the PDF first, then the file. The two were written separately rather than translated, so they match in structure but not in line count; [tests/unit/resume.test.ts](tests/unit/resume.test.ts) checks what they share and deliberately not what they do not.
+- **Never add claims the English page does not make** — JLPT levels, language proficiency, visa or residency status. The same test guards a blocklist of these in *both* locales, and over the resume as well as the page.
 
 ---
 
@@ -309,6 +319,7 @@ A change that breaks CI on one matrix entry will block the whole PR. Don't disab
 - **Add or edit an experience:** the same two files (logo in `/public/logos/`).
 - **Add a technology pill:** the two content files + a line in [lib/tech.ts](lib/tech.ts) + the mark in `/public/tech/`.
 - **Change a UI string:** the `nav`, `sections`, `labels`, `contact` or `footer` blocks of both content files.
+- **Update the resume:** replace the PDF in `/public/`, then transcribe the change into [lib/content/resume.en.ts](lib/content/resume.en.ts) or [resume.ja.ts](lib/content/resume.ja.ts). The page has no content of its own.
 - **Change the page title, description or hreflang:** `meta` in both content files, and `generateMetadata` in [app/[locale]/layout.tsx](app/[locale]/layout.tsx).
 - **Change a token (colour, type, spacing, radius, motion):** the `:root` block of [app/globals.css](app/globals.css), and its Tailwind name in [tailwind.config.ts](tailwind.config.ts) if it is new.
 - **Change contact form behaviour:** [components/site/ContactForm.tsx](components/site/ContactForm.tsx); the endpoint and timeout are in [lib/site.ts](lib/site.ts).
