@@ -98,6 +98,13 @@
   --duration-base: 220ms;
   --duration-slow: 320ms;
 
+  /* Expand and collapse — a speed, not a time. Pixels per second: a panel
+     twice as tall takes twice as long, so every row moves at the same rate.
+     --ease-panel starts immediately and decelerates, which reads as smooth
+     over the longer distances this produces. */
+  --panel-speed: 2000;
+  --ease-panel: cubic-bezier(0.32, 0.72, 0, 1);
+
   /* Entrance — the one-off reveal of the first screen, and the cross-fade the
      language switch plays over the page while the other locale loads. */
   --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
@@ -249,9 +256,12 @@ html[data-locale='ja'] {
   }
 }
 
-/* Expand and collapse. The delay belongs to `visibility` alone — on the way
-   out it waits for the row to finish closing before leaving the tab order —
-   so both directions take exactly --duration-base. */
+/* Expand and collapse. --panel-duration is set per row from its own content
+   height (see lib/panelMotion.ts), so opening and closing run at one speed
+   across the whole page; --duration-base is the fallback before that is
+   measured. The delay belongs to `visibility` alone — on the way out it waits
+   for the row to finish closing before leaving the tab order — so both
+   directions take exactly the same time. */
 @layer components {
   .disclosure-panel {
     display: grid;
@@ -259,9 +269,9 @@ html[data-locale='ja'] {
     opacity: 0;
     visibility: hidden;
     transition:
-      grid-template-rows var(--duration-base) var(--ease-out),
-      opacity var(--duration-base) var(--ease-out),
-      visibility 0s linear var(--duration-base);
+      grid-template-rows var(--panel-duration, var(--duration-base)) var(--ease-panel),
+      opacity var(--panel-duration, var(--duration-base)) var(--ease-panel),
+      visibility 0s linear var(--panel-duration, var(--duration-base));
   }
 
   .disclosure-panel[data-open='true'] {
@@ -269,8 +279,8 @@ html[data-locale='ja'] {
     opacity: 1;
     visibility: visible;
     transition:
-      grid-template-rows var(--duration-base) var(--ease-out),
-      opacity var(--duration-base) var(--ease-out),
+      grid-template-rows var(--panel-duration, var(--duration-base)) var(--ease-panel),
+      opacity var(--panel-duration, var(--duration-base)) var(--ease-panel),
       visibility 0s;
   }
 }

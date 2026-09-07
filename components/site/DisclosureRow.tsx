@@ -1,7 +1,8 @@
 'use client';
 
-import type { ReactNode } from 'react';
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { Icon } from '@/components/ui/Icon';
+import { panelDurationMs, panelSpeed } from '@/lib/panelMotion';
 
 interface DisclosureRowProps {
   id: string;
@@ -53,6 +54,32 @@ export function DisclosureRow({
   const panelId = 'panel-' + id;
   const buttonId = 'button-' + id;
 
+  /**
+   * The panel's own content height decides how long it takes to open, so a
+   * tall row and a short one travel at the same speed. Content is always in
+   * the DOM, so it can be measured while the row is shut; a ResizeObserver
+   * keeps the figure right through reflow and late-loading images.
+   */
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [durationMs, setDurationMs] = useState<number | null>(null);
+
+  useEffect(() => {
+    const el = contentRef.current;
+    if (!el || typeof ResizeObserver === 'undefined') return;
+
+    const measure = () => {
+      const speed = panelSpeed(el);
+      if (speed === null) return;
+      const next = panelDurationMs(el.getBoundingClientRect().height, speed);
+      setDurationMs((current) => (current === next ? current : next));
+    };
+
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <li
       id={'row-' + id}
@@ -100,9 +127,16 @@ export function DisclosureRow({
           aria-labelledby={buttonId}
           data-open={open}
           className="disclosure-panel"
+          style={
+            durationMs === null
+              ? undefined
+              : ({ '--panel-duration': durationMs + 'ms' } as CSSProperties)
+          }
         >
           <div className="min-h-0 overflow-hidden">
-            <div className="grid gap-5 pt-6">{children}</div>
+            <div ref={contentRef} className="grid gap-5 pt-6">
+              {children}
+            </div>
           </div>
         </div>
       </div>

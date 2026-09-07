@@ -72,6 +72,7 @@ lib/
   content/ja.ts            All Japanese copy and content
   content/index.ts         Assembles both into Record<Locale, Copy>
   useReducedMotion.ts      Hook + a plain function for the two JS scroll nudges
+  panelMotion.ts           Expand/collapse duration from content height and --panel-speed
 
 middleware.ts              One-time /ja redirect for visitors in Japan
 
@@ -141,9 +142,11 @@ Three values in the `:root` block of `app/globals.css` drive every transition on
 | Token | Value | Used by |
 | --- | --- | --- |
 | `--duration-fast` | 150ms | every colour, border and background change |
-| `--duration-base` | 220ms | expand / collapse (height + opacity), the language pill |
+| `--duration-base` | 220ms | the language pill; the fallback before a panel is measured |
 | `--duration-slow` | 320ms | unused by this design; kept for the token set |
 | `--ease-out` | `cubic-bezier(.2,.6,.2,1)` | all of the above |
+| `--panel-speed` | 2000 | expand / collapse, in **pixels per second** — not a duration |
+| `--ease-panel` | `cubic-bezier(.32,.72,0,1)` | expand / collapse; immediate start, long decelerate |
 | `--duration-enter` | 620ms | the first-screen entrance |
 | `--enter-step` | 60ms | one beat of the entrance stagger (`.enter-1` … `.enter-6`) |
 | `--ease-enter` | `cubic-bezier(.16,1,.3,1)` | the entrance; most of the movement is over early |
@@ -208,7 +211,8 @@ Marks are shown in their original colours and are never tinted or greyscaled. Th
 
 - **Nothing is hidden waiting for JavaScript.** There is no preloader and no scroll-reveal. The first screen fades and rises in once, through a CSS animation with `animation-fill-mode: both` — no script gates it, nothing below the fold waits on a scroll position, and the whole page is there with JavaScript off. Changing language replaces the tree, so the same animation replays and the new language settles in rather than snapping in.
 - **Fonts** are self-hosted through `next/font/local` with `display: swap`, a preloaded latin subset, a lazily fetched latin-ext subset, and a metric-adjusted fallback — no flash of default text and no reflow. Japanese has no face in the design system: `/ja` uses the reader's system Japanese font rather than downloading one.
-- **Expand/collapse** keeps panel content in the DOM at all times, so opening is instant; the row animates `grid-template-rows` and `opacity` only. Opening and closing take the same `--duration-base`: the transition delay in `.disclosure-panel` applies to `visibility` alone, which is what keeps a closed panel's links out of the tab order without also holding up the collapse.
+- **Expand/collapse** keeps panel content in the DOM at all times, so opening is instant; the row animates `grid-template-rows` and `opacity` only. The transition delay in `.disclosure-panel` applies to `visibility` alone, which is what keeps a closed panel's links out of the tab order without also holding up the collapse.
+- **Panels are given a speed, not a duration.** Content heights run from about 600px to over 1200px, so one duration made the tall rows move at twice the rate of the short ones. [DisclosureRow](components/site/DisclosureRow.tsx) measures its own content with a `ResizeObserver` and sets `--panel-duration` from `--panel-speed` (see [lib/panelMotion.ts](lib/panelMotion.ts)); every row then opens and closes at 2000px/s, in both directions, starting immediately. Change `--panel-speed` to retune all of them at once — never hard-code a duration on a panel.
 - **Navigation** inside the page is plain anchors with CSS smooth scrolling, so it works before hydration. `scroll-padding-top` is `0` and no section carries a `scroll-mt-*`, so a jump lands on the section's own top edge; give either one a value and the tail of the previous section stays on screen.
 
 ---
