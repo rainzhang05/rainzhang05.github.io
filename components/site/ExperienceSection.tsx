@@ -56,7 +56,7 @@ export function ExperienceSection({ copy, openId, onToggle, onOpenProject }: Pro
                       key={id}
                       type="button"
                       onClick={() => onOpenProject(id)}
-                      className="m-0 rounded-sm p-0 text-left text-body-sm text-sage transition-colors duration-fast ease-out hover:text-sage-strong hover:underline hover:decoration-1 hover:underline-offset-2"
+                      className="no-copy m-0 rounded-sm p-0 text-left text-body-sm text-sage transition-colors duration-fast ease-out hover:text-sage-strong hover:underline hover:decoration-1 hover:underline-offset-2"
                     >
                       {titleOf(id)}
                     </button>

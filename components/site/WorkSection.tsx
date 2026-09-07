@@ -66,7 +66,8 @@ function ProjectRow({
             alt={project.image.alt}
             fill
             sizes="(max-width: 900px) 100vw, 880px"
-            className="object-cover object-top"
+            draggable={false}
+            className="no-copy object-cover object-top"
           />
         </div>
       ) : null}

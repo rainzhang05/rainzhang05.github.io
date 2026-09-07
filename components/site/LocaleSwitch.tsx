@@ -56,7 +56,7 @@ export function LocaleSwitch({ current }: { current: Locale }) {
     <div
       role="radiogroup"
       aria-label="Language"
-      className="relative inline-flex rounded-pill border border-rule p-0.5"
+      className="no-copy relative inline-flex rounded-pill border border-rule p-0.5"
     >
       <span
         aria-hidden="true"

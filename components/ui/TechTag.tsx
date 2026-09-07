@@ -12,7 +12,7 @@ export function TechTag({ name, size = 'sm' }: { name: TechName; size?: 'sm' | '
   return (
     <span
       className={
-        'inline-flex items-center gap-1.5 whitespace-nowrap rounded-pill border border-rule text-ink-2 ' +
+        'no-copy inline-flex items-center gap-1.5 whitespace-nowrap rounded-pill border border-rule text-ink-2 ' +
         (size === 'sm' ? 'h-6 px-[9px] text-[12.5px]' : 'h-7 px-[11px] text-caption')
       }
     >
@@ -25,7 +25,8 @@ export function TechTag({ name, size = 'sm' }: { name: TechName; size?: 'sm' | '
           height={px}
           loading="lazy"
           decoding="async"
-          className="block object-contain"
+          draggable={false}
+          className="no-copy block object-contain"
           style={{ width: px, height: px }}
         />
       ) : null}

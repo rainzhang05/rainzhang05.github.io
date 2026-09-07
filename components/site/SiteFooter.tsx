@@ -6,7 +6,7 @@ import type { Copy } from '@/lib/types';
 export function SiteFooter({ copy }: { copy: Copy }) {
   const year = new Date().getFullYear();
   const linkClass =
-    'inline-flex items-center gap-2 text-body-14 text-ink-2 no-underline transition-colors duration-fast ease-out hover:text-ink hover:no-underline';
+    'no-copy inline-flex items-center gap-2 text-body-14 text-ink-2 no-underline transition-colors duration-fast ease-out hover:text-ink hover:no-underline';
 
   return (
     <footer className="mt-24 border-t border-rule pt-10">
@@ -70,7 +70,7 @@ export function SiteFooter({ copy }: { copy: Copy }) {
         </span>
         <a
           href="#top"
-          className="inline-flex items-center gap-1.5 text-caption text-ink-2 no-underline transition-colors duration-fast ease-out hover:text-ink hover:no-underline"
+          className="no-copy inline-flex items-center gap-1.5 text-caption text-ink-2 no-underline transition-colors duration-fast ease-out hover:text-ink hover:no-underline"
         >
           {copy.footer.backToTop}
           <Icon name="arrow-up" size={14} />

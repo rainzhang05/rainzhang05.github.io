@@ -234,6 +234,18 @@ html[data-locale='ja'] {
   }
 }
 
+/* Controls, marks and images are things you press or look at, not text you
+   read: a click or a double-click on one should never leave a selection
+   behind. Prose, panel bodies and the contact links stay selectable, because
+   copying those is the point. */
+@layer components {
+  .no-copy {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+}
+
 /* Expand and collapse. The delay belongs to `visibility` alone — on the way
    out it waits for the row to finish closing before leaving the tab order —
    so both directions take exactly --duration-base. */

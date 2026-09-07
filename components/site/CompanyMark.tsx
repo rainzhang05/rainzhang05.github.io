@@ -22,7 +22,8 @@ export function CompanyMark({ mark, alt }: { mark?: Mark; alt: string }) {
       alt={alt}
       width={width}
       height={HEIGHT}
-      className="block shrink-0"
+      draggable={false}
+      className="no-copy block shrink-0"
       style={{ width, height: HEIGHT }}
     />
   );

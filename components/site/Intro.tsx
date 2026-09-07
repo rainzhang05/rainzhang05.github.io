@@ -35,7 +35,8 @@ export function Intro({ copy, onCopyEmail }: { copy: Copy['intro']; onCopyEmail:
         height={128}
         priority
         sizes="128px"
-        className="enter enter-3 rounded-md bg-surface object-cover"
+        draggable={false}
+        className="no-copy enter enter-3 rounded-md bg-surface object-cover"
       />
     </section>
   );

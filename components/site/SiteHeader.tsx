@@ -34,7 +34,7 @@ export function SiteHeader({
   const wordmark = (
     <a
       href="#top"
-      className="text-body-14 font-medium tracking-[-0.005em] text-ink no-underline transition-colors duration-fast ease-out hover:text-ink-2 hover:no-underline"
+      className="no-copy text-body-14 font-medium tracking-[-0.005em] text-ink no-underline transition-colors duration-fast ease-out hover:text-ink-2 hover:no-underline"
     >
       {name}
     </a>
@@ -53,7 +53,7 @@ export function SiteHeader({
                 href={link.href}
                 target={link.external ? '_blank' : undefined}
                 rel={link.external ? 'noreferrer' : undefined}
-                className="text-body-14 text-ink-2 no-underline transition-colors duration-fast ease-out hover:text-ink hover:no-underline"
+                className="no-copy text-body-14 text-ink-2 no-underline transition-colors duration-fast ease-out hover:text-ink hover:no-underline"
               >
                 {link.label}
               </a>
@@ -67,7 +67,7 @@ export function SiteHeader({
           aria-label="Menu"
           aria-expanded={open}
           onClick={() => setOpen(true)}
-          className="inline-flex h-8 w-8 items-center justify-center rounded-pill text-ink-2 transition-colors duration-fast ease-out hover:bg-surface hover:text-ink sm:hidden"
+          className="no-copy inline-flex h-8 w-8 items-center justify-center rounded-pill text-ink-2 transition-colors duration-fast ease-out hover:bg-surface hover:text-ink sm:hidden"
         >
           <Icon name="menu" size={20} />
         </button>
@@ -86,7 +86,7 @@ export function SiteHeader({
               type="button"
               aria-label="Close menu"
               onClick={() => setOpen(false)}
-              className="inline-flex h-8 w-8 items-center justify-center rounded-pill text-ink-2 transition-colors duration-fast ease-out hover:bg-surface hover:text-ink"
+              className="no-copy inline-flex h-8 w-8 items-center justify-center rounded-pill text-ink-2 transition-colors duration-fast ease-out hover:bg-surface hover:text-ink"
             >
               <Icon name="x" size={20} />
             </button>
@@ -99,7 +99,7 @@ export function SiteHeader({
                 target={link.external ? '_blank' : undefined}
                 rel={link.external ? 'noreferrer' : undefined}
                 onClick={() => setOpen(false)}
-                className="block border-b border-rule py-4 text-display-2 font-normal text-ink-2 no-underline transition-colors duration-fast ease-out hover:text-ink hover:no-underline"
+                className="no-copy block border-b border-rule py-4 text-display-2 font-normal text-ink-2 no-underline transition-colors duration-fast ease-out hover:text-ink hover:no-underline"
               >
                 {link.label}
               </a>

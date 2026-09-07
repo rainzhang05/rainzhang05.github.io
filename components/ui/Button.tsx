@@ -22,7 +22,7 @@ interface CommonProps {
 }
 
 const base =
-  'inline-flex items-center justify-center whitespace-nowrap rounded-button border font-medium leading-none no-underline transition-colors duration-fast ease-out disabled:opacity-45 hover:no-underline';
+  'no-copy inline-flex items-center justify-center whitespace-nowrap rounded-button border font-medium leading-none no-underline transition-colors duration-fast ease-out disabled:opacity-45 hover:no-underline';
 
 function classes({ variant = 'primary', size = 'md', className = '' }: CommonProps) {
   return [base, SIZES[size], VARIANTS[variant], className].filter(Boolean).join(' ');

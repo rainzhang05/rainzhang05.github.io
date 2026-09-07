@@ -65,7 +65,7 @@ export function DisclosureRow({
       <div className="min-w-0 flex-1 basis-[420px]">
         {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events */}
         <div
-          className="group flex cursor-pointer items-start gap-4 text-ink-3 transition-colors duration-fast ease-out hover:text-ink"
+          className="no-copy group flex cursor-pointer items-start gap-4 text-ink-3 transition-colors duration-fast ease-out hover:text-ink"
           onClick={() => onToggle(id)}
         >
           <div className="min-w-0 flex-1">
