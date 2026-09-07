@@ -35,7 +35,9 @@ That's it. No body. No trailer. No `--amend` on already-pushed commits.
 - **Forms:** Contact form posts to Formspree. The endpoint lives in [lib/site.ts](lib/site.ts) and can be overridden with `NEXT_PUBLIC_FORMSPREE_ENDPOINT`.
 - **Node:** `>=20` (CI uses Node 20).
 
-The design is deliberately quiet: one warm ivory theme, one typeface, one accent, no borders or shadows, and exactly one interaction — rows that expand in place. If a change adds a second interaction pattern, a second accent, or a theme toggle, it is working against the design, not with it.
+The design is deliberately quiet: one warm ivory theme, one typeface, one accent, no borders or shadows, and two interactions — rows that expand in place, and the section dock down the left edge. If a change adds a third interaction pattern, a second accent, or a theme toggle, it is working against the design, not with it.
+
+The dock was added deliberately and against the grain of that rule: the page had no persistent navigation at all below the fold. It is held to the same quiet standard — no new colour, no new shadow, no icon language, and it borrows the pill shape the technology tags already use. Do not treat it as licence for a third pattern.
 
 ---
 
@@ -58,11 +60,16 @@ components/
   site/                    The page itself:
     PortfolioPage.tsx      The shell — all interactive state lives here and nowhere else
     SiteHeader.tsx         Static header, menu sheet under 640px, EN/JA switch
+    SectionDock.tsx        The left rail the header morphs into past the first screen
     Intro.tsx              Hero: eyebrow, heading, availability, resume + copy email
     DisclosureRow.tsx      The one expand/collapse row, shared by experience and work
     ExperienceSection.tsx / WorkSection.tsx / BackgroundSection.tsx
     ContactSection.tsx / ContactForm.tsx
     SectionHeading.tsx / CompanyMark.tsx / LocaleSwitch.tsx / SiteFooter.tsx
+
+lib/
+  dockMotion.ts            The dock's maths: progress, gaussian falloff, bezier sampling
+  sectionLinks.ts          The four in-page sections, shared by the footer and the dock
 
 lib/
   site.ts                  Email, links, resume path, Formspree endpoint, locales, cookie name
@@ -130,6 +137,7 @@ import type { Project } from "@/lib/types";
 
 [app/globals.css](app/globals.css) is the **only** file with raw values — colours, type sizes, spacing, radii and motion. [tailwind.config.ts](tailwind.config.ts) maps every token to a Tailwind name, so components write `text-ink-2`, `border-rule`, `duration-base`, `pt-section` — never a hex code or a millisecond count.
 
+- **Dock:** `--dock-hit` (32 — the bubble's hit box), `--dock-pitch` (40 — centre to centre, the width at which two focus rings meet without overlapping) and `--dock-dot` (10 — the nominal diameter, scaled between 0.7 and 1.5 by [lib/dockMotion.ts](lib/dockMotion.ts)).
 - **Colour:** `--paper`, `--sheet`, `--surface`, `--surface-2`; ink scale `--ink`, `--ink-hover`, `--ink-2`, `--ink-3`; rules `--rule`, `--rule-strong`; accent `--sage`, `--sage-strong`, `--sage-tint`; and two semantic colours, `--clay` (errors) and `--ochre`.
 - **Type:** one family. `--font-sans` is Albert Sans from [app/fonts.ts](app/fonts.ts); `--font-sans-jp` is a system Japanese stack that `html[data-locale='ja']` swaps in. The size scale runs `--text-label` (12) through `--text-hero`.
 - **Spacing and layout:** `--container` (1080), `--gutter` / `--gutter-mobile`, `--label-col` (160 — the date column), `--reading-col`, `--section-gap`, `--hero-pad`.
@@ -163,7 +171,9 @@ Change one number there and the whole site changes with it. A `prefers-reduced-m
 
 intro → Experience → Selected work → Other work → Background (education and skills) → Contact → footer.
 
-Section `id`s are English in both locales (`experience`, `work`, `background`, `contact`, plus `top`) because hash links and the footer nav depend on them. Only the labels are translated. A unit test asserts every in-page nav `href` points at a section the page actually renders.
+Section `id`s are English in both locales (`experience`, `work`, `background`, `contact`, plus `top`) because hash links and the footer nav depend on them. Only the labels are translated. A unit test asserts every in-page `href` — the header nav plus [sectionLinks](lib/sectionLinks.ts), which the footer and the dock share — points at a section the page actually renders.
+
+`copy.nav` is the header's list and includes the resume PDF but not Background; `sectionLinks(copy)` is the four real sections. They are different sets on purpose, and no filter of one produces the other.
 
 ---
 
@@ -210,11 +220,12 @@ Marks are shown in their original colours and are never tinted or greyscaled. Th
 
 ## Loading and performance
 
-- **Nothing is hidden waiting for JavaScript.** There is no preloader and no scroll-reveal. The first screen fades and rises in once, through a CSS animation with `animation-fill-mode: both` — no script gates it, nothing below the fold waits on a scroll position, and the whole page is there with JavaScript off. Changing language replaces the tree, so the same animation replays and the new language settles in rather than snapping in.
+- **No content is hidden waiting for JavaScript.** There is no preloader and no scroll-reveal. The first screen fades and rises in once, through a CSS animation with `animation-fill-mode: both` — no script gates it, no *content* below the fold waits on a scroll position, and the whole page is readable and navigable with JavaScript off. The section dock is the one scroll-driven thing on the page, and it is an additional control rather than content: with JavaScript off it never appears and the header and footer navigation still work. Changing language replaces the tree, so the same animation replays and the new language settles in rather than snapping in.
 - **Fonts** are self-hosted through `next/font/local` with `display: swap`, a preloaded latin subset, a lazily fetched latin-ext subset, and a metric-adjusted fallback — no flash of default text and no reflow. Japanese has no face in the design system: `/ja` uses the reader's system Japanese font rather than downloading one.
 - **Expand/collapse** keeps panel content in the DOM at all times, so opening is instant; the row animates `grid-template-rows` and `opacity` only. The transition delay in `.disclosure-panel` applies to `visibility` alone, which is what keeps a closed panel's links out of the tab order without also holding up the collapse.
 - **Panels are given a speed, not a duration.** Content heights run from about 600px to over 1200px, so one duration made the tall rows move at twice the rate of the short ones. [DisclosureRow](components/site/DisclosureRow.tsx) measures its own content with a `ResizeObserver` and sets `--panel-duration` from `--panel-speed` (see [lib/panelMotion.ts](lib/panelMotion.ts)); every row then opens and closes at 2000px/s, in both directions, starting immediately. Change `--panel-speed` to retune all of them at once — never hard-code a duration on a panel.
-- **Navigation** inside the page is plain anchors with CSS smooth scrolling, so it works before hydration. `scroll-padding-top` is `0` and no section carries a `scroll-mt-*`, so a jump lands on the section's own top edge; give either one a value and the tail of the previous section stays on screen.
+- **Navigation** in the header and the footer is plain anchors with CSS smooth scrolling, so it works before hydration. `scroll-padding-top` is `0` and no section carries a `scroll-mt-*`, so a jump lands on the section's own top edge; give either one a value and the tail of the previous section stays on screen. The dock's buttons go through `scrollToSection` in [PortfolioPage](components/site/PortfolioPage.tsx), which uses the same `window.scrollTo` idiom at offset 0 and then moves focus into the section — a button, unlike an anchor, does not move the focus starting point by itself.
+- **The dock is driven by one number.** Everything it draws is a pure function of `window.scrollY`, so scrolling up retraces the way down through the same code rather than playing a second animation, and a fling past every threshold in one frame lands in the right state. It reads landmarks with `offsetTop` rather than `getBoundingClientRect`, because `#experience` carries `.enter` and is transform-offset by 10px for the first second after paint. Under `prefers-reduced-motion` the frame loop never starts at all: the CSS `!important` duration reset cannot touch a transform written from JavaScript.
 
 ---
 
@@ -277,7 +288,7 @@ A change that breaks CI on one matrix entry will block the whole PR. Don't disab
 - **Strict TypeScript** — no `any`. Prefer importing types from [lib/types.ts](lib/types.ts).
 - **Prettier:** single quotes, semicolons, trailing commas (`es5`), `printWidth: 100`, 2-space indent. See [.prettierrc.json](.prettierrc.json). The `tests/` directory is the exception — it is written in double quotes, matching Playwright's own style.
 - **ESLint:** `@typescript-eslint/no-unused-vars` is warn-only with `argsIgnorePattern: "^_"`. `@next/next/no-img-element` is **off** on purpose (see Images above).
-- **Client vs server components:** server by default; add `"use client"` only when the file uses hooks, browser APIs, or event handlers. `PortfolioPage`, `SiteHeader`, `LocaleSwitch`, `ContactForm`, `ContactSection`, `ExperienceSection`, `WorkSection`, `DisclosureRow` and `Field` are client; the rest are server.
+- **Client vs server components:** server by default; add `"use client"` only when the file uses hooks, browser APIs, or event handlers. `PortfolioPage`, `SiteHeader`, `SectionDock`, `LocaleSwitch`, `ContactForm`, `ContactSection`, `ExperienceSection`, `WorkSection`, `DisclosureRow` and `Field` are client; the rest are server.
 - **All interactive state lives in [PortfolioPage.tsx](components/site/PortfolioPage.tsx)** — which experience row is open, which project row is open, and the toast. Sections receive `openId` and `onToggle`. Don't push state down into a section.
 - **No hardcoded UI strings in components.** Add a key to `Copy` in [lib/types.ts](lib/types.ts) and implement it in both content files — TypeScript will fail the build until you do.
 - **No emojis in source** unless explicitly asked.
