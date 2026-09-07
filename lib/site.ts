@@ -4,6 +4,12 @@ export const site = {
   url: 'https://rainzhang.me',
   email: 'rainzhang.zty@gmail.com',
   resumeHref: '/rain-zhang-resume.pdf',
+  /** Share card, 1200x630. Served from public/. */
+  ogImage: '/og.png',
+  /** Mirrors --paper in app/globals.css; tests/unit/site.test.ts keeps them equal. */
+  themeColor: '#f7f5ef',
+  /** Where the work described on the page happens. */
+  location: { locality: 'Vancouver', region: 'BC', country: 'CA' },
   github: 'https://github.com/rainzhang05',
   linkedin: 'https://www.linkedin.com/in/rainzhang05',
   /** Formspree form that receives the contact form. Override with an env var. */

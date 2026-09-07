@@ -81,7 +81,12 @@ export interface NavLink {
 
 export interface Copy {
   locale: string;
-  meta: { title: string; description: string };
+  meta: {
+    title: string;
+    description: string;
+    /** Alt text for the share card in public/og.png. */
+    ogAlt: string;
+  };
   nav: NavLink[];
   intro: {
     eyebrow: string;
@@ -104,6 +109,7 @@ export interface Copy {
     status: string;
     expand: string;
     collapse: string;
+    skipToContent: string;
   };
   experiences: Experience[];
   featured: Project[];

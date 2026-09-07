@@ -10,6 +10,8 @@ export const ja: Copy = {
     title: 'Rain Zhang — ソフトウェアエンジニア（バンクーバー）',
     description:
       'サイモンフレーザー大学でコンピュータサイエンスを学ぶ3年生。Python・TypeScript・Rust で、Web システムの設計から本番運用までを一貫して担当しています。',
+    ogAlt:
+      'Rain Zhang — バンクーバー在住のソフトウェアエンジニア。インターフェース、API、データベース、CI/CD まで、Web システムを一貫して構築しています。',
   },
   nav: [
     {
@@ -55,6 +57,7 @@ export const ja: Copy = {
     status: '現在の状況',
     expand: '詳細を表示',
     collapse: '詳細を閉じる',
+    skipToContent: '本文へスキップ',
   },
   experiences: [
     {

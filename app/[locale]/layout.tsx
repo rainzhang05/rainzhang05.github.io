@@ -1,7 +1,8 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { notFound } from 'next/navigation';
 import { albert, albertExt } from '../fonts';
 import { content } from '@/lib/content';
+import { personJsonLd } from '@/lib/jsonLd';
 import { locales, site, type Locale } from '@/lib/site';
 import '../globals.css';
 
@@ -11,6 +12,19 @@ export function generateStaticParams() {
 }
 
 export const dynamicParams = false;
+
+/**
+ * There is one theme and it is light. Saying so keeps a dark-mode browser
+ * from rendering the form controls, caret and scrollbars dark against ivory.
+ * Exporting `viewport` replaces Next's default, so width and scale are
+ * restated here; pinch-zoom is deliberately left alone.
+ */
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: site.themeColor,
+  colorScheme: 'light',
+};
 
 function assertLocale(value: string): Locale {
   if (!locales.includes(value as Locale)) notFound();
@@ -41,6 +55,15 @@ export async function generateMetadata({
       title: copy.meta.title,
       description: copy.meta.description,
       siteName: site.name,
+      images: [
+        { url: site.ogImage, width: 1200, height: 630, alt: copy.meta.ogAlt, type: 'image/png' },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: copy.meta.title,
+      description: copy.meta.description,
+      images: [{ url: site.ogImage, alt: copy.meta.ogAlt }],
     },
   };
 }
@@ -61,7 +84,13 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale} data-locale={locale} className={albert.variable + ' ' + albertExt.variable}>
-      <body>{children}</body>
+      <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: personJsonLd(content[locale]) }}
+        />
+        {children}
+      </body>
     </html>
   );
 }
