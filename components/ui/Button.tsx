@@ -1,8 +1,18 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
 
 const SIZES = {
-  sm: 'h-8 px-3.5 text-caption gap-1.5',
-  md: 'h-10 px-[18px] text-body-14 gap-2',
+  sm: 'px-3.5 text-caption gap-1.5',
+  md: 'px-[18px] text-body-14 gap-2',
+} as const;
+
+/** A label on one line keeps a fixed height; a wrapping one grows from it. */
+const FIXED = {
+  sm: 'h-8 whitespace-nowrap leading-none',
+  md: 'h-10 whitespace-nowrap leading-none',
+} as const;
+const WRAPS = {
+  sm: 'min-h-8 py-1.5 text-left leading-snug',
+  md: 'min-h-10 py-2 text-left leading-snug',
 } as const;
 
 const VARIANTS = {
@@ -17,15 +27,19 @@ interface CommonProps {
   size?: keyof typeof SIZES;
   icon?: ReactNode;
   iconRight?: ReactNode;
+  /** Let a long label run onto a second line instead of overrunning its column. */
+  wrap?: boolean;
   children: ReactNode;
   className?: string;
 }
 
 const base =
-  'no-copy inline-flex items-center justify-center whitespace-nowrap rounded-button border font-medium leading-none no-underline transition-colors duration-fast ease-out disabled:opacity-45 hover:no-underline';
+  'no-copy inline-flex items-center justify-center rounded-button border font-medium no-underline transition-colors duration-fast ease-out disabled:opacity-45 hover:no-underline';
 
-function classes({ variant = 'primary', size = 'md', className = '' }: CommonProps) {
-  return [base, SIZES[size], VARIANTS[variant], className].filter(Boolean).join(' ');
+function classes({ variant = 'primary', size = 'md', wrap, className = '' }: CommonProps) {
+  return [base, wrap ? WRAPS[size] : FIXED[size], SIZES[size], VARIANTS[variant], className]
+    .filter(Boolean)
+    .join(' ');
 }
 
 export function Button({
@@ -33,13 +47,14 @@ export function Button({
   size,
   icon,
   iconRight,
+  wrap,
   children,
   className,
   type = 'button',
   ...rest
 }: CommonProps & ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
-    <button type={type} className={classes({ variant, size, children, className })} {...rest}>
+    <button type={type} className={classes({ variant, size, wrap, children, className })} {...rest}>
       {icon}
       <span>{children}</span>
       {iconRight}
@@ -52,6 +67,7 @@ export function ButtonLink({
   size,
   icon,
   iconRight,
+  wrap,
   children,
   className,
   href,
@@ -64,7 +80,7 @@ export function ButtonLink({
       download={download}
       target={external ? '_blank' : undefined}
       rel={external ? 'noreferrer' : undefined}
-      className={classes({ variant, size, children, className })}
+      className={classes({ variant, size, wrap, children, className })}
     >
       {icon}
       <span>{children}</span>

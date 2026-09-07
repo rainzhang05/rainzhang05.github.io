@@ -4,6 +4,8 @@ import { DisclosureRow, PanelBlock } from './DisclosureRow';
 import { CompanyMark } from './CompanyMark';
 import { SectionHeading } from './SectionHeading';
 import { TechTagList } from '@/components/ui/TechTag';
+import { Button } from '@/components/ui/Button';
+import { Icon } from '@/components/ui/Icon';
 import type { Copy } from '@/lib/types';
 
 interface Props {
@@ -50,16 +52,18 @@ export function ExperienceSection({ copy, openId, onToggle, onOpenProject }: Pro
 
             {item.related.length > 0 ? (
               <PanelBlock label={copy.labels.relatedWork}>
-                <div className="flex flex-wrap gap-x-5 gap-y-1.5">
+                <div className="flex flex-wrap gap-2">
                   {item.related.map((id) => (
-                    <button
+                    <Button
                       key={id}
-                      type="button"
+                      variant="secondary"
+                      size="sm"
+                      wrap
+                      iconRight={<Icon name="arrow-right" size={14} />}
                       onClick={() => onOpenProject(id)}
-                      className="no-copy m-0 rounded-sm p-0 text-left text-body-sm text-sage transition-colors duration-fast ease-out hover:text-sage-strong hover:underline hover:decoration-1 hover:underline-offset-2"
                     >
                       {titleOf(id)}
-                    </button>
+                    </Button>
                   ))}
                 </div>
               </PanelBlock>

@@ -63,4 +63,24 @@ describe('ButtonLink', () => {
     expect(link).toHaveAttribute('target', '_blank');
     expect(link).toHaveAttribute('rel', 'noreferrer');
   });
+
+  it('keeps a one-line label on one line at a fixed height', () => {
+    render(<Button size="sm">Short</Button>);
+
+    const cls = screen.getByRole('button').className;
+    expect(cls).toContain('whitespace-nowrap');
+    expect(cls).toContain('h-8');
+  });
+
+  it('lets a wrapping label run to a second line and grow', () => {
+    render(
+      <Button size="sm" wrap>
+        A label long enough to need two lines
+      </Button>
+    );
+
+    const cls = screen.getByRole('button').className;
+    expect(cls).not.toContain('whitespace-nowrap');
+    expect(cls).toContain('min-h-8');
+  });
 });
