@@ -20,15 +20,14 @@ test.describe("navigation", () => {
     await expect(page.locator("h1")).toBeInViewport();
   });
 
-  test("opens the resume in a new tab", async ({ page }) => {
+  test("keeps every header link in this tab", async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto("/");
 
-    const resume = page
-      .getByRole("navigation", { name: "Primary" })
-      .getByRole("link", { name: "Resume" });
-    await expect(resume).toHaveAttribute("href", "/rain-zhang-resume.pdf");
-    await expect(resume).toHaveAttribute("target", "_blank");
+    const nav = page.getByRole("navigation", { name: "Primary" });
+    for (const link of await nav.getByRole("link").all()) {
+      await expect(link).not.toHaveAttribute("target", "_blank");
+    }
   });
 
   test("collapses into a sheet on a narrow viewport", async ({ page }) => {
@@ -47,7 +46,7 @@ test.describe("navigation", () => {
   });
 
   test("does not scroll sideways at any width", async ({ page }) => {
-    for (const width of [320, 375, 768, 1280]) {
+    for (const width of [320, 375, 640, 700, 768, 1280]) {
       await page.setViewportSize({ width, height: 800 });
       await page.goto("/");
 

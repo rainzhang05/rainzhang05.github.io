@@ -1,11 +1,13 @@
 import { expect, test } from "@playwright/test";
 
 /**
- * The marks and the resume are the original files from the previous site.
+ * The marks are the original files from the previous site; the two resumes are
+ * the PDFs the resume page offers for download.
  * These serve straight from public/, so a rename or a missed file is a 404.
  */
 const files = [
   "/rain-zhang-resume.pdf",
+  "/rain-zhang-resume-ja.pdf",
   "/logos/feitian.svg",
   "/logos/mnt-realty.svg",
   "/tech/rust.png",

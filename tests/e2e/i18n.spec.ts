@@ -49,6 +49,24 @@ test.describe("languages", () => {
     await expect(group.getByRole("radio", { name: "日本語" })).toHaveAttribute("aria-checked", "true");
   });
 
+  test("keeps the switch its own size, wherever it is shown", async ({ page }) => {
+    await page.goto("/");
+
+    // The two labels sit in equal grid columns so the sliding pill lands on
+    // one of them. Inline, so the control never stretches to its container —
+    // in the menu sheet a block-level grid would run the whole width.
+    const group = await languageSwitch(page);
+    const box = (await group.boundingBox())!;
+    const viewport = page.viewportSize()!;
+    const labels = await group.getByRole("radio").all();
+    const widths = await Promise.all(labels.map(async (l) => (await l.boundingBox())!.width));
+    const pill = (await group.locator('[aria-hidden="true"]').boundingBox())!;
+
+    expect(box.width).toBeLessThan(viewport.width / 2);
+    expect(widths[0]).toBeCloseTo(widths[1], 1);
+    expect(pill.width).toBeCloseTo(widths[0], 1);
+  });
+
   test("declares both languages to search engines", async ({ page }) => {
     await page.goto("/");
 

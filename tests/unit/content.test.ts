@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { content, en, ja } from '@/lib/content';
+import { content, en, ja, resumeEn, resumeJa } from '@/lib/content';
 import { TECH_ICONS, type TechName } from '@/lib/tech';
 import { sectionLinks, targetId } from '@/lib/sectionLinks';
 import { locales, resumePage } from '@/lib/site';
@@ -153,8 +153,11 @@ describe('Japanese content', () => {
     ['a residency claim', /永住|在留資格/],
   ];
 
-  const japanese = JSON.stringify(ja);
-  const english = JSON.stringify(en);
+  // The resume is a second content module, so it is stringified in too: it is
+  // the surface most likely to grow a language certificate or a status line,
+  // and the point of the rule is that no content escapes it.
+  const japanese = JSON.stringify(ja) + JSON.stringify(resumeJa);
+  const english = JSON.stringify(en) + JSON.stringify(resumeEn);
 
   it.each(forbidden)('makes no %s', (_label, pattern) => {
     expect(pattern.test(japanese)).toBe(false);
