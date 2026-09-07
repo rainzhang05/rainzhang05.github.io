@@ -11,8 +11,8 @@ const shape = (copy: Copy) => ({
   nav: copy.nav.map((n) => [n.id, n.href, n.external ?? false]),
   footerLinks: copy.footer.links.map((n) => [n.id, n.href, n.external ?? false]),
   experiences: copy.experiences.map((e) => [e.id, e.tech, e.related, e.mark?.src ?? null]),
-  featured: copy.featured.map((p) => [p.id, p.primary, p.stack, p.quiet.href, p.image?.src ?? null]),
-  other: copy.other.map((p) => [p.id, p.primary, p.stack, p.quiet.href, p.image?.src ?? null]),
+  featured: copy.featured.map((p) => [p.id, p.primary, p.stack, p.image?.src ?? null]),
+  other: copy.other.map((p) => [p.id, p.primary, p.stack, p.image?.src ?? null]),
   projectLinks: allProjects(copy).map((p) => p.links.map((l) => l.href)),
   skills: copy.skills.map((g) => g.items),
 });
@@ -90,7 +90,10 @@ describe('Japanese content', () => {
     ['a JLPT level', /JLPT|日本語能力試験/i],
     ['a language proficiency level', /日本語.{0,4}(ネイティブ|流暢|堪能|ビジネスレベル)/],
     ['a native-speaker claim', /母国語|ネイティブスピーカー/],
-    ['a work visa or sponsorship claim', /就労ビザ|就労資格|ビザサポート|ビザ不要|ビザスポンサー|スポンサーシップ/],
+    [
+      'a work visa or sponsorship claim',
+      /就労ビザ|就労資格|ビザサポート|ビザ不要|ビザスポンサー|スポンサーシップ/,
+    ],
     ['a residency claim', /永住|在留資格/],
   ];
 

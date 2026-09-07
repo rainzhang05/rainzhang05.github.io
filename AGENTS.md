@@ -182,7 +182,7 @@ There is **no `app/layout.tsx`** and no locale React context. `app/[locale]/layo
 
 Everything a recruiter reads is in [lib/content/en.ts](lib/content/en.ts) and [lib/content/ja.ts](lib/content/ja.ts), typed by [lib/types.ts](lib/types.ts). Updating site content means editing a content file, **not** the JSX.
 
-- **Adding a project** is one object in `featured` or `other`; the row, the panel, the pills and the links all follow. Screenshots go in `/public/projects/`.
+- **Adding a project** is one object in `featured` or `other`; the row, the panel, the pills and the links all follow. `links` (live site, repository) render on the collapsed row beside the pills, never inside the panel. Screenshots go in `/public/projects/`, at roughly 2980×1530 to match the existing three.
 - **Adding an experience** is one object in `experiences`. `mark` is optional — omit it and no logo renders. `related` may be `[]`, which drops the related-work block.
 - **Technology pills** are looked up by name in [lib/tech.ts](lib/tech.ts). A name mapped to `null` still renders as a plain pill, so nothing breaks if a mark is missing. Adding one: drop the file in `/public/tech/` and add a line to `TECH_ICONS`.
 - **Edit both locales.** [tests/unit/content.test.ts](tests/unit/content.test.ts) fails if ids, hrefs, technology arrays, marks or skill items drift apart between `en` and `ja`, so you cannot forget one. Only prose differs.

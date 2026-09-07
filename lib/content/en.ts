@@ -167,10 +167,6 @@ export const en: Copy = {
       summary:
         'One Next.js application serving three surfaces for a property management company: the public website, an owner portal for residents, and a staff admin console.',
       primary: ['Next.js', 'TypeScript', 'React'],
-      quiet: {
-        label: 'mntrealty.vercel.app',
-        href: 'https://mntrealty.vercel.app',
-      },
       sections: [
         {
           label: 'What it is',
@@ -206,7 +202,7 @@ export const en: Copy = {
         'The public website, the owner portal and the admin console are all built and deployed; cloud data and backend workflows are next. The source belongs to MNT Realty and is not public.',
       links: [
         {
-          label: 'Live site',
+          label: 'mntrealty.vercel.app',
           href: 'https://mntrealty.vercel.app',
         },
       ],
@@ -218,10 +214,6 @@ export const en: Copy = {
       summary:
         'A public tool for testing FIDO2/WebAuthn flows, including post-quantum ML-DSA credentials.',
       primary: ['Python', 'Flask', 'JavaScript'],
-      quiet: {
-        label: 'webauthnlab.tech',
-        href: 'https://webauthnlab.tech',
-      },
       sections: [
         {
           label: 'What it is',
@@ -259,12 +251,12 @@ export const en: Copy = {
         'Live at webauthnlab.tech and maintained under FeitianTech. About 120 server test files, plus frontend and post-quantum tests, run in CI.',
       links: [
         {
-          label: 'Repository',
-          href: 'https://github.com/feitiantech/postquantum-webauthn-platform',
+          label: 'webauthnlab.tech',
+          href: 'https://webauthnlab.tech',
         },
         {
-          label: 'Live site',
-          href: 'https://webauthnlab.tech',
+          label: 'Repository',
+          href: 'https://github.com/feitiantech/postquantum-webauthn-platform',
         },
       ],
     },
@@ -274,10 +266,6 @@ export const en: Copy = {
       title: 'Authentication Demo Platform',
       summary: 'A customer-facing site for trying FEITIAN’s passwordless and post-quantum sign-in.',
       primary: ['React', 'Python'],
-      quiet: {
-        label: 'demo.ftsafe.com',
-        href: 'https://demo.ftsafe.com',
-      },
       sections: [
         {
           label: 'What it is',
@@ -298,7 +286,7 @@ export const en: Copy = {
       status: 'Live at demo.ftsafe.com. The source belongs to FEITIAN and is not public.',
       links: [
         {
-          label: 'Live site',
+          label: 'demo.ftsafe.com',
           href: 'https://demo.ftsafe.com',
         },
       ],
@@ -310,10 +298,6 @@ export const en: Copy = {
       summary:
         'A CTAP2 security key in software. Linux presents it as a USB device, so browsers can test post-quantum credentials without hardware.',
       primary: ['Rust', 'Linux'],
-      quiet: {
-        label: 'Repository',
-        href: 'https://github.com/feitiantech/fidosoftwareauthenticator',
-      },
       sections: [
         {
           label: 'What it is',
@@ -347,10 +331,6 @@ export const en: Copy = {
       summary:
         'A statically generated portfolio in English and Japanese, built on one small design system shared with my resume and cover letter.',
       primary: ['Next.js', 'TypeScript'],
-      quiet: {
-        label: 'rainzhang.me',
-        href: 'https://rainzhang.me',
-      },
       sections: [
         {
           label: 'What it is',
@@ -379,7 +359,7 @@ export const en: Copy = {
         'Live at rainzhang.me. Unit tests in Vitest and an end-to-end suite in Playwright across Chromium, Firefox, Safari and mobile run in CI.',
       links: [
         {
-          label: 'Live site',
+          label: 'rainzhang.me',
           href: 'https://rainzhang.me',
         },
         {
@@ -395,10 +375,6 @@ export const en: Copy = {
       summary:
         'A course project with three classmates: a trip planner that picks a destination from your passport and visas, then fills in hotels, restaurants and an itinerary.',
       primary: ['React', 'Tailwind CSS'],
-      quiet: {
-        label: 'Live site',
-        href: 'https://travel-advisor-project.vercel.app',
-      },
       sections: [
         {
           label: 'What it is',
@@ -432,7 +408,7 @@ export const en: Copy = {
       status: 'Finished in April 2025 and still live.',
       links: [
         {
-          label: 'Live site',
+          label: 'travel-advisor-project.vercel.app',
           href: 'https://travel-advisor-project.vercel.app',
         },
         {

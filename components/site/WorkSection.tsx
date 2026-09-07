@@ -43,11 +43,13 @@ function ProjectRow({
               <TechTag key={name} name={name} />
             ))}
           </div>
-          <span className="text-caption">
-            <TextLink href={project.quiet.href} tone="ink" external>
-              {project.quiet.label}
-            </TextLink>
-          </span>
+          {project.links.map((link) => (
+            <span key={link.href} className="text-caption">
+              <TextLink href={link.href} tone="ink" external>
+                {link.label}
+              </TextLink>
+            </span>
+          ))}
         </>
       }
     >
@@ -79,14 +81,6 @@ function ProjectRow({
       <PanelBlock label={copy.labels.status}>
         <p className="m-0 max-w-[62ch] text-body-15 text-ink-2">{project.status}</p>
       </PanelBlock>
-
-      <div className="flex flex-wrap gap-x-5 gap-y-2 text-body-15">
-        {project.links.map((link) => (
-          <TextLink key={link.href} href={link.href} external>
-            {link.label}
-          </TextLink>
-        ))}
-      </div>
     </DisclosureRow>
   );
 }

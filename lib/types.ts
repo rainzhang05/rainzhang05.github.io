@@ -47,12 +47,11 @@ export interface Project {
   summary: string;
   /** One to three marks shown while the row is collapsed. */
   primary: TechName[];
-  /** The quiet link at the end of the collapsed row. */
-  quiet: { label: string; href: string };
   sections: ProjectSection[];
   image?: ProjectImage;
   stack: TechName[];
   status: string;
+  /** Live site and repository, at the end of the collapsed row. */
   links: { label: string; href: string }[];
 }
 

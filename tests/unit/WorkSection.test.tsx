@@ -41,7 +41,7 @@ describe('WorkSection', () => {
     expect(screen.getByRole('heading', { level: 4, name: other.title })).toBeInTheDocument();
   });
 
-  it('shows the primary marks and the quiet link while collapsed', () => {
+  it('shows the primary marks and every project link while collapsed', () => {
     setup();
     const project = en.featured[0];
     const row = document.getElementById(`row-${project.id}`)!;
@@ -53,10 +53,22 @@ describe('WorkSection', () => {
     project.primary.forEach((name) => {
       expect(within(collapsed).getAllByText(name).length).toBeGreaterThan(0);
     });
-    expect(within(row).getByRole('link', { name: new RegExp(project.quiet.label) })).toHaveAttribute(
-      'href',
-      project.quiet.href
-    );
+    project.links.forEach((link) => {
+      expect(within(row).getByRole('link', { name: new RegExp(link.label) })).toHaveAttribute(
+        'href',
+        link.href
+      );
+    });
+  });
+
+  it('leaves no links in the panel — they all sit on the collapsed row', () => {
+    setup();
+    const project = en.featured.find((p) => p.links.length > 1)!;
+
+    expect(document.querySelectorAll(`#panel-${project.id} a`)).toHaveLength(0);
+    expect(
+      document.getElementById(`row-${project.id}`)!.querySelectorAll('a[target="_blank"]')
+    ).toHaveLength(project.links.length);
   });
 
   it('reports which row was clicked', async () => {
@@ -69,7 +81,7 @@ describe('WorkSection', () => {
     expect(onToggle).toHaveBeenCalledWith(project.id);
   });
 
-  it('fills an open panel with the write-up, stack, status and links', () => {
+  it('fills an open panel with the write-up, stack and status', () => {
     const project = en.featured[0];
     setup(project.id);
     const panel = document.getElementById(`panel-${project.id}`)!;
@@ -80,12 +92,6 @@ describe('WorkSection', () => {
     });
     expect(within(panel).getByText(en.labels.stack)).toBeInTheDocument();
     expect(within(panel).getByText(project.status)).toBeInTheDocument();
-    project.links.forEach((link) => {
-      expect(within(panel).getByRole('link', { name: new RegExp(link.label) })).toHaveAttribute(
-        'href',
-        link.href
-      );
-    });
   });
 
   it('shows a project screenshot with real alt text when there is one', () => {

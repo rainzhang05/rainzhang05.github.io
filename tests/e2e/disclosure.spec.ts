@@ -34,11 +34,11 @@ test.describe("disclosure rows", () => {
   test("keeps closed panels out of the tab order", async ({ page }) => {
     await page.goto("/");
 
-    const link = page.locator("#panel-work-webauthn a").first();
-    await expect(link).toBeHidden();
+    const related = page.locator("#panel-exp-feitian button").first();
+    await expect(related).toBeHidden();
 
-    await page.locator("#button-work-webauthn").click();
-    await expect(link).toBeVisible();
+    await page.locator("#button-exp-feitian").click();
+    await expect(related).toBeVisible();
   });
 
   test("opens a related project from an experience and brings it into view", async ({ page }) => {

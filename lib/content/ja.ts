@@ -167,10 +167,6 @@ export const ja: Copy = {
       summary:
         '不動産管理会社の3つの画面を、1つの Next.js アプリケーションで提供しています。公開ウェブサイト、居住者向けのオーナーポータル、社内向けの管理コンソールです。',
       primary: ['Next.js', 'TypeScript', 'React'],
-      quiet: {
-        label: 'mntrealty.vercel.app',
-        href: 'https://mntrealty.vercel.app',
-      },
       sections: [
         {
           label: '概要',
@@ -206,7 +202,7 @@ export const ja: Copy = {
         '公開ウェブサイト・オーナーポータル・管理コンソールはいずれも構築・デプロイ済みで、次はクラウドのデータ層とバックエンドのワークフローです。ソースコードは MNT Realty に帰属し、公開していません。',
       links: [
         {
-          label: '公開サイト',
+          label: 'mntrealty.vercel.app',
           href: 'https://mntrealty.vercel.app',
         },
       ],
@@ -218,10 +214,6 @@ export const ja: Copy = {
       summary:
         'FIDO2/WebAuthn の動作を試すための公開ツール。耐量子計算機暗号 ML-DSA の資格情報にも対応しています。',
       primary: ['Python', 'Flask', 'JavaScript'],
-      quiet: {
-        label: 'webauthnlab.tech',
-        href: 'https://webauthnlab.tech',
-      },
       sections: [
         {
           label: '概要',
@@ -259,12 +251,12 @@ export const ja: Copy = {
         'webauthnlab.tech で公開中。FeitianTech のもとで保守しています。サーバー側の約120のテストファイルに加え、フロントエンドと PQC のテストが CI で動きます。',
       links: [
         {
-          label: 'リポジトリ',
-          href: 'https://github.com/feitiantech/postquantum-webauthn-platform',
+          label: 'webauthnlab.tech',
+          href: 'https://webauthnlab.tech',
         },
         {
-          label: '公開サイト',
-          href: 'https://webauthnlab.tech',
+          label: 'リポジトリ',
+          href: 'https://github.com/feitiantech/postquantum-webauthn-platform',
         },
       ],
     },
@@ -274,10 +266,6 @@ export const ja: Copy = {
       title: '認証デモプラットフォーム',
       summary: '飛天ジャパンのパスワードレス認証と耐量子計算機暗号を試せる、顧客向けのサイトです。',
       primary: ['React', 'Python'],
-      quiet: {
-        label: 'demo.ftsafe.com',
-        href: 'https://demo.ftsafe.com',
-      },
       sections: [
         {
           label: '概要',
@@ -298,7 +286,7 @@ export const ja: Copy = {
       status: 'demo.ftsafe.com で公開中。ソースコードは飛天ジャパンのもので、公開されていません。',
       links: [
         {
-          label: '公開サイト',
+          label: 'demo.ftsafe.com',
           href: 'https://demo.ftsafe.com',
         },
       ],
@@ -310,10 +298,6 @@ export const ja: Copy = {
       summary:
         'ソフトウェアで動く CTAP2 セキュリティキー。Linux が USB 機器として見せるため、ハードウェアなしで耐量子計算機暗号の資格情報を試せます。',
       primary: ['Rust', 'Linux'],
-      quiet: {
-        label: 'リポジトリ',
-        href: 'https://github.com/feitiantech/fidosoftwareauthenticator',
-      },
       sections: [
         {
           label: '概要',
@@ -347,10 +331,6 @@ export const ja: Copy = {
       summary:
         '英語と日本語の2言語で静的生成しているポートフォリオ。履歴書やカバーレターと共通の、小さなデザインシステムの上に作っています。',
       primary: ['Next.js', 'TypeScript'],
-      quiet: {
-        label: 'rainzhang.me',
-        href: 'https://rainzhang.me',
-      },
       sections: [
         {
           label: '概要',
@@ -379,7 +359,7 @@ export const ja: Copy = {
         'rainzhang.me で公開中。Vitest のユニットテストと、Chromium・Firefox・Safari・モバイルを横断する Playwright の E2E テストを CI で実行しています。',
       links: [
         {
-          label: '公開サイト',
+          label: 'rainzhang.me',
           href: 'https://rainzhang.me',
         },
         {
@@ -395,10 +375,6 @@ export const ja: Copy = {
       summary:
         '同級生3人との授業課題。パスポートとビザから行き先を選び、ホテル・レストラン・日程まで組み立てる旅行プランナーです。',
       primary: ['React', 'Tailwind CSS'],
-      quiet: {
-        label: '公開サイト',
-        href: 'https://travel-advisor-project.vercel.app',
-      },
       sections: [
         {
           label: '概要',
@@ -432,7 +408,7 @@ export const ja: Copy = {
       status: '2025年4月に完成し、現在も公開されています。',
       links: [
         {
-          label: '公開サイト',
+          label: 'travel-advisor-project.vercel.app',
           href: 'https://travel-advisor-project.vercel.app',
         },
         {
