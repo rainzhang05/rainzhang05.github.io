@@ -57,7 +57,10 @@ export function ResumePage({
         <header className="enter enter-1 flex flex-wrap items-end justify-between gap-x-8 gap-y-4 border-b border-rule pb-6">
           <div className="min-w-0 flex-1 basis-[420px]">
             <h1 className="m-0 text-display-2 font-normal">{site.name}</h1>
-            <p className="mt-1.5 text-body-lg text-ink-2">{resume.tagline}</p>
+            {/* break-keep so the Japanese tagline wraps at its middle dots
+                rather than through a name, the way its PDF sets it. It does
+                nothing to English, which has spaces to break at. */}
+            <p className="mt-1.5 break-keep text-body-lg text-ink-2">{resume.tagline}</p>
           </div>
 
           <div className="grid flex-none gap-0.5 text-caption text-ink-2 sm:justify-items-end sm:text-right">
