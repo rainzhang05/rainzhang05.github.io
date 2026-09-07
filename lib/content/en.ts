@@ -226,7 +226,7 @@ export const en: Copy = {
           text: 'Four tabs: simple sign-in, an advanced mode with an editable request, a codec for attestation objects and CBOR/CTAP structures, and a metadata explorer with root-certificate checks. The server is a modified copy of Yubico’s python-fido2 with ML-DSA-44, -65 and -87 added through liboqs. Each visitor gets an isolated session store, on local disk or Google Cloud Storage, cleaned up after 14 days of inactivity.',
         },
         {
-          label: 'What was hard',
+          label: 'Technical challenges',
           text: 'Teaching the library algorithms it did not know: new COSE identifiers, key handling and attestation checks, without breaking the classical paths. Keeping Cloud Run cold starts short with liboqs in the image, which led to lazy warm-up and a one-worker gunicorn build. Keeping the metadata current without a person in the loop: a daily GitHub Action re-verifies and commits the snapshot.',
         },
       ],
@@ -318,7 +318,7 @@ export const en: Copy = {
           text: 'An authenticator core implements CTAP2.1 on the Trussed framework with littlefs2 storage: credential management, PIN/UV protocols 1 and 2, and reset. A runner registers a virtual USB HID device through Linux uhid and speaks CTAPHID, so Chrome, Firefox and libfido2 see an ordinary key. It advertises ES256 and ML-DSA-44, -65 and -87, and ships a small command-line tool (attach, detach, status, reset, pin) that can run as a daemon.',
         },
         {
-          label: 'What was hard',
+          label: 'Technical challenges',
           text: 'Getting the HID transport and the CTAP state machine right enough that real browsers accept it. Fitting post-quantum keys into CTAP and COSE structures made for classical ones. The first version called liboqs over a C FFI; it later moved to the pure-Rust fips204 crate, with secret keys zeroised on drop.',
         },
       ],

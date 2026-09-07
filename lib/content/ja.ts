@@ -226,7 +226,7 @@ export const ja: Copy = {
           text: 'タブは4つです。簡易サインイン、リクエストを直接編集できる詳細モード、attestation オブジェクトや CBOR/CTAP 構造のコーデック、ルート証明書を検証するメタデータ検索です。サーバーは Yubico の python-fido2 に手を入れたもので、liboqs 経由で ML-DSA-44・-65・-87 を追加しています。訪問者ごとにセッション用の保存領域（ローカルディスクまたは Google Cloud Storage）を分け、14日間使われなければ削除します。',
         },
         {
-          label: '難しかったところ',
+          label: '技術的な課題',
           text: 'ライブラリが知らないアルゴリズムを、従来の経路を壊さずに教えること。新しい COSE 識別子、鍵の扱い、attestation の検証です。liboqs を同梱したまま Cloud Run のコールドスタートを短く保つために、起動時の準備を遅らせ、gunicorn を1ワーカー構成にしました。メタデータを人手なしで最新に保つため、日次の GitHub Action が再検証してコミットしています。',
         },
       ],
@@ -318,7 +318,7 @@ export const ja: Copy = {
           text: '認証器の中核は Trussed フレームワークと littlefs2 上に CTAP2.1 を実装しています。資格情報の管理、PIN/UV プロトコル1と2、リセットに対応します。ランナーが Linux の uhid で仮想 USB HID デバイスを登録し CTAPHID を話すため、Chrome・Firefox・libfido2 からは普通のキーとして見えます。ES256 と ML-DSA-44・-65・-87 を提示し、attach・detach・status・reset・pin を備えた小さなコマンドラインツール（常駐も可能）が付きます。',
         },
         {
-          label: '難しかったところ',
+          label: '技術的な課題',
           text: '実際のブラウザが受け入れる水準まで、HID 転送と CTAP のステートマシンを正しくすること。従来の暗号のために作られた CTAP と COSE の構造に、耐量子計算機暗号の鍵を収めること。最初の版は C の FFI 経由で liboqs を呼んでいましたが、のちに純 Rust の fips204 に移し、秘密鍵は破棄時に消去しています。',
         },
       ],
