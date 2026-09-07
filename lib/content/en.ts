@@ -448,7 +448,7 @@ export const en: Copy = {
     },
   ],
   contact: {
-    lead: 'If you’re hiring, or want to talk about any of this, write to me.',
+    lead: 'If you’re hiring, or want to talk about any of this, please write to me.',
     copy: 'Copy',
     copied: 'Email copied',
     channels: {
