@@ -180,6 +180,15 @@ export interface ResumeGroup {
   items: string;
 }
 
+/** The education block, in the three weights the document sets it in. */
+export interface ResumeEducation {
+  school: string;
+  /** The degree and the place, under the school name. */
+  lines: string[];
+  /** The quieter tail: dates, standing, honours. */
+  notes: string[];
+}
+
 export interface ResumeCopy {
   locale: string;
   meta: {
@@ -201,6 +210,5 @@ export interface ResumeCopy {
   experience: ResumeEntry[];
   projects: ResumeEntry[];
   skills: ResumeGroup[];
-  /** The education block, one line each, as the PDF sets them. */
-  education: string[];
+  education: ResumeEducation;
 }

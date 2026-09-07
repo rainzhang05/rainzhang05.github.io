@@ -138,12 +138,13 @@ export const resumeJa: ResumeCopy = {
       items: 'pytest, Vitest, Playwright, GitHub Actions での CI',
     },
   ],
-  education: [
-    'サイモンフレーザー大学',
-    'コンピュータサイエンス学士',
-    'バンクーバー、BC州、カナダ',
-    '2023年9月 – 2027年4月卒業見込み',
-    'CGPA 3.44 / 4.33',
-    '2024年秋学期と2025年夏学期に Dean’s Honour Roll',
-  ],
+  education: {
+    school: 'サイモンフレーザー大学',
+    lines: ['コンピュータサイエンス学士', 'バンクーバー、BC州、カナダ'],
+    notes: [
+      '2023年9月 – 2027年4月卒業見込み',
+      'CGPA 3.44 / 4.33',
+      '2024年秋学期と2025年夏学期に Dean’s Honour Roll',
+    ],
+  },
 };

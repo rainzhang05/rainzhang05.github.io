@@ -28,6 +28,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: ['var(--font-sans)'],
+        jp: ['var(--font-sans-jp)'],
         mono: ['var(--font-mono)'],
       },
       fontSize: {
@@ -79,6 +80,7 @@ const config: Config = {
         container: 'var(--container)',
         measure: 'var(--measure)',
         reading: 'var(--reading-col)',
+        resume: 'var(--resume-col)',
       },
       borderRadius: {
         sm: 'var(--radius-sm)',

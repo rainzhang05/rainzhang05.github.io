@@ -140,11 +140,12 @@ export const resumeEn: ResumeCopy = {
       items: 'pytest, Vitest, Playwright, CI on GitHub Actions',
     },
   ],
-  education: [
-    'Simon Fraser University',
-    'Bachelor of Science, Computer Science',
-    'Vancouver, BC, Canada',
-    'Sep 2023 – Apr 2027 · CGPA 3.44 / 4.33',
-    'Dean’s Honour Roll, Fall 2024 and Summer 2025',
-  ],
+  education: {
+    school: 'Simon Fraser University',
+    lines: ['Bachelor of Science, Computer Science', 'Vancouver, BC, Canada'],
+    notes: [
+      'Sep 2023 – Apr 2027 · CGPA 3.44 / 4.33',
+      'Dean’s Honour Roll, Fall 2024 and Summer 2025',
+    ],
+  },
 };

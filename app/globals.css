@@ -77,6 +77,13 @@
   --section-gap: 56px;
   --hero-pad: 96px;
 
+  /* The resume sheet. Its PDF is a 710px column split 485 / rule / 167; the
+     web type runs about 1.185x larger, so the geometry is scaled with it and
+     the line lengths stay the ones the document was set for. --resume-aside
+     is the skills and education track. */
+  --resume-col: 840px;
+  --resume-aside: 216px;
+
   /* Radius and shadow */
   --radius-sm: 4px;
   --radius-md: 8px;
@@ -652,6 +659,22 @@ html[data-locale='ja'] {
 @media print {
   body {
     background: #fff;
+  }
+
+  /* The resume is the one page someone prints on purpose. Give the paper the
+     document and nothing else: no site chrome, and one column, because a
+     sidebar that survives the page break lands in the wrong order. */
+  .resume-chrome {
+    display: none;
+  }
+
+  .resume-columns {
+    display: block;
+  }
+
+  .resume-aside {
+    border: 0;
+    padding-left: 0;
   }
 
   /* On paper there is nothing to expand, and a closed panel is the detail
