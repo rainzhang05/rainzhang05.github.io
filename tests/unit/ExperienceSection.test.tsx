@@ -46,9 +46,11 @@ describe('ExperienceSection', () => {
         const mark = screen.getByAltText(item.org);
         const { width, height } = item.mark!;
         expect(mark).toHaveAttribute('src', item.mark!.src);
-        // One cap height for every mark, whatever shape the source file is.
-        expect(mark).toHaveAttribute('height', '18');
-        expect(mark).toHaveAttribute('width', String(Math.round((width / height) * 18)));
+        // One cap height for every mark, whatever shape the source file is,
+        // give or take a declared optical scale.
+        const h = Math.round(18 * (item.mark!.scale ?? 1));
+        expect(mark).toHaveAttribute('height', String(h));
+        expect(mark).toHaveAttribute('width', String(Math.round((width / height) * h)));
       });
   });
 

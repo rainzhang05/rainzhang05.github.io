@@ -10,6 +10,11 @@ export interface CompanyMark {
   src: string;
   width: number;
   height: number;
+  /**
+   * Optical adjustment against the shared cap height, when matching the ink
+   * exactly does not make two marks weigh the same. 1 leaves it alone.
+   */
+  scale?: number;
 }
 
 export interface Experience {

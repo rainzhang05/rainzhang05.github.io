@@ -67,6 +67,7 @@ export const en: Copy = {
         src: '/logos/mnt-realty.svg',
         width: 28,
         height: 28,
+        scale: 1.12,
       },
       summary:
         'The only engineer at a property and strata management company. I build and run the internal systems the office works from, and connect them to the company’s Microsoft 365 accounts and data.',
