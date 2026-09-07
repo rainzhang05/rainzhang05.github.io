@@ -117,7 +117,10 @@ html[data-locale='ja'] {
   html {
     -webkit-text-size-adjust: 100%;
     scrollbar-gutter: stable;
-    scroll-padding-top: var(--gutter-mobile);
+    /* A jump from the nav lands on the section's own top edge. Any padding
+       here — or scroll-margin on the target — scrolls short of it and leaves
+       the tail of the previous section on screen. */
+    scroll-padding-top: 0;
   }
 
   @media (prefers-reduced-motion: no-preference) {

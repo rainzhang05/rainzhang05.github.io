@@ -93,7 +93,7 @@ function ProjectRow({
 
 export function WorkSection({ copy, openId, onToggle }: Props) {
   return (
-    <section id="work" className="scroll-mt-6 pt-section">
+    <section id="work" className="pt-section">
       <SectionHeading>{copy.sections.work}</SectionHeading>
       <ul className="m-0 list-none p-0">
         {copy.featured.map((project) => (

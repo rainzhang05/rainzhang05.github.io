@@ -5,7 +5,7 @@ import type { Copy } from '@/lib/types';
 /** Education and skills in one block, in the same label-column rhythm. */
 export function BackgroundSection({ copy }: { copy: Copy }) {
   return (
-    <section id="background" className="scroll-mt-6 pt-section">
+    <section id="background" className="pt-section">
       <SectionHeading>{copy.sections.background}</SectionHeading>
 
       <div className="flex flex-wrap items-start gap-x-8 gap-y-2 border-b border-rule py-5">

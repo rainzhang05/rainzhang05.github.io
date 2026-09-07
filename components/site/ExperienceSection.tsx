@@ -18,7 +18,7 @@ export function ExperienceSection({ copy, openId, onToggle, onOpenProject }: Pro
     [...copy.featured, ...copy.other].find((p) => p.id === id)?.title ?? id;
 
   return (
-    <section id="experience" className="enter enter-6 scroll-mt-6 pt-section">
+    <section id="experience" className="enter enter-6 pt-section">
       <SectionHeading>{copy.sections.experience}</SectionHeading>
       <ul className="m-0 list-none p-0">
         {copy.experiences.map((item) => (
