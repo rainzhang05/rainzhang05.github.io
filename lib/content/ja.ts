@@ -345,27 +345,45 @@ export const ja: Copy = {
     {
       id: 'work-site',
       dates: '2025年2月 – 現在',
-      title: 'このウェブサイト',
+      title: 'Personal Portfolio Website（個人ポートフォリオサイト）',
       summary:
-        'Next.js と TypeScript。履歴書やカバーレターと共通の、小さなデザインシステムの上に作っています。',
+        '英語と日本語の2言語で静的生成しているポートフォリオ。履歴書やカバーレターと共通の、小さなデザインシステムの上に作っています。',
       primary: ['Next.js', 'TypeScript'],
       quiet: {
-        label: 'リポジトリ',
-        href: 'https://github.com/rainzhang05/rainzhang05.github.io',
+        label: 'rainzhang.me',
+        href: 'https://rainzhang.me',
       },
       sections: [
         {
           label: '概要',
-          text: '2026年に、先に作ったデザインシステムをもとに作り直したポートフォリオです。書体は1つ、生成りの紙色、アクセント色は1色、枠線と影は使いません。履歴書とカバーレターも同じシステムなので、採用担当者が目にするものすべてが同じ手ざわりになります。',
+          text: 'rainzhang.me で公開しているポートフォリオです。1ページを2言語で、専用のデザインシステムの上に作っています。書体は1つ、生成りの紙色、アクセント色は1色、枠線と影は使いません。履歴書とカバーレターも同じシステムなので、採用担当者が目にするものすべてが同じ手ざわりになります。',
         },
         {
           label: '仕組み',
-          text: 'Next.js App Router の静的生成、デザインシステムのトークンを読む Tailwind、自前で配信する Albert Sans、英語と日本語のルート。表示前にすべてがページに揃っていて、最初の画面だけが CSS で一度そっと立ち上がります。スクリプトを待つ要素はありません。',
+          text: 'Next.js App Router が、型付けした1つのコンテンツモデルから両言語をビルド時に静的生成します。/en と /ja は構造が完全に同じで、異なるのは文章だけです。Tailwind は生の値ではなくデザインシステムのトークンを読み、Albert Sans は next/font で自前配信し、ミドルウェアが日本からの初回訪問者を日本語ルートへ送ります（本人が選び直した場合を除きます）。',
+        },
+        {
+          label: '主な機能',
+          text: '経歴と制作物の行はその場で開き、言語スイッチのピルは英語と日本語のあいだを滑り、最初の画面は CSS だけで立ち上がります。問い合わせフォームは honeypot とタイムアウトを備えて Formspree に送信し、メールアドレスはワンクリックでコピーできます。すべて JavaScript なしで描画され、動きはすべて prefers-reduced-motion に従います。',
         },
       ],
-      stack: ['Next.js', 'TypeScript', 'React', 'Tailwind CSS', 'Vercel', 'GitHub Actions'],
-      status: 'rainzhang.me で公開中。',
+      stack: [
+        'Next.js',
+        'TypeScript',
+        'React',
+        'Tailwind CSS',
+        'Playwright',
+        'Vitest',
+        'Vercel',
+        'GitHub Actions',
+      ],
+      status:
+        'rainzhang.me で公開中。Vitest のユニットテストと、Chromium・Firefox・Safari・モバイルを横断する Playwright の E2E テストを CI で実行しています。',
       links: [
+        {
+          label: '公開サイト',
+          href: 'https://rainzhang.me',
+        },
         {
           label: 'リポジトリ',
           href: 'https://github.com/rainzhang05/rainzhang05.github.io',

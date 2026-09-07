@@ -345,27 +345,45 @@ export const en: Copy = {
     {
       id: 'work-site',
       dates: 'Feb 2025 – present',
-      title: 'This Website',
+      title: 'Personal Portfolio Website',
       summary:
-        'Next.js and TypeScript, built on one small design system shared with my resume and cover letter.',
+        'A statically generated portfolio in English and Japanese, built on one small design system shared with my resume and cover letter.',
       primary: ['Next.js', 'TypeScript'],
       quiet: {
-        label: 'Repository',
-        href: 'https://github.com/rainzhang05/rainzhang05.github.io',
+        label: 'rainzhang.me',
+        href: 'https://rainzhang.me',
       },
       sections: [
         {
           label: 'What it is',
-          text: 'My portfolio, rebuilt in 2026 around a design system I made first: one typeface, ivory paper, one accent, no borders or shadows. The resume and cover letter use the same system, so everything a recruiter sees from me comes from one hand.',
+          text: 'My portfolio, at rainzhang.me. One scrolling page in two languages, on its own design system: one typeface, ivory paper, one accent, no borders or shadows. The resume and cover letter use the same system, so everything a recruiter sees from me comes from one hand.',
         },
         {
           label: 'How it works',
-          text: 'Next.js App Router with static generation, Tailwind reading the system’s tokens, self-hosted Albert Sans, English and Japanese routes. Everything is in the page before it renders; the first screen settles in once, in CSS, and nothing waits on a script.',
+          text: 'Next.js App Router prerenders both languages at build time from one typed content model, so /en and /ja stay structurally identical and only the prose differs. Tailwind reads the design system’s tokens rather than raw values, Albert Sans is self-hosted through next/font, and middleware sends a first-time visitor in Japan to the Japanese route unless they have chosen otherwise.',
+        },
+        {
+          label: 'Features',
+          text: 'Experience and project rows expand in place, a language switch whose pill slides between English and Japanese, a first-screen entrance in pure CSS, a contact form that posts to Formspree behind a honeypot and a request timeout, and a copy-to-clipboard email. Everything renders without JavaScript and every duration honours prefers-reduced-motion.',
         },
       ],
-      stack: ['Next.js', 'TypeScript', 'React', 'Tailwind CSS', 'Vercel', 'GitHub Actions'],
-      status: 'Live at rainzhang.me.',
+      stack: [
+        'Next.js',
+        'TypeScript',
+        'React',
+        'Tailwind CSS',
+        'Playwright',
+        'Vitest',
+        'Vercel',
+        'GitHub Actions',
+      ],
+      status:
+        'Live at rainzhang.me. Unit tests in Vitest and an end-to-end suite in Playwright across Chromium, Firefox, Safari and mobile run in CI.',
       links: [
+        {
+          label: 'Live site',
+          href: 'https://rainzhang.me',
+        },
         {
           label: 'Repository',
           href: 'https://github.com/rainzhang05/rainzhang05.github.io',
