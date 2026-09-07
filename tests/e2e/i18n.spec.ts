@@ -59,7 +59,7 @@ test.describe("languages", () => {
   test("translates the interface, not just the prose", async ({ page }) => {
     await page.goto("/ja");
 
-    const untranslated = ["Experience", "Selected work", "Background", "Contact", "Download resume"];
+    const untranslated = ["Experience", "Selected Work", "Background", "Contact", "Download Resume"];
     const body = (await page.locator("main").innerText()).toLowerCase();
 
     for (const phrase of untranslated) {

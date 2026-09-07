@@ -38,13 +38,13 @@ export const en: Copy = {
     eyebrow: 'Computer science · Simon Fraser University · Vancouver, BC, Canada',
     heading: 'I build and maintain web systems, from design through to production.',
     body: 'I’m Rain, a third-year computer science student at SFU. In the past year I’ve built and run production systems for a security-key company and a property management firm, mostly in Python, TypeScript and Rust.',
-    resume: 'Download resume',
+    resume: 'Download Resume',
     copyEmail: 'Copy email',
   },
   sections: {
     experience: 'Experience',
-    work: 'Selected work',
-    otherWork: 'Other work',
+    work: 'Selected Work',
+    otherWork: 'Other Work',
     background: 'Background',
     contact: 'Contact',
   },
@@ -419,7 +419,7 @@ export const en: Copy = {
   education: {
     dates: 'Sep 2023 – Apr 2027',
     school: 'Simon Fraser University',
-    meta: 'BSc, Computer Science · Vancouver, BC, Canada · graduating April 2027',
+    meta: 'BSc, Computer Science · Vancouver, BC, Canada · Graduating April 2027',
     detail: 'CGPA 3.44 / 4.33. Dean’s Honour Roll in Fall 2024 and Summer 2025.',
   },
   skills: [
