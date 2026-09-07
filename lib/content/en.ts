@@ -185,6 +185,12 @@ export const en: Copy = {
           text: 'Getting the access model right in one place rather than in every guard: navigation, page guards and the file route all read the same table, and a section outside a viewer’s role is not-found rather than forbidden, so the portal never tells a tenant what an owner can see. Making a strata a real boundary, so nothing about one is reachable while another is open. And keeping MNT’s own business facts — company details, the strata-document fee schedule, the amenity slot template — as versioned data an administrator edits under Settings, rather than literals in the source, with every saved version restorable.',
         },
       ],
+      image: {
+        src: '/projects/mnt-platform.png',
+        alt: 'The MNT Realty home page, with the service line and the proposal and owner-portal entry points',
+        width: 1600,
+        height: 800,
+      },
       stack: [
         'Next.js',
         'React',
