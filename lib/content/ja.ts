@@ -327,7 +327,7 @@ export const ja: Copy = {
     {
       id: 'work-site',
       dates: '2025年2月 – 現在',
-      title: 'Personal Portfolio Website（個人ポートフォリオサイト）',
+      title: '個人ポートフォリオサイト',
       summary:
         '英語と日本語の2言語で静的生成しているポートフォリオ。履歴書やカバーレターと共通の、小さなデザインシステムの上に作っています。',
       primary: ['Next.js', 'TypeScript'],
