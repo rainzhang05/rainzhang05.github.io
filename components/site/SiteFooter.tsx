@@ -52,7 +52,6 @@ export function SiteFooter({ copy }: { copy: Copy }) {
                 rel={link.external ? 'noreferrer' : undefined}
                 className={linkClass}
               >
-                {link.id === 'email' ? <Icon name="mail" size={14} /> : null}
                 {link.id === 'resume' ? <Icon name="file-text" size={14} /> : null}
                 {link.label}
                 {link.external && link.id !== 'resume' ? (

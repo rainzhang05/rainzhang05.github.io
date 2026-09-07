@@ -510,11 +510,6 @@ export const en: Copy = {
         external: true,
       },
       {
-        id: 'email',
-        label: 'rainzhang.zty@gmail.com',
-        href: 'mailto:rainzhang.zty@gmail.com',
-      },
-      {
         id: 'resume',
         label: 'Resume (PDF)',
         href: '/rain-zhang-resume.pdf',
