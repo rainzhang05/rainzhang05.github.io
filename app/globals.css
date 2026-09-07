@@ -123,6 +123,9 @@ html[data-locale='ja'] {
 @layer base {
   html {
     -webkit-text-size-adjust: 100%;
+    /* One theme, and it is light. Without this a dark-mode browser paints the
+       form controls, caret, autofill and scrollbars dark against the ivory. */
+    color-scheme: light;
     scrollbar-gutter: stable;
     /* A jump from the nav lands on the section's own top edge. Any padding
        here — or scroll-margin on the target — scrolls short of it and leaves
@@ -168,6 +171,23 @@ html[data-locale='ja'] {
   :focus-visible {
     outline: var(--focus-ring-width) solid var(--sage);
     outline-offset: var(--focus-ring-offset);
+  }
+
+  /* The skip link moves focus to <main tabindex="-1">. That is a landing
+     place, not a control, so it must not draw a ring around the whole page. */
+  main:focus {
+    outline: none;
+  }
+
+  /* iOS Safari zooms into any control under 16px on focus and never zooms back
+     out. Phones get the body size; the 15px control text stays on desktop.
+     639.98px is the complement of Tailwind's sm breakpoint. */
+  @media (max-width: 639.98px) {
+    input,
+    textarea,
+    select {
+      font-size: var(--text-body);
+    }
   }
 
   code,
@@ -253,6 +273,9 @@ html[data-locale='ja'] {
     -webkit-user-select: none;
     user-select: none;
     -webkit-user-drag: none;
+    /* iOS paints a grey flash over anything tappable; these are already
+       styled for their own pressed and hover states. */
+    -webkit-tap-highlight-color: transparent;
   }
 }
 
@@ -313,6 +336,14 @@ html[data-locale='ja'] {
 @media print {
   body {
     background: #fff;
+  }
+
+  /* On paper there is nothing to expand, and a closed panel is the detail
+     someone printed the page for. */
+  .disclosure-panel {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    visibility: visible;
   }
 }
 
