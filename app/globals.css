@@ -162,6 +162,11 @@
   --dock-step: 90ms;
   --duration-dock-all: 600ms;
 
+  /* How long the boot sheet stays blank before it explains itself. Under this
+     and the reader never sees a wordmark at all, which is the point: most
+     boots are over well inside it. */
+  --boot-reveal: 450ms;
+
   /* Focus */
   --focus-ring-width: 2px;
   --focus-ring-offset: 2px;
@@ -728,13 +733,16 @@ html[data-boot='leaving'] #boot {
   pointer-events: none;
 }
 
-/* A beat before the mark appears, so a boot that takes no time at all is a
-   blank sheet of the same paper rather than a wordmark flashing on and off. */
+/* The mark waits out --boot-reveal before it fades in, so a boot that takes no
+   time at all is a blank sheet of the same paper and never a wordmark blinking
+   on and off. Nothing is behind it — the first screen is held at opacity 0
+   until the sheet has gone (see the foot of this file) — so an empty sheet
+   looks exactly like the page about to arrive on it. */
 .boot-inner {
   display: grid;
   justify-items: center;
   gap: 18px;
-  animation: enter-fade var(--duration-base) var(--ease-out) 180ms both;
+  animation: enter-fade var(--duration-base) var(--ease-out) var(--boot-reveal) both;
 }
 
 .boot-mark {
@@ -763,9 +771,14 @@ html[data-boot='leaving'] #boot {
   transition: transform var(--duration-base) var(--ease-out);
 }
 
+/* The reduced-motion block at the foot of this file forces every delay to
+   0.01ms, so --boot-reveal cannot hold the mark back there and it would blink
+   on and off on a fast boot. A reader who asked for less motion gets a plain
+   sheet instead; theirs is capped at 800ms in lib/boot.ts, so there is not
+   long to explain. */
 @media (prefers-reduced-motion: reduce) {
   .boot-inner {
-    animation: none;
+    display: none;
   }
 }
 
@@ -793,14 +806,37 @@ html[data-boot='leaving'] #boot {
    animation instead means restoring it starts a fresh one, which is what the
    entrance wants anyway.
 
+   But withdrawing it alone leaves the element at its *natural* state, which is
+   the finished one. The sheet then fades out over paper-coloured nothing to
+   reveal a page that is already fully drawn, and the instant the animation is
+   restored that page blinks out and arrives a second time. So the held state
+   has to be the keyframe's own `from`, matched by hand: opacity, and for
+   `.enter` the 10px it rises through. Restoring the animation is then seamless
+   — `animation-fill-mode: both` puts it on that exact state for the length of
+   its delay, so nothing moves at the handover.
+
+   The hold is released at `leaving` rather than at `done`, so the first screen
+   arrives *through* the sheet's last 220ms instead of waiting for it. Holding
+   to the end left a third of a second in which the sheet had already faded to
+   nothing, over content that was not there yet — paper on paper, and a longer
+   dead beat than the fade it was waiting for. Overlapping costs nothing to
+   look at: the sheet is `--paper` on a `--paper` page, so the only thing it
+   dims during the overlap is text that is itself still fading up.
+
    Note what is *not* here: any rule for the done state. The declaration on
    .enter is untouched there, so the replay when a locale change swaps the tree
    still happens, and the other language settles in rather than snapping in.
    Adding `animation: none` to the done state would silently take that with
    it. */
-html[data-boot='pending'] .enter,
-html[data-boot='pending'] .enter-fade,
-html[data-boot='leaving'] .enter,
-html[data-boot='leaving'] .enter-fade {
+html[data-boot='pending'] .enter {
   animation: none;
+  opacity: 0;
+  transform: translate3d(0, 10px, 0);
+}
+
+/* Opacity only, for the same reason .enter-fade exists: a transform here would
+   become the containing block for the header's fixed menu sheet. */
+html[data-boot='pending'] .enter-fade {
+  animation: none;
+  opacity: 0;
 }
