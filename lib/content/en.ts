@@ -79,17 +79,17 @@ export const en: Copy = {
         {
           label: 'Work',
           items: [
-            'Designed and built MNT Control Center, an internal platform that brings the company’s scattered tools into one place.',
+            'Designed and built MNT Control Center, an internal platform that replaces the separate tools the office used before.',
             'Set up organisation sign-in and role-based access with Microsoft Entra ID, the Graph API and OAuth 2.0.',
             'Built the internal web applications behind it in Next.js, Node.js and PostgreSQL.',
-            'Automated recurring office work: sorting incoming email, looking up owner information, and answering staff questions from company documents through an internal assistant.',
+            'Automated recurring office work: sorting incoming email, looking up owner records, and an internal assistant that answers staff questions from company documents.',
           ],
         },
         {
           label: 'Operations',
           items: [
-            'Look after hosting, deployment, domains and DNS, and the release workflow on Vercel and GitHub Actions.',
-            'Test, maintain and document everything myself, so the systems can be handed over one day.',
+            'Run hosting, deployment, domains and DNS, and the release workflow on Vercel and GitHub Actions.',
+            'Write the tests and the documentation myself, so the systems can be handed over later.',
           ],
         },
       ],
@@ -128,7 +128,7 @@ export const en: Copy = {
         {
           label: 'Work',
           items: [
-            'Designed and built the company’s first WebAuthn/FIDO2 developer platform, replacing scattered third-party tools with one place to register, sign in, inspect and debug credentials.',
+            'Built the company’s first WebAuthn/FIDO2 developer platform: one place to register, sign in, inspect and debug credentials, in place of the third-party tools the team had been using.',
             'Wrote a CTAP2 authenticator in Rust that Linux presents as a virtual USB security key, so browsers and libfido2 could test ML-DSA credentials before hardware existed.',
             'Built a self-service demo site so customers could try passwordless sign-in and security keys without going through support.',
           ],
@@ -136,9 +136,9 @@ export const en: Copy = {
         {
           label: 'Delivery',
           items: [
-            'Deployed with Docker on Linux servers and Google Cloud Run; GitHub Actions for tests, builds and a daily FIDO metadata refresh.',
-            'Worked with FEITIAN’s hardware and security engineers so the tools matched real devices and the data they needed.',
-            'Kept maintaining all three after the internship ended.',
+            'Deployed with Docker on Linux servers and Google Cloud Run, with GitHub Actions running the tests, the builds and a daily FIDO metadata refresh.',
+            'Worked with FEITIAN’s hardware and security engineers so the tools matched the real devices and the data they returned.',
+            'The internship ended in December; I still maintain all three.',
           ],
         },
       ],
