@@ -3,7 +3,11 @@ import { techIcon, type TechName } from '@/lib/tech';
 /**
  * Pill with the technology's own mark, in its original colours.
  * Marks are small (12-14px) and several are SVG, so they stay plain <img>
- * with explicit dimensions — sized, lazy, and no layout shift.
+ * with explicit dimensions — sized, and no layout shift.
+ *
+ * They load eagerly rather than lazily. Each file is a few kilobytes and the
+ * whole set is under 80KB, so there is nothing to defer; more to the point the
+ * boot gate waits for them, and it can only wait for a request that exists.
  */
 export function TechTag({ name, size = 'sm' }: { name: TechName; size?: 'sm' | 'md' }) {
   const src = techIcon(name);
@@ -23,7 +27,7 @@ export function TechTag({ name, size = 'sm' }: { name: TechName; size?: 'sm' | '
           aria-hidden="true"
           width={px}
           height={px}
-          loading="lazy"
+          loading="eager"
           decoding="async"
           draggable={false}
           className="no-copy block object-contain"

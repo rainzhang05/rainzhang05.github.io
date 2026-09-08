@@ -68,6 +68,11 @@ function ProjectRow({
             alt={project.image.alt}
             fill
             sizes="(max-width: 900px) 100vw, 880px"
+            /* Eager, not lazy. The panel is always in the DOM but collapsed to
+               a zero-height track, which never intersects — so a lazy image
+               would not begin loading until the row was opened, and would then
+               draw in half under the reader. */
+            loading="eager"
             draggable={false}
             className="no-copy object-cover object-top"
           />

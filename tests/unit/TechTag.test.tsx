@@ -10,7 +10,7 @@ describe('TechTag', () => {
     expect(mark).toHaveAttribute('src', '/tech/rust.png');
     expect(mark).toHaveAttribute('width', '12');
     expect(mark).toHaveAttribute('height', '12');
-    expect(mark).toHaveAttribute('loading', 'lazy');
+    expect(mark).toHaveAttribute('loading', 'eager');
     expect(screen.getByText('Rust')).toBeInTheDocument();
   });
 
