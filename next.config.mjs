@@ -43,9 +43,9 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   images: {
-    // Only the portrait and the project screenshots go through next/image.
-    // Technology marks and company logos stay inline <img> with explicit
-    // sizes (14-28px, several are SVG), so SVG handling stays off here.
+    // Only the project screenshots go through next/image. Technology marks
+    // and company logos stay inline <img> with explicit sizes (12-18px,
+    // several are SVG), so SVG handling stays off here.
     formats: ['image/webp'],
   },
   async rewrites() {
