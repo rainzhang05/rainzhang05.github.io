@@ -177,7 +177,7 @@ export const en: Copy = {
         },
         {
           label: 'How it works',
-          text: 'Three surfaces, three subdomains, one build. A proxy routes on the host — admin.* to the console, owners.* to the portal — and turns those paths into a not-found page on the public host, so each keeps its own chrome and its own host-only session cookie. Public pages are prerendered; the console and the portal render per request. Every read and write goes through one named data-store contract, one operation per write and one read model per screen, so what staff enter reaches residents at once and the store behind it can be swapped for the drafted PostgreSQL schema without touching a screen.',
+          text: 'Three surfaces, three subdomains, one build. A proxy routes by subdomain: the admin subdomain to the console, the owners subdomain to the portal, and on the public site those same paths are a not-found page, so each keeps its own chrome and its own host-only session cookie. Public pages are prerendered; the console and the portal render per request. Every read and write goes through one named data-store contract, one operation per write and one read model per screen, so what staff enter reaches residents at once and the store behind it can be swapped for the drafted PostgreSQL schema without touching a screen.',
         },
         {
           label: 'Technical challenges',
