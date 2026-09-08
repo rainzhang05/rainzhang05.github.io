@@ -52,3 +52,34 @@ describe('panelSpeed', () => {
     globalThis.getComputedStyle = original;
   });
 });
+
+/**
+ * The point of a speed rather than a duration: every row moves at the same
+ * rate whatever it holds, and only the time taken differs.
+ */
+describe('one speed across every panel', () => {
+  const speed = 1400;
+  // Real content heights, measured in the browser: the two experience entries,
+  // the four selected-work panels, and the three other-work ones.
+  const heights = [606, 597, 1258, 1072, 786, 624, 624, 854];
+
+  it('gives every panel the same pixels per second', () => {
+    const rates = heights.map((h) => h / (panelDurationMs(h, speed) / 1000));
+
+    // Rounding the duration to whole milliseconds is the only thing that can
+    // separate them, and it is worth a tenth of a percent.
+    for (const rate of rates) expect(Math.abs(rate - speed) / speed).toBeLessThan(0.005);
+  });
+
+  it('lets the time taken follow the content, which is the whole idea', () => {
+    const shortest = panelDurationMs(Math.min(...heights), speed);
+    const tallest = panelDurationMs(Math.max(...heights), speed);
+
+    expect(shortest).toBeLessThan(tallest);
+    expect(tallest / shortest).toBeCloseTo(Math.max(...heights) / Math.min(...heights), 1);
+  });
+
+  it('keeps every one of them clear of the floor, so none is capped', () => {
+    for (const h of heights) expect(panelDurationMs(h, speed)).toBeGreaterThan(MIN_PANEL_MS);
+  });
+});
