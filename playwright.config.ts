@@ -12,10 +12,11 @@ export default defineConfig({
   reporter: process.env.CI ? 'list' : [['list'], ['html', { open: 'never' }]],
   use: { baseURL, trace: 'on-first-retry' },
   projects: [
-    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
-    { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
-    { name: 'safari', use: { ...devices['Desktop Safari'] } },
-    { name: 'mobile', use: { ...devices['iPhone 13'] } },
+    { name: 'images', testMatch: /images\.setup\.ts/, retries: 0 },
+    { name: 'chromium', use: { ...devices['Desktop Chrome'] }, dependencies: ['images'] },
+    { name: 'firefox', use: { ...devices['Desktop Firefox'] }, dependencies: ['images'] },
+    { name: 'safari', use: { ...devices['Desktop Safari'] }, dependencies: ['images'] },
+    { name: 'mobile', use: { ...devices['iPhone 13'] }, dependencies: ['images'] },
   ],
   webServer: {
     command: process.env.CI ? `npm run start -- -p ${PORT}` : `npm run dev -- -p ${PORT}`,
