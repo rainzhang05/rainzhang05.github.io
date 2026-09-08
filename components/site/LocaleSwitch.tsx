@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { localeCookie, localeHome, locales, type Locale } from '@/lib/site';
+import { localeHome, locales, rememberLocale, type Locale } from '@/lib/site';
 
 /**
  * Japanese names itself. "JA" is only legible to someone who already reads
@@ -26,8 +26,9 @@ function cameFrom(): Locale | null {
 /**
  * EN / 日本語 switch. Real links, so both routes are crawlable and next/link
  * prefetches the other language before it is clicked. Choosing a language
- * writes the cookie the middleware reads, so the geo redirect never
- * overrides a deliberate choice.
+ * writes the cookie the middleware reads, so neither the geo redirect nor the
+ * language of the last visit can override a deliberate choice — here or on
+ * the visit after it.
  *
  * On a page that exists in both languages the switch is handed that page's two
  * addresses, so choosing a language keeps the reader where they were.
@@ -64,7 +65,7 @@ export function LocaleSwitch({
   }, [current]);
 
   function remember(locale: Locale) {
-    document.cookie = localeCookie + '=' + locale + '; path=/; max-age=31536000; samesite=lax';
+    rememberLocale(locale);
     try {
       window.sessionStorage.setItem(CAME_FROM, current);
     } catch {

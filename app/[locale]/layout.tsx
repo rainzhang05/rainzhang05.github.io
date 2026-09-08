@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { notFound } from 'next/navigation';
 import { albert, albertExt } from '../fonts';
 import { BootGate } from '@/components/site/BootGate';
+import { LocaleMemory } from '@/components/site/LocaleMemory';
 import { EntranceRouter } from '@/lib/entrance';
 import { bootScript } from '@/lib/boot';
 import { content } from '@/lib/content';
@@ -119,6 +120,7 @@ export default async function LocaleLayout({
           </div>
         </div>
         <BootGate />
+        <LocaleMemory locale={locale} />
         <EntranceRouter />
         <script
           type="application/ld+json"
