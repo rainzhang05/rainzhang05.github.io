@@ -56,9 +56,17 @@ export function DisclosureRow({
 
   /**
    * The panel's own content height decides how long it takes to open, so a
-   * tall row and a short one travel at the same speed. Content is always in
-   * the DOM, so it can be measured while the row is shut; a ResizeObserver
-   * keeps the figure right through reflow and late-loading images.
+   * tall row and a short one travel at the same speed. A ResizeObserver keeps
+   * the figure right through reflow and late-loading images.
+   *
+   * `scrollHeight` and not `getBoundingClientRect()`: a shut row is a grid
+   * track at 0fr with its overflow hidden, and both the rect and offsetHeight
+   * of the content inside it read 0 there, while scrollHeight reports its real
+   * height in either state. The rect happens to be measured before the row
+   * collapses today, so this is not a bug being fixed — it is the difference
+   * between a figure that is right and one that is right by timing. Measure
+   * zero and panelDurationMs floors at MIN_PANEL_MS, which for the tallest
+   * panel here would be more than twice the shared speed.
    */
   const contentRef = useRef<HTMLDivElement>(null);
   const [durationMs, setDurationMs] = useState<number | null>(null);
@@ -70,7 +78,7 @@ export function DisclosureRow({
     const measure = () => {
       const speed = panelSpeed(el);
       if (speed === null) return;
-      const next = panelDurationMs(el.getBoundingClientRect().height, speed);
+      const next = panelDurationMs(el.scrollHeight, speed);
       setDurationMs((current) => (current === next ? current : next));
     };
 
