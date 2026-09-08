@@ -25,6 +25,39 @@ test.describe("boot gate", () => {
     expect(pending).toEqual([]);
   });
 
+  test("brings the first screen in once, without a flash", async ({ page }) => {
+    // The bug this pins: holding the entrance with `animation: none` alone
+    // leaves the heading at its *finished* state under the sheet, so the sheet
+    // faded away over a page that was already drawn and the heading then blinked
+    // out and arrived a second time. Sampled every frame, its opacity must only
+    // ever climb.
+    await page.addInitScript(() => {
+      (window as unknown as { __opacity: number[] }).__opacity = [];
+      const tick = () => {
+        const h1 = document.querySelector("h1");
+        if (h1) (window as unknown as { __opacity: number[] }).__opacity.push(+getComputedStyle(h1).opacity);
+        requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    });
+
+    await page.goto("/", { waitUntil: "commit" });
+    await expect(page.locator("html")).toHaveAttribute("data-boot", "done", { timeout: 10_000 });
+    // Past the end of the entrance, so the whole arrival is in the sample.
+    await page.waitForTimeout(1200);
+
+    const samples = await page.evaluate(
+      () => (window as unknown as { __opacity: number[] }).__opacity
+    );
+    expect(samples.length).toBeGreaterThan(20);
+    expect(samples[samples.length - 1]).toBe(1);
+
+    const drops = samples
+      .map((v, i) => (i > 0 && v < samples[i - 1] - 0.001 ? `${samples[i - 1]} -> ${v}` : null))
+      .filter(Boolean);
+    expect(drops, "the first screen dimmed after it had begun arriving").toEqual([]);
+  });
+
   test("skips the sheet on a second load in the same session", async ({ page }) => {
     await page.goto("/");
     await expect(page.locator("html")).toHaveAttribute("data-boot", "done", { timeout: 10_000 });
