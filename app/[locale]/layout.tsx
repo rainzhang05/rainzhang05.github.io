@@ -72,6 +72,12 @@ export async function generateMetadata({
  * The root layout. Albert Sans is preloaded for both languages; the Japanese
  * route carries data-locale="ja", which swaps in the Japanese type stack
  * declared in globals.css.
+ *
+ * data-scroll-behavior tells the App Router that html has scroll-behavior:
+ * smooth, so it turns it off for the length of a route transition and a
+ * cross-route jump to a section lands rather than flying. Next 15 assumes it;
+ * Next 16 reads this attribute, and without it every "#work" from the resume
+ * page becomes a long smooth scroll down the whole document.
  */
 export default async function LocaleLayout({
   children,
@@ -83,7 +89,12 @@ export default async function LocaleLayout({
   const locale = assertLocale((await params).locale);
 
   return (
-    <html lang={locale} data-locale={locale} className={albert.variable + ' ' + albertExt.variable}>
+    <html
+      lang={locale}
+      data-locale={locale}
+      data-scroll-behavior="smooth"
+      className={albert.variable + ' ' + albertExt.variable}
+    >
       <body>
         <script
           type="application/ld+json"

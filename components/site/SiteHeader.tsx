@@ -9,12 +9,18 @@ import type { NavLink } from '@/lib/types';
 
 /**
  * Static header: never sticky, no background, no border. Under 640px the
- * links move into a full-page sheet. In-page navigation is plain anchors, so
- * it works before JavaScript loads and smooth scrolling comes from CSS; a link
- * to another route goes through next/link so that route is prefetched.
+ * links move into a full-page sheet. A link to another route goes through
+ * next/link so that route is prefetched.
  *
  * `homeHref` is what an in-page hash hangs off. It is empty on the home page,
  * where "#work" means this page, and the home page's address anywhere else.
+ * That emptiness is also what picks the element: on the home page a hash is a
+ * plain anchor, so it scrolls before JavaScript loads and the smooth scrolling
+ * comes from CSS. Anywhere else the same link crosses a route, and a plain
+ * anchor there is a full document load — which is what made coming back from
+ * the resume slow. Off the home page it goes through next/link instead, so the
+ * home page is prefetched while the resume is being read and the trip back is
+ * a transition.
  */
 export function SiteHeader({
   name,
@@ -43,11 +49,15 @@ export function SiteHeader({
     return () => document.removeEventListener('keydown', onKey);
   }, [open]);
 
-  const wordmark = (
-    <a
-      href={homeHref + '#top'}
-      className="no-copy text-body-14 font-medium tracking-[-0.005em] text-ink no-underline transition-colors duration-fast ease-out hover:text-ink-2 hover:no-underline"
-    >
+  const wordmarkClass =
+    'no-copy text-body-14 font-medium tracking-[-0.005em] text-ink no-underline transition-colors duration-fast ease-out hover:text-ink-2 hover:no-underline';
+
+  const wordmark = homeHref ? (
+    <Link href={homeHref + '#top'} className={wordmarkClass}>
+      {name}
+    </Link>
+  ) : (
+    <a href={homeHref + '#top'} className={wordmarkClass}>
       {name}
     </a>
   );
@@ -62,7 +72,11 @@ export function SiteHeader({
     };
 
     if (link.href.startsWith('#')) {
-      return <a key={link.id} href={homeHref + link.href} {...shared} />;
+      return homeHref ? (
+        <Link key={link.id} href={homeHref + link.href} {...shared} />
+      ) : (
+        <a key={link.id} href={homeHref + link.href} {...shared} />
+      );
     }
 
     if (link.external) {

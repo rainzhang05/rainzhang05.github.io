@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
 
 const SIZES = {
@@ -62,6 +63,12 @@ export function Button({
   );
 }
 
+/**
+ * `internal` sends the link through next/link, which prefetches the route and
+ * navigates without a document load — worth it for the hero's resume button,
+ * the one link on the site most likely to be the next thing pressed. A
+ * `download` cannot take that path: the router would try to render the PDF.
+ */
 export function ButtonLink({
   variant,
   size,
@@ -73,18 +80,33 @@ export function ButtonLink({
   href,
   external,
   download,
-}: CommonProps & { href: string; external?: boolean; download?: boolean }) {
+  internal,
+}: CommonProps & {
+  href: string;
+  external?: boolean;
+  download?: boolean;
+  internal?: boolean;
+}) {
+  const shared = {
+    className: classes({ variant, size, wrap, children, className }),
+    children: (
+      <>
+        {icon}
+        <span>{children}</span>
+        {iconRight}
+      </>
+    ),
+  };
+
+  if (internal) return <Link href={href} {...shared} />;
+
   return (
     <a
       href={href}
       download={download}
       target={external ? '_blank' : undefined}
       rel={external ? 'noreferrer' : undefined}
-      className={classes({ variant, size, wrap, children, className })}
-    >
-      {icon}
-      <span>{children}</span>
-      {iconRight}
-    </a>
+      {...shared}
+    />
   );
 }

@@ -9,7 +9,8 @@ export function Intro({
   onCopyEmail,
 }: {
   copy: Copy['intro'];
-  /** The resume page for this language. The PDF is downloaded from there. */
+  /** The resume page for this language. The PDF is downloaded from there.
+   * Prefetched from the first screen, so pressing it is a transition. */
   resumeHref: string;
   onCopyEmail: () => void;
 }) {
@@ -22,7 +23,7 @@ export function Intro({
         <h1 className="enter enter-2 mt-5 max-w-[21ch] text-hero font-normal">{copy.heading}</h1>
         <p className="enter enter-3 mt-6 max-w-[58ch] text-body-lg text-ink-2">{copy.body}</p>
         <div className="enter enter-5 mt-8 flex flex-wrap gap-3">
-          <ButtonLink href={resumeHref} icon={<Icon name="file-text" size={16} />}>
+          <ButtonLink href={resumeHref} internal icon={<Icon name="file-text" size={16} />}>
             {copy.resume}
           </ButtonLink>
           <Button variant="secondary" icon={<Icon name="copy" size={16} />} onClick={onCopyEmail}>
