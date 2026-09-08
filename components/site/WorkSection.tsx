@@ -55,9 +55,7 @@ function ProjectRow({
     >
       {project.sections.map((section, i) => (
         <PanelBlock key={section.label} label={section.label}>
-          <p className={'m-0 max-w-[62ch] text-body-15 ' + (i === 0 ? 'text-ink' : 'text-ink-2')}>
-            {section.text}
-          </p>
+          <p className="m-0 max-w-[62ch] text-body-15 text-ink-2">{section.text}</p>
         </PanelBlock>
       ))}
 
