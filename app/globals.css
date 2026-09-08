@@ -162,12 +162,6 @@
   --dock-step: 90ms;
   --duration-dock-all: 600ms;
 
-  /* The boot gate. Only the last of these is a duration a reader waits out:
-     --boot-failsafe is the delay on the CSS-only lift, which fires solely when
-     no script ran at all. The rest of the gate's timings are in lib/boot.ts,
-     because they belong to JavaScript. */
-  --boot-failsafe: 2200ms;
-
   /* Focus */
   --focus-ring-width: 2px;
   --focus-ring-offset: 2px;
@@ -699,29 +693,32 @@ html[data-locale='ja'] {
    arrived, so nothing pops in or draws in half under the reader; once per
    session. lib/boot.ts holds the timings and explains the shape.
 
-   It is up by default and lowered by whichever of three things gets there
-   first: BootGate, the inline script's own timer, or — if no script ran at all
-   — the delayed animation below. `html[data-boot]` switches that animation off
-   the moment a script takes ownership, which is what lets the wait be as long
-   as the page needs rather than as long as a fixed cap allows. A reader with
-   JavaScript disabled never sees any of it: the <noscript> rule in the layout
-   hides #boot outright. */
+   Hidden by default, and raised only by a script — which is what keeps the
+   page's oldest promise, that it is readable with JavaScript off. There is no
+   <noscript> rule and no CSS-only escape here because neither is needed: a
+   sheet that only a script can raise cannot be left up by a script that never
+   ran. The script is the first thing in <body>, before this element is even
+   parsed, so the sheet is part of #boot's first computed style rather than a
+   change to it and there is no frame of page underneath.
+
+   The state lives on <html>, which React also owns: a locale change replaces
+   the tree and takes data-boot with it. That is the other reason the default
+   is down — losing the attribute lowers the sheet rather than raising it. */
 #boot {
+  display: none;
   position: fixed;
   inset: 0;
   /* Above the section dock, which is 40. */
   z-index: 50;
-  display: grid;
   place-items: center;
   background: var(--paper);
   opacity: 1;
-  visibility: visible;
   transition: opacity var(--duration-base) var(--ease-out);
-  animation: boot-lift 1ms linear var(--boot-failsafe) forwards;
 }
 
-html[data-boot] #boot {
-  animation: none;
+html[data-boot='pending'] #boot,
+html[data-boot='leaving'] #boot {
+  display: grid;
 }
 
 /* Fading, but the entrance is still held: see the pause rule at the foot of
@@ -729,19 +726,6 @@ html[data-boot] #boot {
 html[data-boot='leaving'] #boot {
   opacity: 0;
   pointer-events: none;
-}
-
-html[data-boot='done'] #boot {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-
-@keyframes boot-lift {
-  to {
-    opacity: 0;
-    visibility: hidden;
-  }
 }
 
 /* A beat before the mark appears, so a boot that takes no time at all is a

@@ -103,18 +103,11 @@ export default async function LocaleLayout({
       suppressHydrationWarning
     >
       <body>
-        {/* The boot gate's escape hatch for a reader with JavaScript off. A
-            <noscript> body is parsed as ordinary markup when scripting is
-            disabled, so this style applies document-wide and the sheet is
-            never in the way; with scripting on it is inert text. The page has
-            always been readable without JavaScript and this is what keeps that
-            true. */}
-        <noscript
-          dangerouslySetInnerHTML={{ __html: '<style>#boot{display:none!important}</style>' }}
-        />
-        {/* First, and before #boot exists: see lib/boot.ts. Rendering this as
-            a child of <html> would not work — the parser moves it into <head>
-            and hydration then disagrees about the element it is attached to. */}
+        {/* First, and before #boot exists: see lib/boot.ts. The sheet is
+            hidden until this raises it, so a reader with JavaScript off simply
+            never has one. Rendering this as a child of <html> would not work —
+            the parser moves it into <head> and hydration then disagrees about
+            the element it is attached to. */}
         <script dangerouslySetInnerHTML={{ __html: bootScript }} />
         <div id="boot" aria-hidden="true">
           <div className="boot-inner">

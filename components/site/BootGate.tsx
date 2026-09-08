@@ -38,6 +38,15 @@ function settle(img: HTMLImageElement, budget: number): Promise<void> {
   });
 }
 
+/**
+ * Every image currently in the document, as a snapshot. document.images is a
+ * live collection, so iterating it directly is iterating a moving target; and
+ * it is missing outside a real browser, which is what the fallback is for.
+ */
+function images(): HTMLImageElement[] {
+  return Array.from(document.images ?? document.querySelectorAll('img'));
+}
+
 function after(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -123,7 +132,7 @@ export function BootGate() {
         ? document.fonts.ready.then(progress, progress)
         : Promise.resolve();
 
-      const first = Array.from(document.images);
+      const first = images();
       total += first.length;
       await Promise.allSettled([
         fonts,
@@ -131,10 +140,13 @@ export function BootGate() {
       ]);
       if (cancelled) return;
 
-      // One more pass, never a loop. document.images is live, so a while loop
-      // over it is how a gate hangs forever; hydration is the only thing that
+      // One more pass, never a loop, and only over images the first pass never
+      // saw. Iterating the live collection until it comes back clean is how a
+      // gate hangs forever, and re-waiting on one the first pass already spent
+      // its budget on is the same wait twice. Hydration is the only thing that
       // can have added an image by now, and it has finished.
-      const late = Array.from(document.images).filter((img) => !img.complete);
+      const seen = new Set(first);
+      const late = images().filter((img) => !seen.has(img) && !img.complete);
       total += late.length;
       await Promise.allSettled(late.map((img) => settle(img, bootImageMs).then(progress)));
     };

@@ -3,19 +3,18 @@
  * font it needs has arrived, so nothing pops in or draws in half under the
  * reader. It shows once per session.
  *
- * Two mechanisms with deliberately opposite defaults, because they fail
- * differently:
+ * Everything here is off by default and only a script turns it on: the sheet
+ * is `display: none` in globals.css until this script raises it, and the
+ * entrance is untouched until the same script pauses it. That is the whole
+ * safety argument. A sheet only a script can raise cannot be left up by a
+ * script that never ran, so a reader with JavaScript off — or one whose bundle
+ * never arrives — gets exactly the page this site served before the gate
+ * existed, with nothing hidden and nothing frozen.
  *
- *   the overlay        default ON in CSS   lifted by JS, by a CSS failsafe, or
- *                                          hidden outright by a <noscript> rule
- *   the entrance pause default OFF         only ever turned on by the inline
- *                                          script, which also owns clearing it
- *
- * CSS can lift the sheet on its own, but CSS cannot resume a paused animation
- * on another element. If the pause defaulted on and the bundle never arrived,
- * `.enter` would stay frozen at opacity 0 under a lifted sheet — a blank page.
- * The way round it is above, a dead bundle degrades to exactly the behaviour
- * this site had before the gate existed.
+ * It also survives the one thing that catches every other arrangement: the
+ * state lives on <html>, which React owns too, and a locale change replaces
+ * the tree and takes data-boot with it. Losing the attribute has to be the
+ * safe direction, and here it lowers the sheet rather than raising it.
  */
 
 /** Set once the sheet has been shown, so the rest of the session skips it. */
