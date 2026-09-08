@@ -21,7 +21,33 @@ export const site = {
 export const locales = ['en', 'ja'] as const;
 export type Locale = (typeof locales)[number];
 
+/**
+ * The language this browser was last reading the site in. The middleware
+ * reads it on arrival and sends the reader straight back to that language;
+ * only the first visit of all is decided by where the reader is.
+ */
 export const localeCookie = 'portfolio.locale';
+
+/** A year. Long enough that a reader who visits twice a year is still known. */
+export const localeCookieMaxAge = 31536000;
+
+/** Whether a cookie value is a language this site actually has. */
+export function isLocale(value: string | undefined): value is Locale {
+  return locales.includes(value as Locale);
+}
+
+/**
+ * Write the cookie. Deliberately not HttpOnly and set from the browser: the
+ * two things that write it — the switch in the header and the page itself on
+ * arrival — are both client-side, and nothing but the choice of language is
+ * kept in it. `lax` so the cookie still travels on a link followed from
+ * somewhere else, which is exactly the arrival it has to survive.
+ */
+export function rememberLocale(locale: Locale) {
+  document.cookie =
+    localeCookie + '=' + locale + '; path=/; max-age=' + localeCookieMaxAge + '; samesite=lax';
+}
+
 export const localeHome: Record<Locale, string> = { en: '/', ja: '/ja' };
 
 /**
