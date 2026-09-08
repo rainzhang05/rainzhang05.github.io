@@ -46,9 +46,15 @@ test.describe("navigation", () => {
   });
 
   test("does not scroll sideways at any width", async ({ page }) => {
+    // Resized rather than reloaded, for the reason i18n.spec.ts gives: the
+    // layout is CSS, and four navigations in one worker is what times this
+    // sweep out on CI. Now that the page loads its images up front, each of
+    // those navigations also waits on a screenshot variant this width is the
+    // only one to ask for.
+    await page.goto("/");
+
     for (const width of [320, 375, 768, 1280]) {
       await page.setViewportSize({ width, height: 800 });
-      await page.goto("/");
 
       const overflow = await page.evaluate(
         () => document.documentElement.scrollWidth - document.documentElement.clientWidth

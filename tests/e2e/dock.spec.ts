@@ -389,9 +389,13 @@ test.describe("section dock", () => {
   });
 
   test("adds no horizontal overflow once formed", async ({ page }) => {
+    // One navigation, then resize — see the note in nav.spec.ts. The dock
+    // remeasures on resize anyway, so this asks a slightly harder question
+    // than reloading did.
+    await open(page);
+
     for (const width of [640, 768, 1024, 1280]) {
       await page.setViewportSize({ width, height: 800 });
-      await open(page);
       await settleAt(page, 900);
 
       const overflow = await page.evaluate(
