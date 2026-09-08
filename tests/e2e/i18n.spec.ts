@@ -13,6 +13,13 @@ async function languageSwitch(page: Page) {
   return page.getByRole("dialog", { name: "Menu" }).getByRole("radiogroup", { name: "Language" });
 }
 
+/**
+ * What a browser asks for when it navigates to a page. The middleware steers
+ * arrivals and leaves the App Router's own fetches alone, and this header is
+ * what tells them apart — see middleware.ts.
+ */
+const ARRIVING = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
+
 test.describe("languages", () => {
   test("serves Japanese at /ja", async ({ page }) => {
     await page.goto("/ja");
@@ -109,14 +116,14 @@ test.describe("languages", () => {
 
   test("sends a visitor in Japan to /ja once, then respects their choice", async ({ page }) => {
     const response = await page.request.get("/", {
-      headers: { "x-vercel-ip-country": "JP" },
+      headers: { accept: ARRIVING, "x-vercel-ip-country": "JP" },
       maxRedirects: 0,
     });
     expect([307, 308]).toContain(response.status());
     expect(response.headers()["location"]).toContain("/ja");
 
     const chosen = await page.request.get("/", {
-      headers: { "x-vercel-ip-country": "JP", cookie: "portfolio.locale=en" },
+      headers: { accept: ARRIVING, "x-vercel-ip-country": "JP", cookie: "portfolio.locale=en" },
       maxRedirects: 0,
     });
     expect(chosen.status()).toBe(200);
@@ -124,10 +131,79 @@ test.describe("languages", () => {
 
   test("leaves everyone else on English", async ({ page }) => {
     const response = await page.request.get("/", {
-      headers: { "x-vercel-ip-country": "CA" },
+      headers: { accept: ARRIVING, "x-vercel-ip-country": "CA" },
       maxRedirects: 0,
     });
 
     expect(response.status()).toBe(200);
+  });
+
+  test("opens in the language of the last visit, wherever the reader is now", async ({ page }) => {
+    // The cookie outranks the country: someone who read the site in Japanese
+    // gets Japanese from anywhere, and both pages honour it.
+    for (const [path, target] of [
+      ["/", "/ja"],
+      ["/resume", "/ja/resume"],
+    ]) {
+      const response = await page.request.get(path, {
+        headers: { accept: ARRIVING, "x-vercel-ip-country": "CA", cookie: "portfolio.locale=ja" },
+        maxRedirects: 0,
+      });
+
+      expect([307, 308]).toContain(response.status());
+      expect(response.headers()["location"]).toContain(target);
+    }
+  });
+
+  test("ignores a cookie for a language the site does not have", async ({ page }) => {
+    const response = await page.request.get("/", {
+      headers: { accept: ARRIVING, "x-vercel-ip-country": "JP", cookie: "portfolio.locale=fr" },
+      maxRedirects: 0,
+    });
+
+    expect([307, 308]).toContain(response.status());
+    expect(response.headers()["location"]).toContain("/ja");
+  });
+
+  test("steers arrivals only, never the router's own requests", async ({ page }) => {
+    // The router prefetches the other language and asks for anything rather
+    // than for a document. A prefetch of "/" answered with a redirect would be
+    // cached as the answer for "/", and the switch would land back where it
+    // started. See middleware.ts.
+    const response = await page.request.get("/", {
+      headers: { accept: "*/*", "x-vercel-ip-country": "JP" },
+      maxRedirects: 0,
+    });
+
+    expect(response.status()).toBe(200);
+  });
+
+  test("remembers the language of a visit that never touched the switch", async ({
+    page,
+    context,
+  }) => {
+    await page.goto("/ja");
+
+    await expect
+      .poll(async () => (await context.cookies()).find((c) => c.name === "portfolio.locale")?.value)
+      .toBe("ja");
+  });
+
+  test("takes a reader back to the language they left the site in", async ({ page }) => {
+    await page.goto("/ja");
+    await (await languageSwitch(page)).getByRole("radio", { name: "EN" }).click();
+    await page.waitForURL((url) => url.pathname === "/");
+
+    // A fresh arrival at "/" — the switch has spoken, so English it stays.
+    await page.goto("/");
+    await expect(page.locator("html")).toHaveAttribute("lang", "en");
+
+    await (await languageSwitch(page)).getByRole("radio", { name: "日本語" }).click();
+    await page.waitForURL("**/ja");
+
+    // And now the reverse: "/" is where they type, /ja is where they land.
+    await page.goto("/");
+    await expect(page.locator("html")).toHaveAttribute("data-locale", "ja");
+    expect(new URL(page.url()).pathname).toBe("/ja");
   });
 });
