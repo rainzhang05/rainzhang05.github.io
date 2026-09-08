@@ -69,13 +69,15 @@ components/
     ExperienceSection.tsx / WorkSection.tsx / BackgroundSection.tsx
     ContactSection.tsx / ContactForm.tsx
     SectionHeading.tsx / CompanyMark.tsx / LocaleSwitch.tsx / SiteFooter.tsx
+    LocaleMemory.tsx       Renders nothing; records the language being read in the cookie
 
 lib/
   dockMotion.ts            The dock's maths: progress, gaussian falloff, bezier sampling
   sectionLinks.ts          The four in-page sections, shared by the footer and the dock
 
 lib/
-  site.ts                  Email, links, resume routes and PDFs, Formspree endpoint, locales, cookie
+  site.ts                  Email, links, resume routes and PDFs, Formspree endpoint, locales,
+                           the language cookie and the one function that writes it
   types.ts                 The content model (Copy, Experience, Project, SkillGroup, …)
   tech.ts                  Technology name -> mark file in public/tech
   content/en.ts            All English copy and content
@@ -86,7 +88,8 @@ lib/
   useReducedMotion.ts      Hook + a plain function for the two JS scroll nudges
   panelMotion.ts           Expand/collapse duration from content height and --panel-speed
 
-middleware.ts              One-time /ja redirect for visitors in Japan
+middleware.ts              Sends an arrival to the remembered language, or to Japanese if the
+                           first visit is from Japan
 
 public/
   rain-zhang-resume.pdf    English resume; downloaded from /resume and nowhere else
@@ -197,7 +200,9 @@ Both languages come from one `app/[locale]` tree:
 - `generateStaticParams` prerenders `en` and `ja`; `dynamicParams = false`, so anything else 404s.
 - `/` is rewritten to `/en` internally and `/en` redirects to `/`, and `/resume` and `/en/resume` are the same pair (both in [next.config.mjs](next.config.mjs)), so each language has exactly one canonical URL per page. Redirects are evaluated before rewrites and a rewrite does not re-enter them, so there is no loop. The rewrite is also what stops `/resume` being read as the `[locale]` segment and 404ing under `dynamicParams: false` — add a route here and it needs its own pair.
 - **A nested page's metadata replaces the layout's one key at a time.** `app/[locale]/resume/page.tsx` restates `alternates`, `openGraph` and `twitter` in full; drop one and the resume page silently advertises the home page's canonical URL and `og:url`.
-- [middleware.ts](middleware.ts) 307s `/` to `/ja` and `/resume` to `/ja/resume` when `x-vercel-ip-country` is `JP` **and** there is no `portfolio.locale` cookie. Its matcher is an explicit list, never a pattern: a catch-all would match `/ja` and redirect it to itself. [LocaleSwitch](components/site/LocaleSwitch.tsx) owns that cookie — it writes it on click, after which the redirect never fires again. Do not set it on mere visits to `/ja`, and do not bounce `/ja` back to `/`. Local `next dev` has no country header, so `/` stays English.
+- **Which language an arrival gets, in order:** the `portfolio.locale` cookie if it holds a language this site has; otherwise `x-vercel-ip-country` — `JP` gets Japanese, everyone else English. Location decides the first visit of all and is never consulted again. [middleware.ts](middleware.ts) is where this lives; it 307s `/` to `/ja` and `/resume` to `/ja/resume`, and its matcher is an explicit list of the English routes, never a pattern: a catch-all would match `/ja` and redirect it to itself. It only ever redirects *into* Japanese, so a link to `/ja` is never bounced back to `/`. Local `next dev` has no country header, so an unremembered `/` stays English.
+- **Two things write the cookie, both in the browser.** [LocaleSwitch](components/site/LocaleSwitch.tsx) writes it on a click, and [LocaleMemory](components/site/LocaleMemory.tsx) — mounted in the layout, renders nothing — writes the language of the page being read, so a reader who arrived at `/ja` from a link or from the geo redirect is opened in Japanese next time too. Both go through `rememberLocale` in [lib/site.ts](lib/site.ts); do not write `document.cookie` for this anywhere else. A deliberate choice always wins, because the switch writes the cookie before it navigates.
+- **The middleware steers arrivals only, and tells them apart by `Accept: text/html`.** Next strips the `RSC` and prefetch headers — and the `_rsc` query it appends — before middleware sees the request, so what the request asks for is the only thing left to go on. This matters: the switch prefetches the other language through `next/link`, and a prefetch of `/` answered with a redirect back to `/ja` is cached as the answer for `/`, after which clicking EN lands back on Japanese. E2E requests that mean to test the redirect must send a browser-like `Accept` header (`ARRIVING` in [tests/e2e/i18n.spec.ts](tests/e2e/i18n.spec.ts)).
 - The switch uses `next/link`, so the other language is prefetched and both routes stay crawlable.
 
 There is **no `app/layout.tsx`** and no locale React context. `app/[locale]/layout.tsx` is the root layout, which is what makes `<html lang>` and `data-locale` actually change per route. Content is passed down as a plain `copy` prop from the page — no `locale === "ja" ? … : …` anywhere in JSX.
