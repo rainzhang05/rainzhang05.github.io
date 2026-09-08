@@ -168,20 +168,20 @@ export const en: Copy = {
       dates: 'Aug 2026 – Present',
       title: 'MNT Realty Platform',
       summary:
-        'One Next.js application serving three surfaces for a property management company: the public website, an owner portal for residents, and a staff admin console.',
+        'One Next.js application serving three sites for a property management company: a public website, an owner portal for residents, and an admin console for staff.',
       primary: ['Next.js', 'TypeScript', 'React'],
       sections: [
         {
           label: 'What it is',
-          text: 'The platform MNT Realty runs on: a public website for prospective clients, an owner portal where residents of the stratas MNT manages read notices, book amenities and download documents, and an admin console where staff run all of it.',
+          text: 'The system MNT Realty runs on. Prospective clients see the public website. Residents of the stratas MNT manages sign in to the owner portal to read notices, book amenities and download documents. Staff run all of it from the admin console.',
         },
         {
           label: 'How it works',
-          text: 'Three surfaces, three subdomains, one build. A proxy routes by subdomain: the admin subdomain to the console, the owners subdomain to the portal, and on the public site those same paths are a not-found page, so each keeps its own chrome and its own host-only session cookie. Public pages are prerendered; the console and the portal render per request. Every read and write goes through one named data-store contract, one operation per write and one read model per screen, so what staff enter reaches residents at once and the store behind it can be swapped for the drafted PostgreSQL schema without touching a screen.',
+          text: 'Three sites, three subdomains, one build. A proxy routes each subdomain to its own pages — admin to the console, owners to the portal — and the public site answers those same paths with a not-found page. Each keeps its own layout and its own host-only session cookie. Public pages are prerendered; the console and the portal render per request. Every read and write goes through one store interface, so what staff enter reaches residents at once and the store behind it can be swapped for the drafted PostgreSQL schema without touching a screen.',
         },
         {
           label: 'Technical challenges',
-          text: 'Getting the access model right in one place rather than in every guard: navigation, page guards and the file route all read the same table, and a section outside a viewer’s role is not-found rather than forbidden, so the portal never tells a tenant what an owner can see. Making a strata a real boundary, so nothing about one is reachable while another is open. And keeping MNT’s own business facts — company details, the strata-document fee schedule, the amenity slot template — as versioned data an administrator edits under Settings, rather than literals in the source, with every saved version restorable.',
+          text: 'Access is defined once, in a table that the navigation, the page guards and the file route all read. A section outside your role returns not-found rather than forbidden, so the portal never reveals what another role can see. Each strata is a hard boundary: while one is open, nothing from another is reachable. MNT’s own business facts — company details, the strata-document fee schedule, the amenity slot template — are versioned data an administrator edits under Settings rather than values in the source, with every saved version restorable.',
         },
       ],
       image: {
@@ -202,7 +202,7 @@ export const en: Copy = {
         'GitHub Actions',
       ],
       status:
-        'The public website, the owner portal and the admin console are all built and deployed; cloud data and backend workflows are next. The source belongs to MNT Realty and is not public.',
+        'All three are built and deployed; cloud data and backend workflows are next. The source belongs to MNT Realty and is not public.',
       links: [
         {
           label: 'mntrealty.vercel.app',
@@ -220,7 +220,7 @@ export const en: Copy = {
       sections: [
         {
           label: 'What it is',
-          text: 'A Flask web app for developers building on FIDO2. Register and sign in with real or virtual authenticators, edit the raw WebAuthn request as JSON, decode what comes back, and look up any authenticator in the FIDO Alliance metadata service. Built at FEITIAN during my internship and still maintained.',
+          text: 'A Flask web app for developers building on FIDO2. Register and sign in with real or virtual authenticators, edit the raw WebAuthn request as JSON, decode what comes back, and look up any authenticator in the FIDO Alliance metadata service. Built during my internship at FEITIAN, and I still maintain it.',
         },
         {
           label: 'How it works',
@@ -228,7 +228,7 @@ export const en: Copy = {
         },
         {
           label: 'Technical challenges',
-          text: 'Teaching the library algorithms it did not know: new COSE identifiers, key handling and attestation checks, without breaking the classical paths. Keeping Cloud Run cold starts short with liboqs in the image, which led to lazy warm-up and a one-worker gunicorn build. Keeping the metadata current without a person in the loop: a daily GitHub Action re-verifies and commits the snapshot.',
+          text: 'python-fido2 had no post-quantum support, so I added the COSE identifiers, the key handling and the attestation checks for ML-DSA without disturbing the classical paths. Shipping liboqs in the image made Cloud Run slow to start, which led to a lazy warm-up and a one-worker gunicorn build. The FIDO metadata goes stale, so a daily GitHub Action re-verifies the snapshot and commits it — nobody has to remember.',
         },
       ],
       image: {
@@ -272,7 +272,7 @@ export const en: Copy = {
       sections: [
         {
           label: 'What it is',
-          text: 'A demo for FEITIAN’s customers and sales team. Where the developer platform is built for engineers, this one is for people evaluating the products: register a security key, sign in, and see a post-quantum credential work, without reading a specification.',
+          text: 'A demo for FEITIAN’s customers and sales team. The developer platform is built for engineers; this one is for people evaluating the products. Register a security key, sign in, and watch a post-quantum credential work, without reading a specification.',
         },
         {
           label: 'How it works',
@@ -304,7 +304,7 @@ export const en: Copy = {
       sections: [
         {
           label: 'What it is',
-          text: 'A Rust workspace that behaves like a FIDO2 security key without the key. It exists so FEITIAN’s engineers and partners could develop against ML-DSA credentials before the hardware was ready. It started as my own repository and is now maintained under FeitianTech.',
+          text: 'A Rust workspace that behaves like a FIDO2 security key, in software. FEITIAN’s engineers and partners needed to develop against ML-DSA credentials before the hardware was ready. It started as my own repository and is now maintained under FeitianTech.',
         },
         {
           label: 'How it works',
@@ -312,7 +312,7 @@ export const en: Copy = {
         },
         {
           label: 'Technical challenges',
-          text: 'Getting the HID transport and the CTAP state machine right enough that real browsers accept it. Fitting post-quantum keys into CTAP and COSE structures made for classical ones. The first version called liboqs over a C FFI; it later moved to the pure-Rust fips204 crate, with secret keys zeroised on drop.',
+          text: 'Browsers are strict about what they will talk to, so the HID transport and the CTAP state machine had to be exact before Chrome or Firefox accepted the device. CTAP and COSE structures were designed around classical keys, and post-quantum ones do not fit them neatly. The first version called liboqs over a C FFI; it later moved to the pure-Rust fips204 crate, with secret keys zeroised on drop.',
         },
       ],
       stack: ['Rust', 'Linux UHID', 'Trussed', 'littlefs2', 'CTAP2.1', 'fips204', 'liboqs', 'clap'],
@@ -337,7 +337,7 @@ export const en: Copy = {
       sections: [
         {
           label: 'What it is',
-          text: 'My portfolio, at rainzhang.me. One scrolling page in two languages, on its own design system: one typeface, ivory paper, one accent, no borders or shadows. The resume and cover letter use the same system, so everything a recruiter sees from me comes from one hand.',
+          text: 'My portfolio, at rainzhang.me. One scrolling page in two languages, on its own small design system: one typeface, ivory paper, one accent colour, no borders or shadows. My resume and cover letter use the same system, so the three read as one piece of work.',
         },
         {
           label: 'How it works',
