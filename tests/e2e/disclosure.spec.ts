@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 /** The site's only interaction: rows that open in place. */
 test.describe("disclosure rows", () => {

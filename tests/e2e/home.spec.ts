@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 test.describe("home", () => {
   test("renders the page with one h1 and every section", async ({ page }) => {

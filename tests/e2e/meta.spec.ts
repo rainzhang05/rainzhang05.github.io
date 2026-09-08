@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 test.describe("share card and icons", () => {
   test("points at an og image that actually resolves", async ({ page, request }) => {

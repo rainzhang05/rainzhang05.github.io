@@ -1,5 +1,5 @@
-import { expect, type Page } from "@playwright/test";
-import { test } from "@playwright/test";
+import { type Page } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 /**
  * The switch sits in the header on a wide viewport and inside the menu sheet

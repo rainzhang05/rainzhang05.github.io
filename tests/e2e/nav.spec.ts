@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 test.describe("navigation", () => {
   // Below 640px the header links move into the sheet, which has its own test
