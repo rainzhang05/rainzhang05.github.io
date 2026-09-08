@@ -13,7 +13,7 @@ const files = [
   "/tech/rust.png",
   "/tech/nextjs.svg",
   "/tech/microsoft-graph.svg",
-  "/projects/webauthn-platform.png",
+  "/projects/webauthn-platform.webp",
 ];
 
 test.describe("static assets", () => {

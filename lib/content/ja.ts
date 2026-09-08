@@ -185,7 +185,7 @@ export const ja: Copy = {
         },
       ],
       image: {
-        src: '/projects/mnt-platform.png',
+        src: '/projects/mnt-platform.webp',
         alt: 'MNT Realty のホーム画面。提供サービスと、提案依頼・オーナーポータルへの入口',
         width: 1600,
         height: 800,
@@ -232,7 +232,7 @@ export const ja: Copy = {
         },
       ],
       image: {
-        src: '/projects/webauthn-platform.png',
+        src: '/projects/webauthn-platform.webp',
         alt: 'WebAuthn 開発者向けプラットフォームの詳細モード。リクエストの編集と応答の解読',
         width: 1600,
         height: 800,
@@ -280,7 +280,7 @@ export const ja: Copy = {
         },
       ],
       image: {
-        src: '/projects/security-demo.png',
+        src: '/projects/security-demo.webp',
         alt: '認証デモプラットフォームのサインイン画面',
         width: 1600,
         height: 800,
@@ -393,7 +393,7 @@ export const ja: Copy = {
         },
       ],
       image: {
-        src: '/projects/travel-advisor.png',
+        src: '/projects/travel-advisor.webp',
         alt: 'Travel Advisor の結果画面。ホテル・レストラン・観光地の一覧',
         width: 1600,
         height: 800,

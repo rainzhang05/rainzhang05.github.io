@@ -185,7 +185,7 @@ export const en: Copy = {
         },
       ],
       image: {
-        src: '/projects/mnt-platform.png',
+        src: '/projects/mnt-platform.webp',
         alt: 'The MNT Realty home page, with the service line and the proposal and owner-portal entry points',
         width: 1600,
         height: 800,
@@ -232,7 +232,7 @@ export const en: Copy = {
         },
       ],
       image: {
-        src: '/projects/webauthn-platform.png',
+        src: '/projects/webauthn-platform.webp',
         alt: 'The advanced tab of the WebAuthn developer platform, with an editable request and a decoded response',
         width: 1600,
         height: 800,
@@ -280,7 +280,7 @@ export const en: Copy = {
         },
       ],
       image: {
-        src: '/projects/security-demo.png',
+        src: '/projects/security-demo.webp',
         alt: 'The authentication demo platform sign-in screen',
         width: 1600,
         height: 800,
@@ -393,7 +393,7 @@ export const en: Copy = {
         },
       ],
       image: {
-        src: '/projects/travel-advisor.png',
+        src: '/projects/travel-advisor.webp',
         alt: 'The Travel Advisor results page with hotels, restaurants and attractions',
         width: 1600,
         height: 800,
