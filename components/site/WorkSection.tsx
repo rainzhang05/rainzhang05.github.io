@@ -67,7 +67,14 @@ function ProjectRow({
             src={project.image.src}
             alt={project.image.alt}
             fill
-            sizes="(max-width: 900px) 100vw, 880px"
+            /* The frame is never as wide as the viewport, and saying it is
+               costs real bytes: at 768px it measures 480px, not 768. Below
+               640px it is the content column, so the two 24px mobile gutters
+               come off; from 640px the 160px date column and its 32px gap go
+               too; past the 1080px container it settles at a constant 792px.
+               Under-declaring at the fold is safe — the smallest candidate
+               next/image generates is 640w. */
+            sizes="(max-width: 639px) calc(100vw - 48px), (max-width: 1079px) calc(100vw - 288px), 792px"
             /* Eager, not lazy. The panel is always in the DOM but collapsed to
                a zero-height track, which never intersects — so a lazy image
                would not begin loading until the row was opened, and would then
