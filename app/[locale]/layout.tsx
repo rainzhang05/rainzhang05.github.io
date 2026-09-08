@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { notFound } from 'next/navigation';
 import { albert, albertExt } from '../fonts';
 import { BootGate } from '@/components/site/BootGate';
+import { EntranceRouter } from '@/lib/entrance';
 import { bootScript } from '@/lib/boot';
 import { content } from '@/lib/content';
 import { personJsonLd } from '@/lib/jsonLd';
@@ -118,6 +119,7 @@ export default async function LocaleLayout({
           </div>
         </div>
         <BootGate />
+        <EntranceRouter />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: personJsonLd(content[locale]) }}

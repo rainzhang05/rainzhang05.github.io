@@ -109,8 +109,8 @@
      twice as tall takes twice as long, so every row moves at the same rate.
      --ease-panel starts immediately and decelerates, which reads as smooth
      over the longer distances this produces. */
-  --panel-speed: 2000;
-  --ease-panel: cubic-bezier(0.32, 0.72, 0, 1);
+  --panel-speed: 1400;
+  --ease-panel: cubic-bezier(0.3, 0.45, 0.15, 1);
 
   /* Entrance — the one-off reveal of the first screen, and the cross-fade the
      language switch plays over the page while the other locale loads. */
@@ -328,6 +328,36 @@ html[data-locale='ja'] {
   .enter-6 {
     animation-delay: calc(var(--enter-step) * 6);
   }
+}
+
+/* One thing arrives per navigation: the first screen, or the section the
+   reader came for. `data-entrance` on the page root says which, and
+   PortfolioPage sets it before paint (see lib/entrance.ts), so nothing is ever
+   seen animating that the reader did not arrive at.
+
+   The four sections below the first screen have no animation of their own by
+   default — on an ordinary visit they are simply already there, below the
+   fold. Arriving at one directly, which is what every link in the resume
+   page's header and footer does, gives that one an arrival and settles
+   everything else. The id in these selectors is doing real work: it outranks
+   the blanket below, so the section being arrived at keeps its animation while
+   its neighbours lose theirs. */
+html[data-entrance='experience'] #experience,
+html[data-entrance='work'] #work,
+html[data-entrance='background'] #background,
+html[data-entrance='contact'] #contact {
+  animation: enter var(--duration-enter) var(--ease-enter) var(--enter-step) both;
+}
+
+/* Arriving at a section means the first screen is not what is being read, so
+   its cascade does not play — including the sixth beat on #experience, which
+   exists to carry the intro's rhythm into the top of the page and is exactly
+   the delay that made an arrival there look like a stall. */
+html[data-entrance='experience'] :is(.enter, .enter-fade),
+html[data-entrance='work'] :is(.enter, .enter-fade),
+html[data-entrance='background'] :is(.enter, .enter-fade),
+html[data-entrance='contact'] :is(.enter, .enter-fade) {
+  animation: none;
 }
 
 /* Controls, marks and images are things you press or look at, not text you
@@ -828,7 +858,8 @@ html[data-boot='leaving'] #boot {
    still happens, and the other language settles in rather than snapping in.
    Adding `animation: none` to the done state would silently take that with
    it. */
-html[data-boot='pending'] .enter {
+html[data-boot='pending'] .enter,
+html[data-boot='pending'] :is(#experience, #work, #background, #contact) {
   animation: none;
   opacity: 0;
   transform: translate3d(0, 10px, 0);

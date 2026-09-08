@@ -17,6 +17,14 @@
  * safe direction, and here it lowers the sheet rather than raising it.
  */
 
+/**
+ * The sections a link can arrive at, mirrored from lib/entrance.ts. The script
+ * below sets `data-entrance` from the fragment before anything is parsed: the
+ * server never sees a fragment, so a deep-linked section would otherwise be
+ * painted settled and then hidden again to animate in.
+ */
+export const entranceSections = ['experience', 'work', 'background', 'contact'];
+
 /** Set once the sheet has been shown, so the rest of the session skips it. */
 export const bootFlag = 'portfolio.booted';
 
@@ -58,7 +66,9 @@ export const bootFadeMs = 220;
  * style rather than a change to it, so there is no before-change style to
  * transition from and no flash.
  */
-export const bootScript = `(function(){var d=document.documentElement;try{if(sessionStorage.getItem(${JSON.stringify(
+export const bootScript = `(function(){var d=document.documentElement;var h=location.hash.replace(/^#/,"");d.setAttribute("data-entrance",${JSON.stringify(
+  entranceSections
+)}.indexOf(h)<0?"intro":h);try{if(sessionStorage.getItem(${JSON.stringify(
   bootFlag
 )})==="1"){d.setAttribute("data-boot","done");return}}catch(e){}d.setAttribute("data-boot","pending");window.__bootLive=false;setTimeout(function(){if(window.__bootLive||d.getAttribute("data-boot")!=="pending")return;d.setAttribute("data-boot","leaving");setTimeout(function(){d.setAttribute("data-boot","done")},${bootFadeMs})},${bootHandoffMs})})();`;
 
