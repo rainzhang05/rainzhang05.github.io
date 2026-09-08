@@ -173,7 +173,7 @@ export const en: Copy = {
       sections: [
         {
           label: 'What it is',
-          text: 'The platform MNT Realty runs on: a public website for prospective clients, an owner portal where residents of the stratas MNT manages read notices, book amenities and download documents, and an admin console where staff run all of it. Replacing a single 553 KB HTML document that switched between all four audiences with CSS and served everything from one PHP endpoint.',
+          text: 'The platform MNT Realty runs on: a public website for prospective clients, an owner portal where residents of the stratas MNT manages read notices, book amenities and download documents, and an admin console where staff run all of it.',
         },
         {
           label: 'How it works',
