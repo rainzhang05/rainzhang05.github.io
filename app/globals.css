@@ -162,6 +162,12 @@
   --dock-step: 90ms;
   --duration-dock-all: 600ms;
 
+  /* The boot gate. Only the last of these is a duration a reader waits out:
+     --boot-failsafe is the delay on the CSS-only lift, which fires solely when
+     no script ran at all. The rest of the gate's timings are in lib/boot.ts,
+     because they belong to JavaScript. */
+  --boot-failsafe: 2200ms;
+
   /* Focus */
   --focus-ring-width: 2px;
   --focus-ring-offset: 2px;
@@ -689,6 +695,96 @@ html[data-locale='ja'] {
   }
 }
 
+/* The boot gate. A sheet of paper over the page until every image and font has
+   arrived, so nothing pops in or draws in half under the reader; once per
+   session. lib/boot.ts holds the timings and explains the shape.
+
+   It is up by default and lowered by whichever of three things gets there
+   first: BootGate, the inline script's own timer, or — if no script ran at all
+   — the delayed animation below. `html[data-boot]` switches that animation off
+   the moment a script takes ownership, which is what lets the wait be as long
+   as the page needs rather than as long as a fixed cap allows. A reader with
+   JavaScript disabled never sees any of it: the <noscript> rule in the layout
+   hides #boot outright. */
+#boot {
+  position: fixed;
+  inset: 0;
+  /* Above the section dock, which is 40. */
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  background: var(--paper);
+  opacity: 1;
+  visibility: visible;
+  transition: opacity var(--duration-base) var(--ease-out);
+  animation: boot-lift 1ms linear var(--boot-failsafe) forwards;
+}
+
+html[data-boot] #boot {
+  animation: none;
+}
+
+/* Fading, but the entrance is still held: see the pause rule at the foot of
+   this file. Pointer events go first, so the page is live before it is seen. */
+html[data-boot='leaving'] #boot {
+  opacity: 0;
+  pointer-events: none;
+}
+
+html[data-boot='done'] #boot {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+@keyframes boot-lift {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+/* A beat before the mark appears, so a boot that takes no time at all is a
+   blank sheet of the same paper rather than a wordmark flashing on and off. */
+.boot-inner {
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+  animation: enter-fade var(--duration-base) var(--ease-out) 180ms both;
+}
+
+.boot-mark {
+  font-size: var(--text-body-14);
+  font-weight: var(--weight-medium);
+  letter-spacing: -0.005em;
+  color: var(--ink);
+}
+
+/* Determinate, and a transition rather than an animation — an animation would
+   be caught by the pause rule along with the entrance. */
+.boot-rule {
+  display: block;
+  width: 132px;
+  height: 1px;
+  overflow: hidden;
+  background: var(--rule);
+}
+
+.boot-rule > span {
+  display: block;
+  height: 100%;
+  background: var(--sage);
+  transform: scaleX(var(--boot-progress, 0));
+  transform-origin: left center;
+  transition: transform var(--duration-base) var(--ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .boot-inner {
+    animation: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -698,4 +794,29 @@ html[data-locale='ja'] {
     animation-duration: 0.01ms !important;
     animation-delay: 0.01ms !important;
   }
+}
+
+/* The first screen is held until the sheet has gone, so its 620ms plays when
+   the reader can actually see it rather than finishing underneath it. Written
+   unlayered and last on purpose: `.enter` sits in a Tailwind @layer directive,
+   which is not a real cascade layer, so what wins here is order and
+   specificity rather than layering.
+
+   `animation: none` and not `animation-play-state: paused`, which is the
+   obvious way to write this and does not work: an animation held from before
+   it ever started does not resume in Chrome — the computed play state goes
+   back to running and its current time stays at zero for good. Withdrawing the
+   animation instead means restoring it starts a fresh one, which is what the
+   entrance wants anyway.
+
+   Note what is *not* here: any rule for the done state. The declaration on
+   .enter is untouched there, so the replay when a locale change swaps the tree
+   still happens, and the other language settles in rather than snapping in.
+   Adding `animation: none` to the done state would silently take that with
+   it. */
+html[data-boot='pending'] .enter,
+html[data-boot='pending'] .enter-fade,
+html[data-boot='leaving'] .enter,
+html[data-boot='leaving'] .enter-fade {
+  animation: none;
 }

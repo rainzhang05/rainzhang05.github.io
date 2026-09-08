@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from 'next';
 import { notFound } from 'next/navigation';
 import { albert, albertExt } from '../fonts';
+import { BootGate } from '@/components/site/BootGate';
+import { bootScript } from '@/lib/boot';
 import { content } from '@/lib/content';
 import { personJsonLd } from '@/lib/jsonLd';
 import { locales, site, type Locale } from '@/lib/site';
@@ -94,8 +96,35 @@ export default async function LocaleLayout({
       data-locale={locale}
       data-scroll-behavior="smooth"
       className={albert.variable + ' ' + albertExt.variable}
+      /* The boot script writes data-boot on this element before React sees it,
+         which React would otherwise report as a hydration mismatch. The
+         suppression covers this element's own attributes and nothing below
+         it. */
+      suppressHydrationWarning
     >
       <body>
+        {/* The boot gate's escape hatch for a reader with JavaScript off. A
+            <noscript> body is parsed as ordinary markup when scripting is
+            disabled, so this style applies document-wide and the sheet is
+            never in the way; with scripting on it is inert text. The page has
+            always been readable without JavaScript and this is what keeps that
+            true. */}
+        <noscript
+          dangerouslySetInnerHTML={{ __html: '<style>#boot{display:none!important}</style>' }}
+        />
+        {/* First, and before #boot exists: see lib/boot.ts. Rendering this as
+            a child of <html> would not work — the parser moves it into <head>
+            and hydration then disagrees about the element it is attached to. */}
+        <script dangerouslySetInnerHTML={{ __html: bootScript }} />
+        <div id="boot" aria-hidden="true">
+          <div className="boot-inner">
+            <span className="boot-mark">{site.name}</span>
+            <span className="boot-rule">
+              <span />
+            </span>
+          </div>
+        </div>
+        <BootGate />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: personJsonLd(content[locale]) }}
