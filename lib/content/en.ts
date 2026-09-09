@@ -9,7 +9,7 @@ export const en: Copy = {
   meta: {
     title: 'Rain Zhang — Software Engineer, Vancouver',
     description:
-      'Third-year computer science student at SFU. I build and maintain web systems, from design through to production — Python, TypeScript and Rust.',
+      'Fourth-year computer science student at SFU. I build and maintain web systems, from design through to production — Python, TypeScript and Rust.',
     ogAlt:
       'Rain Zhang — software engineer in Vancouver, BC. I build complete web systems and software end to end: interfaces, APIs, databases and CI/CD.',
   },
