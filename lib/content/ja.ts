@@ -9,7 +9,7 @@ export const ja: Copy = {
   meta: {
     title: 'Rain Zhang — ソフトウェアエンジニア（バンクーバー）',
     description:
-      'サイモンフレーザー大学でコンピュータサイエンスを学ぶ3年生。Python・TypeScript・Rust で、Web システムの設計から本番運用までを一貫して担当しています。',
+      'サイモンフレーザー大学でコンピュータサイエンスを学ぶ4年生。Python・TypeScript・Rust で、Web システムの設計から本番運用までを一貫して担当しています。',
     ogAlt:
       'Rain Zhang — バンクーバー在住のソフトウェアエンジニア。インターフェース、API、データベース、CI/CD まで、Web システムを一貫して構築しています。',
   },
@@ -38,7 +38,7 @@ export const ja: Copy = {
   intro: {
     eyebrow: 'コンピュータサイエンス · サイモンフレーザー大学 · バンクーバー、BC州、カナダ',
     heading: 'Web システムの設計から本番運用まで、一貫して担当しています。',
-    body: 'Rain Zhang です。サイモンフレーザー大学でコンピュータサイエンスを学ぶ3年生です。この1年は、セキュリティキーの会社と不動産管理会社で実際に運用されるシステムを、主に Python・TypeScript・Rust で開発し、運用してきました。',
+    body: 'Rain Zhang です。サイモンフレーザー大学でコンピュータサイエンスを学ぶ4年生です。この1年は、セキュリティキーの会社と不動産管理会社で実際に運用されるシステムを、主に Python・TypeScript・Rust で開発し、運用してきました。',
     resume: '履歴書',
     copyEmail: 'メールアドレスをコピー',
   },
