@@ -13,9 +13,9 @@ export const resumeEn: ResumeCopy = {
   meta: {
     title: 'Resume — Rain Zhang',
     description:
-      'The resume of Rain Zhang, full-stack engineer and computer science student in Vancouver, BC. Read it here or download the PDF.',
+      'The resume of Rain Zhang, full-stack developer and product engineer in Vancouver, BC. Read it here or download the PDF.',
   },
-  tagline: 'Full-stack engineer · Computer Science, Simon Fraser University',
+  tagline: 'Full-Stack Developer & Product Engineer · Simon Fraser University',
   contact: [
     [{ text: 'Vancouver, BC, Canada' }],
     [
@@ -47,11 +47,11 @@ export const resumeEn: ResumeCopy = {
       meta: [{ text: 'MNT Realty' }, { text: 'Vancouver, BC, Canada' }],
       dates: 'Aug 2026 – present',
       bullets: [
-        'Sole software engineer for the company, responsible for every internal system from architecture to hosting, deployment and ongoing maintenance.',
-        'Redesigned and rebuilt the MNT Realty platform from the ground up: a new public website, an owner portal for residents, and a staff admin console in one application.',
-        'Built MNT Control Center, an internal platform that brings the office’s scattered tools into one place, in Next.js, Node.js and PostgreSQL.',
+        'Sole software engineer for the company: own every internal system from requirements and architecture to hosting, deployment and maintenance.',
+        'Scoped and rebuilt the MNT Realty platform from the ground up: a new public website, an owner portal for residents, and a staff admin console in one application.',
+        'Chose the workflows worth replacing and built MNT Control Center, bringing the office’s scattered tools into one place, in Next.js, Node.js and PostgreSQL.',
         'Set up organization sign-in and role-based access with Microsoft Entra ID, the Graph API and OAuth 2.0.',
-        'Automated recurring office work: sorting incoming email, looking up owner information, and answering staff questions from company documents.',
+        'Automated the slowest recurring office work: sorting incoming email, looking up owner information, and answering staff questions from company documents.',
       ],
     },
     {
@@ -64,7 +64,7 @@ export const resumeEn: ResumeCopy = {
       ],
       dates: 'Sep – Dec 2025',
       bullets: [
-        'Built and ran three production systems for the post-quantum FIDO2 program: a public developer platform, a Rust software security key, and a customer demo site.',
+        'Defined and delivered three production systems for the post-quantum FIDO2 program: a public developer platform, a Rust software security key, and a customer demo site.',
         'Wrote a CTAP2.1 authenticator in Rust that Linux presents as a virtual USB security key, letting browsers test ML-DSA credentials before hardware existed.',
         'Deployed with Docker on Linux servers and Google Cloud Run; GitHub Actions ran tests, builds and a daily FIDO metadata refresh.',
         'Worked with hardware and security engineers so the tools matched real devices; still maintaining all three after the internship ended.',
@@ -85,7 +85,7 @@ export const resumeEn: ResumeCopy = {
       ],
       dates: 'Aug 2026 – present',
       bullets: [
-        'One application serving three surfaces: the public website, an owner portal for residents, and a staff admin console, each on its own subdomain.',
+        'One application serving three audiences: the public website, an owner portal for residents, and a staff admin console, each on its own subdomain.',
         'Host-based routing gives each surface its own chrome and session cookie; every read and write goes through one data-store contract.',
         'Navigation, page guards and file routes read one access table, so no role ever learns what another can see.',
       ],
@@ -106,7 +106,7 @@ export const resumeEn: ResumeCopy = {
       ],
       dates: 'Sep 2025 – present',
       bullets: [
-        'Public tool for FIDO2 developers: register and sign in with real or virtual authenticators, decode responses, and search the FIDO Alliance metadata service.',
+        'Public tool for FIDO2 developers, built because the team had none: register and sign in with real or virtual authenticators, decode responses, and search the FIDO Alliance metadata service.',
         'Added ML-DSA-44, -65 and -87 to a fork of Yubico’s python-fido2 through liboqs, without breaking the classical paths.',
         'About 120 server test files plus frontend and post-quantum suites run in CI; a daily GitHub Action re-verifies the metadata snapshot.',
       ],
