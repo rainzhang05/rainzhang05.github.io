@@ -7,11 +7,11 @@ import type { Copy } from '../types';
 export const en: Copy = {
   locale: 'en',
   meta: {
-    title: 'Rain Zhang — Software Engineer, Vancouver',
+    title: 'Rain Zhang — Full-Stack Developer & Product Engineer, Vancouver',
     description:
-      'Fourth-year computer science student at SFU. I build and maintain web systems, from design through to production — Python, TypeScript and Rust.',
+      'Fourth-year computer science student at SFU. I work out what needs building, then build and maintain the web systems end to end — Python, TypeScript and Rust.',
     ogAlt:
-      'Rain Zhang — software engineer in Vancouver, BC. I build complete web systems and software end to end: interfaces, APIs, databases and CI/CD.',
+      'Rain Zhang — full-stack developer and product engineer in Vancouver, BC. I decide what a system needs to do, then build it end to end: interfaces, APIs, databases and CI/CD.',
   },
   nav: [
     {
@@ -36,9 +36,10 @@ export const en: Copy = {
     },
   ],
   intro: {
-    eyebrow: 'Computer science · Simon Fraser University · Vancouver, BC, Canada',
+    eyebrow:
+      'Full-Stack Developer & Product Engineer · Simon Fraser University · Vancouver, BC, Canada',
     heading: 'I build and maintain web systems, from design through to production.',
-    body: 'I’m Rain, a fourth-year computer science student at SFU. In the past year I’ve built and run production systems for a security-key company and a property management firm, mostly in Python, TypeScript and Rust.',
+    body: 'I’m Rain, a fourth-year computer science student at SFU. In the past year I’ve decided what to build, built it and kept it running for a security-key company and a property management firm, mostly in Python, TypeScript and Rust.',
     resume: 'Resume',
     copyEmail: 'Copy email',
   },
@@ -74,15 +75,15 @@ export const en: Copy = {
         scale: 1.45,
       },
       summary:
-        'The only engineer at a property and strata management company. I build and run the internal systems the office works from, and connect them to the company’s Microsoft 365 accounts and data.',
+        'The only engineer at a property and strata management company. I work out with staff what the office actually needs, then build and run the internal systems it works from, connected to the company’s Microsoft 365 accounts and data.',
       groups: [
         {
           label: 'Work',
           items: [
-            'Designed and built MNT Control Center, an internal platform that replaces the separate tools the office used before.',
+            'Decided what an internal platform had to replace, then designed and built MNT Control Center in place of the separate tools the office used before.',
             'Set up organisation sign-in and role-based access with Microsoft Entra ID, the Graph API and OAuth 2.0.',
             'Built the internal web applications behind it in Next.js, Node.js and PostgreSQL.',
-            'Automated recurring office work: sorting incoming email, looking up owner records, and an internal assistant that answers staff questions from company documents.',
+            'Automated the recurring office work that cost staff the most time: sorting incoming email, looking up owner records, and an internal assistant that answers staff questions from company documents.',
           ],
         },
         {
@@ -123,12 +124,12 @@ export const en: Copy = {
         height: 60,
       },
       summary:
-        'Built three systems for FEITIAN’s post-quantum FIDO2 work and ran them end to end: a public WebAuthn developer platform, a software security key in Rust, and a customer demo site.',
+        'Worked out what FEITIAN’s post-quantum FIDO2 work needed, then built three systems and ran them end to end: a public WebAuthn developer platform, a software security key in Rust, and a customer demo site.',
       groups: [
         {
           label: 'Work',
           items: [
-            'Built the company’s first WebAuthn/FIDO2 developer platform: one place to register, sign in, inspect and debug credentials, in place of the third-party tools the team had been using.',
+            'The team was working from third-party tools that could not show post-quantum credentials, so I built the company’s first WebAuthn/FIDO2 developer platform: one place to register, sign in, inspect and debug them.',
             'Wrote a CTAP2 authenticator in Rust that Linux presents as a virtual USB security key, so browsers and libfido2 could test ML-DSA credentials before hardware existed.',
             'Built a self-service demo site so customers could try passwordless sign-in and security keys without going through support.',
           ],
@@ -220,7 +221,7 @@ export const en: Copy = {
       sections: [
         {
           label: 'What it is',
-          text: 'A Flask web app for developers building on FIDO2. Register and sign in with real or virtual authenticators, edit the raw WebAuthn request as JSON, decode what comes back, and look up any authenticator in the FIDO Alliance metadata service. Built during my internship at FEITIAN, and I still maintain it.',
+          text: 'A Flask web app for developers building on FIDO2. No tool on the market could show a post-quantum credential, so I decided what one would have to do and built it: register and sign in with real or virtual authenticators, edit the raw WebAuthn request as JSON, decode what comes back, and look up any authenticator in the FIDO Alliance metadata service. Started during my internship at FEITIAN, and I still maintain it.',
         },
         {
           label: 'How it works',
@@ -476,7 +477,7 @@ export const en: Copy = {
     },
   },
   footer: {
-    tagline: 'Full-Stack Engineer and Computer Science Student in Vancouver.',
+    tagline: 'Full-Stack Developer & Product Engineer in Vancouver.',
     navigate: 'Navigate',
     elsewhere: 'Elsewhere',
     backToTop: 'Back to top',
