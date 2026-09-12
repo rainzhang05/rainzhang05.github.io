@@ -1,0 +1,126 @@
+<div class="page">
+  <header class="masthead">
+    <div class="identity">
+      <h1>Rain Zhang</h1>
+      <p class="tagline">Full-Stack Developer &amp; Product Engineer · Simon Fraser University</p>
+    </div>
+    <div class="contact">
+      <p>Vancouver, BC, Canada</p>
+      <p>+1 (236) 333-7191 · <a href="mailto:rainzhang.zty@gmail.com">rainzhang.zty@gmail.com</a></p>
+      <p><a href="https://rainzhang.me">rainzhang.me</a> · <a href="https://github.com/rainzhang05">github.com/rainzhang05</a></p>
+      <p><a href="https://www.linkedin.com/in/rainzhang05">linkedin.com/in/rainzhang05</a></p>
+    </div>
+  </header>
+
+  <div class="columns">
+    <main class="col-main">
+      <section class="block">
+        <h2>Experience</h2>
+        <div class="rule"></div>
+
+        <article class="entry">
+          <h3>Software and IT Systems Specialist</h3>
+          <div class="entry-meta">
+            <p class="org">MNT Realty · Vancouver, BC, Canada</p>
+            <p class="dates">Aug 2026 – present</p>
+          </div>
+          <ul class="bullets">
+            <li>Sole software engineer for the company: own every internal system from requirements and architecture to hosting, deployment and maintenance.</li>
+            <li>Scoped and rebuilt the MNT Realty platform from the ground up: a new public website, an owner portal for residents, and a staff admin console in one application.</li>
+            <li>Chose the workflows worth replacing and built MNT Control Center, bringing the office&#39;s scattered tools into one place, in Next.js, Node.js and PostgreSQL.</li>
+            <li>Set up organization sign-in and role-based access with Microsoft Entra ID, the Graph API and OAuth 2.0.</li>
+            <li>Automated the slowest recurring office work: sorting incoming email, looking up owner information, and answering staff questions from company documents.</li>
+          </ul>
+        </article>
+
+        <article class="entry">
+          <h3>Full-Stack Engineer Intern</h3>
+          <div class="entry-meta">
+            <p class="org">FEITIAN Technologies · International Dept. · Beijing</p>
+            <p class="dates">Sep – Dec 2025</p>
+          </div>
+          <ul class="bullets">
+            <li>Defined and delivered three production systems for the post-quantum FIDO2 program: a public developer platform, a Rust software security key, and a customer demo site.</li>
+            <li>Wrote a CTAP2.1 authenticator in Rust that Linux presents as a virtual USB security key, letting browsers test ML-DSA credentials before hardware existed.</li>
+            <li>Deployed with Docker on Linux servers and Google Cloud Run; GitHub Actions ran tests, builds and a daily FIDO metadata refresh.</li>
+            <li>Worked with hardware and security engineers so the tools matched real devices; still maintaining all three after the internship ended.</li>
+          </ul>
+        </article>
+      </section>
+
+      <section class="block">
+        <h2>Projects</h2>
+        <div class="rule"></div>
+
+        <article class="entry">
+          <h3>MNT Realty Platform</h3>
+          <div class="entry-meta stack-meta">
+            <p class="stack">Next.js · TypeScript · Node.js · PostgreSQL · Vercel · <a href="https://mntrealty.vercel.app">mntrealty.vercel.app</a></p>
+            <p class="dates">Aug 2026 – present</p>
+          </div>
+          <ul class="bullets">
+            <li>One application serving three audiences: the public website, an owner portal for residents, and a staff admin console, each on its own subdomain.</li>
+            <li>Host-based routing gives each surface its own chrome and session cookie; every read and write goes through one data-store contract.</li>
+            <li>Navigation, page guards and file routes read one access table, so no role ever learns what another can see.</li>
+          </ul>
+        </article>
+
+        <article class="entry">
+          <h3>WebAuthn Developer Platform</h3>
+          <div class="entry-meta stack-meta">
+            <p class="stack">Python · Flask · Docker · liboqs · <a href="https://webauthnlab.tech">webauthnlab.tech</a> · <a href="https://github.com/feitiantech/postquantum-webauthn-platform">repository</a></p>
+            <p class="dates">Sep 2025 – present</p>
+          </div>
+          <ul class="bullets">
+            <li>Public tool for FIDO2 developers, built because the team had none: register and sign in with real or virtual authenticators, decode responses, and search the FIDO Alliance metadata service.</li>
+            <li>Added ML-DSA-44, -65 and -87 to a fork of Yubico&#39;s python-fido2 through liboqs, without breaking the classical paths.</li>
+            <li>About 120 server test files plus frontend and post-quantum suites run in CI; a daily GitHub Action re-verifies the metadata snapshot.</li>
+          </ul>
+        </article>
+      </section>
+    </main>
+
+    <aside class="col-aside">
+      <section class="block">
+        <h2>Skills</h2>
+        <div class="rule"></div>
+        <dl>
+          <div class="skill">
+            <dt>Languages</dt>
+            <dd>Python, TypeScript, JavaScript, Rust, C, C++, Java</dd>
+          </div>
+          <div class="skill">
+            <dt>Web</dt>
+            <dd>React, Next.js, Node.js, Flask, Tailwind CSS, HTML, CSS, REST APIs</dd>
+          </div>
+          <div class="skill">
+            <dt>Data and cloud</dt>
+            <dd>PostgreSQL, Docker, Google Cloud, Vercel, GitHub Actions, Git, Linux</dd>
+          </div>
+          <div class="skill">
+            <dt>Security</dt>
+            <dd>WebAuthn, FIDO2, CTAP2.1, OAuth 2.0, Microsoft Entra ID, post-quantum cryptography (ML-DSA, liboqs)</dd>
+          </div>
+          <div class="skill">
+            <dt>Testing</dt>
+            <dd>pytest, Vitest, Playwright, CI on GitHub Actions</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="block">
+        <h2>Education</h2>
+        <div class="rule"></div>
+        <p class="school">Simon Fraser University</p>
+        <div class="school-lines">
+          <p>Bachelor of Science, Computer Science</p>
+          <p>Vancouver, BC, Canada</p>
+        </div>
+        <div class="school-notes">
+          <p>Sep 2023 – Apr 2027 · CGPA 3.44 / 4.33</p>
+          <p>Dean&#39;s Honour Roll, Fall 2024 and Summer 2025</p>
+        </div>
+      </section>
+    </aside>
+  </div>
+</div>

@@ -1,0 +1,492 @@
+/*
+ * The resume, reconstructed as the source the two PDFs in public/ are printed
+ * from. Every value here was measured out of the shipped PDFs: the page is
+ * authored at print scale, so 1px is exactly 0.75pt and every baseline lands
+ * on a whole pixel, the way the originals do.
+ *
+ * Do not round the fractional offsets. Each one is whatever puts its block's
+ * baseline exactly where the shipped PDF puts it, found by resume/solve.mjs
+ * measuring the laid-out page and relaxing the offsets in document order.
+ * Change a line height or a type size and the offsets below it are stale:
+ * re-run `npm run resume:solve` rather than nudging them by hand.
+ */
+
+:root {
+  /* Colour. Four are the site's own tokens; the hairline is document-local —
+     it sits between globals.css --rule and --rule-strong and matches neither. */
+  --ink: #2b2a27;
+  --ink-2: #5e5b55;
+  --ink-3: #726e67;
+  --sage: #5f7363;
+  --rule: #d8d4cb;
+
+  /* Type sizes. The PDF records these as px truncated to two decimals
+     (12.66 for 12.6667), which is why they read as arbitrary there; in pt they
+     are exact half-points. */
+  --t-name: 25pt;
+  --t-title: 10.5pt;
+  --t-body: 9.5pt;
+  --t-aside: 9pt;
+  --t-school: 10pt;
+  --t-caption: 8.5pt;
+  --t-label: 7.5pt;
+
+  /* Line pitches, refitted across every block of the shipped PDFs: a three-line
+     bullet spans exactly 35px, so the body pitch is 17.5px = 13.125pt. */
+  --lh-h2: 15px;
+  --lh-title: 19.6px;
+  --lh-body: 13.125pt;
+  --lh-dt: 14.5px;
+  --lh-dd: 12.5pt;
+
+  /* Vertical offsets. Solved by resume/solve.mjs against the shipped PDFs' own
+     baselines, not chosen — re-run the solver rather than editing them by hand.
+     Each one places its block, and everything below it follows. */
+  /* Page and masthead */
+  --o-masthead: 133px;
+  --o-identity: 54.7564px;
+  --o-tagline: 3.0124px;
+  --o-contact: 47.75px;
+
+  /* Columns */
+  --o-column-pad: 1px;
+  --o-rule: 3.75px;
+  --o-rule-proj: 4px;
+  --o-rule-edu: 5px;
+  --o-block-main: 14.5091px;
+  --o-block-aside: 19.6686px;
+
+  /* Experience and project entries */
+  --o-entry: 6.0031px;
+  --o-entry-gap: 9.5122px;
+  --o-entry-proj: 6px;
+  --o-entry-gap-proj: 9px;
+  --o-meta: 0.419px;
+  --o-stack-meta: -0.5994px;
+  --o-bullets: 4.5px;
+  --o-bullets-proj: 5px;
+  --o-bullet-gap: 2px;
+
+  /* Skills and education */
+  --o-skill: 8.0031px;
+  --o-skill-items: 0.5px;
+  --o-skill-gap: 9.6625px;
+  --o-skill-gap-3: 9.9844px;
+  --o-skill-gap-4: 9.9844px;
+  --o-skill-gap-5: 10.3125px;
+  --o-school: 5.0019px;
+  --o-school-lines: 2.0013px;
+  --o-school-notes: 5.0113px;
+}
+
+@page {
+  size: 8.5in 11in;
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  width: 816px;
+  background: #fff;
+  color: var(--ink-2);
+  font-family: 'Albert Sans', system-ui, sans-serif;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  /* The originals were set with this. Greedy wrapping and `balance` both break
+     their lines somewhere else; `pretty` reproduces every break. */
+  text-wrap: pretty;
+}
+
+a {
+  color: var(--sage);
+  text-decoration: none;
+}
+
+p,
+h1,
+h2,
+h3,
+ul,
+ol,
+li,
+dl,
+dt,
+dd {
+  margin: 0;
+  padding: 0;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+/* ---------------------------------------------------------------- masthead */
+
+.page {
+  padding: 0 52.8px;
+}
+
+.masthead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  height: var(--o-masthead);
+  border-bottom: 1px solid var(--rule);
+}
+
+.identity {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin-top: var(--o-identity);
+}
+
+.identity h1 {
+  font-size: var(--t-name);
+  font-weight: 500;
+  line-height: 40px;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.tagline {
+  margin-top: var(--o-tagline);
+  font-size: var(--t-title);
+  line-height: 19.6px;
+  color: var(--ink-2);
+}
+
+.contact {
+  flex: none;
+  margin-top: var(--o-contact);
+  text-align: right;
+}
+
+.contact p {
+  font-size: var(--t-caption);
+  line-height: 13.25pt;
+  color: var(--ink-2);
+}
+
+/* ----------------------------------------------------------------- columns */
+
+.columns {
+  display: flex;
+  align-items: stretch;
+  margin-top: 16px;
+}
+
+.col-main {
+  width: 484.8px;
+  padding-bottom: var(--o-column-pad);
+}
+
+.col-aside {
+  width: 197.2px; /* 167px of text + 29.2px padding + the 1px rule */
+  margin-left: 28.4px;
+  padding-left: 29.2px;
+  border-left: 1px solid var(--rule);
+}
+
+h2 {
+  font-size: var(--t-label);
+  font-weight: 500;
+  line-height: var(--lh-h2);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* A filled element, not a border: the originals draw every hairline as a rect,
+   and Chrome snaps a rect and a baseline on different rules, so the two need to
+   be placed independently. */
+.rule {
+  height: 0.75pt;
+  margin-top: var(--o-rule);
+  background: var(--rule);
+}
+
+/* The second rule in each column needs its own offset: its heading sits at a
+   different subpixel position, and Chrome snaps the rect from that. */
+.col-aside .block:nth-of-type(2) .rule {
+  margin-top: var(--o-rule-edu);
+}
+
+.col-main .block:nth-of-type(2) .rule {
+  margin-top: var(--o-rule-proj);
+}
+
+.col-main .block + .block {
+  margin-top: var(--o-block-main);
+}
+
+.col-aside .block + .block {
+  margin-top: var(--o-block-aside);
+}
+
+/* ------------------------------------------------------- an entry, and its */
+
+.entry {
+  margin-top: var(--o-entry);
+}
+
+.entry + .entry {
+  margin-top: var(--o-entry-gap);
+}
+
+.col-main .block:nth-of-type(2) .entry {
+  margin-top: var(--o-entry-proj);
+}
+
+.col-main .block:nth-of-type(2) .entry + .entry {
+  margin-top: var(--o-entry-gap-proj);
+}
+
+.col-main .block:nth-of-type(2) .bullets {
+  margin-top: var(--o-bullets-proj);
+}
+
+.entry h3 {
+  font-size: var(--t-title);
+  font-weight: 600;
+  line-height: var(--lh-title);
+  color: var(--ink);
+}
+
+.entry-meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0 18px;
+  margin-top: var(--o-meta);
+}
+
+.entry-meta .org {
+  font-size: var(--t-body);
+  line-height: var(--lh-body);
+  color: var(--ink-2);
+}
+
+.entry-meta .stack {
+  font-size: var(--t-caption);
+  line-height: 12pt;
+  color: var(--ink-3);
+}
+
+.entry-meta .dates {
+  flex: none;
+  font-size: var(--t-caption);
+  line-height: 12pt;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+
+.stack-meta {
+  margin-top: var(--o-stack-meta);
+}
+
+/* ----------------------------------------------------------------- bullets */
+
+.bullets {
+  margin-top: var(--o-bullets);
+  padding-left: 17.3px;
+}
+
+.bullets li {
+  position: relative;
+  font-size: var(--t-body);
+  line-height: var(--lh-body);
+  color: var(--ink-2);
+}
+
+.bullets li + li {
+  margin-top: var(--o-bullet-gap);
+}
+
+/* The disc the originals draw: 4x4px, 18.1px left of the text, its top six
+   pixels above the first baseline. Drawn rather than a list marker so the
+   position is ours and not Chrome's. */
+.bullets li::before {
+  content: '';
+  position: absolute;
+  left: -18.1px;
+  top: 7.181px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--ink-2);
+}
+
+/* ------------------------------------------------------------------- aside */
+
+.skill {
+  margin-top: var(--o-skill);
+}
+
+.skill + .skill {
+  margin-top: var(--o-skill-gap);
+}
+
+/* Each group placed on its own. One shared gap accumulated up to three pixels
+   of drift by the foot of the column, because the item block's height is
+   fractional (a 16.667px pitch) and Chrome rounds it per block. */
+.skill:nth-of-type(3) {
+  margin-top: var(--o-skill-gap-3);
+}
+
+.skill:nth-of-type(4) {
+  margin-top: var(--o-skill-gap-4);
+}
+
+.skill:nth-of-type(5) {
+  margin-top: var(--o-skill-gap-5);
+}
+
+.skill dt {
+  font-size: var(--t-aside);
+  font-weight: 600;
+  line-height: var(--lh-dt);
+  color: var(--ink);
+}
+
+.skill dd {
+  margin-top: var(--o-skill-items);
+  font-size: var(--t-aside);
+  line-height: var(--lh-dd);
+  color: var(--ink-2);
+}
+
+.school {
+  margin-top: var(--o-school);
+  font-size: var(--t-school);
+  font-weight: 600;
+  line-height: 18px;
+  color: var(--ink);
+}
+
+.school-lines {
+  margin-top: var(--o-school-lines);
+}
+
+.school-lines p {
+  font-size: var(--t-aside);
+  line-height: 12.75pt;
+  color: var(--ink-2);
+}
+
+.school-notes {
+  margin-top: var(--o-school-notes);
+}
+
+.school-notes p {
+  font-size: var(--t-caption);
+  line-height: 12.75pt;
+  color: var(--ink-3);
+}
+
+/* Japanese offsets. Solved by resume/solve.mjs against the Japanese PDF. */
+html[lang='ja'] {
+  /* Japanese sets a little smaller and a little lower; same solver, same
+     method, its own PDF's baselines. */
+  --lh-h2: 15px;
+  --lh-title: 19.6px;
+  --lh-body: 13.125pt;
+  --lh-dt: 14.5px;
+  --lh-dd: 12.5pt;
+
+  /* Page and masthead */
+  --o-masthead: 139px;
+  --o-identity: 39.7564px;
+  --o-tagline: 4.0124px;
+  --o-contact: 51.75px;
+
+  /* Columns */
+  --o-column-pad: 0px;
+  --o-rule: 3.75px;
+  --o-rule-proj: 5px;
+  --o-rule-edu: 5px;
+  --o-block-main: 14.0091px;
+  --o-block-aside: 14.0124px;
+
+  /* Experience and project entries */
+  --o-entry: 7.0031px;
+  --o-entry-gap: 11.0122px;
+  --o-entry-proj: 6px;
+  --o-entry-gap-proj: 11.0312px;
+  --o-meta: 2.419px;
+  --o-stack-meta: 1.4006px;
+  --o-bullets: 3.5px;
+  --o-bullets-proj: 5.0156px;
+  --o-bullet-gap: 2px;
+
+  /* Skills and education */
+  --o-skill: 8.0031px;
+  --o-skill-items: 1.5px;
+  --o-skill-gap: 9.0062px;
+  --o-skill-gap-3: 9px;
+  --o-skill-gap-4: 9px;
+  --o-skill-gap-5: 9px;
+  --o-school: 6.0019px;
+  --o-school-lines: 2.0013px;
+  --o-school-notes: 6.0113px;
+}
+
+/* ------------------------------------------------------------- Japanese */
+
+/*
+ * Same skeleton and the same horizontal anchors as English — the columns, the
+ * rules and the text edges are identical in both PDFs. What differs is the type
+ * scale (Japanese sets a little smaller), its line pitches, and the family:
+ * Japanese runs fall to Hiragino Sans, a macOS system face, whose W3/W4/W5
+ * weights are what the shipped PDF embeds. Latin runs stay in Albert Sans.
+ *
+ * Offsets live in resume/solve.mjs's sibling block below and are solved the
+ * same way, against the Japanese PDF's own baselines.
+ */
+html[lang='ja'] body {
+  font-family: 'Albert Sans', 'Hiragino Sans', sans-serif;
+}
+
+html[lang='ja'] .tagline {
+  /* Breaks at its middle dots rather than through a name, as its PDF sets it. */
+  word-break: keep-all;
+  font-size: 10pt;
+  line-height: 15pt;
+}
+
+html[lang='ja'] .contact p {
+  line-height: 13.75pt;
+}
+
+html[lang='ja'] .bullets li {
+  font-size: 9pt;
+  line-height: 13.5pt;
+}
+
+html[lang='ja'] .entry-meta .org {
+  font-size: 9pt;
+}
+
+html[lang='ja'] .skill dt,
+html[lang='ja'] .skill dd,
+html[lang='ja'] .school-lines p {
+  font-size: 8.5pt;
+}
+
+html[lang='ja'] .skill dd,
+html[lang='ja'] .school-lines p {
+  line-height: 12.75pt;
+}
+
+html[lang='ja'] .school-notes p {
+  line-height: 13.5pt;
+}

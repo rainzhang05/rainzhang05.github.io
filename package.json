@@ -2,7 +2,7 @@
   "name": "rainzhang-portfolio",
   "version": "2.0.0",
   "private": true,
-  "description": "Rain Zhang — personal portfolio. Next.js (App Router) + TypeScript + Tailwind.",
+  "description": "Rain Zhang \u2014 personal portfolio. Next.js (App Router) + TypeScript + Tailwind.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -13,7 +13,10 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
+    "test:e2e:ui": "playwright test --ui",
+    "resume": "node resume/build.mjs",
+    "resume:measure": "node resume/measure.mjs",
+    "resume:solve": "node resume/solve.mjs"
   },
   "dependencies": {
     "next": "15.5.18",
