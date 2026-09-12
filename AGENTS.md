@@ -91,9 +91,22 @@ lib/
 middleware.ts              Sends an arrival to the remembered language, or to Japanese if the
                            first visit is from Japan
 
+resume/                    The source the two PDFs in public/ are printed from. Reconstructed
+                           from the shipped files' own measured geometry after the original was
+                           lost, and verified against them line by line.
+  resume.css               Page geometry and type. The only file here with raw values.
+  resume.en.html           The English resume's markup
+  resume.ja.html           The Japanese resume's markup
+  build.mjs                Prints both PDFs with Playwright's Chromium (npm run resume)
+  solve.mjs                Solves the vertical offsets against targets.*.json
+  measure.mjs              Line counts and remaining slack per block, without printing
+  compare.py               Line-by-line diff of a printed PDF against the shipped one
+  targets.en.json          The shipped PDFs' own baselines, in px — the solver's contract
+  targets.ja.json
+
 public/
-  rain-zhang-resume.pdf    English resume; downloaded from /resume and nowhere else
-  rain-zhang-resume-ja.pdf Japanese resume; downloaded from /ja/resume
+  rain-zhang-resume.pdf    English resume; printed from resume/, downloaded from /resume
+  rain-zhang-resume-ja.pdf Japanese resume; printed from resume/, downloaded from /ja/resume
   logos/                   Company marks (feitian.svg, mnt-realty.svg)
   projects/                Project screenshots
   tech/                    Technology marks, looked up by lib/tech.ts
@@ -137,6 +150,9 @@ import type { Project } from "@/lib/types";
 | `npm run test:coverage` | Vitest with v8 coverage (`coverage/` output) |
 | `npm run test:e2e` | Playwright across all configured projects |
 | `npm run test:e2e:ui` | Playwright UI mode |
+| `npm run resume` | Print both resume PDFs into `public/` from `resume/` (macOS only — the Japanese one needs Hiragino Sans) |
+| `npm run resume:measure` | How many lines every block of the resume sets to, and the room left on its last line |
+| `npm run resume:solve` | Re-solve the resume's vertical offsets against the shipped PDFs' baselines |
 
 **Before claiming a task is done**, run at minimum: `npm run lint && npm run typecheck && npm run test`. Add `npm run test:e2e` if your change is observable in the browser (DOM, routing, interactions, layout).
 
@@ -217,7 +233,7 @@ Everything a recruiter reads is in [lib/content/en.ts](lib/content/en.ts) and [l
 - **Adding an experience** is one object in `experiences`. `mark` is optional — omit it and no logo renders. `related` may be `[]`, which drops the related-work block.
 - **Technology pills** are looked up by name in [lib/tech.ts](lib/tech.ts). A name mapped to `null` still renders as a plain pill, so nothing breaks if a mark is missing. Adding one: drop the file in `/public/tech/` and add a line to `TECH_ICONS`.
 - **Edit both locales.** [tests/unit/content.test.ts](tests/unit/content.test.ts) fails if ids, hrefs, technology arrays, marks or skill items drift apart between `en` and `ja`, so you cannot forget one. Only prose differs. A resume href is the one exception: `/resume` and `/ja/resume` legitimately differ, so `shape()` strips the `/ja` prefix before comparing and a separate test pins the prefix itself.
-- **The resume is a transcription, not content you write.** [lib/content/resume.en.ts](lib/content/resume.en.ts) and [resume.ja.ts](lib/content/resume.ja.ts) are the two PDFs in `public/`, word for word and in their own order — nothing added, reworded or left out. They are deliberately *not* derived from `copy.experiences` / `featured` / `skills` / `education`, which say different things, and they are outside `Copy` so the home page does not ship them. Change the PDF first, then the file. The two were written separately rather than translated, so they match in structure but not in line count; [tests/unit/resume.test.ts](tests/unit/resume.test.ts) checks what they share and deliberately not what they do not.
+- **The resume is a transcription, not content you write.** [lib/content/resume.en.ts](lib/content/resume.en.ts) and [resume.ja.ts](lib/content/resume.ja.ts) are the two PDFs in `public/`, word for word and in their own order — nothing added, reworded or left out. They are deliberately *not* derived from `copy.experiences` / `featured` / `skills` / `education`, which say different things, and they are outside `Copy` so the home page does not ship them. The PDF is now generated from [resume/](resume/) rather than being the thing you replace: reword `resume/resume.en.html` or `resume.ja.html`, run `npm run resume`, then carry the same words into the content file. [tests/unit/resumeSource.test.ts](tests/unit/resumeSource.test.ts) fails if the two say different things. The two were written separately rather than translated, so they match in structure but not in line count; [tests/unit/resume.test.ts](tests/unit/resume.test.ts) checks what they share and deliberately not what they do not.
 - **Never add claims the English page does not make** — JLPT levels, language proficiency, visa or residency status. The same test guards a blocklist of these in *both* locales, and over the resume as well as the page.
 
 ---
@@ -339,7 +355,7 @@ A change that breaks CI on one matrix entry will block the whole PR. Don't disab
 - **Add or edit an experience:** the same two files (logo in `/public/logos/`).
 - **Add a technology pill:** the two content files + a line in [lib/tech.ts](lib/tech.ts) + the mark in `/public/tech/`.
 - **Change a UI string:** the `nav`, `sections`, `labels`, `contact` or `footer` blocks of both content files.
-- **Update the resume:** replace the PDF in `/public/`, then transcribe the change into [lib/content/resume.en.ts](lib/content/resume.en.ts) or [resume.ja.ts](lib/content/resume.ja.ts). The page has no content of its own.
+- **Update the resume:** reword [resume/resume.en.html](resume/resume.en.html) or [resume.ja.html](resume/resume.ja.html), check `npm run resume:measure` still reports the same line counts (both PDFs are full to the bottom edge — one extra line spills onto a second page), run `npm run resume` to reprint into `/public/`, then carry the same words into [lib/content/resume.en.ts](lib/content/resume.en.ts) or [resume.ja.ts](lib/content/resume.ja.ts). The page has no content of its own.
 - **Change the page title, description or hreflang:** `meta` in both content files, and `generateMetadata` in [app/[locale]/layout.tsx](app/[locale]/layout.tsx).
 - **Change a token (colour, type, spacing, radius, motion):** the `:root` block of [app/globals.css](app/globals.css), and its Tailwind name in [tailwind.config.ts](tailwind.config.ts) if it is new.
 - **Change contact form behaviour:** [components/site/ContactForm.tsx](components/site/ContactForm.tsx); the endpoint and timeout are in [lib/site.ts](lib/site.ts).
