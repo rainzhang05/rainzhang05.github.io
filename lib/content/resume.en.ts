@@ -47,8 +47,8 @@ export const resumeEn: ResumeCopy = {
       meta: [{ text: 'MNT Realty' }, { text: 'Vancouver, BC, Canada' }],
       dates: 'Aug 2026 – present',
       bullets: [
-        'Sole software engineer for the company: own every internal system from requirements and architecture to hosting, deployment and maintenance.',
-        'Scoped and rebuilt the MNT Realty platform from the ground up: a new public website, an owner portal for residents, and a staff admin console in one application.',
+        'Own every internal system for the company, from requirements and architecture through to hosting, deployment and maintenance.',
+        'Scoped and rebuilt the MNT Realty platform from the ground up: three sites — a public website, an owner portal for residents and a staff admin console — in one application.',
         'Chose the workflows worth replacing and built MNT Control Center, bringing the office’s scattered tools into one place, in Next.js, Node.js and PostgreSQL.',
         'Set up organization sign-in and role-based access with Microsoft Entra ID, the Graph API and OAuth 2.0.',
         'Automated the slowest recurring office work: sorting incoming email, looking up owner information, and answering staff questions from company documents.',
