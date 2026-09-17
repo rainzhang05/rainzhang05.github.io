@@ -213,6 +213,37 @@ export const en: Copy = {
       ],
     },
     {
+      id: 'work-authenticator',
+      dates: 'Oct 2025 – Present',
+      title: 'FIDO2 Software Authenticator',
+      summary:
+        'A CTAP2 security key in software. Linux presents it as a USB device, so browsers can test post-quantum credentials without hardware.',
+      primary: ['Rust', 'Linux'],
+      sections: [
+        {
+          label: 'What it is',
+          text: 'A Rust workspace that behaves like a FIDO2 security key, in software. FEITIAN’s engineers and partners needed to develop against ML-DSA credentials before the hardware was ready. It started as my own repository and now lives under FeitianTech, where I still maintain it.',
+        },
+        {
+          label: 'How it works',
+          text: 'An authenticator core implements CTAP2.1 on the Trussed framework with littlefs2 storage: credential management, PIN/UV protocols 1 and 2, and reset. A runner registers a virtual USB HID device through Linux uhid and speaks CTAPHID, so Chrome, Firefox and libfido2 see an ordinary key. It advertises ES256 and ML-DSA-44, -65 and -87, and ships a small command-line tool (attach, detach, status, reset, pin) that can run as a daemon.',
+        },
+        {
+          label: 'Technical challenges',
+          text: 'Browsers are strict about what they will talk to, so the HID transport and the CTAP state machine had to be exact before Chrome or Firefox accepted the device. CTAP and COSE structures were designed around classical keys, and post-quantum ones do not fit them neatly. The first version called liboqs over a C FFI; it later moved to the pure-Rust fips204 crate, with secret keys zeroised on drop.',
+        },
+      ],
+      stack: ['Rust', 'Linux UHID', 'Trussed', 'littlefs2', 'CTAP2.1', 'fips204', 'liboqs', 'clap'],
+      status:
+        'Works on Linux and is used alongside the developer platform, and still under active development. CI runs rustfmt, clippy and the test suite.',
+      links: [
+        {
+          label: 'Repository',
+          href: 'https://github.com/feitiantech/fidosoftwareauthenticator',
+        },
+      ],
+    },
+    {
       id: 'work-webauthn',
       dates: 'Sep 2025 – Present',
       title: 'WebAuthn Developer Platform',
@@ -293,37 +324,6 @@ export const en: Copy = {
         {
           label: 'demo.ftsafe.com',
           href: 'https://demo.ftsafe.com',
-        },
-      ],
-    },
-    {
-      id: 'work-authenticator',
-      dates: 'Oct 2025 – Present',
-      title: 'FIDO2 Software Authenticator',
-      summary:
-        'A CTAP2 security key in software. Linux presents it as a USB device, so browsers can test post-quantum credentials without hardware.',
-      primary: ['Rust', 'Linux'],
-      sections: [
-        {
-          label: 'What it is',
-          text: 'A Rust workspace that behaves like a FIDO2 security key, in software. FEITIAN’s engineers and partners needed to develop against ML-DSA credentials before the hardware was ready. It started as my own repository and now lives under FeitianTech, where I still maintain it.',
-        },
-        {
-          label: 'How it works',
-          text: 'An authenticator core implements CTAP2.1 on the Trussed framework with littlefs2 storage: credential management, PIN/UV protocols 1 and 2, and reset. A runner registers a virtual USB HID device through Linux uhid and speaks CTAPHID, so Chrome, Firefox and libfido2 see an ordinary key. It advertises ES256 and ML-DSA-44, -65 and -87, and ships a small command-line tool (attach, detach, status, reset, pin) that can run as a daemon.',
-        },
-        {
-          label: 'Technical challenges',
-          text: 'Browsers are strict about what they will talk to, so the HID transport and the CTAP state machine had to be exact before Chrome or Firefox accepted the device. CTAP and COSE structures were designed around classical keys, and post-quantum ones do not fit them neatly. The first version called liboqs over a C FFI; it later moved to the pure-Rust fips204 crate, with secret keys zeroised on drop.',
-        },
-      ],
-      stack: ['Rust', 'Linux UHID', 'Trussed', 'littlefs2', 'CTAP2.1', 'fips204', 'liboqs', 'clap'],
-      status:
-        'Works on Linux and is used alongside the developer platform, and still under active development. CI runs rustfmt, clippy and the test suite.',
-      links: [
-        {
-          label: 'Repository',
-          href: 'https://github.com/feitiantech/fidosoftwareauthenticator',
         },
       ],
     },

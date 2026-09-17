@@ -213,6 +213,37 @@ export const ja: Copy = {
       ],
     },
     {
+      id: 'work-authenticator',
+      dates: '2025年10月 – 現在',
+      title: 'FIDO2 ソフトウェア認証器',
+      summary:
+        'ソフトウェアで動く CTAP2 セキュリティキー。Linux が USB 機器として見せるため、ハードウェアなしで耐量子計算機暗号の資格情報を試せます。',
+      primary: ['Rust', 'Linux'],
+      sections: [
+        {
+          label: '概要',
+          text: 'ソフトウェアで FIDO2 セキュリティキーとして振る舞う Rust のワークスペースです。社内のエンジニアや取引先が、ハードウェアが揃う前から ML-DSA の資格情報に対して開発できるようにするために作りました。自分のリポジトリから始まり、現在は FeitianTech のもとで自分が保守を続けています。',
+        },
+        {
+          label: '仕組み',
+          text: '認証器の中核は Trussed フレームワークと littlefs2 上に CTAP2.1 を実装しています。資格情報の管理、PIN/UV プロトコル1と2、リセットに対応します。ランナーが Linux の uhid で仮想 USB HID デバイスを登録し CTAPHID を話すため、Chrome・Firefox・libfido2 からは普通のキーとして見えます。ES256 と ML-DSA-44・-65・-87 を提示し、attach・detach・status・reset・pin を備えた小さなコマンドラインツール（常駐も可能）が付きます。',
+        },
+        {
+          label: '技術的な課題',
+          text: 'ブラウザは相手を厳しく選ぶので、Chrome や Firefox に受け入れられるまで HID 転送と CTAP のステートマシンを正確に作り込む必要がありました。CTAP と COSE の構造は従来の鍵を前提にしていて、耐量子計算機暗号の鍵はそのままでは収まりません。最初の版は C の FFI 経由で liboqs を呼んでいましたが、のちに純 Rust の fips204 に移し、秘密鍵は破棄時に消去しています。',
+        },
+      ],
+      stack: ['Rust', 'Linux UHID', 'Trussed', 'littlefs2', 'CTAP2.1', 'fips204', 'liboqs', 'clap'],
+      status:
+        'Linux 上で動作し、開発者向けプラットフォームと合わせて使われています。現在も開発を続けており、CI では rustfmt・clippy・テストを実行しています。',
+      links: [
+        {
+          label: 'リポジトリ',
+          href: 'https://github.com/feitiantech/fidosoftwareauthenticator',
+        },
+      ],
+    },
+    {
       id: 'work-webauthn',
       dates: '2025年9月 – 現在',
       title: 'WebAuthn 開発者向けプラットフォーム',
@@ -293,37 +324,6 @@ export const ja: Copy = {
         {
           label: 'demo.ftsafe.com',
           href: 'https://demo.ftsafe.com',
-        },
-      ],
-    },
-    {
-      id: 'work-authenticator',
-      dates: '2025年10月 – 現在',
-      title: 'FIDO2 ソフトウェア認証器',
-      summary:
-        'ソフトウェアで動く CTAP2 セキュリティキー。Linux が USB 機器として見せるため、ハードウェアなしで耐量子計算機暗号の資格情報を試せます。',
-      primary: ['Rust', 'Linux'],
-      sections: [
-        {
-          label: '概要',
-          text: 'ソフトウェアで FIDO2 セキュリティキーとして振る舞う Rust のワークスペースです。社内のエンジニアや取引先が、ハードウェアが揃う前から ML-DSA の資格情報に対して開発できるようにするために作りました。自分のリポジトリから始まり、現在は FeitianTech のもとで自分が保守を続けています。',
-        },
-        {
-          label: '仕組み',
-          text: '認証器の中核は Trussed フレームワークと littlefs2 上に CTAP2.1 を実装しています。資格情報の管理、PIN/UV プロトコル1と2、リセットに対応します。ランナーが Linux の uhid で仮想 USB HID デバイスを登録し CTAPHID を話すため、Chrome・Firefox・libfido2 からは普通のキーとして見えます。ES256 と ML-DSA-44・-65・-87 を提示し、attach・detach・status・reset・pin を備えた小さなコマンドラインツール（常駐も可能）が付きます。',
-        },
-        {
-          label: '技術的な課題',
-          text: 'ブラウザは相手を厳しく選ぶので、Chrome や Firefox に受け入れられるまで HID 転送と CTAP のステートマシンを正確に作り込む必要がありました。CTAP と COSE の構造は従来の鍵を前提にしていて、耐量子計算機暗号の鍵はそのままでは収まりません。最初の版は C の FFI 経由で liboqs を呼んでいましたが、のちに純 Rust の fips204 に移し、秘密鍵は破棄時に消去しています。',
-        },
-      ],
-      stack: ['Rust', 'Linux UHID', 'Trussed', 'littlefs2', 'CTAP2.1', 'fips204', 'liboqs', 'clap'],
-      status:
-        'Linux 上で動作し、開発者向けプラットフォームと合わせて使われています。現在も開発を続けており、CI では rustfmt・clippy・テストを実行しています。',
-      links: [
-        {
-          label: 'リポジトリ',
-          href: 'https://github.com/feitiantech/fidosoftwareauthenticator',
         },
       ],
     },
