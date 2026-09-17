@@ -75,11 +75,12 @@ export const en: Copy = {
         scale: 1.45,
       },
       summary:
-        'The only engineer at a property and strata management company. I work out with staff what the office actually needs, then build and run the internal systems it works from, connected to the company’s Microsoft 365 accounts and data.',
+        'I run the software and IT side of a property and strata management company. I work out with staff what the office actually needs, then build and run the internal systems it works from, connected to the company’s Microsoft 365 accounts and data.',
       groups: [
         {
           label: 'Work',
           items: [
+            'Rebuilt the MNT Realty platform from the ground up, folding three sites — the public website, an owner portal for residents and a staff admin console — into one application.',
             'Decided what an internal platform had to replace, then designed and built MNT Control Center in place of the separate tools the office used before.',
             'Set up organisation sign-in and role-based access with Microsoft Entra ID, the Graph API and OAuth 2.0.',
             'Built the internal web applications behind it in Next.js, Node.js and PostgreSQL.',
