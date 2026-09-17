@@ -4,6 +4,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperti
 import {
   ACTIVE_LINE,
   AMPLITUDE,
+  BAND_SLACK,
   BASE,
   OPEN_RATIO,
   RELEASE_RATIO,
@@ -273,14 +274,17 @@ export function SectionDock({
 
       if (!reduced) {
         // Proximity. Every boundary releases further out than it engages, so a
-        // pointer parked on one cannot chatter.
+        // pointer parked on one cannot chatter. Past the column's ends the
+        // distance comes back infinite, so both boundaries release at once and
+        // the lens leaves a pointer in the empty gutter alone.
         if (shown && Number.isFinite(pointerX)) {
           const d = railDistance(
             pointerX,
             pointerY,
             marks.railRight,
             marks.railTop,
-            marks.railBottom
+            marks.railBottom,
+            lensOn ? BAND_SLACK : 0
           );
           if (!lensOn && d <= marks.reach) lensOn = true;
           else if (lensOn && d > marks.reach * RELEASE_RATIO) lensOn = false;

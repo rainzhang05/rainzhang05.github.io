@@ -67,28 +67,42 @@ export function magnify(distance: number, base: number, amplitude: number, sprea
 }
 
 /**
- * Distance from a pointer to the collapsed rail, in px.
+ * How far past the rail's ends a pointer that already woke the lens may stray
+ * before the column lets go, in px. The band engages on the rail's exact edge:
+ * above the first bubble and below the last there is nothing to magnify, so a
+ * pointer there is in empty gutter and the dock owes it no answer. Releasing on
+ * that same pixel, though, would let a pointer parked on the edge chatter the
+ * lens on and off, so it is given a few px of overshoot — wider than any
+ * pointer jitter, far narrower than a bubble.
+ */
+export const BAND_SLACK = 4;
+
+/**
+ * Distance from a pointer to the collapsed rail, in px, or Infinity when the
+ * pointer is not beside the rail at all.
  *
  * The rail runs from the left edge of the viewport to `right` and spans
  * `top`..`bottom`, so there is no left side to be outside of: only how far
- * right of it, and how far past its ends, the pointer is. Euclidean, so a
- * cursor 100px right *and* 100px below is 141px away rather than 100 — which
- * is what stops the dock waking for a pointer parked in the corner of a tall
- * window. Anywhere inside the rail's own box this is 0, which is why :hover is
- * a strict subset of proximity rather than a parallel path.
+ * right of it the pointer is. Past either end the distance is not measured but
+ * refused. The lens has no bubble to aim at up there — the gutter above the
+ * first bubble and below the last is empty — and a pointer that is merely near
+ * the column's corner is looking at the page, not at the dock. Anywhere inside
+ * the rail's own box this is 0, which is why :hover is a strict subset of
+ * proximity rather than a parallel path.
+ *
+ * `slack` extends the ends for a pointer the caller has already engaged; see
+ * BAND_SLACK.
  */
 export function railDistance(
   x: number,
   y: number,
   right: number,
   top: number,
-  bottom: number
+  bottom: number,
+  slack: number
 ): number {
-  const dx = x > right ? x - right : 0;
-  const dy = y < top ? top - y : y > bottom ? y - bottom : 0;
-  if (dx === 0) return dy;
-  if (dy === 0) return dx;
-  return Math.sqrt(dx * dx + dy * dy);
+  if (y < top - slack || y > bottom + slack) return Number.POSITIVE_INFINITY;
+  return x > right ? x - right : 0;
 }
 
 /**
