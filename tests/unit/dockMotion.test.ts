@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   ACTIVE_LINE,
   AMPLITUDE,
+  BAND_SLACK,
   BASE,
   OPEN_RATIO,
   RELEASE_RATIO,
@@ -55,7 +56,8 @@ describe("railDistance", () => {
   const right = 60;
   const top = 350;
   const bottom = 550;
-  const d = (x: number, y: number) => railDistance(x, y, right, top, bottom);
+  const d = (x: number, y: number, slack = 0) =>
+    railDistance(x, y, right, top, bottom, slack);
 
   it("is zero anywhere inside the rail, which is why :hover is a subset", () => {
     expect(d(0, 450)).toBe(0);
@@ -68,17 +70,22 @@ describe("railDistance", () => {
     expect(d(180, 400)).toBe(120);
   });
 
-  it("measures straight past either end", () => {
-    expect(d(30, 300)).toBe(50);
-    expect(d(30, 600)).toBe(50);
+  it("refuses a pointer past either end, where there is no bubble to magnify", () => {
+    expect(d(30, 349)).toBe(Number.POSITIVE_INFINITY);
+    expect(d(30, 551)).toBe(Number.POSITIVE_INFINITY);
+    // However close in from the side: above the column is empty gutter.
+    expect(d(0, 300)).toBe(Number.POSITIVE_INFINITY);
+    expect(d(0, 600)).toBe(Number.POSITIVE_INFINITY);
   });
 
-  it("is euclidean at a corner, so a pointer parked diagonally stays away", () => {
-    expect(d(160, 650)).toBeCloseTo(Math.sqrt(100 * 100 + 100 * 100), 10);
-    expect(d(160, 650)).toBeGreaterThan(100);
+  it("holds an engaged pointer for its slack, so an edge cannot chatter", () => {
+    expect(d(80, 347, BAND_SLACK)).toBe(20);
+    expect(d(80, 553, BAND_SLACK)).toBe(20);
+    expect(d(80, 350 - BAND_SLACK - 1, BAND_SLACK)).toBe(Number.POSITIVE_INFINITY);
+    expect(BAND_SLACK).toBeGreaterThan(0);
   });
 
-  it("grows monotonically as the pointer retreats", () => {
+  it("grows monotonically as the pointer retreats across the gutter", () => {
     let previous = -1;
     for (let x = 0; x < 400; x += 10) {
       const now = d(x, 450);

@@ -319,6 +319,87 @@ test.describe("section dock", () => {
     expect(underneath).toBe(true);
   });
 
+  test("ignores a pointer in the empty gutter above or below the column", async ({ page }) => {
+    await page.setViewportSize(DESKTOP);
+    await open(page);
+    const supported = await page.evaluate(
+      () => matchMedia("(hover: hover) and (pointer: fine)").matches
+    );
+    test.skip(!supported, "no hover hardware");
+    await settleAt(page, 900);
+
+    const rail = await page.evaluate(() => {
+      const nav = document.querySelector<HTMLElement>(".section-dock")!;
+      const box = nav.getBoundingClientRect();
+      const style = getComputedStyle(document.documentElement);
+      const inset = parseFloat(style.getPropertyValue("--dock-inset"));
+      const hit = parseFloat(style.getPropertyValue("--dock-hit"));
+      const pitch = parseFloat(style.getPropertyValue("--dock-pitch"));
+      return { right: inset + hit, top: box.top, bottom: box.bottom, pitch };
+    });
+
+    /** Park the pointer and let the lens finish moving, then report the column. */
+    const park = (x: number, y: number) =>
+      page.evaluate(async ([px, py]) => {
+        const nav = document.querySelector<HTMLElement>(".section-dock")!;
+        const dots = [...nav.querySelectorAll<HTMLElement>(".dock-dot")];
+        const items = [...nav.querySelectorAll<HTMLElement>(".dock-item")];
+        const read = () => dots.map((d) => Number(d.style.transform.slice(6, -1)));
+
+        let previous = "";
+        let stable = 0;
+        for (let i = 0; i < 300 && (i < 20 || stable < 6); i += 1) {
+          // Re-sent every frame: the rail listens for pointermove, and a parked
+          // pointer sends nothing of its own.
+          window.dispatchEvent(
+            new PointerEvent("pointermove", {
+              clientX: px,
+              clientY: py,
+              pointerType: "mouse",
+              bubbles: true,
+            })
+          );
+          await new Promise((r) => requestAnimationFrame(() => r(null)));
+          const now = JSON.stringify(read());
+          stable = now === previous ? stable + 1 : 0;
+          previous = now;
+        }
+
+        return {
+          scales: read(),
+          active: items.findIndex((i) => i.dataset.active === "true"),
+          open: items.findIndex((i) => i.dataset.open === "true"),
+        };
+      }, [x, y]);
+
+    const x = rail.right + 40;
+    const resting = (await settleAt(page, 900))!;
+    const active = resting.active;
+    expect(active).toBeGreaterThanOrEqual(0);
+
+    // Beside the first bubble, the lens picks it up and the label commits.
+    const beside = await park(x, rail.top + rail.pitch / 2);
+    expect(beside.open).toBe(0);
+    expect(beside.scales[0]).toBeGreaterThan(1.4);
+
+    // A pointer's width further up is in empty gutter — no bubble is drawn
+    // there, so the column owes it nothing and returns to the section it is on.
+    const above = await park(x, rail.top - rail.pitch);
+    expect(above.open).toBe(-1);
+    expect(above.scales[0]).toBeLessThan(1);
+    expect(above.scales[active]).toBeGreaterThan(1.4);
+
+    // And the same past the other end.
+    const besideLast = await park(x, rail.bottom - rail.pitch / 2);
+    expect(besideLast.open).toBe(4);
+    expect(besideLast.scales[4]).toBeGreaterThan(1.4);
+
+    const below = await park(x, rail.bottom + rail.pitch);
+    expect(below.open).toBe(-1);
+    expect(below.scales[4]).toBeLessThan(1);
+    expect(below.scales[active]).toBeGreaterThan(1.4);
+  });
+
   test("expands a label rightward on hover", async ({ page }) => {
     await page.setViewportSize(DESKTOP);
     await open(page);
