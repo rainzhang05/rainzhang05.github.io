@@ -75,7 +75,7 @@ export const en: Copy = {
         scale: 1.45,
       },
       summary:
-        'I run the software and IT side of a property and strata management company. I work out with staff what the office actually needs, then build and run the internal systems it works from, connected to the company’s Microsoft 365 accounts and data.',
+        'I run the software and IT side of a property and strata management company. I work with staff to determine what the office needs, then build and run the internal systems it works from, connected to the company’s Microsoft 365 accounts and data.',
       groups: [
         {
           label: 'Work',
