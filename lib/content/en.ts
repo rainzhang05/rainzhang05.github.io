@@ -297,7 +297,7 @@ export const en: Copy = {
     },
     {
       id: 'work-authenticator',
-      dates: 'Oct – Nov 2025',
+      dates: 'Oct 2025 – Present',
       title: 'FIDO2 Software Authenticator',
       summary:
         'A CTAP2 security key in software. Linux presents it as a USB device, so browsers can test post-quantum credentials without hardware.',
@@ -305,7 +305,7 @@ export const en: Copy = {
       sections: [
         {
           label: 'What it is',
-          text: 'A Rust workspace that behaves like a FIDO2 security key, in software. FEITIAN’s engineers and partners needed to develop against ML-DSA credentials before the hardware was ready. It started as my own repository and is now maintained under FeitianTech.',
+          text: 'A Rust workspace that behaves like a FIDO2 security key, in software. FEITIAN’s engineers and partners needed to develop against ML-DSA credentials before the hardware was ready. It started as my own repository and now lives under FeitianTech, where I still maintain it.',
         },
         {
           label: 'How it works',
@@ -318,7 +318,7 @@ export const en: Copy = {
       ],
       stack: ['Rust', 'Linux UHID', 'Trussed', 'littlefs2', 'CTAP2.1', 'fips204', 'liboqs', 'clap'],
       status:
-        'Works on Linux and is used alongside the developer platform. CI runs rustfmt, clippy and the test suite.',
+        'Works on Linux and is used alongside the developer platform, and still under active development. CI runs rustfmt, clippy and the test suite.',
       links: [
         {
           label: 'Repository',

@@ -297,7 +297,7 @@ export const ja: Copy = {
     },
     {
       id: 'work-authenticator',
-      dates: '2025年10月 – 11月',
+      dates: '2025年10月 – 現在',
       title: 'FIDO2 ソフトウェア認証器',
       summary:
         'ソフトウェアで動く CTAP2 セキュリティキー。Linux が USB 機器として見せるため、ハードウェアなしで耐量子計算機暗号の資格情報を試せます。',
@@ -305,7 +305,7 @@ export const ja: Copy = {
       sections: [
         {
           label: '概要',
-          text: 'ソフトウェアで FIDO2 セキュリティキーとして振る舞う Rust のワークスペースです。社内のエンジニアや取引先が、ハードウェアが揃う前から ML-DSA の資格情報に対して開発できるようにするために作りました。自分のリポジトリから始まり、現在は FeitianTech のもとで保守されています。',
+          text: 'ソフトウェアで FIDO2 セキュリティキーとして振る舞う Rust のワークスペースです。社内のエンジニアや取引先が、ハードウェアが揃う前から ML-DSA の資格情報に対して開発できるようにするために作りました。自分のリポジトリから始まり、現在は FeitianTech のもとで自分が保守を続けています。',
         },
         {
           label: '仕組み',
@@ -318,7 +318,7 @@ export const ja: Copy = {
       ],
       stack: ['Rust', 'Linux UHID', 'Trussed', 'littlefs2', 'CTAP2.1', 'fips204', 'liboqs', 'clap'],
       status:
-        'Linux 上で動作し、開発者向けプラットフォームと合わせて使われています。CI では rustfmt・clippy・テストを実行しています。',
+        'Linux 上で動作し、開発者向けプラットフォームと合わせて使われています。現在も開発を続けており、CI では rustfmt・clippy・テストを実行しています。',
       links: [
         {
           label: 'リポジトリ',
