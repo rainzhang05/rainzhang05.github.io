@@ -10,6 +10,7 @@ const files = [
   "/rain-zhang-resume-ja.pdf",
   "/logos/feitian.svg",
   "/logos/mnt-realty.svg",
+  "/logos/sfu.png",
   "/tech/rust.png",
   "/tech/nextjs.svg",
   "/tech/microsoft-graph.svg",

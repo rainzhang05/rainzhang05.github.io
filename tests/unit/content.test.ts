@@ -22,6 +22,7 @@ const shape = (copy: Copy) => ({
   sectionLinks: sectionLinks(copy).map((n) => [n.id, n.href]),
   footerLinks: copy.footer.links.map((n) => [n.id, unprefix(n.href), n.external ?? false]),
   experiences: copy.experiences.map((e) => [e.id, e.tech, e.related, e.mark?.src ?? null]),
+  education: copy.education.mark?.src ?? null,
   featured: copy.featured.map((p) => [p.id, p.primary, p.stack, p.image?.src ?? null]),
   other: copy.other.map((p) => [p.id, p.primary, p.stack, p.image?.src ?? null]),
   projectLinks: allProjects(copy).map((p) => p.links.map((l) => l.href)),

@@ -426,6 +426,11 @@ export const ja: Copy = {
   education: {
     dates: '2023年9月 – 2027年12月',
     school: 'サイモンフレーザー大学',
+    mark: {
+      src: '/logos/sfu.png',
+      width: 2560,
+      height: 1280,
+    },
     meta: 'コンピュータサイエンス学士 · バンクーバー、BC州、カナダ · 2027年12月卒業見込み',
     detail: 'CGPA 3.44 / 4.33。2024年秋学期と2025年夏学期に Dean’s Honour Roll。',
   },

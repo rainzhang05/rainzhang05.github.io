@@ -68,6 +68,8 @@ export interface SkillGroup {
 export interface Education {
   dates: string;
   school: string;
+  /** School mark, in front of the name, as an experience row carries one. */
+  mark?: CompanyMark;
   meta: string;
   detail: string;
 }

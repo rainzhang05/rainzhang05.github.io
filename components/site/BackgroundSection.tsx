@@ -1,3 +1,4 @@
+import { CompanyMark } from './CompanyMark';
 import { SectionHeading } from './SectionHeading';
 import { TechTagList } from '@/components/ui/TechTag';
 import type { Copy } from '@/lib/types';
@@ -13,7 +14,12 @@ export function BackgroundSection({ copy }: { copy: Copy }) {
           {copy.education.dates}
         </span>
         <div className="min-w-0 flex-1 basis-[420px]">
-          <h3 className="m-0 text-heading font-medium">{copy.education.school}</h3>
+          <h3 className="m-0 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-heading font-medium">
+            {/* Decorative: the school name it sits against is the heading's own
+                text, and an alt here would make a screen reader say it twice. */}
+            <CompanyMark mark={copy.education.mark} alt="" />
+            {copy.education.school}
+          </h3>
           <p className="mt-0.5 text-body-15 text-ink-2">{copy.education.meta}</p>
           <p className="mt-2.5 max-w-measure text-body-15 text-ink-2">{copy.education.detail}</p>
         </div>
