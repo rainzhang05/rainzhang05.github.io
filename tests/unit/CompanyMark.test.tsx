@@ -5,13 +5,13 @@ import { CompanyMark } from '@/components/site/CompanyMark';
 describe('CompanyMark', () => {
   it('normalises a wordmark to the shared cap height, keeping its ratio', () => {
     render(
-      <CompanyMark mark={{ src: '/logos/feitian.svg', width: 336, height: 60 }} alt="FEITIAN" />
+      <CompanyMark mark={{ src: '/logos/feitian.png', width: 1748, height: 428 }} alt="FEITIAN" />
     );
 
     const mark = screen.getByAltText('FEITIAN');
-    expect(mark).toHaveAttribute('src', '/logos/feitian.svg');
+    expect(mark).toHaveAttribute('src', '/logos/feitian.png');
     expect(mark).toHaveAttribute('height', '18');
-    expect(mark).toHaveAttribute('width', '101');
+    expect(mark).toHaveAttribute('width', '74');
   });
 
   it('gives a square mark the same height, so the two weigh alike', () => {

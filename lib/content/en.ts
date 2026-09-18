@@ -120,9 +120,9 @@ export const en: Copy = {
       org: 'FEITIAN Technologies',
       orgLine: 'FEITIAN Technologies · International Department · Beijing, China',
       mark: {
-        src: '/logos/feitian.svg',
-        width: 336,
-        height: 60,
+        src: '/logos/feitian.png',
+        width: 1748,
+        height: 428,
       },
       summary:
         'Worked out what FEITIAN’s post-quantum FIDO2 work needed, then built three systems and ran them end to end: a public WebAuthn developer platform, a software security key in Rust, and a customer demo site.',

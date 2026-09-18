@@ -107,7 +107,7 @@ resume/                    The source the two PDFs in public/ are printed from. 
 public/
   rain-zhang-resume.pdf    English resume; printed from resume/, downloaded from /resume
   rain-zhang-resume-ja.pdf Japanese resume; printed from resume/, downloaded from /ja/resume
-  logos/                   Company marks (feitian.svg, mnt-realty.svg)
+  logos/                   Company and school marks (feitian.png, mnt-realty.svg, sfu.png)
   projects/                Project screenshots
   tech/                    Technology marks, looked up by lib/tech.ts
 
@@ -252,7 +252,7 @@ Two rules, and the ESLint config depends on them:
 
 Images, technology badges and every control carry `.no-copy` (see `globals.css`), so a click or a double-click on one leaves no text selection and images cannot be dragged out. Prose, panel bodies and the contact links are deliberately left selectable — copying those is the point. A browser's own "copy image" is not blocked; suppressing the context menu to do that is not worth what it breaks.
 
-Marks are shown in their original colours and are never tinted or greyscaled. The SVG logos in `public/logos/` carry their own `<style>` blocks — those blocks are what make them blue, so an "optimisation" pass that strips them will silently turn both logos black. [tests/e2e/assets.spec.ts](tests/e2e/assets.spec.ts) guards this.
+Marks are shown in their original colours and are never tinted or greyscaled. `mnt-realty.svg` carries its own `<style>` block — that block is what makes it blue, so an "optimisation" pass that strips it will silently turn the logo black. `feitian.png` was a JPEG of blue on white: it is trimmed to its ink and matted to alpha, because the page background is cream and a surviving white field reads as a card behind the mark. [tests/e2e/assets.spec.ts](tests/e2e/assets.spec.ts) guards both.
 
 ---
 

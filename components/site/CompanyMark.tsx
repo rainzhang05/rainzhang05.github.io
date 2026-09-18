@@ -5,12 +5,14 @@ const HEIGHT = 18;
 
 /**
  * Company marks stay in their original colours, at a shared height rather
- * than their own: one is a square, the other a wordmark five times as wide,
- * and sitting in front of a title they have to weigh the same. A mark may
- * carry a `scale` when equal ink height still does not read as equal.
+ * than their own: one is a square, one a two-line wordmark four times as wide,
+ * one a filled tile, and sitting in front of a title they have to weigh the
+ * same. A mark may carry a `scale` when equal ink height still does not read
+ * as equal.
  *
- * Plain <img> with explicit dimensions: both files are small SVGs, so this
- * avoids turning on SVG handling in next/image and cannot shift layout.
+ * Plain <img> with explicit dimensions: the files are small, and the SVG among
+ * them would otherwise mean turning on SVG handling in next/image. Sized in
+ * the markup and in style, so a mark cannot shift layout as it loads.
  */
 export function CompanyMark({ mark, alt }: { mark?: Mark; alt: string }) {
   if (!mark) return null;

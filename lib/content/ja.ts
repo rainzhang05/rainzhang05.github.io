@@ -120,9 +120,9 @@ export const ja: Copy = {
       org: '飛天ジャパン',
       orgLine: '飛天ジャパン · 国際部 · 北京、中国',
       mark: {
-        src: '/logos/feitian.svg',
-        width: 336,
-        height: 60,
+        src: '/logos/feitian.png',
+        width: 1748,
+        height: 428,
       },
       summary:
         '耐量子計算機暗号（PQC）対応の FIDO2 に何が必要かを整理した上で、3つのシステムを開発から運用まで担当しました。公開用の WebAuthn 開発者向けプラットフォーム、Rust によるソフトウェアセキュリティキー、顧客向けデモサイトです。',
