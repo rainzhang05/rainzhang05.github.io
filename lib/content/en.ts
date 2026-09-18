@@ -424,9 +424,9 @@ export const en: Copy = {
     },
   ],
   education: {
-    dates: 'Sep 2023 – Apr 2027',
+    dates: 'Sep 2023 – Dec 2027',
     school: 'Simon Fraser University',
-    meta: 'BSc, Computer Science · Vancouver, BC, Canada · Graduating April 2027',
+    meta: 'BSc, Computer Science · Vancouver, BC, Canada · Graduating December 2027',
     detail: 'CGPA 3.44 / 4.33. Dean’s Honour Roll in Fall 2024 and Summer 2025.',
   },
   skills: [
