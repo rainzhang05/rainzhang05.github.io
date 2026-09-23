@@ -103,7 +103,7 @@ test.describe("boot gate", () => {
   test("stays down when a locale change replaces the tree", async ({ page }) => {
     // data-boot lives on <html>, which React replaces on a locale change. The
     // sheet has to come down with it, not back up.
-    // Below 640px the switch moves into the menu sheet; this test is about the
+    // Below 768px the switch moves into the menu sheet; this test is about the
     // gate, not the header, so give it the width where the switch is in view.
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto("/resume");

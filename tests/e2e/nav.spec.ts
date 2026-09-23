@@ -1,7 +1,7 @@
 import { expect, test } from "./fixtures";
 
 test.describe("navigation", () => {
-  // Below 640px the header links move into the sheet, which has its own test
+  // Below 768px the header links move into the sheet, which has its own test
   // further down; these two are about the wide header.
   test("jumps to a section from the header", async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });

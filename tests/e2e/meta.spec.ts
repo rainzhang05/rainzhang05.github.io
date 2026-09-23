@@ -23,11 +23,14 @@ test.describe("share card and icons", () => {
     expect(served.headers()["content-type"]).toContain("image/png");
   });
 
-  test("declares one light theme and a home-screen icon", async ({ page, request }) => {
+  test("declares both themes and a home-screen icon", async ({ page, request }) => {
     await page.goto("/");
 
-    await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute("content", "#f7f5ef");
-    await expect(page.locator('meta[name="color-scheme"]')).toHaveAttribute("content", "light");
+    const light = page.locator('meta[name="theme-color"][media="(prefers-color-scheme: light)"]');
+    const dark = page.locator('meta[name="theme-color"][media="(prefers-color-scheme: dark)"]');
+    await expect(light).toHaveAttribute("content", "#f7f5ef");
+    await expect(dark).toHaveAttribute("content", "#1b1a17");
+    await expect(page.locator('meta[name="color-scheme"]')).toHaveAttribute("content", "light dark");
 
     const href = await page.locator('link[rel="apple-touch-icon"]').getAttribute("href");
     expect(href).toBeTruthy();

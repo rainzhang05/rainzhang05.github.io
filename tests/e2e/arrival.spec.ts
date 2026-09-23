@@ -73,7 +73,7 @@ test.describe("arriving at a section", () => {
   test("gives the resume page its own entrance back afterwards", async ({ page }) => {
     // data-entrance lives on <html>, which both pages share: a stale "work"
     // would silence the resume page's masthead.
-    // Below 640px the header links move into the menu sheet; this test is
+    // Below 768px the header links move into the menu sheet; this test is
     // about the attribute, not the header, so drive the wide one.
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto("/#work");

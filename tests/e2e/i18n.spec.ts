@@ -75,14 +75,14 @@ test.describe("languages", () => {
   });
 
   test("leaves the wide header room for it at the width it first appears", async ({ page }) => {
-    // 640 is where the links and the switch come out of the menu sheet, so it
+    // 768 is where the links and the switch come out of the menu sheet, so it
     // is the tightest the wide header ever is — and "日本語" is a wider label
-    // than the "JA" it replaced. Resized rather than reloaded: the header is
-    // laid out by CSS, and six navigations in one worker is what made the
-    // sweep in nav.spec.ts time out on CI.
+    // than the "JA" it replaced, with the theme switch beside it. Resized
+    // rather than reloaded: the header is laid out by CSS, and six navigations
+    // in one worker is what made the sweep in nav.spec.ts time out on CI.
     await page.goto("/");
 
-    for (const width of [640, 700]) {
+    for (const width of [768, 800]) {
       await page.setViewportSize({ width, height: 800 });
 
       const header = page.locator("header").first();
