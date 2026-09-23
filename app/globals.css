@@ -25,6 +25,12 @@
   --clay: #8d5a54;
   --ochre: #7d6838;
   --selection: #dce3da;
+  color-scheme: light;
+
+  /* What a technology mark needs to stay legible on this ground. Nothing on
+     ivory; see the dark blocks below and MARK_ON_DARK in lib/tech.ts. */
+  --mark-invert: none;
+  --mark-outline: none;
 
   /* Type — Albert Sans only; --font-albert* come from next/font in app/fonts.ts */
   --font-sans:
@@ -179,6 +185,71 @@
   }
 }
 
+/* The dark ground. Not a second design: the same Soft Studio palette laid on
+   warm charcoal instead of ivory — the same hue, the same low chroma, the same
+   sage — with each colour placed so its contrast against the dark paper is
+   what its light counterpart's is against ivory (ink 14:1, ink-2 6.4:1, ink-3
+   4.8:1, sage 5.7:1; rules just above the ground). Surfaces step *up* from the
+   paper here, because a fill that is darker than the ground cannot be seen.
+
+   Written twice, identically, because CSS cannot share one block between a
+   media query and a selector: the first is System (the default, and the only
+   one a reader without JavaScript gets), the second an explicit choice from
+   the switch in the header (see lib/theme.ts). tests/unit/theme.test.ts fails
+   if the two drift apart or miss a token.
+
+   `screen` on both: the resume is the one page printed on purpose, and paper
+   is ivory whatever the screen was. */
+@media screen and (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --paper: #1b1a17;
+    --surface: #262521;
+    --surface-2: #302e2a;
+    --sheet: #211f1c;
+    --ink: #ebe8e0;
+    --ink-hover: #d6d2c9;
+    --ink-2: #a19c92;
+    --ink-3: #8b867c;
+    --rule: #2e2c28;
+    --rule-strong: #3d3b36;
+    --sage: #839987;
+    --sage-strong: #9aae9e;
+    --sage-tint: #252c26;
+    --clay: #bf8c84;
+    --ochre: #bba16f;
+    --selection: #333f35;
+    --shadow-toast: 0 8px 24px -12px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--rule);
+    --mark-invert: invert(1);
+    --mark-outline: drop-shadow(0 0 0.5px var(--ink)) drop-shadow(0 0 0.5px var(--ink));
+    color-scheme: dark;
+  }
+}
+
+@media screen {
+  :root[data-theme='dark'] {
+    --paper: #1b1a17;
+    --surface: #262521;
+    --surface-2: #302e2a;
+    --sheet: #211f1c;
+    --ink: #ebe8e0;
+    --ink-hover: #d6d2c9;
+    --ink-2: #a19c92;
+    --ink-3: #8b867c;
+    --rule: #2e2c28;
+    --rule-strong: #3d3b36;
+    --sage: #839987;
+    --sage-strong: #9aae9e;
+    --sage-tint: #252c26;
+    --clay: #bf8c84;
+    --ochre: #bba16f;
+    --selection: #333f35;
+    --shadow-toast: 0 8px 24px -12px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--rule);
+    --mark-invert: invert(1);
+    --mark-outline: drop-shadow(0 0 0.5px var(--ink)) drop-shadow(0 0 0.5px var(--ink));
+    color-scheme: dark;
+  }
+}
+
 html[data-locale='ja'] {
   --font-sans: var(--font-sans-jp);
 }
@@ -186,9 +257,9 @@ html[data-locale='ja'] {
 @layer base {
   html {
     -webkit-text-size-adjust: 100%;
-    /* One theme, and it is light. Without this a dark-mode browser paints the
-       form controls, caret, autofill and scrollbars dark against the ivory. */
-    color-scheme: light;
+    /* color-scheme is declared with the palette (light in :root, dark in the
+       dark blocks), so the form controls, caret, autofill and scrollbars are
+       always drawn for the ground they sit on — never dark on ivory. */
     scrollbar-gutter: stable;
     /* A jump from the nav lands on the section's own top edge. Any padding
        here — or scroll-margin on the target — scrolls short of it and leaves
@@ -592,7 +663,7 @@ html[data-entrance='contact'] :is(.enter, .enter-fade) {
     /* The active fill is an inset spread, not a background. It grows inward
        from the ring until the ring has closed into a disc, so the state change
        has a direction and a shape, and every frame of it is a fully opaque
-       sage annulus at 4.68:1 on paper — a background fading up from
+       sage annulus at 4.68:1 on ivory (5.7:1 on charcoal) — a background fading up from
        transparent passes through about 1.6:1 halfway, where the state is
        genuinely ambiguous. box-shadow is paint-only, so unlike border-width
        this touches no layout. */
@@ -689,6 +760,61 @@ html[data-entrance='contact'] :is(.enter, .enter-fade) {
   .locale-pill[data-slide-from='ja'] {
     animation: slide-pill-from-ja var(--duration-base) var(--ease-out);
   }
+}
+
+/* The theme switch. Which option is selected — the pill's slot and the icon
+   drawn in full ink — is read from <html> rather than from React state, so
+   the first paint already has it right: the inline script in lib/theme.ts has
+   set data-theme before the header is parsed, while React only learns the
+   choice after hydration and would otherwise slide the pill across under the
+   reader. No attribute is System, which is also what a reader without
+   JavaScript gets. aria-checked still comes from React, for assistive
+   technology, and is never styled. */
+@layer components {
+  .theme-pill {
+    transform: translateX(0);
+  }
+
+  html[data-theme='light'] .theme-pill {
+    transform: translateX(100%);
+  }
+
+  html[data-theme='dark'] .theme-pill {
+    transform: translateX(200%);
+  }
+
+  .theme-option {
+    color: var(--ink-2);
+  }
+
+  .theme-option:hover,
+  html:not([data-theme='light'], [data-theme='dark']) .theme-option[data-theme-option='system'],
+  html[data-theme='light'] .theme-option[data-theme-option='light'],
+  html[data-theme='dark'] .theme-option[data-theme-option='dark'] {
+    color: var(--ink);
+  }
+
+  /* Technology marks whose black would vanish on the dark ground. Both tokens
+     are `none` on ivory, so in the light theme this is no filter at all. */
+  img[data-on-dark='invert'] {
+    filter: var(--mark-invert);
+  }
+
+  img[data-on-dark='outline'] {
+    filter: var(--mark-outline);
+  }
+}
+
+/* A change of theme lands in one frame. Without this the background swaps at
+   once while every link and control fades its colour over --duration-fast, so
+   for 150ms the page is half in one theme and half in the other — sage on
+   charcoal passing through the contrast of sage on ivory. applyTheme() raises
+   the attribute for exactly one frame around the swap. The theme pill is the
+   one thing exempt: its slide is the confirmation that the choice was made. */
+html[data-theme-switching] *:not(.theme-pill),
+html[data-theme-switching] *::before,
+html[data-theme-switching] *::after {
+  transition: none !important;
 }
 
 @media print {
