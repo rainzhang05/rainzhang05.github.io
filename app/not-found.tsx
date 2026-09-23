@@ -1,4 +1,5 @@
 import { NotFound } from '@/components/site/NotFound';
+import { themeScript } from '@/lib/theme';
 import { albert } from './fonts';
 import './globals.css';
 
@@ -12,10 +13,15 @@ import './globals.css';
  * to bring the stylesheet and the typeface itself. It uses next/font's own
  * class rather than the --font-albert variable: globals.css builds --font-sans
  * on :root, where that variable would still be undefined.
+ *
+ * It brings the theme script for the same reason: System follows the device
+ * from the stylesheet alone, but an explicit Light or Dark is only ever put on
+ * <html> by that script, and it runs here before the page below it is parsed.
  */
 export default function GlobalNotFound() {
   return (
     <div className={albert.className + ' bg-paper text-ink'}>
+      <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       <NotFound />
     </div>
   );

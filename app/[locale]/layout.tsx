@@ -3,11 +3,13 @@ import { notFound } from 'next/navigation';
 import { albert, albertExt } from '../fonts';
 import { BootGate } from '@/components/site/BootGate';
 import { LocaleMemory } from '@/components/site/LocaleMemory';
+import { ThemeMemory } from '@/components/site/ThemeMemory';
 import { EntranceRouter } from '@/lib/entrance';
 import { bootScript } from '@/lib/boot';
 import { content } from '@/lib/content';
 import { personJsonLd } from '@/lib/jsonLd';
 import { locales, site, type Locale } from '@/lib/site';
+import { themeScript } from '@/lib/theme';
 import '../globals.css';
 
 /** Both languages are prerendered at build time. */
@@ -18,16 +20,21 @@ export function generateStaticParams() {
 export const dynamicParams = false;
 
 /**
- * There is one theme and it is light. Saying so keeps a dark-mode browser
- * from rendering the form controls, caret and scrollbars dark against ivory.
- * Exporting `viewport` replaces Next's default, so width and scale are
- * restated here; pinch-zoom is deliberately left alone.
+ * Two grounds, ivory and charcoal, and System — the device's own preference —
+ * picks between them unless the reader has chosen (see lib/theme.ts). The
+ * theme-color pair follows the same preference; an explicit choice repoints
+ * both once the page is hydrated. Exporting `viewport` replaces Next's
+ * default, so width and scale are restated here; pinch-zoom is deliberately
+ * left alone.
  */
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: site.themeColor,
-  colorScheme: 'light',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: site.themeColor.light },
+    { media: '(prefers-color-scheme: dark)', color: site.themeColor.dark },
+  ],
+  colorScheme: 'light dark',
 };
 
 function assertLocale(value: string): Locale {
@@ -98,10 +105,10 @@ export default async function LocaleLayout({
       data-locale={locale}
       data-scroll-behavior="smooth"
       className={albert.variable + ' ' + albertExt.variable}
-      /* The boot script writes data-boot on this element before React sees it,
-         which React would otherwise report as a hydration mismatch. The
-         suppression covers this element's own attributes and nothing below
-         it. */
+      /* The boot and theme scripts write data-boot and data-theme on this
+         element before React sees it, which React would otherwise report as a
+         hydration mismatch. The suppression covers this element's own
+         attributes and nothing below it. */
       suppressHydrationWarning
     >
       <body>
@@ -111,6 +118,10 @@ export default async function LocaleLayout({
             the parser moves it into <head> and hydration then disagrees about
             the element it is attached to. */}
         <script dangerouslySetInnerHTML={{ __html: bootScript }} />
+        {/* Beside it, and for the same reason: an explicit Light or Dark is on
+            <html> before anything is parsed, so the first paint — the boot
+            sheet included — is already in that theme. */}
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <div id="boot" aria-hidden="true">
           <div className="boot-inner">
             <span className="boot-mark">{site.name}</span>
@@ -121,6 +132,7 @@ export default async function LocaleLayout({
         </div>
         <BootGate />
         <LocaleMemory locale={locale} />
+        <ThemeMemory />
         <EntranceRouter />
         <script
           type="application/ld+json"

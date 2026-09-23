@@ -5,8 +5,11 @@ export const site = {
   email: 'rainzhang.zty@gmail.com',
   /** Share card, 1200x630. Served from public/. */
   ogImage: '/og.png',
-  /** Mirrors --paper in app/globals.css; tests/unit/site.test.ts keeps them equal. */
-  themeColor: '#f7f5ef',
+  /**
+   * Mirrors --paper in app/globals.css, for each ground; tests/unit/site.test.ts
+   * keeps them equal. A meta tag cannot read a custom property.
+   */
+  themeColor: { light: '#f7f5ef', dark: '#1b1a17' },
   /** Where the work described on the page happens. */
   location: { locality: 'Vancouver', region: 'BC', country: 'CA' },
   github: 'https://github.com/rainzhang05',
