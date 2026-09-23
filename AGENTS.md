@@ -35,7 +35,9 @@ That's it. No body. No trailer. No `--amend` on already-pushed commits.
 - **Forms:** Contact form posts to Formspree. The endpoint lives in [lib/site.ts](lib/site.ts) and can be overridden with `NEXT_PUBLIC_FORMSPREE_ENDPOINT`.
 - **Node:** `>=20` (CI uses Node 20).
 
-The design is deliberately quiet: one warm ivory theme, one typeface, one accent, no borders or shadows, and two interactions — rows that expand in place, and the section dock down the left edge. If a change adds a third interaction pattern, a second accent, or a theme toggle, it is working against the design, not with it.
+The design is deliberately quiet: one palette, one typeface, one accent, no borders or shadows, and two interactions — rows that expand in place, and the section dock down the left edge. If a change adds a third interaction pattern or a second accent, it is working against the design, not with it.
+
+The palette has two grounds — warm ivory, and the same palette laid on warm charcoal — and a System / Light / Dark switch in the top-right corner of the header picks between them (System, the default, follows the device). Dark is not a second design: same hue, same low chroma, same sage, each colour placed so its contrast on charcoal is what its light counterpart's is on ivory. The switch is the language switch's twin — same pill, same sliding indicator — so it adds a control, not a kind of control.
 
 The dock was added deliberately and against the grain of that rule: the page had no persistent navigation at all below the fold. It is held to the same quiet standard — no new colour, no new shadow, no icon language, and it borrows the pill shape the technology tags already use. Do not treat it as licence for a third pattern.
 
@@ -60,7 +62,9 @@ components/
                            TextLink, Button, Toast, Field
   site/                    The page itself:
     PortfolioPage.tsx      The shell — all interactive state lives here and nowhere else
-    SiteHeader.tsx         Static header, menu sheet under 640px, EN / 日本語 switch
+    SiteHeader.tsx         Static header, menu sheet under 768px, EN / 日本語 switch, theme switch
+    ThemeSwitch.tsx        System / Light / Dark, top-right at every width
+    ThemeMemory.tsx        Renders nothing; puts the chosen theme back on <html> after a locale swap
     SectionDock.tsx        The left rail the header morphs into past the first screen
     Intro.tsx              Hero: eyebrow, heading, body, resume + copy email
     ResumePage.tsx         The resume page: masthead, download, two columns
@@ -87,6 +91,7 @@ lib/
   content/index.ts         Assembles both into Record<Locale, Copy>, and the resumes
   useReducedMotion.ts      Hook + a plain function for the two JS scroll nudges
   panelMotion.ts           Expand/collapse duration from content height and --panel-speed
+  theme.ts                 System / Light / Dark: the inline script, readTheme, showTheme, chooseTheme
 
 middleware.ts              Sends an arrival to the remembered language, or to Japanese if the
                            first visit is from Japan
@@ -163,10 +168,11 @@ import type { Project } from "@/lib/types";
 [app/globals.css](app/globals.css) is the **only** file with raw values — colours, type sizes, spacing, radii and motion. [tailwind.config.ts](tailwind.config.ts) maps every token to a Tailwind name, so components write `text-ink-2`, `border-rule`, `duration-base`, `pt-section` — never a hex code or a millisecond count.
 
 - **Dock:** `--dock-pitch` (40 — centre to centre, and the button's own height, so n bubbles are exactly n x pitch tall; `SPREAD` in [lib/dockMotion.ts](lib/dockMotion.ts) is 0.95 x this, so retuning one means retuning the other), `--dock-dot` (10 — the nominal diameter, scaled between 0.7 and 1.5 by the lens), `--dock-rise` (10 — the travel on the way in, the same distance the first screen rises) and `--dock-reach` (120 — how far right of the rail a pointer is felt, clamped at runtime to the gutter that actually exists). `--dock-hit` and `--dock-inset` **step at 1176px**: 36/12 below it, where the content column starts at exactly 48px and the rail's box has to end there, and 44/16 above it, where the gutter has room. That step is a media query, not a width read in JavaScript, for the same reason the 640px gate is one.
-- **Colour:** `--paper`, `--sheet`, `--surface`, `--surface-2`; ink scale `--ink`, `--ink-hover`, `--ink-2`, `--ink-3`; rules `--rule`, `--rule-strong`; accent `--sage`, `--sage-strong`, `--sage-tint`; and two semantic colours, `--clay` (errors) and `--ochre`.
+- **Colour:** `--paper`, `--sheet`, `--surface`, `--surface-2`; ink scale `--ink`, `--ink-hover`, `--ink-2`, `--ink-3`; rules `--rule`, `--rule-strong`; accent `--sage`, `--sage-strong`, `--sage-tint`; and two semantic colours, `--clay` (errors) and `--ochre`. Every one has a dark value too (below), as do `--shadow-toast` and the two mark filters `--mark-invert` / `--mark-outline`, which are `none` on ivory.
 - **Type:** one family. `--font-sans` is Albert Sans from [app/fonts.ts](app/fonts.ts); `--font-sans-jp` is a system Japanese stack that `html[data-locale='ja']` swaps in. The size scale runs `--text-label` (12) through `--text-hero`.
 - **Spacing and layout:** `--container` (1080), `--gutter` / `--gutter-mobile`, `--label-col` (160 — the date column), `--reading-col`, `--section-gap`, `--hero-pad`.
-- **There is one theme.** No `data-theme`, no theme script, no `localStorage`, no dark mode. Removing that machinery is what makes the first paint the finished page. Do not add it back without being asked.
+- **Two grounds, one palette.** The light tokens live on `:root`. The dark ones are written **twice, identically**: once under `@media screen and (prefers-color-scheme: dark)` for `:root:not([data-theme='light'])` (System), once under `@media screen` for `:root[data-theme='dark']` (an explicit Dark). CSS cannot share one block between a media query and a selector; [tests/unit/theme.test.ts](tests/unit/theme.test.ts) fails if the two drift apart or a light colour token has no dark value. Change a colour in one, change it in both. `screen` on both is what keeps a printed resume on ivory. In the dark blocks the surfaces step *up* from the paper, because a fill darker than the ground cannot be seen. `color-scheme` is declared with the palette, so form controls and scrollbars follow the ground.
+- **How the theme reaches the page** ([lib/theme.ts](lib/theme.ts)). System is the *absence* of `data-theme` and needs no JavaScript, so a reader with scripts off still gets their device's theme. Only an explicit Light or Dark is written — to `localStorage` under `portfolio.theme`, and to `<html>` by an inline script placed beside the boot script as the first thing in `<body>`, so the first paint is already right (the pages are prerendered; the server never knows the choice). A locale change remounts `<html>` and drops the attribute, exactly as it drops `data-boot`; [ThemeMemory](components/site/ThemeMemory.tsx), in the layout, puts it back in a layout effect before that commit paints. `chooseTheme` withdraws transitions for one flushed frame (`data-theme-switching`) so nothing fades its colour behind a ground that has already changed; the theme pill is the one exemption. The theme pill's position and the selected icon are styled from `<html>`'s attribute, not React state, so they are right on the first paint; `aria-checked` alone comes from state. The script touches nothing but the attribute: the `theme-color` metas are React's, so `showTheme` repoints them after hydration.
 
 ### Motion
 
@@ -252,7 +258,7 @@ Two rules, and the ESLint config depends on them:
 
 Images, technology badges and every control carry `.no-copy` (see `globals.css`), so a click or a double-click on one leaves no text selection and images cannot be dragged out. Prose, panel bodies and the contact links are deliberately left selectable — copying those is the point. A browser's own "copy image" is not blocked; suppressing the context menu to do that is not worth what it breaks.
 
-Marks are shown in their original colours and are never tinted or greyscaled. `mnt-realty.svg` carries its own `<style>` block — that block is what makes it blue, so an "optimisation" pass that strips it will silently turn the logo black. `feitian.png` was a JPEG of blue on white: it is trimmed to its ink and matted to alpha, because the page background is cream and a surviving white field reads as a card behind the mark. [tests/e2e/assets.spec.ts](tests/e2e/assets.spec.ts) guards both.
+Marks are shown in their original colours and are never tinted or greyscaled — with one deliberate exception, on the dark ground only. Eight technology marks have black that vanishes on charcoal; `MARK_ON_DARK` in [lib/tech.ts](lib/tech.ts) inverts the ones that are black-and-white and nothing else (which is the brand's own reversed mark) and traces the ones with real colour in a hairline of ink. Both filters are tokens that are `none` on ivory. Company logos are never touched. `mnt-realty.svg` carries its own `<style>` block — that block is what makes it blue, so an "optimisation" pass that strips it will silently turn the logo black. `feitian.png` was a JPEG of blue on white: it is trimmed to its ink and matted to alpha, because the page background is cream and a surviving white field reads as a card behind the mark. [tests/e2e/assets.spec.ts](tests/e2e/assets.spec.ts) guards both.
 
 ---
 
@@ -310,7 +316,7 @@ Marks are shown in their original colours and are never tinted or greyscaled. `m
 - **`tsconfig.json` excludes `tests/e2e`** — Playwright uses its own tsconfig.
 - **Don't rely on `window.scrollY` checks** — they're flaky in headless browsers. Use `expect(locator).toBeInViewport()`.
 - **Sweep widths by resizing, not by reloading.** Layout is CSS, so one navigation and three `setViewportSize` calls prove exactly what four navigations do, in a fraction of the time. This has timed out CI twice. Since the page began loading its images up front there is a second reason: each viewport asks `next/image` for a different variant, and `next start`'s own optimizer stalls the browser on the first cold request for a second variant. Vercel's does not — the live site was checked at every one of those widths — so this is a CI-only trap, not something to design the page around.
-- **Mind the `mobile` project.** Below 640px the header links and the language switch move into the menu sheet. A test that drives the wide header must set an explicit desktop viewport; a test that drives the switch should reach whichever copy is visible (see the `languageSwitch` helper in [tests/e2e/i18n.spec.ts](tests/e2e/i18n.spec.ts)).
+- **Mind the `mobile` project.** Below 768px the header links and the language switch move into the menu sheet (the theme switch stays in the header at every width). The breakpoint is 768, not the site's usual 640, because at 640 the links and the language switch leave only 15px for the theme switch. A test that drives the wide header must set an explicit desktop viewport; a test that drives the switch should reach whichever copy is visible (see the `languageSwitch` helper in [tests/e2e/i18n.spec.ts](tests/e2e/i18n.spec.ts)).
 - **Scope `role="alert"` queries to the form.** Next.js renders its own route announcer with `role="alert"`, which otherwise trips strict mode.
 - The honeypot is parked off-screen, not `display: none`, so it is "visible" to a browser. Assert its position, not `toBeHidden()`.
 
@@ -341,7 +347,7 @@ A change that breaks CI on one matrix entry will block the whole PR. Don't disab
 - **Strict TypeScript** — no `any`. Prefer importing types from [lib/types.ts](lib/types.ts).
 - **Prettier:** single quotes, semicolons, trailing commas (`es5`), `printWidth: 100`, 2-space indent. See [.prettierrc.json](.prettierrc.json). The `tests/` directory is the exception — it is written in double quotes, matching Playwright's own style.
 - **ESLint:** `@typescript-eslint/no-unused-vars` is warn-only with `argsIgnorePattern: "^_"`. `@next/next/no-img-element` is **off** on purpose (see Images above).
-- **Client vs server components:** server by default; add `"use client"` only when the file uses hooks, browser APIs, or event handlers. `PortfolioPage`, `SiteHeader`, `SectionDock`, `LocaleSwitch`, `ContactForm`, `ContactSection`, `ExperienceSection`, `WorkSection`, `DisclosureRow` and `Field` are client; the rest are server.
+- **Client vs server components:** server by default; add `"use client"` only when the file uses hooks, browser APIs, or event handlers. `PortfolioPage`, `SiteHeader`, `SectionDock`, `LocaleSwitch`, `ThemeSwitch`, `ThemeMemory`, `ContactForm`, `ContactSection`, `ExperienceSection`, `WorkSection`, `DisclosureRow` and `Field` are client; the rest are server.
 - **All interactive state lives in [PortfolioPage.tsx](components/site/PortfolioPage.tsx)** — which experience row is open, which project row is open, and the toast. Sections receive `openId` and `onToggle`. Don't push state down into a section.
 - **No hardcoded UI strings in components.** Add a key to `Copy` in [lib/types.ts](lib/types.ts) and implement it in both content files — TypeScript will fail the build until you do.
 - **No emojis in source** unless explicitly asked.
@@ -357,6 +363,6 @@ A change that breaks CI on one matrix entry will block the whole PR. Don't disab
 - **Change a UI string:** the `nav`, `sections`, `labels`, `contact` or `footer` blocks of both content files.
 - **Update the resume:** reword [resume/resume.en.html](resume/resume.en.html) or [resume.ja.html](resume/resume.ja.html), check `npm run resume:measure` still reports the same line counts (both PDFs are full to the bottom edge — one extra line spills onto a second page), run `npm run resume` to reprint into `/public/`, then carry the same words into [lib/content/resume.en.ts](lib/content/resume.en.ts) or [resume.ja.ts](lib/content/resume.ja.ts). The page has no content of its own.
 - **Change the page title, description or hreflang:** `meta` in both content files, and `generateMetadata` in [app/[locale]/layout.tsx](app/[locale]/layout.tsx).
-- **Change a token (colour, type, spacing, radius, motion):** the `:root` block of [app/globals.css](app/globals.css), and its Tailwind name in [tailwind.config.ts](tailwind.config.ts) if it is new.
+- **Change a token (colour, type, spacing, radius, motion):** the `:root` block of [app/globals.css](app/globals.css), and its Tailwind name in [tailwind.config.ts](tailwind.config.ts) if it is new. A colour also has a dark value in **both** dark blocks below it.
 - **Change contact form behaviour:** [components/site/ContactForm.tsx](components/site/ContactForm.tsx); the endpoint and timeout are in [lib/site.ts](lib/site.ts).
 - **Add an icon glyph:** extend the `PATHS` map in [components/ui/Icon.tsx](components/ui/Icon.tsx) — the `IconName` type is derived from it, so there is nothing else to keep in sync.
