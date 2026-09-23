@@ -1,7 +1,8 @@
-import { techIcon, type TechName } from '@/lib/tech';
+import { MARK_ON_DARK, techIcon, type TechName } from '@/lib/tech';
 
 /**
- * Pill with the technology's own mark, in its original colours.
+ * Pill with the technology's own mark, in its original colours — except the
+ * few that need help on the dark ground (MARK_ON_DARK in lib/tech.ts).
  * Marks are small (12-14px) and several are SVG, so they stay plain <img>
  * with explicit dimensions — sized, and no layout shift.
  *
@@ -30,6 +31,7 @@ export function TechTag({ name, size = 'sm' }: { name: TechName; size?: 'sm' | '
           loading="eager"
           decoding="async"
           draggable={false}
+          data-on-dark={MARK_ON_DARK[name]}
           className="no-copy block object-contain"
           style={{ width: px, height: px }}
         />
