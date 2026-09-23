@@ -115,6 +115,12 @@ export interface Copy {
     skipToContent: string;
     /** Accessible name for the section dock. Must not collide with "Primary". */
     sectionNav: string;
+    /**
+     * The theme switch in the header: the group's accessible name and one per
+     * option. None may contain "menu" — the header's own button is found by
+     * that name.
+     */
+    theme: { group: string; system: string; light: string; dark: string };
   };
   experiences: Experience[];
   featured: Project[];

@@ -60,6 +60,7 @@ export const en: Copy = {
     collapse: 'Hide details',
     skipToContent: 'Skip to content',
     sectionNav: 'On this page',
+    theme: { group: 'Theme', system: 'System', light: 'Light', dark: 'Dark' },
   },
   experiences: [
     {

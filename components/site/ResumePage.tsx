@@ -50,6 +50,7 @@ export function ResumePage({
           homeHref={home}
           localeHrefs={resumePage}
           currentId="resume"
+          themeLabels={copy.labels.theme}
         />
       </div>
 

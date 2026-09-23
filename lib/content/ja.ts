@@ -60,6 +60,7 @@ export const ja: Copy = {
     collapse: '詳細を閉じる',
     skipToContent: '本文へスキップ',
     sectionNav: 'このページの内容',
+    theme: { group: 'テーマ', system: 'システム', light: 'ライト', dark: 'ダーク' },
   },
   experiences: [
     {

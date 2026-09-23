@@ -4,13 +4,20 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Icon } from '@/components/ui/Icon';
 import { LocaleSwitch } from './LocaleSwitch';
+import { ThemeSwitch } from './ThemeSwitch';
 import { localeHome, type Locale } from '@/lib/site';
-import type { NavLink } from '@/lib/types';
+import type { Copy, NavLink } from '@/lib/types';
 
 /**
- * Static header: never sticky, no background, no border. Under 640px the
- * links move into a full-page sheet. A link to another route goes through
- * next/link so that route is prefetched.
+ * Static header: never sticky, no background, no border. Under 768px the
+ * links and the language switch move into a full-page sheet. A link to another
+ * route goes through next/link so that route is prefetched.
+ *
+ * The theme switch stays in the top-right corner at every width — last in the
+ * row on a wide screen, and beside the menu button on a narrow one. It is why
+ * the sheet takes over at 768 rather than 640: at 640 the links and the
+ * language switch already fill all but 15px of the row, and the full row needs
+ * about 740.
  *
  * `homeHref` is what an in-page hash hangs off. It is empty on the home page,
  * where "#work" means this page, and the home page's address anywhere else.
@@ -29,10 +36,13 @@ export function SiteHeader({
   homeHref = '',
   localeHrefs = localeHome,
   currentId,
+  themeLabels,
 }: {
   name: string;
   links: NavLink[];
   locale: Locale;
+  /** The theme switch's names, from the page's own copy. */
+  themeLabels: Copy['labels']['theme'];
   homeHref?: string;
   localeHrefs?: Record<Locale, string>;
   /** The nav entry for the page being read, marked aria-current. */
@@ -91,27 +101,31 @@ export function SiteHeader({
       <header className="enter-fade flex items-center justify-between gap-6 pt-9">
         {wordmark}
 
-        <div className="hidden items-center gap-7 sm:flex">
-          <nav aria-label="Primary" className="flex gap-7">
-            {links.map((link) =>
-              navLink(
-                link,
-                'no-copy text-body-14 text-ink-2 no-underline transition-colors duration-fast ease-out hover:text-ink hover:no-underline aria-[current]:text-ink'
-              )
-            )}
-          </nav>
-          <LocaleSwitch current={locale} hrefs={localeHrefs} />
-        </div>
+        <div className="flex items-center gap-4 md:gap-7">
+          <div className="hidden items-center gap-7 md:flex">
+            <nav aria-label="Primary" className="flex gap-7">
+              {links.map((link) =>
+                navLink(
+                  link,
+                  'no-copy text-body-14 text-ink-2 no-underline transition-colors duration-fast ease-out hover:text-ink hover:no-underline aria-[current]:text-ink'
+                )
+              )}
+            </nav>
+            <LocaleSwitch current={locale} hrefs={localeHrefs} />
+          </div>
 
-        <button
-          type="button"
-          aria-label="Menu"
-          aria-expanded={open}
-          onClick={() => setOpen(true)}
-          className="no-copy inline-flex h-8 w-8 items-center justify-center rounded-pill text-ink-2 transition-colors duration-fast ease-out hover:bg-surface hover:text-ink sm:hidden"
-        >
-          <Icon name="menu" size={20} />
-        </button>
+          <ThemeSwitch labels={themeLabels} />
+
+          <button
+            type="button"
+            aria-label="Menu"
+            aria-expanded={open}
+            onClick={() => setOpen(true)}
+            className="no-copy inline-flex h-8 w-8 items-center justify-center rounded-pill text-ink-2 transition-colors duration-fast ease-out hover:bg-surface hover:text-ink md:hidden"
+          >
+            <Icon name="menu" size={20} />
+          </button>
+        </div>
       </header>
 
       {open ? (

@@ -121,7 +121,12 @@ export function PortfolioPage({ copy, locale }: { copy: Copy; locale: Locale }) 
         >
           {copy.labels.skipToContent}
         </a>
-        <SiteHeader name={site.name} links={copy.nav} locale={locale} />
+        <SiteHeader
+          name={site.name}
+          links={copy.nav}
+          locale={locale}
+          themeLabels={copy.labels.theme}
+        />
         <main id="main" tabIndex={-1}>
           <Intro copy={copy.intro} resumeHref={resumePage[locale]} onCopyEmail={copyEmail} />
           <ExperienceSection
