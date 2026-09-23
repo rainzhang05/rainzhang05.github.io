@@ -9,12 +9,17 @@ import { site } from '@/lib/site';
  * the copy honest instead.
  */
 describe('site.themeColor', () => {
-  it('is the --paper token from app/globals.css', () => {
-    const css = readFileSync(resolve(__dirname, '../../app/globals.css'), 'utf8');
-    const paper = /--paper:\s*(#[0-9a-f]{3,8});/i.exec(css)?.[1];
+  const css = readFileSync(resolve(__dirname, '../../app/globals.css'), 'utf8');
+  const papers = [...css.matchAll(/--paper:\s*(#[0-9a-f]{3,8});/gi)].map((m) => m[1]);
 
-    expect(paper).toBeDefined();
-    expect(site.themeColor).toBe(paper);
+  it('is the light --paper token from app/globals.css', () => {
+    expect(papers[0]).toBeDefined();
+    expect(site.themeColor.light).toBe(papers[0]);
+  });
+
+  it('is the dark --paper token from app/globals.css', () => {
+    expect(papers[1]).toBeDefined();
+    expect(site.themeColor.dark).toBe(papers[1]);
   });
 });
 

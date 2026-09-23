@@ -21,6 +21,14 @@ describe('TechTag', () => {
     expect(screen.getByText('Cypress')).toBeInTheDocument();
   });
 
+  it('flags a mark that needs help on the dark ground, and leaves the rest alone', () => {
+    const { container, rerender } = render(<TechTag name="Rust" />);
+    expect(container.querySelector('img')).toHaveAttribute('data-on-dark', 'invert');
+
+    rerender(<TechTag name="React" />);
+    expect(container.querySelector('img')).not.toHaveAttribute('data-on-dark');
+  });
+
   it('marks are decorative — the name beside them is the accessible text', () => {
     const { container } = render(<TechTag name="Python" />);
 

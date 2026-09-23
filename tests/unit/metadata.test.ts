@@ -17,9 +17,12 @@ import { locales, site } from '@/lib/site';
 const metadataFor = (locale: string) => generateMetadata({ params: Promise.resolve({ locale }) });
 
 describe('viewport', () => {
-  it('declares the one theme, so dark-mode browsers leave the page alone', () => {
-    expect(viewport.themeColor).toBe(site.themeColor);
-    expect(viewport.colorScheme).toBe('light');
+  it('declares both grounds, so the browser draws its own chrome for each', () => {
+    expect(viewport.themeColor).toEqual([
+      { media: '(prefers-color-scheme: light)', color: site.themeColor.light },
+      { media: '(prefers-color-scheme: dark)', color: site.themeColor.dark },
+    ]);
+    expect(viewport.colorScheme).toBe('light dark');
   });
 
   it('keeps the page zoomable', () => {

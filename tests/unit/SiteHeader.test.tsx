@@ -4,7 +4,10 @@ import userEvent from '@testing-library/user-event';
 import { SiteHeader } from '@/components/site/SiteHeader';
 import { en } from '@/lib/content';
 
-const render_ = () => render(<SiteHeader name="Rain Zhang" links={en.nav} locale="en" />);
+const render_ = () =>
+  render(
+    <SiteHeader name="Rain Zhang" links={en.nav} locale="en" themeLabels={en.labels.theme} />
+  );
 
 describe('SiteHeader', () => {
   it('renders the wordmark as a link back to the top', () => {
@@ -33,7 +36,14 @@ describe('SiteHeader', () => {
 
   it('hangs in-page links off the page it is given, and marks the current one', () => {
     render(
-      <SiteHeader name="Rain Zhang" links={en.nav} locale="en" homeHref="/" currentId="resume" />
+      <SiteHeader
+        name="Rain Zhang"
+        links={en.nav}
+        locale="en"
+        homeHref="/"
+        currentId="resume"
+        themeLabels={en.labels.theme}
+      />
     );
 
     const nav = screen.getByRole('navigation', { name: 'Primary' });
