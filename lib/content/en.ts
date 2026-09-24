@@ -174,15 +174,15 @@ export const en: Copy = {
       sections: [
         {
           label: 'What it is',
-          text: 'The system MNT Realty runs on. Prospective clients see the public website. Residents of the stratas MNT manages sign in to the owner portal to read notices, book amenities and download documents. Staff run all of it from the admin console.',
+          text: 'MNT Realty’s website and online services. Prospective clients see the public website. Residents of the stratas MNT manages sign in to the owner portal to read notices, book amenities and download documents. Staff manage all of it from the admin console.',
         },
         {
           label: 'How it works',
-          text: 'Three sites, three subdomains, one build. A proxy routes each subdomain to its own pages — admin to the console, owners to the portal — and the public site answers those same paths with a not-found page. Each keeps its own layout and its own host-only session cookie. Public pages are prerendered; the console and the portal render per request. Every read and write goes through one store interface, so what staff enter reaches residents at once and the store behind it can be swapped for the drafted PostgreSQL schema without touching a screen.',
+          text: 'The three sites come from one build, each on its own subdomain. A proxy sends each subdomain to its own pages (admin to the console, owners to the portal), and the public site returns a not-found page for those paths. Each site has its own layout and its own host-only session cookie. Public pages are prerendered, and the console and the portal are rendered on each request. All reads and writes go through one data store interface, so changes staff make show up for residents right away, and the store can later be switched to the drafted PostgreSQL schema without changing any screens.',
         },
         {
           label: 'Technical challenges',
-          text: 'Access is defined once, in a table that the navigation, the page guards and the file route all read. A section outside your role returns not-found rather than forbidden, so the portal never reveals what another role can see. Each strata is a hard boundary: while one is open, nothing from another is reachable. MNT’s own business facts — company details, the strata-document fee schedule, the amenity slot template — are versioned data an administrator edits under Settings rather than values in the source, with every saved version restorable.',
+          text: 'Access rules are defined once, in a table that the navigation, the page guards and the file route all read. A section outside a user’s role returns not-found rather than forbidden, so the portal does not reveal what other roles can see. Each strata is kept separate: while one is open, nothing from another can be reached. MNT’s own business details, such as company information, the fee schedule for strata documents and the template for amenity booking slots, are versioned data that an administrator edits under Settings, not values in the code. Any saved version can be restored.',
         },
       ],
       image: {
@@ -203,7 +203,7 @@ export const en: Copy = {
         'GitHub Actions',
       ],
       status:
-        'All three are built and deployed; cloud data and backend workflows are next. The source belongs to MNT Realty and is not public.',
+        'All three sites are built and deployed. The next steps are cloud data storage and backend workflows. The source code belongs to MNT Realty and is not public.',
       links: [
         {
           label: 'mntrealty.vercel.app',
@@ -216,25 +216,25 @@ export const en: Copy = {
       dates: 'Oct 2025 – Present',
       title: 'FIDO2 Software Authenticator',
       summary:
-        'A CTAP2 security key in software. Linux presents it as a USB device, so browsers can test post-quantum credentials without hardware.',
+        'A CTAP2 security key that runs in software. Linux presents it as a USB device, so browsers can test post-quantum credentials without real hardware.',
       primary: ['Rust', 'Linux'],
       sections: [
         {
           label: 'What it is',
-          text: 'A Rust workspace that behaves like a FIDO2 security key, in software. FEITIAN’s engineers and partners needed to develop against ML-DSA credentials before the hardware was ready. It started as my own repository and now lives under FeitianTech, where I still maintain it.',
+          text: 'A Rust workspace that works like a FIDO2 security key, but in software. FEITIAN’s engineers and partners needed to build and test software that uses ML-DSA credentials before the hardware was ready. It started in my own repository and has since moved to FEITIAN’s GitHub organization, where I still maintain it.',
         },
         {
           label: 'How it works',
-          text: 'An authenticator core implements CTAP2.1 on the Trussed framework with littlefs2 storage: credential management, PIN/UV protocols 1 and 2, and reset. A runner registers a virtual USB HID device through Linux uhid and speaks CTAPHID, so Chrome, Firefox and libfido2 see an ordinary key. It advertises ES256 and ML-DSA-44, -65 and -87, and ships a small command-line tool (attach, detach, status, reset, pin) that can run as a daemon.',
+          text: 'The authenticator core implements CTAP2.1 (credential management, PIN/UV protocols 1 and 2, and reset) on the Trussed framework with littlefs2 storage. A runner creates a virtual USB HID device through Linux uhid and uses the CTAPHID protocol, so Chrome, Firefox and libfido2 treat it as an ordinary security key. It supports ES256 and ML-DSA-44, -65 and -87, and comes with a small command-line tool (attach, detach, status, reset, pin) that can run in the background.',
         },
         {
           label: 'Technical challenges',
-          text: 'Browsers are strict about what they will talk to, so the HID transport and the CTAP state machine had to be exact before Chrome or Firefox accepted the device. CTAP and COSE structures were designed around classical keys, and post-quantum ones do not fit them neatly. The first version called liboqs over a C FFI; it later moved to the pure-Rust fips204 crate, with secret keys zeroised on drop.',
+          text: 'Browsers only accept devices that follow the protocol closely, so the HID transport and the CTAP state machine had to be exact before Chrome or Firefox would use the key. CTAP and COSE structures were designed for classical keys, and post-quantum keys do not fit them easily. The first version called liboqs through a C FFI; it later moved to the pure-Rust fips204 crate, with secret keys zeroized when they are dropped.',
         },
       ],
       stack: ['Rust', 'Linux UHID', 'Trussed', 'littlefs2', 'CTAP2.1', 'fips204', 'liboqs', 'clap'],
       status:
-        'Works on Linux and is used alongside the developer platform, and still under active development. CI runs rustfmt, clippy and the test suite.',
+        'Works on Linux and is used alongside the developer platform. It is still in active development, and CI runs rustfmt, clippy and the test suite.',
       links: [
         {
           label: 'Repository',
@@ -252,15 +252,15 @@ export const en: Copy = {
       sections: [
         {
           label: 'What it is',
-          text: 'A Flask web app for developers building on FIDO2. No tool on the market could show a post-quantum credential, so I decided what one would have to do and built it: register and sign in with real or virtual authenticators, edit the raw WebAuthn request as JSON, decode what comes back, and look up any authenticator in the FIDO Alliance metadata service. Started during my internship at FEITIAN, and I still maintain it.',
+          text: 'A Flask web application for developers who work with FIDO2. The third-party tools the team used could not show post-quantum credentials, so I built one that could. Developers can register and sign in with real or virtual authenticators, edit the raw WebAuthn request as JSON, decode the response, and look up any authenticator in the FIDO Alliance metadata service. I started it during my internship at FEITIAN and still maintain it.',
         },
         {
           label: 'How it works',
-          text: 'Four tabs: simple sign-in, an advanced mode with an editable request, a codec for attestation objects and CBOR/CTAP structures, and a metadata explorer with root-certificate checks. The server is a modified copy of Yubico’s python-fido2 with ML-DSA-44, -65 and -87 added through liboqs. Each visitor gets an isolated session store, on local disk or Google Cloud Storage, cleaned up after 14 days of inactivity.',
+          text: 'It has four tabs: simple sign-in, an advanced mode with an editable request, a codec for attestation objects and CBOR/CTAP structures, and a metadata explorer that checks root certificates. The server uses a modified copy of Yubico’s python-fido2 library, with ML-DSA-44, -65 and -87 added through liboqs. Each visitor gets a separate session store, on local disk or in Google Cloud Storage, and a store that goes unused for 14 days is deleted.',
         },
         {
           label: 'Technical challenges',
-          text: 'python-fido2 had no post-quantum support, so I added the COSE identifiers, the key handling and the attestation checks for ML-DSA without disturbing the classical paths. Shipping liboqs in the image made Cloud Run slow to start, which led to a lazy warm-up and a one-worker gunicorn build. The FIDO metadata goes stale, so a daily GitHub Action re-verifies the snapshot and commits it — nobody has to remember.',
+          text: 'python-fido2 had no post-quantum support, so I added the COSE identifiers, key handling and attestation checks for ML-DSA while keeping the classical algorithms working. Including liboqs in the container image made Cloud Run slow to start, so I added a lazy warm-up and set gunicorn to run a single worker. The FIDO metadata goes out of date, so a daily GitHub Action re-verifies the snapshot and commits it automatically.',
         },
       ],
       image: {
@@ -283,7 +283,7 @@ export const en: Copy = {
         'Vitest',
       ],
       status:
-        'Live at webauthnlab.tech and maintained under FeitianTech. About 120 server test files, plus frontend and post-quantum tests, run in CI.',
+        'Live at webauthnlab.tech and maintained in FEITIAN’s GitHub organization. CI runs about 120 server test files, plus front-end and post-quantum tests.',
       links: [
         {
           label: 'webauthnlab.tech',
@@ -299,16 +299,17 @@ export const en: Copy = {
       id: 'work-demo',
       dates: 'Nov – Dec 2025',
       title: 'Authentication Demo Platform',
-      summary: 'A customer-facing site for trying FEITIAN’s passwordless and post-quantum sign-in.',
+      summary:
+        'A demo site where FEITIAN’s customers can try passwordless and post-quantum sign-in.',
       primary: ['React', 'Python'],
       sections: [
         {
           label: 'What it is',
-          text: 'A demo for FEITIAN’s customers and sales team. The developer platform is built for engineers; this one is for people evaluating the products. Register a security key, sign in, and watch a post-quantum credential work, without reading a specification.',
+          text: 'A demo for FEITIAN’s customers and sales team. The developer platform is for engineers; this site is for people evaluating FEITIAN’s products. Visitors can register a security key, sign in, and see a post-quantum credential work without reading a specification.',
         },
         {
           label: 'How it works',
-          text: 'A React front end over the same authentication service and ML-DSA support as the developer platform, with a guided interface in place of raw requests and responses.',
+          text: 'A React front end on top of the same authentication service and ML-DSA support as the developer platform. Instead of raw requests and responses, it guides visitors through each step.',
         },
       ],
       image: {
@@ -318,7 +319,7 @@ export const en: Copy = {
         height: 800,
       },
       stack: ['React', 'JavaScript', 'Python', 'Flask', 'WebAuthn / FIDO2', 'ML-DSA', 'liboqs'],
-      status: 'Live at demo.ftsafe.com. The source belongs to FEITIAN and is not public.',
+      status: 'Live at demo.ftsafe.com. The source code belongs to FEITIAN and is not public.',
       links: [
         {
           label: 'demo.ftsafe.com',
@@ -333,20 +334,20 @@ export const en: Copy = {
       dates: 'Feb 2025 – Present',
       title: 'Personal Portfolio Website',
       summary:
-        'A statically generated portfolio in English and Japanese, built on one small design system shared with my resume and cover letter.',
+        'A statically generated portfolio site in English and Japanese. It shares a small design system with my resume and cover letter.',
       primary: ['Next.js', 'TypeScript'],
       sections: [
         {
           label: 'What it is',
-          text: 'My portfolio, at rainzhang.me. One scrolling page in two languages, on its own small design system: one typeface, ivory paper, one accent colour, no borders or shadows. My resume and cover letter use the same system, so the three read as one piece of work.',
+          text: 'My portfolio at rainzhang.me: a home page and a resume page, both in English and Japanese. It uses its own small design system: one typeface, one accent colour, no borders or shadows, and a light and a dark theme. My resume and cover letter use the same design, so the three look like one set.',
         },
         {
           label: 'How it works',
-          text: 'Next.js App Router prerenders both languages at build time from one typed content model, so /en and /ja stay structurally identical and only the prose differs. Tailwind reads the design system’s tokens rather than raw values, Albert Sans is self-hosted through next/font, and middleware sends a first-time visitor in Japan to the Japanese route unless they have chosen otherwise.',
+          text: 'The Next.js App Router prerenders both languages at build time from one typed content model, so the English and Japanese home pages have the same structure and only the text differs. Tailwind reads the design system’s tokens instead of raw values, and Albert Sans is self-hosted through next/font. Middleware shows a first-time visitor from Japan the Japanese version, and after that the site remembers the language each reader last used.',
         },
         {
           label: 'Features',
-          text: 'Experience and project rows expand in place, a language switch whose pill slides between English and Japanese, a first-screen entrance in pure CSS, a contact form that posts to Formspree behind a honeypot and a request timeout, and a copy-to-clipboard email. Everything renders without JavaScript and every duration honours prefers-reduced-motion.',
+          text: 'Experience and project rows expand in place. The site also has a language switch, a theme switch (System, Light and Dark), a short entrance animation in plain CSS, a contact form that sends through Formspree with a honeypot field and a request timeout, and a button that copies my email address. The pages still load and their links still work without JavaScript, and every animation follows the reader’s reduced-motion setting.',
         },
       ],
       stack: [
@@ -360,7 +361,7 @@ export const en: Copy = {
         'GitHub Actions',
       ],
       status:
-        'Live at rainzhang.me. Unit tests in Vitest and an end-to-end suite in Playwright across Chromium, Firefox, Safari and mobile run in CI.',
+        'Live at rainzhang.me. CI runs Vitest unit tests and Playwright end-to-end tests in Chromium, Firefox and WebKit, plus an emulated iPhone.',
       links: [
         {
           label: 'rainzhang.me',
@@ -377,20 +378,20 @@ export const en: Copy = {
       dates: 'Jan – Apr 2025',
       title: 'Travel Advisor',
       summary:
-        'A course project with three classmates: a trip planner that picks a destination from your passport and visas, then fills in hotels, restaurants and an itinerary.',
+        'A course project with three classmates: a trip planner that suggests a destination based on a traveller’s passport and visas, then fills in hotels, restaurants and an itinerary.',
       primary: ['React', 'Tailwind CSS'],
       sections: [
         {
           label: 'What it is',
-          text: 'A CMPT 276 group project. You answer a short questionnaire or pick a place, choose dates, and get hotels, restaurants, attractions and a day-by-day plan, with a chat assistant for follow-up questions.',
+          text: 'A group project for CMPT 276. Users answer a short questionnaire or choose a place, pick their dates, and get hotels, restaurants, attractions and a day-by-day plan. A chat assistant answers follow-up questions.',
         },
         {
           label: 'My part',
-          text: 'I built the React and Tailwind front end, the passport and visa questionnaire that asks OpenAI for a destination, the date steps and their validation, and the chat widget. A teammate wrote the Express service that fronts the Tripadvisor API.',
+          text: 'I built the React and Tailwind front end, the passport and visa questionnaire that asks OpenAI for a destination, the date steps and their validation, and the chat widget. A teammate wrote the Express service that connects to the Tripadvisor API.',
         },
         {
           label: 'Looking back',
-          text: 'The OpenAI key is called from the browser. Today I would put it behind the backend.',
+          text: 'The app calls the OpenAI API directly from the browser. If I built it again, I would move that call to the backend.',
         },
       ],
       image: {
