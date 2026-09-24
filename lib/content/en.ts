@@ -187,7 +187,7 @@ export const en: Copy = {
       ],
       image: {
         src: '/projects/mnt-platform.webp',
-        alt: 'The MNT Realty home page, with the service line and the proposal and owner-portal entry points',
+        alt: 'The MNT Realty home page, with the Owner portal and Request a proposal buttons above a photo of the Vancouver skyline',
         width: 1600,
         height: 800,
       },
@@ -265,7 +265,7 @@ export const en: Copy = {
       ],
       image: {
         src: '/projects/webauthn-platform.webp',
-        alt: 'The advanced tab of the WebAuthn developer platform, with an editable request and a decoded response',
+        alt: 'The FIDO MDS Authenticators tab of the WebAuthn developer platform, with a searchable table of authenticators from the FIDO Metadata Service',
         width: 1600,
         height: 800,
       },
@@ -314,7 +314,7 @@ export const en: Copy = {
       ],
       image: {
         src: '/projects/security-demo.webp',
-        alt: 'The authentication demo platform sign-in screen',
+        alt: 'The Info page of the authentication demo platform, with a Password section and an Add Security Key button',
         width: 1600,
         height: 800,
       },
@@ -396,7 +396,7 @@ export const en: Copy = {
       ],
       image: {
         src: '/projects/travel-advisor.webp',
-        alt: 'The Travel Advisor results page with hotels, restaurants and attractions',
+        alt: 'The Travel Advisor start page, with a short description and a Start Your Journey button',
         width: 1600,
         height: 800,
       },

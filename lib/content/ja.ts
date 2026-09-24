@@ -187,7 +187,7 @@ export const ja: Copy = {
       ],
       image: {
         src: '/projects/mnt-platform.webp',
-        alt: 'MNT Realty のホーム画面。提供サービスと、提案依頼・オーナーポータルへの入口',
+        alt: 'MNT Realty のホーム画面。上部に「Owner portal」と「Request a proposal」のボタン、その下にバンクーバーの街並みの写真',
         width: 1600,
         height: 800,
       },
@@ -265,7 +265,7 @@ export const ja: Copy = {
       ],
       image: {
         src: '/projects/webauthn-platform.webp',
-        alt: 'WebAuthn 開発者向けプラットフォームの詳細モード。リクエストの編集と応答の解読',
+        alt: 'WebAuthn 開発者向けプラットフォームの「FIDO MDS Authenticators」タブ。FIDO メタデータサービスの認証器を検索できる一覧表',
         width: 1600,
         height: 800,
       },
@@ -314,7 +314,7 @@ export const ja: Copy = {
       ],
       image: {
         src: '/projects/security-demo.webp',
-        alt: '認証デモプラットフォームのサインイン画面',
+        alt: '認証デモプラットフォームの「Info」ページ。パスワードの項目と「Add Security Key」ボタン',
         width: 1600,
         height: 800,
       },
@@ -396,7 +396,7 @@ export const ja: Copy = {
       ],
       image: {
         src: '/projects/travel-advisor.webp',
-        alt: 'Travel Advisor の結果画面。ホテル・レストラン・観光地の一覧',
+        alt: 'Travel Advisor のスタート画面。短い紹介文と「Start Your Journey」ボタン',
         width: 1600,
         height: 800,
       },
