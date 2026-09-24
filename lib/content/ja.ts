@@ -7,11 +7,11 @@ import type { Copy } from '../types';
 export const ja: Copy = {
   locale: 'ja',
   meta: {
-    title: 'Rain Zhang — フルスタックデベロッパー・プロダクトエンジニア（バンクーバー）',
+    title: 'Rain Zhang — フルスタックデベロッパー（バンクーバー）',
     description:
-      'サイモンフレーザー大学でコンピュータサイエンスを学ぶ4年生。何を作るべきかを見極め、Python・TypeScript・Rust で Web システムの設計から本番運用までを一貫して担当しています。',
+      'サイモンフレーザー大学でコンピュータサイエンスを学ぶ4年生です。主に Python・TypeScript・Rust で、Web アプリケーションと開発者向けツールを開発・保守しています。',
     ogAlt:
-      'Rain Zhang — バンクーバー在住のフルスタックデベロッパー・プロダクトエンジニア。何を作るべきかを決め、インターフェース、API、データベース、CI/CD まで一貫して構築しています。',
+      'Rain Zhang のポートフォリオカード。バンクーバー（BC州）のソフトウェアエンジニアで、Python・TypeScript・Rust・Next.js・React を使って Web システムを作っています。',
   },
   nav: [
     {
@@ -36,8 +36,7 @@ export const ja: Copy = {
     },
   ],
   intro: {
-    eyebrow:
-      'フルスタックデベロッパー・プロダクトエンジニア · サイモンフレーザー大学 · バンクーバー、BC州、カナダ',
+    eyebrow: 'フルスタックデベロッパー · サイモンフレーザー大学 · バンクーバー、BC州、カナダ',
     heading: 'Web システムの設計から本番運用まで、一貫して担当しています。',
     body: 'Rain Zhang です。サイモンフレーザー大学でコンピュータサイエンスを学ぶ4年生です。この1年は、セキュリティキーの会社と不動産管理会社で、何を作るべきかを決め、実際に開発し、運用まで続けてきました。主に Python・TypeScript・Rust です。',
     resume: '履歴書',
@@ -484,7 +483,7 @@ export const ja: Copy = {
     },
   },
   footer: {
-    tagline: 'バンクーバー在住。フルスタックデベロッパー・プロダクトエンジニア。',
+    tagline: 'フルスタックデベロッパー。バンクーバーでコンピュータサイエンスを学んでいます。',
     navigate: 'ページ内',
     elsewhere: 'その他',
     backToTop: 'ページ上部へ',

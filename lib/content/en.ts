@@ -7,11 +7,11 @@ import type { Copy } from '../types';
 export const en: Copy = {
   locale: 'en',
   meta: {
-    title: 'Rain Zhang — Full-Stack Developer & Product Engineer, Vancouver',
+    title: 'Rain Zhang — Full-Stack Developer, Vancouver',
     description:
-      'Fourth-year computer science student at SFU. I work out what needs building, then build and maintain the web systems end to end — Python, TypeScript and Rust.',
+      'Fourth-year computer science student at Simon Fraser University. I build and maintain web applications and developer tools, mostly in Python, TypeScript and Rust.',
     ogAlt:
-      'Rain Zhang — full-stack developer and product engineer in Vancouver, BC. I decide what a system needs to do, then build it end to end: interfaces, APIs, databases and CI/CD.',
+      'Portfolio card for Rain Zhang, software engineer in Vancouver, BC, who builds web systems with Python, TypeScript, Rust, Next.js and React.',
   },
   nav: [
     {
@@ -36,8 +36,7 @@ export const en: Copy = {
     },
   ],
   intro: {
-    eyebrow:
-      'Full-Stack Developer & Product Engineer · Simon Fraser University · Vancouver, BC, Canada',
+    eyebrow: 'Full-Stack Developer · Simon Fraser University · Vancouver, BC, Canada',
     heading: 'I build and maintain web systems, from design through to production.',
     body: 'I’m Rain, a fourth-year computer science student at SFU. In the past year I’ve decided what to build, built it and kept it running for a security-key company and a property management firm, mostly in Python, TypeScript and Rust.',
     resume: 'Resume',
@@ -484,7 +483,7 @@ export const en: Copy = {
     },
   },
   footer: {
-    tagline: 'Full-Stack Developer & Product Engineer in Vancouver.',
+    tagline: 'Full-stack developer and computer science student in Vancouver.',
     navigate: 'Navigate',
     elsewhere: 'Elsewhere',
     backToTop: 'Back to top',
