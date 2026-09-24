@@ -460,7 +460,7 @@ export const ja: Copy = {
     },
   ],
   contact: {
-    lead: '採用のご連絡でも、ここにある仕事の話でも、お気軽にご連絡ください。',
+    lead: '採用のご相談や、ここで紹介した仕事についてのお話など、ご連絡をいただけるとうれしいです。',
     copy: 'コピー',
     copied: 'メールアドレスをコピーしました',
     channels: {
@@ -487,7 +487,7 @@ export const ja: Copy = {
     navigate: 'ページ内',
     elsewhere: 'その他',
     backToTop: 'ページ上部へ',
-    credit: 'デザインと開発 Rain Zhang',
+    credit: 'デザイン・開発：Rain Zhang',
     links: [
       {
         id: 'github',

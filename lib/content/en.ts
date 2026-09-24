@@ -431,7 +431,7 @@ export const en: Copy = {
       width: 2560,
       height: 1280,
     },
-    meta: 'BSc, Computer Science · Vancouver, BC, Canada · Graduating December 2027',
+    meta: 'BSc, Computer Science · Vancouver, BC, Canada · Expected to graduate in December 2027',
     detail: 'CGPA 3.44 / 4.33. Dean’s Honour Roll in Fall 2024 and Summer 2025.',
   },
   skills: [
@@ -460,7 +460,7 @@ export const en: Copy = {
     },
   ],
   contact: {
-    lead: 'If you’re hiring, or want to talk about any of this, please write to me.',
+    lead: 'If you’re hiring or would like to talk about my work, I’d be glad to hear from you.',
     copy: 'Copy',
     copied: 'Email copied',
     channels: {
@@ -475,11 +475,11 @@ export const en: Copy = {
       submit: 'Send message',
       sending: 'Sending',
       sentTitle: 'Message sent.',
-      sentBody: 'Thanks — I’ll get back to you as soon as I can.',
+      sentBody: 'Thank you. I’ll reply as soon as I can.',
       another: 'Send another',
       required: 'Required',
       invalidEmail: 'That doesn’t look like an email address.',
-      failed: 'Couldn’t reach the server — try emailing me directly.',
+      failed: 'Couldn’t reach the server. Please email me directly instead.',
     },
   },
   footer: {
@@ -487,7 +487,7 @@ export const en: Copy = {
     navigate: 'Navigate',
     elsewhere: 'Elsewhere',
     backToTop: 'Back to top',
-    credit: 'Designed and Built by Rain Zhang',
+    credit: 'Designed and built by Rain Zhang',
     links: [
       {
         id: 'github',
