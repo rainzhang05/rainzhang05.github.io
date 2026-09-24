@@ -75,23 +75,22 @@ export const en: Copy = {
         scale: 1.45,
       },
       summary:
-        'I run the software and IT side of a property and strata management company. I work with staff to determine what the office needs, then build and run the internal systems it works from, connected to the company’s Microsoft 365 accounts and data.',
+        'I’m responsible for software and IT at a property and strata management company. I work with staff to understand what the office needs, then build and maintain the internal systems they use, connected to the company’s Microsoft 365 accounts and data.',
       groups: [
         {
           label: 'Work',
           items: [
-            'Rebuilt the MNT Realty platform from the ground up, folding three sites — the public website, an owner portal for residents and a staff admin console — into one application.',
-            'Decided what an internal platform had to replace, then designed and built MNT Control Center in place of the separate tools the office used before.',
-            'Set up organisation sign-in and role-based access with Microsoft Entra ID, the Graph API and OAuth 2.0.',
-            'Built the internal web applications behind it in Next.js, Node.js and PostgreSQL.',
-            'Automated the recurring office work that cost staff the most time: sorting incoming email, looking up owner records, and an internal assistant that answers staff questions from company documents.',
+            'Planned and rebuilt the MNT Realty platform from scratch as one application for three sites: a public website, an owner portal for residents, and an admin console for staff.',
+            'Designed and built MNT Control Center, an internal platform in Next.js, Node.js and PostgreSQL that replaces the separate tools the office used before.',
+            'Set up organization sign-in and role-based access with Microsoft Entra ID, the Graph API and OAuth 2.0.',
+            'Automated the recurring office tasks that took staff the most time: sorting incoming email, looking up owner information, and answering staff questions from company documents with an internal assistant.',
           ],
         },
         {
           label: 'Operations',
           items: [
-            'Run hosting, deployment, domains and DNS, and the release workflow on Vercel and GitHub Actions.',
-            'Write the tests and the documentation myself, so the systems can be handed over later.',
+            'Manage hosting, deployment, domains and DNS, and the release process on Vercel and GitHub Actions.',
+            'Write tests and documentation so that someone else can take over the systems later.',
           ],
         },
       ],
@@ -125,22 +124,22 @@ export const en: Copy = {
         height: 428,
       },
       summary:
-        'Worked out what FEITIAN’s post-quantum FIDO2 work needed, then built three systems and ran them end to end: a public WebAuthn developer platform, a software security key in Rust, and a customer demo site.',
+        'I planned, built and ran three systems for FEITIAN’s post-quantum FIDO2 work: a public WebAuthn developer platform, a software security key in Rust, and a customer demo site.',
       groups: [
         {
           label: 'Work',
           items: [
-            'The team was working from third-party tools that could not show post-quantum credentials, so I built the company’s first WebAuthn/FIDO2 developer platform: one place to register, sign in, inspect and debug them.',
-            'Wrote a CTAP2 authenticator in Rust that Linux presents as a virtual USB security key, so browsers and libfido2 could test ML-DSA credentials before hardware existed.',
-            'Built a self-service demo site so customers could try passwordless sign-in and security keys without going through support.',
+            'Built the company’s first WebAuthn/FIDO2 developer platform, because the team’s third-party tools could not show post-quantum credentials. Developers can register, sign in, inspect and debug credentials in one place.',
+            'Wrote a CTAP2 authenticator in Rust that Linux presents as a virtual USB security key, so browsers and libfido2 could test ML-DSA credentials before the hardware was ready.',
+            'Built a self-service demo site where customers can try passwordless sign-in and security keys without contacting support.',
+            'Worked with FEITIAN’s hardware and security engineers so the tools matched the real devices and the data they returned.',
           ],
         },
         {
-          label: 'Delivery',
+          label: 'Operations',
           items: [
-            'Deployed with Docker on Linux servers and Google Cloud Run, with GitHub Actions running the tests, the builds and a daily FIDO metadata refresh.',
-            'Worked with FEITIAN’s hardware and security engineers so the tools matched the real devices and the data they returned.',
-            'The internship ended in December; I still maintain all three.',
+            'Deployed with Docker on Linux servers and Google Cloud Run, with GitHub Actions running tests, builds and a daily update of the FIDO metadata.',
+            'Still maintain all three systems after the internship ended in December 2025.',
           ],
         },
       ],
