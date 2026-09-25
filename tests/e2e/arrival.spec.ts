@@ -27,7 +27,12 @@ async function arrivalOf(page: import("@playwright/test").Page, id: string, link
   }, "#" + id);
 
   await page.locator("footer").getByRole("link", { name: linkName }).first().click();
-  await page.waitForTimeout(1400);
+  await expect(page.locator("html")).toHaveAttribute("data-entrance", id);
+  await expect(page.locator("#" + id)).toHaveCSS("opacity", "1");
+  await page.waitForFunction(() => {
+    const samples = (window as unknown as { __o: number[] }).__o;
+    return samples[samples.length - 1] === 1;
+  });
 
   return page.evaluate(() => (window as unknown as { __o: number[] }).__o);
 }

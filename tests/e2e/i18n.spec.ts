@@ -31,17 +31,24 @@ test.describe("languages", () => {
 
   test("switches language and remembers the choice", async ({ page, context }) => {
     await page.goto("/");
+    await expect
+      .poll(async () => (await context.cookies()).find((c) => c.name === "portfolio.locale")?.value)
+      .toBe("en");
 
     await (await languageSwitch(page)).getByRole("radio", { name: "日本語" }).click();
     await page.waitForURL("**/ja");
 
     await expect(page.locator("html")).toHaveAttribute("lang", "ja");
-    const cookies = await context.cookies();
-    expect(cookies.find((c) => c.name === "portfolio.locale")?.value).toBe("ja");
+    await expect
+      .poll(async () => (await context.cookies()).find((c) => c.name === "portfolio.locale")?.value)
+      .toBe("ja");
   });
 
-  test("switches back to English", async ({ page }) => {
+  test("switches back to English", async ({ page, context }) => {
     await page.goto("/ja");
+    await expect
+      .poll(async () => (await context.cookies()).find((c) => c.name === "portfolio.locale")?.value)
+      .toBe("ja");
 
     await (await languageSwitch(page)).getByRole("radio", { name: "EN" }).click();
     await page.waitForURL((url) => url.pathname === "/");
@@ -189,10 +196,16 @@ test.describe("languages", () => {
       .toBe("ja");
   });
 
-  test("takes a reader back to the language they left the site in", async ({ page }) => {
+  test("takes a reader back to the language they left the site in", async ({ page, context }) => {
     await page.goto("/ja");
+    await expect
+      .poll(async () => (await context.cookies()).find((c) => c.name === "portfolio.locale")?.value)
+      .toBe("ja");
     await (await languageSwitch(page)).getByRole("radio", { name: "EN" }).click();
     await page.waitForURL((url) => url.pathname === "/");
+    await expect
+      .poll(async () => (await context.cookies()).find((c) => c.name === "portfolio.locale")?.value)
+      .toBe("en");
 
     // A fresh arrival at "/" — the switch has spoken, so English it stays.
     await page.goto("/");
@@ -200,6 +213,9 @@ test.describe("languages", () => {
 
     await (await languageSwitch(page)).getByRole("radio", { name: "日本語" }).click();
     await page.waitForURL("**/ja");
+    await expect
+      .poll(async () => (await context.cookies()).find((c) => c.name === "portfolio.locale")?.value)
+      .toBe("ja");
 
     // And now the reverse: "/" is where they type, /ja is where they land.
     await page.goto("/");
