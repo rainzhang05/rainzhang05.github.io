@@ -42,6 +42,9 @@ const securityHeaders = [
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  experimental: {
+    globalNotFound: true,
+  },
   images: {
     // Only the project screenshots go through next/image. Technology marks
     // and company logos stay inline <img> with explicit sizes (12-18px,

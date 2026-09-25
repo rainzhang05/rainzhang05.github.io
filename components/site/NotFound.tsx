@@ -2,8 +2,7 @@ import Link from 'next/link';
 import { site } from '@/lib/site';
 
 /**
- * The body of the 404 page, shared by the global boundary and the one inside
- * the [locale] segment. A missing URL carries no locale to read, so this is
+ * The body of the global 404 page. A missing URL carries no locale to read, so this is
  * the one place in the site with English copy of its own rather than a key in
  * the content files.
  */

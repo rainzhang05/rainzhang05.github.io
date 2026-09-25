@@ -78,6 +78,10 @@ test.describe("404", () => {
     expect(response?.status()).toBe(404);
     await expect(page.getByRole("heading", { name: "This page does not exist." })).toBeVisible();
     await expect(page.getByRole("link", { name: /Back to Rain Zhang/ })).toBeVisible();
+
+    // A 404 must not leave the dev server unable to render the locale layouts.
+    expect((await page.goto("/"))?.status()).toBe(200);
+    expect((await page.goto("/ja"))?.status()).toBe(200);
   });
 
   test("answers a deeper unknown path the same way", async ({ page }) => {
@@ -90,8 +94,7 @@ test.describe("404", () => {
   test("looks like the rest of the site", async ({ page }) => {
     await page.goto("/no-such-page");
 
-    // Next wraps this page in a bare html/body of its own, so the stylesheet
-    // and the typeface have to be carried in by hand — easy to lose silently.
+    // This global page supplies its own html/body, stylesheet and typeface.
     const styles = await page.evaluate(() => {
       const heading = document.querySelector("h1") as HTMLElement;
       return {

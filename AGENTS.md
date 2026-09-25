@@ -49,6 +49,7 @@ The dock was added deliberately and against the grain of that rule: the page had
 app/
   globals.css              Design tokens (colour, type, spacing, radius, motion) + base rules.
                            The only file in the repo with raw values.
+  global-not-found.tsx     Full-document 404 for unmatched paths, outside the locale layout
   fonts.ts                 Albert Sans, self-hosted through next/font/local
   fonts/*.woff2            The four font files (upright/italic x latin/latin-ext)
   icon.svg                 Favicon, applied to every route
@@ -220,6 +221,7 @@ In `sectionLinks`, **`id` is the element the dock watches and `href` is where th
 Both languages come from one `app/[locale]` tree:
 
 - `generateStaticParams` prerenders `en` and `ja`; `dynamicParams = false`, so anything else 404s.
+- There is no `app/layout.tsx`. `app/[locale]/layout.tsx` owns `<html lang>` and `data-locale` for the four valid routes. `experimental.globalNotFound` makes `app/global-not-found.tsx` answer unmatched paths at the routing level in both development and production; it supplies its own document, global CSS, fonts and theme script because no locale layout wraps it. Keep this boundary when changing the 404 page: a root `app/not-found.tsx` without `app/layout.tsx` causes a persistent build error in `next dev` after an unknown URL.
 - `/` is rewritten to `/en` internally and `/en` redirects to `/`, and `/resume` and `/en/resume` are the same pair (both in [next.config.mjs](next.config.mjs)), so each language has exactly one canonical URL per page. Redirects are evaluated before rewrites and a rewrite does not re-enter them, so there is no loop. The rewrite is also what stops `/resume` being read as the `[locale]` segment and 404ing under `dynamicParams: false` — add a route here and it needs its own pair.
 - **A nested page's metadata replaces the layout's one key at a time.** `app/[locale]/resume/page.tsx` restates `alternates`, `openGraph` and `twitter` in full; drop one and the resume page silently advertises the home page's canonical URL and `og:url`.
 - **Which language an arrival gets, in order:** the `portfolio.locale` cookie if it holds a language this site has; otherwise `x-vercel-ip-country` — `JP` gets Japanese, everyone else English. Location decides the first visit of all and is never consulted again. [middleware.ts](middleware.ts) is where this lives; it 307s `/` to `/ja` and `/resume` to `/ja/resume`, and its matcher is an explicit list of the English routes, never a pattern: a catch-all would match `/ja` and redirect it to itself. It only ever redirects *into* Japanese, so a link to `/ja` is never bounced back to `/`. Local `next dev` has no country header, so an unremembered `/` stays English.
