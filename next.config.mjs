@@ -17,7 +17,7 @@ const csp = [
   "img-src 'self' data: blob:",
   "font-src 'self'",
   `connect-src 'self' https://formspree.io${isDev ? ' ws:' : ''}`,
-  "form-action 'self'",
+  "form-action 'self' https://formspree.io",
   "frame-ancestors 'none'",
   // No upgrade-insecure-requests: every subresource is same-origin and
   // relative, HSTS already forces https on the domain, and WebKit applies the

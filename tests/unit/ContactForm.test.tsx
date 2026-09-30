@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { renderToString } from 'react-dom/server';
 import userEvent from '@testing-library/user-event';
 import { ContactForm } from '@/components/site/ContactForm';
 import { en } from '@/lib/content';
@@ -8,8 +9,9 @@ import { site } from '@/lib/site';
 const copy = en.contact.form;
 
 function setup() {
-  render(<ContactForm copy={copy} />);
+  const rendered = render(<ContactForm copy={copy} />);
   return {
+    ...rendered,
     name: screen.getByLabelText(copy.name),
     email: screen.getByLabelText(copy.email),
     message: screen.getByLabelText(copy.message),
@@ -25,11 +27,30 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  vi.useRealTimers();
   vi.unstubAllGlobals();
   vi.restoreAllMocks();
 });
 
 describe('ContactForm', () => {
+  function fillValidForm() {
+    fireEvent.change(screen.getByLabelText(copy.name), { target: { value: 'Ada' } });
+    fireEvent.change(screen.getByLabelText(copy.email), { target: { value: 'ada@example.com' } });
+    fireEvent.change(screen.getByLabelText(copy.message), { target: { value: 'Hello' } });
+  }
+
+  it('renders a native POST form with validation before hydration', () => {
+    const html = renderToString(<ContactForm copy={copy} />);
+    const document = new DOMParser().parseFromString(html, 'text/html');
+    const form = document.querySelector('form')!;
+
+    expect(form.getAttribute('action')).toBe(site.formspreeEndpoint);
+    expect(form.getAttribute('method')).toBe('post');
+    expect(form.hasAttribute('novalidate')).toBe(false);
+    expect(form.querySelectorAll('[required]')).toHaveLength(3);
+    expect(form.querySelector('[name="email"]')).toHaveAttribute('type', 'email');
+  });
+
   it('says nothing about a field the visitor has only passed through', async () => {
     const user = userEvent.setup();
     const { name, email, message } = setup();
@@ -51,6 +72,7 @@ describe('ContactForm', () => {
     await user.click(submit);
 
     expect((await screen.findAllByRole('alert'))[0]).toHaveTextContent(copy.required);
+    expect(screen.getByLabelText(copy.name)).toHaveFocus();
   });
 
   it('rejects an address that is not an email, once Send has been pressed', async () => {
@@ -63,6 +85,16 @@ describe('ContactForm', () => {
     await user.click(submit);
 
     expect(await screen.findByText(copy.invalidEmail)).toBeInTheDocument();
+  });
+
+  it('focuses the first invalid field after earlier fields are corrected', () => {
+    const { container, name, email } = setup();
+    fireEvent.change(name, { target: { value: 'Ada' } });
+    fireEvent.change(email, { target: { value: 'invalid' } });
+    fireEvent.submit(container.querySelector('form')!);
+
+    expect(email).toHaveFocus();
+    expect(email).toHaveAccessibleDescription(copy.invalidEmail);
   });
 
   it('clears an error as soon as the field is corrected', async () => {
@@ -163,7 +195,7 @@ describe('ContactForm', () => {
 
   it('carries a honeypot field that is hidden from people', () => {
     const { container } = render(<ContactForm copy={copy} />);
-    const honeypot = container.querySelector('input[name="confirm_username"]');
+    const honeypot = container.querySelector('input[name="_gotcha"]');
 
     expect(honeypot).toBeInTheDocument();
     expect(honeypot).toHaveAttribute('tabindex', '-1');
@@ -173,7 +205,7 @@ describe('ContactForm', () => {
   it('silently drops a submission from a bot that filled the honeypot', async () => {
     const user = userEvent.setup();
     const { container } = render(<ContactForm copy={copy} />);
-    const honeypot = container.querySelector('input[name="confirm_username"]') as HTMLInputElement;
+    const honeypot = container.querySelector('input[name="_gotcha"]') as HTMLInputElement;
 
     await user.type(screen.getByLabelText(copy.name), 'Bot');
     await user.type(screen.getByLabelText(copy.email), 'bot@example.com');
@@ -185,6 +217,58 @@ describe('ContactForm', () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
+  it('clears the honeypot when starting another message', async () => {
+    const { container } = setup();
+    fillValidForm();
+    fireEvent.change(container.querySelector('[name="_gotcha"]')!, { target: { value: 'spam' } });
+    fireEvent.submit(container.querySelector('form')!);
+    fireEvent.click(screen.getByRole('button', { name: copy.another }));
+    fillValidForm();
+    fireEvent.submit(container.querySelector('form')!);
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(await screen.findByText(copy.sentTitle)).toBeInTheDocument();
+  });
+
+  it('allows one request at a time and protects the message being sent', async () => {
+    let resolve!: (response: Response) => void;
+    fetchMock.mockImplementation(() => new Promise<Response>((done) => { resolve = done; }));
+    const { container, name, email, message, submit } = setup();
+    fillValidForm();
+    const form = container.querySelector('form')!;
+    fireEvent.submit(form);
+    fireEvent.submit(form);
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(form).toHaveAttribute('aria-busy', 'true');
+    [name, email, message, submit].forEach((field) => expect(field).toBeDisabled());
+
+    await act(async () => resolve({ ok: false } as Response));
+    [name, email, message, submit].forEach((field) => expect(field).toBeEnabled());
+    expect(message).toHaveValue('Hello');
+  });
+
+  it('cancels on unmount and ignores a late response', async () => {
+    vi.useFakeTimers();
+    let signal!: AbortSignal;
+    let resolve!: (response: Response) => void;
+    fetchMock.mockImplementation((_url: string, init: RequestInit) => {
+      signal = init.signal as AbortSignal;
+      return new Promise<Response>((done) => { resolve = done; });
+    });
+    const { container, unmount } = render(<ContactForm copy={copy} />);
+    fillValidForm();
+    fireEvent.submit(container.querySelector('form')!);
+    unmount();
+
+    expect(signal.aborted).toBe(true);
+    expect(vi.getTimerCount()).toBe(0);
+    setup();
+    await act(async () => resolve({ ok: true } as Response));
+    expect(screen.queryByText(copy.sentTitle)).toBeNull();
+    expect(screen.getByRole('button', { name: copy.submit })).toBeEnabled();
+  });
+
   it('aborts a request that hangs past the timeout', async () => {
     // fireEvent rather than userEvent: this test drives the clock itself, and
     // userEvent's own timers would compete with the fake ones.
@@ -192,7 +276,9 @@ describe('ContactForm', () => {
     let signal: AbortSignal | undefined;
     fetchMock.mockImplementation((_url: string, init: RequestInit) => {
       signal = init.signal ?? undefined;
-      return new Promise(() => {});
+      return new Promise((_resolve, reject) => {
+        signal?.addEventListener('abort', () => reject(new DOMException('Aborted', 'AbortError')));
+      });
     });
 
     const { container } = render(<ContactForm copy={copy} />);
@@ -204,9 +290,14 @@ describe('ContactForm', () => {
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(signal?.aborted).toBe(false);
 
-    vi.advanceTimersByTime(site.formTimeoutMs);
+    await act(async () => vi.advanceTimersByTimeAsync(site.formTimeoutMs));
     expect(signal?.aborted).toBe(true);
+    expect(screen.getByText(copy.failed)).toBeInTheDocument();
+    expect(screen.getByLabelText(copy.message)).toHaveValue('Hello');
+    expect(screen.getByRole('button', { name: copy.submit })).toBeEnabled();
 
-    vi.useRealTimers();
+    fetchMock.mockResolvedValue({ ok: true } as Response);
+    await act(async () => fireEvent.submit(container.querySelector('form')!));
+    expect(screen.getByText(copy.sentTitle)).toBeInTheDocument();
   });
 });

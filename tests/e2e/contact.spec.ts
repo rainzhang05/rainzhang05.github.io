@@ -1,5 +1,6 @@
 import { type Page } from "@playwright/test";
 import { expect, test } from "./fixtures";
+import { en, ja } from "@/lib/content";
 
 const FORMSPREE = "**/formspree.io/**";
 
@@ -86,7 +87,7 @@ test.describe("contact form", () => {
   test("carries a honeypot that people never see", async ({ page }) => {
     await openContact(page);
 
-    const honeypot = page.locator('input[name="confirm_username"]');
+    const honeypot = page.locator('input[name="_gotcha"]');
     await expect(honeypot).toHaveCount(1);
     await expect(honeypot).toHaveAttribute("aria-hidden", "true");
     await expect(honeypot).toHaveAttribute("tabindex", "-1");
@@ -107,4 +108,56 @@ test.describe("contact form", () => {
     const clipboard = await page.evaluate(() => navigator.clipboard.readText());
     expect(clipboard).toBe("rainzhang.zty@gmail.com");
   });
+});
+
+test.describe("native contact form", () => {
+  test.use({ javaScriptEnabled: false });
+
+  for (const [path, copy] of [["/", en.contact.form], ["/ja", ja.contact.form]] as const) {
+    test(`posts ${path} without putting the message in the URL`, async ({ page }) => {
+      await page.route(FORMSPREE, (route) => route.fulfill({
+        status: 200,
+        contentType: "text/html",
+        body: "<!doctype html><title>Intercepted</title><p>Submission intercepted</p>",
+      }));
+      const response = await page.goto(path);
+      expect(response?.headers()["content-security-policy"]).toContain(
+        "form-action 'self' https://formspree.io"
+      );
+      await page.getByLabel(copy.name).fill("Ada");
+      await page.getByLabel(copy.email).fill("ada@example.com");
+      await page.getByLabel(copy.message).fill("Private test message");
+
+      const posted = page.waitForRequest(FORMSPREE);
+      await page.getByRole("button", { name: copy.submit }).press("Enter");
+      const request = await posted;
+      expect(request.method()).toBe("POST");
+      expect(new URL(request.url()).search).toBe("");
+      expect(Object.fromEntries(new URLSearchParams(request.postData() ?? ""))).toEqual({
+        name: "Ada",
+        email: "ada@example.com",
+        message: "Private test message",
+        _gotcha: "",
+      });
+      await expect(page.getByText("Submission intercepted")).toBeVisible();
+      expect(new URL(page.url()).search).toBe("");
+    });
+
+    test(`validates required fields and email on ${path} without scripts`, async ({ page }) => {
+      let posted = false;
+      await page.route(FORMSPREE, async (route) => {
+        posted = true;
+        await route.fulfill({ status: 200, body: "intercepted" });
+      });
+      await page.goto(path);
+      await page.getByRole("button", { name: copy.submit }).click();
+      expect(await page.getByLabel(copy.name).evaluate((input: HTMLInputElement) => input.validity.valueMissing)).toBe(true);
+      await page.getByLabel(copy.name).fill("Ada");
+      await page.getByLabel(copy.email).fill("invalid");
+      await page.getByLabel(copy.message).fill("Hello");
+      await page.getByRole("button", { name: copy.submit }).click();
+      expect(await page.getByLabel(copy.email).evaluate((input: HTMLInputElement) => input.validity.typeMismatch)).toBe(true);
+      expect(posted).toBe(false);
+    });
+  }
 });

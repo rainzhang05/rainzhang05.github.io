@@ -21,6 +21,7 @@ describe('TextField', () => {
 
     expect(screen.getByRole('alert')).toHaveTextContent('Required');
     expect(screen.getByLabelText('Email')).toHaveAttribute('aria-invalid', 'true');
+    expect(screen.getByLabelText('Email')).toHaveAccessibleDescription('Required');
   });
 
   it('leaves a valid input unmarked', () => {
@@ -28,6 +29,7 @@ describe('TextField', () => {
 
     expect(screen.queryByRole('alert')).toBeNull();
     expect(screen.getByLabelText('Email')).not.toHaveAttribute('aria-invalid');
+    expect(screen.getByLabelText('Email')).not.toHaveAttribute('aria-describedby');
   });
 
   it('reports typing and blurring', async () => {
@@ -59,5 +61,18 @@ describe('TextAreaField', () => {
     );
 
     expect(screen.getByRole('alert')).toHaveTextContent('Required');
+    expect(screen.getByLabelText('Message')).toHaveAccessibleDescription('Required');
+  });
+
+  it('removes the error association when corrected', () => {
+    const { rerender } = render(
+      <TextAreaField label="Message" name="message" value="" error="Required" onChange={noop} />
+    );
+    const textarea = screen.getByLabelText('Message');
+    expect(textarea).toHaveAccessibleDescription('Required');
+
+    rerender(<TextAreaField label="Message" name="message" value="Hello" onChange={noop} />);
+    expect(textarea).not.toHaveAttribute('aria-describedby');
+    expect(screen.queryByRole('alert')).toBeNull();
   });
 });

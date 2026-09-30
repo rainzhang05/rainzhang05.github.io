@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState, type ChangeEvent, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
 import { TextAreaField, TextField } from '@/components/ui/Field';
@@ -26,7 +26,24 @@ export function ContactForm({ copy }: { copy: Copy['contact']['form'] }) {
   const [values, setValues] = useState(EMPTY);
   const [attempted, setAttempted] = useState(false);
   const [status, setStatus] = useState<Status>('idle');
+  const [hydrated, setHydrated] = useState(false);
   const honeypot = useRef('');
+  const activeRequest = useRef<{
+    controller: AbortController;
+    timer: ReturnType<typeof setTimeout>;
+  } | null>(null);
+
+  useEffect(() => {
+    setHydrated(true);
+    return () => {
+      const request = activeRequest.current;
+      activeRequest.current = null;
+      if (request) {
+        clearTimeout(request.timer);
+        request.controller.abort();
+      }
+    };
+  }, []);
 
   const errors = {
     name: values.name.trim() ? null : copy.required,
@@ -45,8 +62,14 @@ export function ContactForm({ copy }: { copy: Copy['contact']['form'] }) {
 
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (activeRequest.current) return;
     setAttempted(true);
-    if (errors.name || errors.email || errors.message) return;
+    const invalid = (Object.keys(errors) as Array<keyof typeof errors>).find((key) => errors[key]);
+    if (invalid) {
+      const field = e.currentTarget.elements.namedItem(invalid);
+      if (field instanceof HTMLElement) field.focus();
+      return;
+    }
 
     setStatus('sending');
 
@@ -58,6 +81,8 @@ export function ContactForm({ copy }: { copy: Copy['contact']['form'] }) {
 
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), site.formTimeoutMs);
+    const request = { controller, timer };
+    activeRequest.current = request;
 
     try {
       const response = await fetch(site.formspreeEndpoint, {
@@ -66,11 +91,12 @@ export function ContactForm({ copy }: { copy: Copy['contact']['form'] }) {
         body: JSON.stringify(values),
         signal: controller.signal,
       });
-      setStatus(response.ok ? 'sent' : 'error');
+      if (activeRequest.current === request) setStatus(response.ok ? 'sent' : 'error');
     } catch {
-      setStatus('error');
+      if (activeRequest.current === request) setStatus('error');
     } finally {
       clearTimeout(timer);
+      if (activeRequest.current === request) activeRequest.current = null;
     }
   }
 
@@ -88,6 +114,7 @@ export function ContactForm({ copy }: { copy: Copy['contact']['form'] }) {
             size="sm"
             onClick={() => {
               setValues(EMPTY);
+              honeypot.current = '';
               setAttempted(false);
               setStatus('idle');
             }}
@@ -100,10 +127,17 @@ export function ContactForm({ copy }: { copy: Copy['contact']['form'] }) {
   }
 
   return (
-    <form onSubmit={submit} noValidate aria-busy={status === 'sending'} className="grid gap-4">
+    <form
+      action={site.formspreeEndpoint}
+      method="post"
+      onSubmit={submit}
+      noValidate={hydrated}
+      aria-busy={status === 'sending'}
+      className="grid gap-4"
+    >
       <input
         type="text"
-        name="confirm_username"
+        name="_gotcha"
         tabIndex={-1}
         autoComplete="off"
         aria-hidden="true"
@@ -118,6 +152,8 @@ export function ContactForm({ copy }: { copy: Copy['contact']['form'] }) {
           label={copy.name}
           name="name"
           value={values.name}
+          required
+          disabled={status === 'sending'}
           error={shown('name')}
           autoComplete="name"
           onChange={change('name')}
@@ -127,6 +163,8 @@ export function ContactForm({ copy }: { copy: Copy['contact']['form'] }) {
           name="email"
           type="email"
           value={values.email}
+          required
+          disabled={status === 'sending'}
           error={shown('email')}
           autoComplete="email"
           onChange={change('email')}
@@ -137,6 +175,8 @@ export function ContactForm({ copy }: { copy: Copy['contact']['form'] }) {
         label={copy.message}
         name="message"
         value={values.message}
+        required
+        disabled={status === 'sending'}
         error={shown('message')}
         onChange={change('message')}
       />

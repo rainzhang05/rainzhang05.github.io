@@ -10,6 +10,8 @@ interface FieldProps {
   autoComplete?: string;
   type?: 'text' | 'email';
   rows?: number;
+  required?: boolean;
+  disabled?: boolean;
   onChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   /** Optional: the contact form validates on submit, not on blur. */
   onBlur?: (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
@@ -27,6 +29,8 @@ export function TextField({
   error,
   autoComplete,
   type = 'text',
+  required,
+  disabled,
   onChange,
   onBlur,
 }: FieldProps) {
@@ -50,14 +54,17 @@ export function TextField({
           type={type}
           value={value}
           autoComplete={autoComplete}
+          required={required}
+          disabled={disabled}
           aria-invalid={error ? true : undefined}
+          aria-describedby={error ? id + '-error' : undefined}
           onChange={onChange}
           onBlur={onBlur}
           className={control}
         />
       </div>
       {error ? (
-        <p role="alert" className="text-caption text-clay">
+        <p id={id + '-error'} role="alert" className="text-caption text-clay">
           {error}
         </p>
       ) : null}
@@ -71,6 +78,8 @@ export function TextAreaField({
   value,
   error,
   rows = 5,
+  required,
+  disabled,
   onChange,
   onBlur,
 }: FieldProps) {
@@ -93,14 +102,17 @@ export function TextAreaField({
           name={name}
           rows={rows}
           value={value}
+          required={required}
+          disabled={disabled}
           aria-invalid={error ? true : undefined}
+          aria-describedby={error ? id + '-error' : undefined}
           onChange={onChange}
           onBlur={onBlur}
           className={control + ' block resize-y leading-relaxed'}
         />
       </div>
       {error ? (
-        <p role="alert" className="text-caption text-clay">
+        <p id={id + '-error'} role="alert" className="text-caption text-clay">
           {error}
         </p>
       ) : null}
