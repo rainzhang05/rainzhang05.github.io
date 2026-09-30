@@ -121,6 +121,7 @@ export interface Copy {
      * that name.
      */
     theme: { group: string; system: string; light: string; dark: string };
+    navigation: { primary: string; menu: string; closeMenu: string };
   };
   experiences: Experience[];
   featured: Project[];

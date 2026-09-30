@@ -1,5 +1,6 @@
 import { type Page } from "@playwright/test";
 import { expect, test } from "./fixtures";
+import { en, ja } from "@/lib/content";
 
 /**
  * The switch sits in the header on a wide viewport and inside the menu sheet
@@ -9,8 +10,9 @@ async function languageSwitch(page: Page) {
   const inHeader = page.getByRole("radiogroup", { name: "Language" }).first();
   if (await inHeader.isVisible()) return inHeader;
 
-  await page.getByRole("button", { name: "Menu" }).click();
-  return page.getByRole("dialog", { name: "Menu" }).getByRole("radiogroup", { name: "Language" });
+  const labels = (await page.locator("html").getAttribute("lang") === "ja" ? ja : en).labels.navigation;
+  await page.getByRole("button", { name: labels.menu, exact: true }).click();
+  return page.getByRole("dialog", { name: labels.menu }).getByRole("radiogroup", { name: "Language" });
 }
 
 test.describe("resume routing", () => {

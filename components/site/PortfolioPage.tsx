@@ -126,6 +126,7 @@ export function PortfolioPage({ copy, locale }: { copy: Copy; locale: Locale }) 
           links={copy.nav}
           locale={locale}
           themeLabels={copy.labels.theme}
+          navigationLabels={copy.labels.navigation}
         />
         <main id="main" tabIndex={-1}>
           <Intro copy={copy.intro} resumeHref={resumePage[locale]} onCopyEmail={copyEmail} />

@@ -51,6 +51,7 @@ export function ResumePage({
           localeHrefs={resumePage}
           currentId="resume"
           themeLabels={copy.labels.theme}
+          navigationLabels={copy.labels.navigation}
         />
       </div>
 

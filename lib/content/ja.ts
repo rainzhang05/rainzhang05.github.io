@@ -60,6 +60,11 @@ export const ja: Copy = {
     skipToContent: '本文へスキップ',
     sectionNav: 'このページの内容',
     theme: { group: 'テーマ', system: 'システム', light: 'ライト', dark: 'ダーク' },
+    navigation: {
+      primary: 'メインナビゲーション',
+      menu: 'メニュー',
+      closeMenu: 'メニューを閉じる',
+    },
   },
   experiences: [
     {

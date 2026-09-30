@@ -50,10 +50,12 @@ function cameFrom(): Locale | null {
 export function LocaleSwitch({
   current,
   hrefs = localeHome,
+  onNavigate,
 }: {
   current: Locale;
   /** Where each language goes. Defaults to the two home pages. */
   hrefs?: Record<Locale, string>;
+  onNavigate?: () => void;
 }) {
   const [target, setTarget] = useState<Locale>(current);
   const [slideFrom, setSlideFrom] = useState<Locale | null>(null);
@@ -97,7 +99,10 @@ export function LocaleSwitch({
           hrefLang={locale}
           role="radio"
           aria-checked={locale === current}
-          onClick={() => remember(locale)}
+          onClick={() => {
+            remember(locale);
+            onNavigate?.();
+          }}
           className={
             'relative inline-flex h-[22px] w-full items-center justify-center rounded-pill px-2 font-jp text-[12.5px] font-medium no-underline transition-colors duration-base ease-out hover:no-underline ' +
             (target === locale ? 'text-ink' : 'text-ink-2 hover:text-ink')
