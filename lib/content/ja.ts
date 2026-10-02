@@ -56,6 +56,7 @@ export const ja: Copy = {
     relatedWork: '関連する制作物',
     stack: '技術構成',
     status: '現在の状況',
+    maintained: '継続的に保守中',
     expand: '詳細を表示',
     collapse: '詳細を閉じる',
     skipToContent: '本文へスキップ',
@@ -174,6 +175,7 @@ export const ja: Copy = {
       id: 'work-mnt-platform',
       dates: '2026年8月 – 現在',
       title: 'MNT Realty Platform（不動産管理プラットフォーム）',
+      maintained: true,
       summary:
         '不動産管理会社の3つのサイトを、1つの Next.js アプリケーションで提供しています。公開ウェブサイト、居住者向けのオーナーポータル、スタッフ向けの管理コンソールです。',
       primary: ['Next.js', 'TypeScript', 'React'],
@@ -221,6 +223,7 @@ export const ja: Copy = {
       id: 'work-authenticator',
       dates: '2025年10月 – 現在',
       title: 'FIDO2 ソフトウェア認証器',
+      maintained: true,
       summary:
         'ソフトウェアで動く CTAP2 セキュリティキー。Linux が USB 機器として見せるため、ハードウェアなしで耐量子計算機暗号の資格情報を試せます。',
       primary: ['Rust', 'Linux'],
@@ -252,6 +255,7 @@ export const ja: Copy = {
       id: 'work-webauthn',
       dates: '2025年9月 – 現在',
       title: 'WebAuthn 開発者向けプラットフォーム',
+      maintained: true,
       summary:
         'FIDO2/WebAuthn の動作を試すための公開ツール。耐量子計算機暗号 ML-DSA の資格情報にも対応しています。',
       primary: ['Python', 'Flask', 'JavaScript'],

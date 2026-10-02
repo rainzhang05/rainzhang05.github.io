@@ -49,6 +49,8 @@ export interface Project {
   id: string;
   dates: string;
   title: string;
+  /** Still being worked on: the row carries a badge beside its title. */
+  maintained?: boolean;
   summary: string;
   /** One to three marks shown while the row is collapsed. */
   primary: TechName[];
@@ -111,6 +113,7 @@ export interface Copy {
     relatedWork: string;
     stack: string;
     status: string;
+    maintained: string;
     expand: string;
     collapse: string;
     skipToContent: string;

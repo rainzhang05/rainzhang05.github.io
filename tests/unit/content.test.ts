@@ -23,7 +23,13 @@ const shape = (copy: Copy) => ({
   footerLinks: copy.footer.links.map((n) => [n.id, unprefix(n.href), n.external ?? false]),
   experiences: copy.experiences.map((e) => [e.id, e.tech, e.related, e.mark?.src ?? null]),
   education: copy.education.mark?.src ?? null,
-  projects: copy.projects.map((p) => [p.id, p.primary, p.stack, p.image?.src ?? null]),
+  projects: copy.projects.map((p) => [
+    p.id,
+    p.primary,
+    p.stack,
+    p.image?.src ?? null,
+    p.maintained ?? false,
+  ]),
   projectLinks: allProjects(copy).map((p) => p.links.map((l) => l.href)),
   skills: copy.skills.map((g) => g.items),
 });

@@ -41,6 +41,31 @@ describe('WorkSection', () => {
     expect(screen.queryAllByRole('heading', { level: 4 })).toHaveLength(0);
   });
 
+  it('badges exactly the projects that are still maintained, beside the title', () => {
+    setup();
+
+    const maintained = en.projects.filter((p) => p.maintained).map((p) => p.title);
+    expect(maintained).toEqual([
+      'MNT Realty Platform',
+      'FIDO2 Software Authenticator',
+      'WebAuthn Developer Platform',
+    ]);
+
+    en.projects.forEach((project) => {
+      const row = document.getElementById(`row-${project.id}`)!;
+      const badge = within(row).queryByText(en.labels.maintained);
+      if (project.maintained) {
+        expect(badge).toBeInTheDocument();
+        // Beside the title, but not part of the heading's name.
+        expect(within(row).getByRole('heading', { name: project.title })).not.toContainElement(
+          badge
+        );
+      } else {
+        expect(badge).toBeNull();
+      }
+    });
+  });
+
   it('keeps the projects in the order the content lists them', () => {
     setup();
 
@@ -55,8 +80,7 @@ describe('WorkSection', () => {
 
     // The panel is always in the DOM, and its stack repeats these names, so
     // scope to the always-visible part of the row.
-    const collapsed = within(row).getByRole('button', { name: project.title }).closest('div')!
-      .parentElement!.parentElement!;
+    const collapsed = row.querySelector('.group')!.parentElement!;
     project.primary.forEach((name) => {
       expect(within(collapsed).getAllByText(name).length).toBeGreaterThan(0);
     });

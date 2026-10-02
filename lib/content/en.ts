@@ -56,6 +56,7 @@ export const en: Copy = {
     relatedWork: 'Related work',
     stack: 'Stack',
     status: 'Status',
+    maintained: 'Actively maintained',
     expand: 'Show details',
     collapse: 'Hide details',
     skipToContent: 'Skip to content',
@@ -170,6 +171,7 @@ export const en: Copy = {
       id: 'work-mnt-platform',
       dates: 'Aug 2026 – Present',
       title: 'MNT Realty Platform',
+      maintained: true,
       summary:
         'One Next.js application serving three sites for a property management company: a public website, an owner portal for residents, and an admin console for staff.',
       primary: ['Next.js', 'TypeScript', 'React'],
@@ -217,6 +219,7 @@ export const en: Copy = {
       id: 'work-authenticator',
       dates: 'Oct 2025 – Present',
       title: 'FIDO2 Software Authenticator',
+      maintained: true,
       summary:
         'A CTAP2 security key that runs in software. Linux presents it as a USB device, so browsers can test post-quantum credentials without real hardware.',
       primary: ['Rust', 'Linux'],
@@ -248,6 +251,7 @@ export const en: Copy = {
       id: 'work-webauthn',
       dates: 'Sep 2025 – Present',
       title: 'WebAuthn Developer Platform',
+      maintained: true,
       summary:
         'A public tool for testing FIDO2/WebAuthn flows, including post-quantum ML-DSA credentials.',
       primary: ['Python', 'Flask', 'JavaScript'],

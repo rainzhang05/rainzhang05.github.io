@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { DisclosureRow, PanelBlock } from './DisclosureRow';
 import { SectionHeading } from './SectionHeading';
+import { Badge } from '@/components/ui/Badge';
 import { TechTag, TechTagList } from '@/components/ui/TechTag';
 import { TextLink } from '@/components/ui/TextLink';
 import type { Copy, Project } from '@/lib/types';
@@ -32,6 +33,7 @@ function ProjectRow({
       summary={project.summary}
       open={open}
       onToggle={onToggle}
+      badge={project.maintained ? <Badge>{copy.labels.maintained}</Badge> : undefined}
       labels={copy.labels}
       footer={
         <>
