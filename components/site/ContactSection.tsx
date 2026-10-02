@@ -23,41 +23,39 @@ export function ContactSection({ copy, onCopyEmail }: { copy: Copy; onCopyEmail:
   const { channels } = copy.contact;
 
   return (
-    <section tabIndex={-1} id="contact" className="pt-section">
+    <section tabIndex={-1} id="contact" className="pt-section-space">
       <SectionHeading>{copy.sections.contact}</SectionHeading>
 
-      <div className="pt-6">
-        <div className="grid items-start gap-x-gutter gap-y-10 md:grid-cols-2">
-          <div className="min-w-0">
-            <p className="m-0 max-w-measure text-body-lg">{copy.contact.lead}</p>
-            <dl className="m-0 mt-6 grid gap-2.5 p-0 text-body-15">
-              <Channel label={channels.email}>
-                <TextLink href={'mailto:' + site.email}>{site.email}</TextLink>
-                <Button
-                  variant="quiet"
-                  size="sm"
-                  icon={<Icon name="copy" size={14} />}
-                  onClick={onCopyEmail}
-                >
-                  {copy.contact.copy}
-                </Button>
-              </Channel>
-              <Channel label={channels.linkedin}>
-                <TextLink href={site.linkedin} external>
-                  linkedin.com/in/rainzhang05
-                </TextLink>
-              </Channel>
-              <Channel label={channels.github}>
-                <TextLink href={site.github} external>
-                  github.com/rainzhang05
-                </TextLink>
-              </Channel>
-            </dl>
-          </div>
+      <div className="grid items-start gap-x-gutter gap-y-10 md:grid-cols-2">
+        <div className="min-w-0">
+          <p className="m-0 max-w-measure text-body-lg">{copy.contact.lead}</p>
+          <dl className="m-0 mt-6 grid gap-2.5 p-0 text-body-15">
+            <Channel label={channels.email}>
+              <TextLink href={'mailto:' + site.email}>{site.email}</TextLink>
+              <Button
+                variant="quiet"
+                size="sm"
+                icon={<Icon name="copy" size={14} />}
+                onClick={onCopyEmail}
+              >
+                {copy.contact.copy}
+              </Button>
+            </Channel>
+            <Channel label={channels.linkedin}>
+              <TextLink href={site.linkedin} external>
+                linkedin.com/in/rainzhang05
+              </TextLink>
+            </Channel>
+            <Channel label={channels.github}>
+              <TextLink href={site.github} external>
+                github.com/rainzhang05
+              </TextLink>
+            </Channel>
+          </dl>
+        </div>
 
-          <div className="min-w-0">
-            <ContactForm copy={copy.contact.form} />
-          </div>
+        <div className="min-w-0">
+          <ContactForm copy={copy.contact.form} />
         </div>
       </div>
     </section>

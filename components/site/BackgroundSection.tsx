@@ -3,13 +3,17 @@ import { SectionHeading } from './SectionHeading';
 import { TechTagList } from '@/components/ui/TechTag';
 import type { Copy } from '@/lib/types';
 
-/** Education and skills in one block, in the same label-column rhythm. */
+/**
+ * Education and skills in one block, in the same label-column rhythm. No rules:
+ * education stands a row's distance above the skills, and the skill groups sit
+ * closer to each other than to it, so they read as one list.
+ */
 export function BackgroundSection({ copy }: { copy: Copy }) {
   return (
-    <section tabIndex={-1} id="background" className="pt-section">
+    <section tabIndex={-1} id="background" className="pt-section-space">
       <SectionHeading>{copy.sections.background}</SectionHeading>
 
-      <div className="flex flex-wrap items-start gap-x-8 gap-y-2 border-b border-rule py-5">
+      <div className="flex flex-wrap items-start gap-x-8 gap-y-2">
         <span className="tabular w-full flex-none pt-0.5 text-body-14 text-ink-3 sm:w-label">
           {copy.education.dates}
         </span>
@@ -25,19 +29,18 @@ export function BackgroundSection({ copy }: { copy: Copy }) {
         </div>
       </div>
 
-      {copy.skills.map((group) => (
-        <div
-          key={group.label}
-          className="flex flex-wrap items-start gap-x-8 gap-y-2 border-b border-rule py-4"
-        >
-          <span className="w-full flex-none pt-0.5 text-body-14 text-ink-3 sm:w-label">
-            {group.label}
-          </span>
-          <div className="min-w-0 flex-1 basis-[420px]">
-            <TechTagList items={group.items} />
+      <div className="mt-row-space grid gap-5">
+        {copy.skills.map((group) => (
+          <div key={group.label} className="flex flex-wrap items-start gap-x-8 gap-y-2">
+            <span className="w-full flex-none pt-0.5 text-body-14 text-ink-3 sm:w-label">
+              {group.label}
+            </span>
+            <div className="min-w-0 flex-1 basis-[420px]">
+              <TechTagList items={group.items} />
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </section>
   );
 }

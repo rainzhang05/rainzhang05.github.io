@@ -81,7 +81,9 @@ export function ResumePage({
         <div className="resume-columns enter enter-3 mt-12 grid gap-y-12 md:grid-cols-[minmax(0,1fr)_var(--resume-aside)] md:gap-x-8 md:gap-y-0">
           <div className="min-w-0">
             <section aria-labelledby="resume-experience">
-              <SectionHeading id="resume-experience">{resume.headings.experience}</SectionHeading>
+              <SectionHeading id="resume-experience" rule>
+                {resume.headings.experience}
+              </SectionHeading>
               <ul className="m-0 list-none p-0">
                 {resume.experience.map((entry) => (
                   <ResumeEntry key={entry.id} entry={entry} meta="org" />
@@ -90,7 +92,9 @@ export function ResumePage({
             </section>
 
             <section aria-labelledby="resume-projects" className="pt-section">
-              <SectionHeading id="resume-projects">{resume.headings.projects}</SectionHeading>
+              <SectionHeading id="resume-projects" rule>
+                {resume.headings.projects}
+              </SectionHeading>
               <ul className="m-0 list-none p-0">
                 {resume.projects.map((entry) => (
                   <ResumeEntry key={entry.id} entry={entry} meta="stack" />
@@ -101,7 +105,9 @@ export function ResumePage({
 
           <aside className="resume-aside min-w-0 md:border-l md:border-rule md:pl-8">
             <section aria-labelledby="resume-skills">
-              <SectionHeading id="resume-skills">{resume.headings.skills}</SectionHeading>
+              <SectionHeading id="resume-skills" rule>
+                {resume.headings.skills}
+              </SectionHeading>
               <dl className="m-0 mt-5 grid gap-4">
                 {resume.skills.map((group) => (
                   <div key={group.id}>
@@ -113,7 +119,9 @@ export function ResumePage({
             </section>
 
             <section aria-labelledby="resume-education" className="pt-section">
-              <SectionHeading id="resume-education">{resume.headings.education}</SectionHeading>
+              <SectionHeading id="resume-education" rule>
+                {resume.headings.education}
+              </SectionHeading>
               <div className="mt-5 grid gap-0.5">
                 <p className="m-0 text-body-15 font-medium text-ink">{resume.education.school}</p>
                 {resume.education.lines.map((line) => (
