@@ -213,8 +213,14 @@ test.describe("section dock", () => {
     await open(page);
 
     // Introduction's own top is 64, which sits in the band where the dock is
-    // still hidden, so it is checked from the first place the dock exists.
-    const intro = await settleAt(page, 200);
+    // still hidden, so it is checked from the first place the dock exists:
+    // as far down as the 45% line still falls inside the intro, which is
+    // wherever the intro ends rather than a fixed offset.
+    const introY = await page.evaluate(() => {
+      const bottom = document.getElementById("intro")!.getBoundingClientRect().bottom;
+      return Math.floor(bottom + window.scrollY - document.documentElement.clientHeight * 0.45 - 10);
+    });
+    const intro = await settleAt(page, introY);
     expect(intro?.active, "active while still in the intro").toBe(0);
 
     const ids = ["experience", "work", "background", "contact"];
