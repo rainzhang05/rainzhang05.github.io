@@ -51,6 +51,18 @@ export function settleDistance(pxPerSecond: number, settleMs: number): number {
   return (pxPerSecond * settleMs) / 1000 / SETTLE_POWER;
 }
 
+/** Where a panel of `height` joins the shared motion, and how long its glide lasts. */
+function shape(height: number, pxPerSecond: number, settleMs: number) {
+  const fullSettle = settleDistance(pxPerSecond, settleMs);
+  const cruise = Math.max(0, height - fullSettle);
+  const settle = height - cruise;
+  // Where on the shared settle this panel joins it: at the start for any panel
+  // taller than the settle, part-way through for one shorter than it.
+  const joinAt = 1 - Math.pow(settle / fullSettle, 1 / SETTLE_POWER);
+  const cruiseMs = (cruise / pxPerSecond) * 1000;
+  return { fullSettle, cruise, joinAt, cruiseMs };
+}
+
 /**
  * The duration and easing that move a panel of `height` pixels along the
  * shared motion. Null when there is nothing sensible to compute, so the CSS
@@ -63,16 +75,8 @@ export function panelMotion(
 ): PanelMotion | null {
   if (!(height > 0) || !(pxPerSecond > 0) || !(settleMs > 0)) return null;
 
-  const fullSettle = settleDistance(pxPerSecond, settleMs);
-  const cruise = Math.max(0, height - fullSettle);
-  const settle = height - cruise;
-
-  // Where on the shared settle this panel joins it: at the start for any panel
-  // taller than the settle, part-way through for one shorter than it.
-  const joinAt = 1 - Math.pow(settle / fullSettle, 1 / SETTLE_POWER);
-  const cruiseMs = (cruise / pxPerSecond) * 1000;
-  const settleTakesMs = settleMs * (1 - joinAt);
-  const durationMs = cruiseMs + settleTakesMs;
+  const { fullSettle, cruise, joinAt, cruiseMs } = shape(height, pxPerSecond, settleMs);
+  const durationMs = cruiseMs + settleMs * (1 - joinAt);
 
   const stops: string[] = ['0 0%'];
   if (cruise > 0) stops.push(stop(cruise / height, cruiseMs / durationMs));
@@ -84,6 +88,50 @@ export function panelMotion(
 
   // A tenth of a millisecond, so rounding cannot put two panels out of step.
   return { durationMs: round(durationMs, 1), easing: 'linear(' + stops.join(', ') + ')' };
+}
+
+/**
+ * How many milliseconds into its motion a panel of `height` has travelled
+ * `distance` pixels: the curve panelMotion draws, read the other way.
+ */
+export function panelTimeAt(
+  height: number,
+  distance: number,
+  pxPerSecond: number,
+  settleMs: number
+): number {
+  if (!(height > 0) || !(pxPerSecond > 0) || !(settleMs > 0)) return 0;
+
+  const { fullSettle, cruise, joinAt, cruiseMs } = shape(height, pxPerSecond, settleMs);
+  const travelled = Math.min(Math.max(distance, 0), height);
+  if (travelled <= cruise) return (travelled / pxPerSecond) * 1000;
+
+  const u = 1 - Math.pow((height - travelled) / fullSettle, 1 / SETTLE_POWER);
+  return cruiseMs + settleMs * (u - joinAt);
+}
+
+/**
+ * How far into its close a panel can start without anyone being able to tell.
+ *
+ * Closing, a panel's bottom edge rises from `top + height` to `top`, and
+ * everything below the panel rises with it. While that edge is below the fold,
+ * so is everything it moves, and the time spent down there is time in which
+ * nothing visibly happens. A short panel's edge starts on screen and there is
+ * none; a selected-work panel opened from the top of the screen ends 600px
+ * below the fold, and the reader watched its text fade for a quarter of a
+ * second before anything rose into view. Starting the close this many
+ * milliseconds in puts the edge at the fold on the first frame, and what is
+ * left is the tail of the shared motion — exactly what a short panel shows.
+ */
+export function unseenCloseMs(
+  height: number,
+  top: number,
+  viewportHeight: number,
+  pxPerSecond: number,
+  settleMs: number
+): number {
+  const unseen = Math.min(height, top + height - viewportHeight);
+  return unseen > 0 ? panelTimeAt(height, unseen, pxPerSecond, settleMs) : 0;
 }
 
 function stop(progress: number, at: number): string {

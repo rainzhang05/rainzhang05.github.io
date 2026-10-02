@@ -1,8 +1,15 @@
 'use client';
 
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from 'react';
 import { Icon } from '@/components/ui/Icon';
-import { panelMotion, panelTokens, supportsLinearEasing } from '@/lib/panelMotion';
+import { panelMotion, panelTokens, supportsLinearEasing, unseenCloseMs } from '@/lib/panelMotion';
 
 interface DisclosureRowProps {
   id: string;
@@ -24,6 +31,8 @@ interface DisclosureRowProps {
   /** Panel content. Always rendered, so opening is instant. */
   children: ReactNode;
 }
+
+const useBeforePaint = typeof window === 'undefined' ? useEffect : useLayoutEffect;
 
 /** A panel's measured motion; `easing` is null where the browser has no linear(). */
 interface MeasuredMotion {
@@ -105,6 +114,45 @@ export function DisclosureRow({
     return () => observer.disconnect();
   }, []);
 
+  /**
+   * A close starts where its bottom edge first comes into view. A tall panel
+   * shut from near the top of the screen has that edge far below the fold, and
+   * nothing it moves is visible until it rises past it — so the transition is
+   * wound forward past that part before the first frame is painted (see
+   * unseenCloseMs). What is left is the end of the motion every row ends on.
+   *
+   * Only from fully open, and only on the shared curve: an opening interrupted
+   * half-way reverses over a shortened, rescaled transition, and the fallback
+   * easing is a different curve, so neither can be read off panelTimeAt.
+   */
+  const panelRef = useRef<HTMLDivElement>(null);
+  const wasOpen = useRef(open);
+
+  useBeforePaint(() => {
+    const closing = wasOpen.current && !open;
+    wasOpen.current = open;
+    const panel = panelRef.current;
+    const content = contentRef.current;
+    if (!closing || !panel || !content || !motion?.easing) return;
+    if (typeof panel.getAnimations !== 'function') return;
+
+    const tokens = panelTokens(content);
+    if (tokens === null) return;
+    const height = content.scrollHeight;
+    // Reading layout here starts the transitions, still at their first frame.
+    const { top, height: shown } = panel.getBoundingClientRect();
+    if (Math.abs(shown - height) > 1) return;
+
+    const viewport = document.documentElement.clientHeight;
+    const skipMs = unseenCloseMs(height, top, viewport, tokens.speed, tokens.settleMs);
+    if (skipMs <= 0) return;
+    for (const transition of panel.getAnimations()) {
+      // The fade keeps its own time; the height and the visibility delay move on together.
+      if ((transition as CSSTransition).transitionProperty === 'opacity') continue;
+      transition.currentTime = skipMs;
+    }
+  }, [open, motion]);
+
   return (
     <li
       id={'row-' + id}
@@ -147,6 +195,7 @@ export function DisclosureRow({
         ) : null}
 
         <div
+          ref={panelRef}
           id={panelId}
           role="region"
           aria-labelledby={buttonId}
