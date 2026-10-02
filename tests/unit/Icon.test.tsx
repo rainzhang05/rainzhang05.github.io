@@ -35,4 +35,14 @@ describe('Icon', () => {
     expect(svg).toHaveAttribute('stroke-width', '1.5');
     expect(svg).toHaveAttribute('fill', 'none');
   });
+
+  it('draws a technology in the same weight as an interface glyph', () => {
+    const { container } = render(<Icon name="python" size={14} />);
+    const svg = container.querySelector('svg');
+
+    expect(svg).toHaveAttribute('stroke-width', '1.5');
+    expect(svg).toHaveAttribute('fill', 'none');
+    expect(svg).toHaveAttribute('stroke', 'currentColor');
+    expect(svg?.children.length).toBeGreaterThan(0);
+  });
 });
