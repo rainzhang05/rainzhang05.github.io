@@ -266,7 +266,7 @@ export const en: Copy = {
       ],
       image: {
         src: '/projects/webauthn-platform.webp',
-        alt: 'The FIDO MDS Authenticators tab of the WebAuthn developer platform, with a searchable table of authenticators from the FIDO Metadata Service',
+        alt: 'The Advanced Authentication tab of the WebAuthn developer platform, with registration settings beside a JSON editor for the credential creation options',
         width: 1600,
         height: 800,
       },

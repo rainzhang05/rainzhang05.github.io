@@ -270,7 +270,7 @@ export const ja: Copy = {
       ],
       image: {
         src: '/projects/webauthn-platform.webp',
-        alt: 'WebAuthn 開発者向けプラットフォームの「FIDO MDS Authenticators」タブ。FIDO メタデータサービスの認証器を検索できる一覧表',
+        alt: 'WebAuthn 開発者向けプラットフォームの「Advanced Authentication」タブ。登録の設定項目と、credential 作成オプションを編集する JSON エディター',
         width: 1600,
         height: 800,
       },
