@@ -17,33 +17,40 @@ describe('WorkSection', () => {
     expect(container.querySelector('section')).toHaveAttribute('id', 'work');
   });
 
-  it('renders both lists under their own headings', () => {
-    setup();
+  it('renders one section under one heading', () => {
+    const { container } = render(<WorkSection copy={en} openId={null} onToggle={() => {}} />);
 
     expect(screen.getByText(en.sections.work)).toBeInTheDocument();
-    expect(screen.getByText(en.sections.otherWork)).toBeInTheDocument();
+    expect(container.querySelectorAll('ul')).toHaveLength(1);
   });
 
   it('renders every project as a row', () => {
     setup();
 
-    [...en.featured, ...en.other].forEach((project) => {
+    en.projects.forEach((project) => {
       expect(screen.getByRole('button', { name: project.title })).toBeInTheDocument();
     });
   });
 
-  it('ranks selected work above other work in the heading outline', () => {
+  it('gives every project the same heading level', () => {
     setup();
 
-    const featured = en.featured[0];
-    const other = en.other[0];
-    expect(screen.getByRole('heading', { level: 3, name: featured.title })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { level: 4, name: other.title })).toBeInTheDocument();
+    en.projects.forEach((project) => {
+      expect(screen.getByRole('heading', { level: 3, name: project.title })).toBeInTheDocument();
+    });
+    expect(screen.queryAllByRole('heading', { level: 4 })).toHaveLength(0);
+  });
+
+  it('keeps the projects in the order the content lists them', () => {
+    setup();
+
+    const shown = screen.getAllByRole('heading', { level: 3 }).map((h) => h.textContent);
+    expect(shown).toEqual(en.projects.map((p) => p.title));
   });
 
   it('shows the primary marks and every project link while collapsed', () => {
     setup();
-    const project = en.featured[0];
+    const project = en.projects[0];
     const row = document.getElementById(`row-${project.id}`)!;
 
     // The panel is always in the DOM, and its stack repeats these names, so
@@ -63,7 +70,7 @@ describe('WorkSection', () => {
 
   it('leaves no links in the panel — they all sit on the collapsed row', () => {
     setup();
-    const project = en.featured.find((p) => p.links.length > 1)!;
+    const project = en.projects.find((p) => p.links.length > 1)!;
 
     expect(document.querySelectorAll(`#panel-${project.id} a`)).toHaveLength(0);
     expect(
@@ -74,7 +81,7 @@ describe('WorkSection', () => {
   it('reports which row was clicked', async () => {
     const user = userEvent.setup();
     const { onToggle } = setup();
-    const project = en.featured[0];
+    const project = en.projects[0];
 
     await user.click(screen.getByRole('button', { name: project.title }));
 
@@ -82,7 +89,7 @@ describe('WorkSection', () => {
   });
 
   it('fills an open panel with the write-up, stack and status', () => {
-    const project = en.featured[0];
+    const project = en.projects[0];
     setup(project.id);
     const panel = document.getElementById(`panel-${project.id}`)!;
 
@@ -95,7 +102,7 @@ describe('WorkSection', () => {
   });
 
   it('shows a project screenshot with real alt text when there is one', () => {
-    const withImage = [...en.featured, ...en.other].find((p) => p.image);
+    const withImage = en.projects.find((p) => p.image);
     if (!withImage) return;
 
     setup(withImage.id);

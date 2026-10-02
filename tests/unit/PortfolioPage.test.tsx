@@ -48,7 +48,7 @@ describe('PortfolioPage', () => {
     render(<PortfolioPage copy={en} locale="en" />);
 
     en.experiences.forEach((e) => expect(expanded(e.id)).toBe('false'));
-    en.featured.forEach((p) => expect(expanded(p.id)).toBe('false'));
+    en.projects.forEach((p) => expect(expanded(p.id)).toBe('false'));
   });
 
   it('opens a row, and closes it again on a second click', async () => {
@@ -78,7 +78,7 @@ describe('PortfolioPage', () => {
   it('keeps only one project open at a time', async () => {
     const user = userEvent.setup();
     render(<PortfolioPage copy={en} locale="en" />);
-    const [first, second] = en.featured;
+    const [first, second] = en.projects;
 
     await user.click(row(first.id));
     await user.click(row(second.id));
@@ -91,7 +91,7 @@ describe('PortfolioPage', () => {
     const user = userEvent.setup();
     render(<PortfolioPage copy={en} locale="en" />);
     const experience = en.experiences[0];
-    const project = en.featured[0];
+    const project = en.projects[0];
 
     await user.click(row(experience.id));
     await user.click(row(project.id));
@@ -105,7 +105,7 @@ describe('PortfolioPage', () => {
     render(<PortfolioPage copy={en} locale="en" />);
     const experience = en.experiences.find((e) => e.related.length > 0)!;
     const targetId = experience.related[0];
-    const target = [...en.featured, ...en.other].find((p) => p.id === targetId)!;
+    const target = en.projects.find((p) => p.id === targetId)!;
 
     await user.click(row(experience.id));
     const panel = document.getElementById(`panel-${experience.id}`)!;

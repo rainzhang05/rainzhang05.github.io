@@ -48,7 +48,6 @@ export const ja: Copy = {
     intro: '自己紹介',
     experience: '経歴',
     work: '主な制作物',
-    otherWork: 'その他の制作物',
     background: '学歴と技術',
     contact: '連絡先',
   },
@@ -170,7 +169,7 @@ export const ja: Copy = {
       related: ['work-authenticator', 'work-webauthn', 'work-demo'],
     },
   ],
-  featured: [
+  projects: [
     {
       id: 'work-mnt-platform',
       dates: '2026年8月 – 現在',
@@ -334,8 +333,6 @@ export const ja: Copy = {
         },
       ],
     },
-  ],
-  other: [
     {
       id: 'work-site',
       dates: '2025年2月 – 現在',

@@ -103,7 +103,6 @@ export interface Copy {
     intro: string;
     experience: string;
     work: string;
-    otherWork: string;
     background: string;
     contact: string;
   };
@@ -126,8 +125,7 @@ export interface Copy {
     navigation: { primary: string; menu: string; closeMenu: string };
   };
   experiences: Experience[];
-  featured: Project[];
-  other: Project[];
+  projects: Project[];
   education: Education;
   skills: SkillGroup[];
   contact: {

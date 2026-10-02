@@ -94,7 +94,7 @@ describe('ExperienceSection', () => {
     const { onOpenProject } = setup(withRelated.id);
 
     const targetId = withRelated.related[0];
-    const target = [...en.featured, ...en.other].find((p) => p.id === targetId)!;
+    const target = en.projects.find((p) => p.id === targetId)!;
     const panel = document.getElementById(`panel-${withRelated.id}`)!;
 
     await user.click(within(panel).getByRole('button', { name: target.title }));

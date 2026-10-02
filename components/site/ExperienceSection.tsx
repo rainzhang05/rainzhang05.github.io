@@ -16,8 +16,7 @@ interface Props {
 }
 
 export function ExperienceSection({ copy, openId, onToggle, onOpenProject }: Props) {
-  const titleOf = (id: string) =>
-    [...copy.featured, ...copy.other].find((p) => p.id === id)?.title ?? id;
+  const titleOf = (id: string) => copy.projects.find((p) => p.id === id)?.title ?? id;
 
   return (
     <section tabIndex={-1} id="experience" className="enter enter-6 pt-section">

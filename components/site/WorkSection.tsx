@@ -18,13 +18,11 @@ function ProjectRow({
   copy,
   open,
   onToggle,
-  headingLevel,
 }: {
   project: Project;
   copy: Copy;
   open: boolean;
   onToggle: (id: string) => void;
-  headingLevel?: 'h3' | 'h4';
 }) {
   return (
     <DisclosureRow
@@ -34,7 +32,6 @@ function ProjectRow({
       summary={project.summary}
       open={open}
       onToggle={onToggle}
-      headingLevel={headingLevel}
       labels={copy.labels}
       footer={
         <>
@@ -100,31 +97,13 @@ export function WorkSection({ copy, openId, onToggle }: Props) {
     <section tabIndex={-1} id="work" className="pt-section">
       <SectionHeading>{copy.sections.work}</SectionHeading>
       <ul className="m-0 list-none p-0">
-        {copy.featured.map((project) => (
+        {copy.projects.map((project) => (
           <ProjectRow
             key={project.id}
             project={project}
             copy={copy}
             open={openId === project.id}
             onToggle={onToggle}
-          />
-        ))}
-      </ul>
-
-      <div className="border-b border-rule pb-3 pt-10">
-        <h3 className="m-0 text-label font-medium uppercase text-ink-3">
-          {copy.sections.otherWork}
-        </h3>
-      </div>
-      <ul className="m-0 list-none p-0">
-        {copy.other.map((project) => (
-          <ProjectRow
-            key={project.id}
-            project={project}
-            copy={copy}
-            open={openId === project.id}
-            onToggle={onToggle}
-            headingLevel="h4"
           />
         ))}
       </ul>

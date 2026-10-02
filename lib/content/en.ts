@@ -48,7 +48,6 @@ export const en: Copy = {
     intro: 'Introduction',
     experience: 'Experience',
     work: 'Selected Work',
-    otherWork: 'Other Work',
     background: 'Background',
     contact: 'Contact',
   },
@@ -166,7 +165,7 @@ export const en: Copy = {
       related: ['work-authenticator', 'work-webauthn', 'work-demo'],
     },
   ],
-  featured: [
+  projects: [
     {
       id: 'work-mnt-platform',
       dates: 'Aug 2026 – Present',
@@ -330,8 +329,6 @@ export const en: Copy = {
         },
       ],
     },
-  ],
-  other: [
     {
       id: 'work-site',
       dates: 'Feb 2025 – Present',

@@ -5,7 +5,7 @@ import { sectionLinks, targetId } from '@/lib/sectionLinks';
 import { locales, resumePage } from '@/lib/site';
 import type { Copy, Project } from '@/lib/types';
 
-const allProjects = (copy: Copy): Project[] => [...copy.featured, ...copy.other];
+const allProjects = (copy: Copy): Project[] => copy.projects;
 
 /**
  * A route that exists in both languages differs by exactly the "/ja" prefix,
@@ -23,8 +23,7 @@ const shape = (copy: Copy) => ({
   footerLinks: copy.footer.links.map((n) => [n.id, unprefix(n.href), n.external ?? false]),
   experiences: copy.experiences.map((e) => [e.id, e.tech, e.related, e.mark?.src ?? null]),
   education: copy.education.mark?.src ?? null,
-  featured: copy.featured.map((p) => [p.id, p.primary, p.stack, p.image?.src ?? null]),
-  other: copy.other.map((p) => [p.id, p.primary, p.stack, p.image?.src ?? null]),
+  projects: copy.projects.map((p) => [p.id, p.primary, p.stack, p.image?.src ?? null]),
   projectLinks: allProjects(copy).map((p) => p.links.map((l) => l.href)),
   skills: copy.skills.map((g) => g.items),
 });
