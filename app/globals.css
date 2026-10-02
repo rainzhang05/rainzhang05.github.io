@@ -83,6 +83,19 @@
   --section-gap: 56px;
   --hero-pad: 96px;
 
+  /* The home page's sections and rows are held apart by space alone, with no
+     rules between them, so these gaps carry the structure the hairlines used
+     to. --section-space is the distance into each section after the first;
+     --section-space-first is shorter, so the first screen still shows the top
+     of Experience. --heading-space runs from a section's label to its first
+     row, and --row-space from one row to the next. The phone values are here;
+     the wider ones are in the 640px block below. --section-gap is the
+     resume's, which keeps its rules. */
+  --section-space: 112px;
+  --section-space-first: 72px;
+  --heading-space: 28px;
+  --row-space: 48px;
+
   /* The resume sheet. Its PDF is a 710px column split 485 / rule / 167; the
      web type runs about 1.185x larger, so the geometry is scaled with it and
      the line lengths stay the ones the document was set for. --resume-aside
@@ -103,7 +116,7 @@
   /* Motion — every transition on the site resolves to these three values.
      --duration-fast: colour and border changes
      --duration-base: the language pill; a panel's fallback before it is measured
-     --duration-slow: the section dock's active fill; a panel's fade
+     --duration-slow: the section dock's active fill
      --duration-enter: the first-screen entrance
      prefers-reduced-motion zeroes all of them (see bottom of this file). */
   --ease-out: cubic-bezier(0.2, 0.6, 0.2, 1);
@@ -117,9 +130,16 @@
      same speed at every moment however much they hold; a taller one only
      glides for longer. lib/panelMotion.ts turns the pair into each panel's
      duration and its linear() easing. --ease-panel is the fallback for a
-     browser without linear(), and the dock's ring. */
-  --panel-speed: 2800;
-  --panel-settle: 400ms;
+     browser without linear(), and the dock's ring. --panel-fade is the time
+     a panel's content takes to fade, to settle --panel-rise down into place,
+     and the time its chevron takes to turn.
+     All three are 15% slower than they were (2800, 400ms and the 320ms of
+     --duration-slow), which is what made the rows read as smooth rather than
+     quick once the rules between them had gone. */
+  --panel-speed: 2435;
+  --panel-settle: 460ms;
+  --panel-fade: 370ms;
+  --panel-rise: 8px;
   --ease-panel: cubic-bezier(0.3, 0.45, 0.15, 1);
 
   /* Entrance — the one-off reveal of the first screen, and the cross-fade the
@@ -180,6 +200,15 @@
   /* Focus */
   --focus-ring-width: 2px;
   --focus-ring-offset: 2px;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --section-space: 168px;
+    --section-space-first: 104px;
+    --heading-space: 36px;
+    --row-space: 60px;
+  }
 }
 
 @media (min-width: 1176px) {
@@ -454,7 +483,7 @@ html[data-entrance='contact'] :is(.enter, .enter-fade) {
    from its own content height (see lib/panelMotion.ts), so every row opens
    and closes along one motion — the same speed at every moment, not only on
    average; --duration-base and --ease-panel stand in before that is measured.
-   The fade is not tied to the height: it takes --duration-slow on every row,
+   The fade is not tied to the height: it takes --panel-fade on every row,
    because a fade stretched over a tall row's longer travel reads as a slower
    row. The delay belongs to `visibility` alone — on the way out it waits for
    the row to finish closing before leaving the tab order — so both directions
@@ -468,7 +497,7 @@ html[data-entrance='contact'] :is(.enter, .enter-fade) {
     transition:
       grid-template-rows var(--panel-duration, var(--duration-base))
         var(--panel-ease, var(--ease-panel)),
-      opacity var(--duration-slow) var(--ease-out),
+      opacity var(--panel-fade) var(--ease-out),
       visibility 0s linear var(--panel-duration, var(--duration-base));
   }
 
@@ -479,8 +508,23 @@ html[data-entrance='contact'] :is(.enter, .enter-fade) {
     transition:
       grid-template-rows var(--panel-duration, var(--duration-base))
         var(--panel-ease, var(--ease-panel)),
-      opacity var(--duration-slow) var(--ease-out),
+      opacity var(--panel-fade) var(--ease-out),
       visibility 0s;
+  }
+
+  /* With no rule under the row, a panel that only grew and faded looked
+     pasted in underneath it. The content also settles down from
+     --panel-rise above its place as it fades in, so it reads as unfolding
+     out of the row's own toggle, and on the way out it folds back up into it.
+     Same time and curve as the fade; a transform, so the height the panel
+     measures and the motion it computes from that are untouched. */
+  .disclosure-content {
+    transform: translate3d(0, calc(var(--panel-rise) * -1), 0);
+    transition: transform var(--panel-fade) var(--ease-out);
+  }
+
+  .disclosure-panel[data-open='true'] .disclosure-content {
+    transform: none;
   }
 }
 
@@ -856,6 +900,10 @@ html[data-theme-switching] *::after {
     grid-template-rows: 1fr;
     opacity: 1;
     visibility: visible;
+  }
+
+  .disclosure-content {
+    transform: none;
   }
 }
 

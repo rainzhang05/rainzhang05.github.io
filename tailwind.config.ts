@@ -74,6 +74,10 @@ const config: Config = {
         gutter: 'var(--gutter)',
         'gutter-mobile': 'var(--gutter-mobile)',
         section: 'var(--section-gap)',
+        'section-space': 'var(--section-space)',
+        'section-space-first': 'var(--section-space-first)',
+        'heading-space': 'var(--heading-space)',
+        'row-space': 'var(--row-space)',
         hero: 'var(--hero-pad)',
       },
       maxWidth: {
@@ -99,6 +103,7 @@ const config: Config = {
         fast: 'var(--duration-fast)',
         base: 'var(--duration-base)',
         slow: 'var(--duration-slow)',
+        'panel-fade': 'var(--panel-fade)',
         enter: 'var(--duration-enter)',
       },
       transitionTimingFunction: {
