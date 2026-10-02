@@ -139,6 +139,8 @@ describe('PortfolioPage', () => {
   it('renders the Japanese page from the Japanese content', () => {
     render(<PortfolioPage copy={ja} locale="ja" />);
 
-    expect(screen.getAllByRole('heading', { level: 1 })[0]).toHaveTextContent(ja.intro.heading);
+    expect(screen.getAllByRole('heading', { level: 1 })[0]).toHaveTextContent(
+      ja.intro.heading.replace(/\s+/g, " ")
+    );
   });
 });
