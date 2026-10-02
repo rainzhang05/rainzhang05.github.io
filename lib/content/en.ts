@@ -37,8 +37,8 @@ export const en: Copy = {
   ],
   intro: {
     eyebrow: 'Full-Stack Developer · Simon Fraser University · Vancouver, BC, Canada',
-    heading: 'I build and maintain web applications, from design to production.',
-    body: 'I’m Rain, a fourth-year computer science student at SFU. Over the past year I’ve built and maintained software for a security-key company and a property management company. I work mostly in Python, TypeScript and Rust.',
+    heading: 'Hello, I’m Rain Zhang.',
+    body: 'I’m a fourth-year computer science student at SFU. Over the past year I’ve built and maintained software for a security-key company and a property management company. I work mostly in Python, TypeScript and Rust.',
     resume: 'Resume',
     copyEmail: 'Copy email',
   },
