@@ -52,6 +52,59 @@ test.describe("disclosure rows", () => {
     await expect(page.locator("#row-work-webauthn")).toBeInViewport();
   });
 
+  test("opens a short row and a tall row at the same speed", async ({ page }) => {
+    await page.goto("/");
+
+    /**
+     * Opens a row, pauses its transition, and seeks it to fixed times: how far
+     * it has come 30 and 60ms in, and how far it has left 100 and 200ms before
+     * it stops. Seeking rather than sampling frames, so a slow machine cannot
+     * make two rows look different.
+     */
+    const motion = (id: string) =>
+      page.evaluate(async (id) => {
+        const panel = document.getElementById("panel-" + id)!;
+        const content = panel.firstElementChild!.firstElementChild!;
+        document.getElementById("button-" + id)!.click();
+
+        let rows: Animation | undefined;
+        for (let i = 0; i < 100 && !rows; i++) {
+          await new Promise((r) => setTimeout(r, 10));
+          rows = panel
+            .getAnimations()
+            .find((a) => (a as CSSTransition).transitionProperty === "grid-template-rows");
+        }
+        rows!.pause();
+        const end = Number(rows!.effect!.getComputedTiming().endTime);
+        const height = content.scrollHeight;
+        const at = (t: number) => {
+          rows!.currentTime = t;
+          return panel.getBoundingClientRect().height;
+        };
+        const result = {
+          after30: at(30),
+          after60: at(60),
+          left200: height - at(end - 200),
+          left100: height - at(end - 100),
+        };
+        rows!.finish();
+        return result;
+      }, id);
+
+    // Wait for both rows to have measured themselves.
+    await expect(page.locator("#panel-exp-feitian")).toHaveAttribute("style", /--panel-ease/);
+    await expect(page.locator("#panel-work-mnt-platform")).toHaveAttribute("style", /--panel-ease/);
+
+    const short = await motion("exp-feitian");
+    const tall = await motion("work-mnt-platform");
+
+    // The tall panel is about twice the height of the short one. When its
+    // duration was simply in proportion, it trailed by over 20px after 60ms.
+    for (const key of ["after30", "after60", "left200", "left100"] as const) {
+      expect(Math.abs(short[key] - tall[key]), key).toBeLessThan(2);
+    }
+  });
+
   test("is operable from the keyboard", async ({ page }) => {
     await page.goto("/");
 

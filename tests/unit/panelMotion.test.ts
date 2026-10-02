@@ -1,85 +1,178 @@
-import { describe, expect, it } from 'vitest';
-import { MIN_PANEL_MS, panelDurationMs, panelSpeed } from '@/lib/panelMotion';
+import { afterEach, describe, expect, it } from 'vitest';
+import {
+  panelMotion,
+  panelTokens,
+  settleDistance,
+  supportsLinearEasing,
+  type PanelMotion,
+} from '@/lib/panelMotion';
 
-describe('panelDurationMs', () => {
-  it('gives a taller panel proportionally longer, so both move at one speed', () => {
-    const short = panelDurationMs(600, 2000);
-    const tall = panelDurationMs(1200, 2000);
+const SPEED = 2800;
+const SETTLE = 400;
+const FULL_SETTLE = settleDistance(SPEED, SETTLE);
 
-    expect(short).toBe(300);
-    expect(tall).toBe(600);
-    expect(tall / short).toBe(2);
-  });
+// Real content heights, measured in the browser at 1024px: the two experience
+// entries and the six projects.
+const HEIGHTS = [597, 653, 1183, 670, 1137, 781, 702, 849];
 
-  it('holds one speed across every real panel height on the page', () => {
-    const heights = [597, 606, 624, 786, 854, 1072, 1258];
-    const speeds = heights.map((h) => Math.round(h / (panelDurationMs(h, 2000) / 1000)));
+/** Where a panel is, in pixels, `t` ms after it starts — read off its linear() easing. */
+function travelled(motion: PanelMotion, height: number, t: number): number {
+  const stops = motion.easing
+    .slice('linear('.length, -1)
+    .split(', ')
+    .map((s) => {
+      const [progress, at] = s.split(' ');
+      return { x: Number.parseFloat(at) / 100, y: Number(progress) };
+    });
+  const x = Math.min(1, Math.max(0, t / motion.durationMs));
+  for (let i = 1; i < stops.length; i++) {
+    const a = stops[i - 1];
+    const b = stops[i];
+    if (x <= b.x) return (a.y + ((b.y - a.y) * (x - a.x)) / (b.x - a.x || 1)) * height;
+  }
+  return height;
+}
 
-    // Rounding to whole milliseconds is the only source of drift.
-    speeds.forEach((s) => expect(Math.abs(s - 2000)).toBeLessThanOrEqual(5));
-  });
+/** The one motion every panel shares: the distance still to go, `left` ms from the end. */
+function stillToGo(left: number): number {
+  if (left >= SETTLE) return FULL_SETTLE + (SPEED * (left - SETTLE)) / 1000;
+  return FULL_SETTLE * (left / SETTLE) ** 4;
+}
 
-  it('will not let a very short panel blink open', () => {
-    expect(panelDurationMs(40, 2000)).toBe(MIN_PANEL_MS);
-  });
-
-  it('falls back rather than dividing by nothing', () => {
-    expect(panelDurationMs(0, 2000)).toBe(MIN_PANEL_MS);
-    expect(panelDurationMs(600, 0)).toBe(MIN_PANEL_MS);
-    expect(panelDurationMs(Number.NaN, 2000)).toBe(MIN_PANEL_MS);
-  });
-});
-
-describe('panelSpeed', () => {
-  const el = (value: string) =>
-    ({ style: { getPropertyValue: () => value } }) as unknown as Element;
-
-  it('reads the token off the element', () => {
-    const original = globalThis.getComputedStyle;
-    globalThis.getComputedStyle = (() => ({ getPropertyValue: () => ' 2000 ' })) as never;
-
-    expect(panelSpeed(el('2000'))).toBe(2000);
-
-    globalThis.getComputedStyle = original;
-  });
-
-  it('reports nothing when the token is missing, so the CSS fallback stands', () => {
-    const original = globalThis.getComputedStyle;
-    globalThis.getComputedStyle = (() => ({ getPropertyValue: () => '' })) as never;
-
-    expect(panelSpeed(el(''))).toBeNull();
-
-    globalThis.getComputedStyle = original;
-  });
-});
+const motionFor = (h: number) => panelMotion(h, SPEED, SETTLE)!;
 
 /**
- * The point of a speed rather than a duration: every row moves at the same
- * rate whatever it holds, and only the time taken differs.
+ * The point of the whole module: two panels of different heights are at the
+ * same speed at every moment, not merely on average. A duration in proportion
+ * to height matched only the average — it stretched the easing, so a tall
+ * panel got up to speed and came to rest twice as slowly as a short one.
  */
-describe('one speed across every panel', () => {
-  const speed = 1400;
-  // Real content heights, measured in the browser: the two experience entries,
-  // the four selected-work panels, and the three other-work ones.
-  const heights = [606, 597, 1258, 1072, 786, 624, 624, 854];
-
-  it('gives every panel the same pixels per second', () => {
-    const rates = heights.map((h) => h / (panelDurationMs(h, speed) / 1000));
-
-    // Rounding the duration to whole milliseconds is the only thing that can
-    // separate them, and it is worth a tenth of a percent.
-    for (const rate of rates) expect(Math.abs(rate - speed) / speed).toBeLessThan(0.005);
+describe('one motion across every panel', () => {
+  it('moves every panel off at the cruise speed at once', () => {
+    for (const h of HEIGHTS) {
+      const motion = motionFor(h);
+      // 50ms is inside every panel's glide: the shortest settles from 113ms.
+      expect(travelled(motion, h, 50)).toBeCloseTo((SPEED * 50) / 1000, 1);
+      expect(travelled(motion, h, 16)).toBeCloseTo((SPEED * 16) / 1000, 1);
+    }
   });
 
-  it('lets the time taken follow the content, which is the whole idea', () => {
-    const shortest = panelDurationMs(Math.min(...heights), speed);
-    const tallest = panelDurationMs(Math.max(...heights), speed);
-
-    expect(shortest).toBeLessThan(tallest);
-    expect(tallest / shortest).toBeCloseTo(Math.max(...heights) / Math.min(...heights), 1);
+  it('brings every panel to rest along the same settle', () => {
+    for (const h of HEIGHTS) {
+      const motion = motionFor(h);
+      for (const left of [0, 25, 50, 100, 150, 200, 300, 400]) {
+        const position = travelled(motion, h, motion.durationMs - left);
+        // Within a pixel: the settle is drawn as straight lines between samples.
+        expect(Math.abs(h - position - stillToGo(left))).toBeLessThan(1);
+      }
+    }
   });
 
-  it('keeps every one of them clear of the floor, so none is capped', () => {
-    for (const h of heights) expect(panelDurationMs(h, speed)).toBeGreaterThan(MIN_PANEL_MS);
+  it('puts the shortest and the tallest row in the same place after the same time', () => {
+    const short = motionFor(597);
+    const tall = motionFor(1183);
+
+    expect(travelled(short, 597, 100)).toBeCloseTo(travelled(tall, 1183, 100), 1);
+  });
+
+  it('lets a taller panel glide for longer, and nothing else', () => {
+    const short = motionFor(597);
+    const tall = motionFor(1183);
+
+    // The extra time is exactly the extra distance at the cruise speed.
+    expect(tall.durationMs - short.durationMs).toBeCloseTo(((1183 - 597) / SPEED) * 1000, 0);
+  });
+
+  it('lets a panel shorter than the settle join it part-way, so it still lands alike', () => {
+    const h = 120;
+    const motion = motionFor(h);
+
+    expect(h).toBeLessThan(FULL_SETTLE);
+    expect(motion.durationMs).toBeLessThan(SETTLE);
+    for (const left of [0, 50, 100, 150, 200]) {
+      if (left > motion.durationMs) continue;
+      const position = travelled(motion, h, motion.durationMs - left);
+      expect(Math.abs(h - position - stillToGo(left))).toBeLessThan(1);
+    }
+  });
+
+  it('cannot blink a tiny panel open: it rides the slow end of the settle', () => {
+    expect(motionFor(20).durationMs).toBeGreaterThan(SETTLE / 2);
+  });
+});
+
+describe('panelMotion', () => {
+  it('writes a well-formed linear() easing that never runs backwards', () => {
+    const { easing } = motionFor(849);
+
+    expect(easing.startsWith('linear(0 0%, ')).toBe(true);
+    expect(easing.endsWith(', 1 100%)')).toBe(true);
+
+    const stops = easing
+      .slice('linear('.length, -1)
+      .split(', ')
+      .map((s) => s.split(' ').map((n) => Number.parseFloat(n)));
+    for (let i = 1; i < stops.length; i++) {
+      expect(stops[i][0]).toBeGreaterThanOrEqual(stops[i - 1][0]);
+      expect(stops[i][1]).toBeGreaterThan(stops[i - 1][1]);
+    }
+  });
+
+  it('reports nothing it cannot compute, so the CSS fallback stands', () => {
+    expect(panelMotion(0, SPEED, SETTLE)).toBeNull();
+    expect(panelMotion(Number.NaN, SPEED, SETTLE)).toBeNull();
+    expect(panelMotion(600, 0, SETTLE)).toBeNull();
+    expect(panelMotion(600, SPEED, 0)).toBeNull();
+  });
+});
+
+describe('panelTokens', () => {
+  const original = globalThis.getComputedStyle;
+  afterEach(() => {
+    globalThis.getComputedStyle = original;
+  });
+
+  const tokens = (values: Record<string, string>) => {
+    globalThis.getComputedStyle = (() => ({
+      getPropertyValue: (name: string) => values[name] ?? '',
+    })) as never;
+    return panelTokens({} as Element);
+  };
+
+  it('reads the speed and the settle off the element', () => {
+    expect(tokens({ '--panel-speed': ' 2800', '--panel-settle': ' 400ms' })).toEqual({
+      speed: 2800,
+      settleMs: 400,
+    });
+  });
+
+  it('reads a settle written in seconds', () => {
+    expect(tokens({ '--panel-speed': '2800', '--panel-settle': '0.4s' })?.settleMs).toBe(400);
+  });
+
+  it('reports nothing when either token is missing', () => {
+    expect(tokens({ '--panel-settle': '400ms' })).toBeNull();
+    expect(tokens({ '--panel-speed': '2800' })).toBeNull();
+    expect(tokens({ '--panel-speed': '2800', '--panel-settle': '400' })).toBeNull();
+  });
+});
+
+describe('supportsLinearEasing', () => {
+  const original = globalThis.CSS;
+  afterEach(() => {
+    globalThis.CSS = original;
+  });
+
+  it('asks the browser', () => {
+    globalThis.CSS = { supports: () => true } as unknown as typeof CSS;
+    expect(supportsLinearEasing()).toBe(true);
+
+    globalThis.CSS = { supports: () => false } as unknown as typeof CSS;
+    expect(supportsLinearEasing()).toBe(false);
+  });
+
+  it('says no where there is no CSS object to ask', () => {
+    globalThis.CSS = undefined as unknown as typeof CSS;
+    expect(supportsLinearEasing()).toBe(false);
   });
 });
