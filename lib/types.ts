@@ -96,6 +96,8 @@ export interface Copy {
     body: string;
     resume: string;
     copyEmail: string;
+    github: string;
+    linkedin: string;
   };
   sections: {
     intro: string;

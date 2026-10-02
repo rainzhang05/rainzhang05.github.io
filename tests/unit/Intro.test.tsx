@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Intro } from '@/components/site/Intro';
 import { en } from '@/lib/content';
-import { resumePage } from '@/lib/site';
+import { resumePage, site } from '@/lib/site';
 
 describe('Intro', () => {
   it('carries the page heading', () => {
@@ -35,6 +35,25 @@ describe('Intro', () => {
     const { container } = render(<Intro copy={en.intro} resumeHref={resumePage.en} onCopyEmail={() => {}} />);
 
     expect(container.querySelector('img')).toBeNull();
+  });
+
+  it('puts the profiles beside the resume and email buttons, in the same row', () => {
+    render(<Intro copy={en.intro} resumeHref={resumePage.en} onCopyEmail={() => {}} />);
+
+    const github = screen.getByRole('link', { name: en.intro.github });
+    const linkedin = screen.getByRole('link', { name: en.intro.linkedin });
+
+    expect(github).toHaveAttribute('href', site.github);
+    expect(linkedin).toHaveAttribute('href', site.linkedin);
+    for (const link of [github, linkedin]) {
+      expect(link).toHaveAttribute('target', '_blank');
+      expect(link).toHaveAttribute('rel', expect.stringContaining('noreferrer'));
+    }
+
+    const row = screen.getByRole('link', { name: en.intro.resume }).parentElement;
+    expect(row).toContainElement(screen.getByRole('button', { name: en.intro.copyEmail }));
+    expect(row).toContainElement(github);
+    expect(row).toContainElement(linkedin);
   });
 
   it('hands the copy-email action back to the page', async () => {

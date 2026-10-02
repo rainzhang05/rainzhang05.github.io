@@ -1,6 +1,7 @@
 import { Button, ButtonLink } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
 import { Eyebrow } from '@/components/ui/Eyebrow';
+import { site } from '@/lib/site';
 import type { Copy } from '@/lib/types';
 
 export function Intro({
@@ -31,6 +32,22 @@ export function Intro({
           <Button variant="secondary" icon={<Icon name="copy" size={16} />} onClick={onCopyEmail}>
             {copy.copyEmail}
           </Button>
+          <ButtonLink
+            variant="secondary"
+            href={site.github}
+            external
+            icon={<Icon name="github" size={16} />}
+          >
+            {copy.github}
+          </ButtonLink>
+          <ButtonLink
+            variant="secondary"
+            href={site.linkedin}
+            external
+            icon={<Icon name="linkedin" size={16} />}
+          >
+            {copy.linkedin}
+          </ButtonLink>
         </div>
       </div>
     </section>

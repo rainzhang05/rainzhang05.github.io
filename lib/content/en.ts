@@ -41,6 +41,8 @@ export const en: Copy = {
     body: 'I’m a fourth-year computer science student at SFU. Over the past year I’ve built and maintained software for a security-key company and a property management company. I work mostly in Python, TypeScript and Rust.',
     resume: 'Resume',
     copyEmail: 'Copy email',
+    github: 'GitHub',
+    linkedin: 'LinkedIn',
   },
   sections: {
     intro: 'Introduction',
