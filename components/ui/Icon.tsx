@@ -1,5 +1,4 @@
 import type { SVGProps } from 'react';
-import { TECH_GLYPHS } from './techGlyphs';
 
 /**
  * Lucide (ISC licence) glyphs, stroke softened to 1.5 as the design system
@@ -109,10 +108,7 @@ const PATHS = {
   ),
 } as const;
 
-/** The interface glyphs and the technology glyphs share one set, one weight and one component. */
-const GLYPHS = { ...PATHS, ...TECH_GLYPHS } as const;
-
-export type IconName = keyof typeof GLYPHS;
+export type IconName = keyof typeof PATHS;
 
 interface IconProps extends Omit<SVGProps<SVGSVGElement>, 'name'> {
   name: IconName;
@@ -139,7 +135,7 @@ export function Icon({ name, size = 18, label, ...rest }: IconProps) {
       className="inline-block shrink-0 align-middle"
       {...rest}
     >
-      {GLYPHS[name]}
+      {PATHS[name]}
     </svg>
   );
 }
