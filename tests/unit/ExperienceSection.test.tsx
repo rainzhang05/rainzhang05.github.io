@@ -61,10 +61,11 @@ describe('ExperienceSection', () => {
       .filter((item) => item.mark)
       .forEach((item) => {
         const mark = screen.getByAltText(item.org);
-        const title = screen.getByRole('button', { name: item.role });
+        const heading = mark.closest('h3')!;
 
-        expect(mark.parentElement).toBe(title.parentElement);
-        expect(mark.compareDocumentPosition(title)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+        // Inside the title's heading, ahead of its text.
+        expect(heading.firstElementChild!.contains(mark)).toBe(true);
+        expect(heading.lastChild!.textContent).toBe(item.role);
       });
   });
 

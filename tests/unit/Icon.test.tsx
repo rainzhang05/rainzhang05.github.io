@@ -14,7 +14,7 @@ describe('Icon', () => {
   });
 
   it('is hidden from assistive tech when it carries no meaning of its own', () => {
-    const { container } = render(<Icon name="plus" />);
+    const { container } = render(<Icon name="chevron-down" />);
     const svg = container.querySelector('svg');
 
     expect(svg).toHaveAttribute('aria-hidden', 'true');

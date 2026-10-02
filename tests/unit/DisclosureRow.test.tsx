@@ -65,12 +65,35 @@ describe('DisclosureRow', () => {
     expect(screen.getByText('Panel body')).toBeInTheDocument();
   });
 
-  it('reports a toggle when the header is clicked', async () => {
+  it('reports a toggle when the chevron is pressed', async () => {
     const user = userEvent.setup();
     const { onToggle } = renderRow();
 
     await user.click(screen.getByRole('button', { name: 'Travel advisor' }));
     expect(onToggle).toHaveBeenCalledWith('work-travel');
+  });
+
+  it('opens only from its chevron, never from the text of the row', async () => {
+    const user = userEvent.setup();
+    const { onToggle } = renderRow({ subtitle: 'MNT Realty · Vancouver, BC' });
+
+    await user.click(screen.getByRole('heading', { name: 'Travel advisor' }));
+    await user.click(screen.getByText('MNT Realty · Vancouver, BC'));
+    await user.click(screen.getByText('A trip planner.'));
+    expect(onToggle).not.toHaveBeenCalled();
+
+    await user.click(screen.getByRole('button', { name: 'Travel advisor' }));
+    expect(onToggle).toHaveBeenCalledTimes(1);
+  });
+
+  it('is the only control in a collapsed row', () => {
+    renderRow();
+
+    const row = document.getElementById('row-work-travel')!;
+    const panel = document.getElementById('panel-work-travel')!;
+    const controls = Array.from(row.querySelectorAll('button')).filter((el) => !panel.contains(el));
+    expect(controls).toHaveLength(1);
+    expect(controls[0]).toHaveAttribute('id', 'button-work-travel');
   });
 
   it('swaps its affordance label with its state', () => {

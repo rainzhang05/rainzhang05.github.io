@@ -79,10 +79,13 @@ describe('WorkSection', () => {
     const row = document.getElementById(`row-${project.id}`)!;
 
     // The panel is always in the DOM, and its stack repeats these names, so
-    // scope to the always-visible part of the row.
-    const collapsed = row.querySelector('.group')!.parentElement!;
+    // look only at what sits before it in the row.
+    const panel = document.getElementById(`panel-${project.id}`)!;
+    const collapsed = Array.from(panel.parentElement!.children).filter((el) => el !== panel);
     project.primary.forEach((name) => {
-      expect(within(collapsed).getAllByText(name).length).toBeGreaterThan(0);
+      expect(
+        collapsed.some((el) => within(el as HTMLElement).queryAllByText(name).length > 0)
+      ).toBe(true);
     });
     project.links.forEach((link) => {
       expect(within(row).getByRole('link', { name: new RegExp(link.label) })).toHaveAttribute(

@@ -47,6 +47,15 @@ describe('TextField', () => {
 });
 
 describe('TextAreaField', () => {
+  it('sizes itself to its text rather than being dragged', () => {
+    render(<TextAreaField label="Message" name="message" value="" onChange={noop} />);
+
+    const field = screen.getByLabelText('Message');
+    expect(field).toHaveClass('resize-none');
+    expect(field.style.overflowY).toBe('hidden');
+    expect(field).toHaveAttribute('rows', '5');
+  });
+
   it('renders a labelled textarea', () => {
     render(<TextAreaField label="Message" name="message" value="hi" onChange={noop} onBlur={noop} />);
 
