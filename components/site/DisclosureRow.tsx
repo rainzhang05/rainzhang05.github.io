@@ -46,12 +46,19 @@ interface MeasuredMotion {
  * One row of the site's only interactive pattern. Experience entries and
  * projects are the same component, so they open, close and read alike.
  *
- * The whole header is a click target; the title is the real button, and it
- * carries aria-expanded and aria-controls, so keyboard and screen-reader
- * users get the same affordance. An experience row leads with its company
- * mark, which is what tells the two lists apart at a glance. The panel is in
- * the DOM at all times and animates height and opacity, the same in both
- * directions — see .disclosure-panel in globals.css.
+ * The row opens from one control and nothing else: a chevron, last in the row
+ * and on the content's left edge, right where the panel unfolds — rows have no
+ * rule between them, so it is also what marks where a row ends. It is quiet
+ * at rest, in --ink-3 with no fill, and turns over and darkens while its row
+ * is open. The title, summary and the rest of the row are plain text, so they
+ * can be selected like any other prose on the page.
+ *
+ * The chevron carries aria-expanded and aria-controls and is named by the
+ * row's title, so a screen reader hears "Travel Advisor, button, collapsed";
+ * its tooltip says what pressing it does. An experience row leads with its
+ * company mark, which is what tells the two lists apart at a glance. The
+ * panel is in the DOM at all times and animates height and opacity, the same
+ * in both directions — see .disclosure-panel in globals.css.
  */
 export function DisclosureRow({
   id,
@@ -157,48 +164,48 @@ export function DisclosureRow({
   }, [open, motion]);
 
   return (
-    <li
-      id={'row-' + id}
-      className="flex scroll-mt-6 flex-wrap items-start gap-x-8 gap-y-2 border-b border-rule py-5"
-    >
+    <li id={'row-' + id} className="flex scroll-mt-6 flex-wrap items-start gap-x-8 gap-y-2">
       <span className="tabular w-full flex-none pt-0.5 text-body-14 text-ink-3 sm:w-label">
         {meta}
       </span>
 
       <div className="min-w-0 flex-1 basis-[420px]">
-        {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events */}
-        <div
-          className="no-copy group flex cursor-pointer items-start gap-4 text-ink-3 transition-colors duration-fast ease-out hover:text-ink"
-          onClick={() => onToggle(id)}
-        >
-          <div className="min-w-0 flex-1">
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
-              <Heading className="m-0 flex flex-wrap items-center gap-x-2.5 gap-y-1">
-                {leading}
-                <button
-                  id={buttonId}
-                  type="button"
-                  aria-expanded={open}
-                  aria-controls={panelId}
-                  title={open ? labels.collapse : labels.expand}
-                  className="m-0 block rounded-sm p-0 text-left text-heading font-medium text-ink"
-                >
-                  {title}
-                </button>
-              </Heading>
-              {badge}
-            </div>
-            {subtitle ? <p className="mt-0.5 text-body-15 text-ink-2">{subtitle}</p> : null}
-            <p className="mt-2.5 max-w-measure text-body-15 text-ink-2">{summary}</p>
-          </div>
-          <span aria-hidden="true" className="mt-1 inline-flex">
-            <Icon name={open ? 'minus' : 'plus'} size={18} />
-          </span>
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+          <Heading className="m-0 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-heading font-medium text-ink">
+            {leading}
+            {title}
+          </Heading>
+          {badge}
         </div>
+        {subtitle ? <p className="mt-0.5 text-body-15 text-ink-2">{subtitle}</p> : null}
+        <p className="mt-2.5 max-w-measure text-body-15 text-ink-2">{summary}</p>
 
         {footer ? (
           <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">{footer}</div>
         ) : null}
+
+        <button
+          id={buttonId}
+          type="button"
+          aria-expanded={open}
+          aria-controls={panelId}
+          aria-label={title}
+          title={open ? labels.collapse : labels.expand}
+          onClick={() => onToggle(id)}
+          className={
+            'no-copy -ml-2 mt-3 flex h-8 w-8 items-center justify-center rounded-pill transition-colors duration-fast ease-out hover:bg-surface hover:text-ink ' +
+            (open ? 'text-ink' : 'text-ink-3')
+          }
+        >
+          <span
+            className={
+              'inline-flex transition-transform duration-panel-fade ease-out' +
+              (open ? ' rotate-180' : '')
+            }
+          >
+            <Icon name="chevron-down" size={18} />
+          </span>
+        </button>
 
         <div
           ref={panelRef}
@@ -217,7 +224,7 @@ export function DisclosureRow({
           }
         >
           <div className="min-h-0 overflow-hidden">
-            <div ref={contentRef} className="grid gap-5 pt-6">
+            <div ref={contentRef} className="disclosure-content grid gap-5 pt-6">
               {children}
             </div>
           </div>
@@ -227,12 +234,16 @@ export function DisclosureRow({
   );
 }
 
-/** Eyebrow + content block, used inside every open panel. */
+/**
+ * Label + content block, used inside every open panel. The label is a quiet
+ * subhead in sentence case, not an eyebrow: with no rules on the page, an
+ * uppercase label inside a panel reads as the start of another section.
+ */
 export function PanelBlock({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div>
-      <div className="text-label font-medium uppercase text-ink-3">{label}</div>
-      <div className="mt-2">{children}</div>
+      <div className="text-body-14 font-medium text-ink">{label}</div>
+      <div className="mt-1.5">{children}</div>
     </div>
   );
 }

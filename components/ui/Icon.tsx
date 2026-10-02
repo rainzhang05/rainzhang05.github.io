@@ -24,6 +24,7 @@ const PATHS = {
     </>
   ),
   check: <path d="M20 6 9 17l-5-5" />,
+  'chevron-down': <path d="m6 9 6 6 6-6" />,
   copy: (
     <>
       <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
@@ -72,7 +73,6 @@ const PATHS = {
       <path d="M4 19h16" />
     </>
   ),
-  minus: <path d="M5 12h14" />,
   monitor: (
     <>
       <rect width="20" height="14" x="2" y="3" rx="2" />
@@ -81,12 +81,6 @@ const PATHS = {
     </>
   ),
   moon: <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />,
-  plus: (
-    <>
-      <path d="M5 12h14" />
-      <path d="M12 5v14" />
-    </>
-  ),
   sun: (
     <>
       <circle cx="12" cy="12" r="4" />
