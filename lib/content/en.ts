@@ -163,7 +163,7 @@ export const en: Copy = {
         'ML-DSA',
         'liboqs',
       ],
-      related: ['work-webauthn', 'work-demo', 'work-authenticator'],
+      related: ['work-authenticator', 'work-webauthn', 'work-demo'],
     },
   ],
   featured: [
