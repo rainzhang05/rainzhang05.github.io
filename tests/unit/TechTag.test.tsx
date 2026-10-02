@@ -3,46 +3,44 @@ import { render, screen } from '@testing-library/react';
 import { TechTag, TechTagList } from '@/components/ui/TechTag';
 
 describe('TechTag', () => {
-  it('draws a line glyph for a name that has one', () => {
+  it('shows the technology mark for a name that has one', () => {
     const { container } = render(<TechTag name="Rust" />);
 
-    const glyph = container.querySelector('svg');
-    expect(glyph).toBeInTheDocument();
-    expect(glyph).toHaveAttribute('width', '14');
-    expect(glyph).toHaveAttribute('height', '14');
-    expect(glyph).toHaveAttribute('stroke', 'currentColor');
-    expect(glyph).toHaveAttribute('stroke-width', '1.5');
-    expect(container.querySelector('img')).toBeNull();
+    const mark = container.querySelector('img');
+    expect(mark).toHaveAttribute('src', '/tech/rust.png');
+    expect(mark).toHaveAttribute('width', '12');
+    expect(mark).toHaveAttribute('height', '12');
+    expect(mark).toHaveAttribute('loading', 'eager');
     expect(screen.getByText('Rust')).toBeInTheDocument();
   });
 
-  it('renders a plain pill when the name has no glyph, rather than breaking', () => {
+  it('renders a plain pill when the name has no mark, rather than breaking', () => {
     const { container } = render(<TechTag name="Cypress" />);
 
-    expect(container.querySelector('svg')).toBeNull();
+    expect(container.querySelector('img')).toBeNull();
     expect(screen.getByText('Cypress')).toBeInTheDocument();
   });
 
-  it('draws the glyph in the colour of the name, on either ground', () => {
-    const { container } = render(<TechTag name="Next.js" />);
+  it('flags a mark that needs help on the dark ground, and leaves the rest alone', () => {
+    const { container, rerender } = render(<TechTag name="Rust" />);
+    expect(container.querySelector('img')).toHaveAttribute('data-on-dark', 'invert');
 
-    // currentColor, not a fill: nothing to invert or outline on charcoal.
-    expect(container.querySelector('svg')).toHaveAttribute('fill', 'none');
-    expect(container.querySelector('[data-on-dark]')).toBeNull();
+    rerender(<TechTag name="React" />);
+    expect(container.querySelector('img')).not.toHaveAttribute('data-on-dark');
   });
 
-  it('glyphs are decorative — the name beside them is the accessible text', () => {
+  it('marks are decorative — the name beside them is the accessible text', () => {
     const { container } = render(<TechTag name="Python" />);
 
-    const glyph = container.querySelector('svg');
-    expect(glyph).toHaveAttribute('aria-hidden', 'true');
-    expect(glyph).not.toHaveAttribute('role');
+    const mark = container.querySelector('img');
+    expect(mark).toHaveAttribute('alt', '');
+    expect(mark).toHaveAttribute('aria-hidden', 'true');
   });
 
-  it('sizes the glyph up in the md variant', () => {
+  it('sizes the mark up in the md variant', () => {
     const { container } = render(<TechTag name="Python" size="md" />);
 
-    expect(container.querySelector('svg')).toHaveAttribute('width', '16');
+    expect(container.querySelector('img')).toHaveAttribute('width', '14');
   });
 
   it('lists every item it is given', () => {
