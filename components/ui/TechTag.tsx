@@ -1,18 +1,14 @@
-import { MARK_ON_DARK, techIcon, type TechName } from '@/lib/tech';
+import { Icon } from '@/components/ui/Icon';
+import { techIcon, type TechName } from '@/lib/tech';
 
 /**
- * Pill with the technology's own mark, in its original colours — except the
- * few that need help on the dark ground (MARK_ON_DARK in lib/tech.ts).
- * Marks are small (12-14px) and several are SVG, so they stay plain <img>
- * with explicit dimensions — sized, and no layout shift.
- *
- * They load eagerly rather than lazily. Each file is a few kilobytes and the
- * whole set is under 80KB, so there is nothing to defer; more to the point the
- * boot gate waits for them, and it can only wait for a request that exists.
+ * Pill with the technology's line glyph, drawn in the colour of its name. The
+ * glyph is an inline SVG from the same set and weight as the rest of the
+ * icons, so it needs no request, no sizing attributes to avoid layout shift,
+ * and no help on the dark ground. A name with no glyph is a plain pill.
  */
 export function TechTag({ name, size = 'sm' }: { name: TechName; size?: 'sm' | 'md' }) {
-  const src = techIcon(name);
-  const px = size === 'sm' ? 12 : 14;
+  const glyph = techIcon(name);
 
   return (
     <span
@@ -21,21 +17,7 @@ export function TechTag({ name, size = 'sm' }: { name: TechName; size?: 'sm' | '
         (size === 'sm' ? 'h-6 px-[9px] text-[12.5px]' : 'h-7 px-[11px] text-caption')
       }
     >
-      {src ? (
-        <img
-          src={src}
-          alt=""
-          aria-hidden="true"
-          width={px}
-          height={px}
-          loading="eager"
-          decoding="async"
-          draggable={false}
-          data-on-dark={MARK_ON_DARK[name]}
-          className="no-copy block object-contain"
-          style={{ width: px, height: px }}
-        />
-      ) : null}
+      {glyph ? <Icon name={glyph} size={size === 'sm' ? 14 : 16} /> : null}
       {name}
     </span>
   );
