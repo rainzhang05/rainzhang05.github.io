@@ -1,9 +1,9 @@
 import { expect, test } from "./fixtures";
 
 /**
- * The marks are the original files from the previous site; the two resumes are
- * the PDFs the resume page offers for download.
- * These serve straight from public/, so a rename or a missed file is a 404.
+ * The company logos and project screenshots are served straight from public/;
+ * the two resumes are the PDFs the resume page offers for download.
+ * A rename or a missed file is a 404.
  */
 const files = [
   "/rain-zhang-resume.pdf",
@@ -11,9 +11,6 @@ const files = [
   "/logos/feitian.png",
   "/logos/mnt-realty.svg",
   "/logos/sfu.png",
-  "/tech/rust.png",
-  "/tech/nextjs.svg",
-  "/tech/microsoft-graph.svg",
   "/projects/webauthn-platform.webp",
 ];
 
