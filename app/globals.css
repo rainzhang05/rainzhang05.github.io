@@ -27,6 +27,11 @@
   --selection: #dce3da;
   color-scheme: light;
 
+  /* What a technology mark needs to stay legible on this ground. Nothing on
+     ivory; see the dark blocks below and MARK_ON_DARK in lib/tech.ts. */
+  --mark-invert: none;
+  --mark-outline: none;
+
   /* Type — Albert Sans only; --font-albert* come from next/font in app/fonts.ts */
   --font-sans:
     var(--font-albert), var(--font-albert-ext), system-ui, -apple-system, 'Segoe UI', Helvetica,
@@ -218,6 +223,8 @@
     --ochre: #bba16f;
     --selection: #333f35;
     --shadow-toast: 0 8px 24px -12px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--rule);
+    --mark-invert: invert(1);
+    --mark-outline: drop-shadow(0 0 0.5px var(--ink)) drop-shadow(0 0 0.5px var(--ink));
     color-scheme: dark;
   }
 }
@@ -241,6 +248,8 @@
     --ochre: #bba16f;
     --selection: #333f35;
     --shadow-toast: 0 8px 24px -12px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--rule);
+    --mark-invert: invert(1);
+    --mark-outline: drop-shadow(0 0 0.5px var(--ink)) drop-shadow(0 0 0.5px var(--ink));
     color-scheme: dark;
   }
 }
@@ -792,6 +801,16 @@ html[data-entrance='contact'] :is(.enter, .enter-fade) {
   html[data-theme='light'] .theme-option[data-theme-option='light'],
   html[data-theme='dark'] .theme-option[data-theme-option='dark'] {
     color: var(--ink);
+  }
+
+  /* Technology marks whose black would vanish on the dark ground. Both tokens
+     are `none` on ivory, so in the light theme this is no filter at all. */
+  img[data-on-dark='invert'] {
+    filter: var(--mark-invert);
+  }
+
+  img[data-on-dark='outline'] {
+    filter: var(--mark-outline);
   }
 }
 
