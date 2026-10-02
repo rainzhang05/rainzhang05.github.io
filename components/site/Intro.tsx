@@ -20,7 +20,9 @@ export function Intro({
         <div className="enter enter-1">
           <Eyebrow>{copy.eyebrow}</Eyebrow>
         </div>
-        <h1 className="enter enter-2 mt-5 max-w-[21ch] text-hero font-normal">{copy.heading}</h1>
+        <h1 className="enter enter-2 mt-5 max-w-[21ch] whitespace-pre-line break-keep text-balance text-hero font-normal">
+          {copy.heading}
+        </h1>
         <p className="enter enter-3 mt-6 max-w-[58ch] text-body-lg text-ink-2">{copy.body}</p>
         <div className="enter enter-5 mt-8 flex flex-wrap gap-3">
           <ButtonLink href={resumeHref} internal icon={<Icon name="file-text" size={16} />}>
