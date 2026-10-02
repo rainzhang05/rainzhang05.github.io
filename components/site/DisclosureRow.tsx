@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { Icon } from '@/components/ui/Icon';
-import { panelDurationMs, panelSpeed } from '@/lib/panelMotion';
+import { panelMotion, panelTokens, supportsLinearEasing } from '@/lib/panelMotion';
 
 interface DisclosureRowProps {
   id: string;
@@ -25,6 +25,12 @@ interface DisclosureRowProps {
   children: ReactNode;
 }
 
+/** A panel's measured motion; `easing` is null where the browser has no linear(). */
+interface MeasuredMotion {
+  durationMs: number;
+  easing: string | null;
+}
+
 /**
  * One row of the site's only interactive pattern. Experience entries and
  * projects are the same component, so they open, close and read alike.
@@ -33,8 +39,8 @@ interface DisclosureRowProps {
  * carries aria-expanded and aria-controls, so keyboard and screen-reader
  * users get the same affordance. An experience row leads with its company
  * mark, which is what tells the two lists apart at a glance. The panel is in
- * the DOM at all times and animates height and opacity over --duration-base in
- * both directions — see .disclosure-panel in globals.css.
+ * the DOM at all times and animates height and opacity, the same in both
+ * directions — see .disclosure-panel in globals.css.
  */
 export function DisclosureRow({
   id,
@@ -55,9 +61,11 @@ export function DisclosureRow({
   const buttonId = 'button-' + id;
 
   /**
-   * The panel's own content height decides how long it takes to open, so a
-   * tall row and a short one travel at the same speed. A ResizeObserver keeps
-   * the figure right through reflow and late-loading images.
+   * The panel's own content height decides how long it takes to open and the
+   * easing that gets it there, so a tall row and a short one move at the same
+   * speed at every moment, not just on average (see lib/panelMotion.ts). A
+   * ResizeObserver keeps the figure right through reflow and late-loading
+   * images.
    *
    * `scrollHeight` and not `getBoundingClientRect()`: a shut row is a grid
    * track at 0fr with its overflow hidden, and both the rect and offsetHeight
@@ -65,21 +73,30 @@ export function DisclosureRow({
    * height in either state. The rect happens to be measured before the row
    * collapses today, so this is not a bug being fixed — it is the difference
    * between a figure that is right and one that is right by timing. Measure
-   * zero and panelDurationMs floors at MIN_PANEL_MS, which for the tallest
-   * panel here would be more than twice the shared speed.
+   * zero and there is no motion to compute, so the panel would fall back to
+   * --duration-base and snap open far faster than its neighbours.
    */
   const contentRef = useRef<HTMLDivElement>(null);
-  const [durationMs, setDurationMs] = useState<number | null>(null);
+  const [motion, setMotion] = useState<MeasuredMotion | null>(null);
 
   useEffect(() => {
     const el = contentRef.current;
     if (!el || typeof ResizeObserver === 'undefined') return;
+    const linear = supportsLinearEasing();
 
     const measure = () => {
-      const speed = panelSpeed(el);
-      if (speed === null) return;
-      const next = panelDurationMs(el.scrollHeight, speed);
-      setDurationMs((current) => (current === next ? current : next));
+      const tokens = panelTokens(el);
+      if (tokens === null) return;
+      const computed = panelMotion(el.scrollHeight, tokens.speed, tokens.settleMs);
+      if (computed === null) return;
+      // Without linear() the duration still follows the distance, under --ease-panel.
+      const next: MeasuredMotion = {
+        durationMs: computed.durationMs,
+        easing: linear ? computed.easing : null,
+      };
+      setMotion((current) =>
+        current?.durationMs === next.durationMs && current.easing === next.easing ? current : next
+      );
     };
 
     measure();
@@ -136,9 +153,12 @@ export function DisclosureRow({
           data-open={open}
           className="disclosure-panel"
           style={
-            durationMs === null
+            motion === null
               ? undefined
-              : ({ '--panel-duration': durationMs + 'ms' } as CSSProperties)
+              : ({
+                  '--panel-duration': motion.durationMs + 'ms',
+                  '--panel-ease': motion.easing ?? undefined,
+                } as CSSProperties)
           }
         >
           <div className="min-h-0 overflow-hidden">

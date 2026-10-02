@@ -102,8 +102,8 @@
 
   /* Motion — every transition on the site resolves to these three values.
      --duration-fast: colour and border changes
-     --duration-base: expand and collapse (height + opacity)
-     --duration-slow: the section dock's active fill
+     --duration-base: the language pill; a panel's fallback before it is measured
+     --duration-slow: the section dock's active fill; a panel's fade
      --duration-enter: the first-screen entrance
      prefers-reduced-motion zeroes all of them (see bottom of this file). */
   --ease-out: cubic-bezier(0.2, 0.6, 0.2, 1);
@@ -111,11 +111,15 @@
   --duration-base: 220ms;
   --duration-slow: 320ms;
 
-  /* Expand and collapse — a speed, not a time. Pixels per second: a panel
-     twice as tall takes twice as long, so every row moves at the same rate.
-     --ease-panel starts immediately and decelerates, which reads as smooth
-     over the longer distances this produces. */
-  --panel-speed: 1400;
+  /* Expand and collapse — a speed and a landing, not a time. Every panel
+     moves off at --panel-speed (pixels per second) at once, glides at it, and
+     comes to rest over the same --panel-settle, so any two rows are at the
+     same speed at every moment however much they hold; a taller one only
+     glides for longer. lib/panelMotion.ts turns the pair into each panel's
+     duration and its linear() easing. --ease-panel is the fallback for a
+     browser without linear(), and the dock's ring. */
+  --panel-speed: 2800;
+  --panel-settle: 400ms;
   --ease-panel: cubic-bezier(0.3, 0.45, 0.15, 1);
 
   /* Entrance — the one-off reveal of the first screen, and the cross-fade the
@@ -446,12 +450,15 @@ html[data-entrance='contact'] :is(.enter, .enter-fade) {
   }
 }
 
-/* Expand and collapse. --panel-duration is set per row from its own content
-   height (see lib/panelMotion.ts), so opening and closing run at one speed
-   across the whole page; --duration-base is the fallback before that is
-   measured. The delay belongs to `visibility` alone — on the way out it waits
-   for the row to finish closing before leaving the tab order — so both
-   directions take exactly the same time. */
+/* Expand and collapse. --panel-duration and --panel-ease are set per row
+   from its own content height (see lib/panelMotion.ts), so every row opens
+   and closes along one motion — the same speed at every moment, not only on
+   average; --duration-base and --ease-panel stand in before that is measured.
+   The fade is not tied to the height: it takes --duration-slow on every row,
+   because a fade stretched over a tall row's longer travel reads as a slower
+   row. The delay belongs to `visibility` alone — on the way out it waits for
+   the row to finish closing before leaving the tab order — so both directions
+   take exactly the same time. */
 @layer components {
   .disclosure-panel {
     display: grid;
@@ -459,8 +466,9 @@ html[data-entrance='contact'] :is(.enter, .enter-fade) {
     opacity: 0;
     visibility: hidden;
     transition:
-      grid-template-rows var(--panel-duration, var(--duration-base)) var(--ease-panel),
-      opacity var(--panel-duration, var(--duration-base)) var(--ease-panel),
+      grid-template-rows var(--panel-duration, var(--duration-base))
+        var(--panel-ease, var(--ease-panel)),
+      opacity var(--duration-slow) var(--ease-out),
       visibility 0s linear var(--panel-duration, var(--duration-base));
   }
 
@@ -469,8 +477,9 @@ html[data-entrance='contact'] :is(.enter, .enter-fade) {
     opacity: 1;
     visibility: visible;
     transition:
-      grid-template-rows var(--panel-duration, var(--duration-base)) var(--ease-panel),
-      opacity var(--panel-duration, var(--duration-base)) var(--ease-panel),
+      grid-template-rows var(--panel-duration, var(--duration-base))
+        var(--panel-ease, var(--ease-panel)),
+      opacity var(--duration-slow) var(--ease-out),
       visibility 0s;
   }
 }
