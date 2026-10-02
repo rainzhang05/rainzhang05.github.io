@@ -37,7 +37,7 @@ export const ja: Copy = {
   ],
   intro: {
     eyebrow: 'フルスタックデベロッパー · サイモンフレーザー大学 · バンクーバー、BC州、カナダ',
-    heading: 'Rain Zhang です。',
+    heading: 'はじめまして、\nRain Zhang と申します。',
     body: 'サイモンフレーザー大学でコンピュータサイエンスを学ぶ4年生です。この1年は、セキュリティキーの会社と不動産管理会社でソフトウェアを開発し、保守してきました。主に Python・TypeScript・Rust を使っています。',
     resume: '履歴書',
     copyEmail: 'メールアドレスをコピー',
