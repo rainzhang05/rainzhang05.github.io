@@ -25,6 +25,8 @@ interface DisclosureRowProps {
   headingLevel?: 'h3' | 'h4';
   /** Company mark, in front of the title. Experience rows have one; projects do not. */
   leading?: ReactNode;
+  /** A status beside the title, outside the heading so it is not part of its name. */
+  badge?: ReactNode;
   /** Pills and the quiet link: below the summary, always visible. */
   footer?: ReactNode;
   labels: { expand: string; collapse: string };
@@ -61,6 +63,7 @@ export function DisclosureRow({
   onToggle,
   headingLevel = 'h3',
   leading,
+  badge,
   footer,
   labels,
   children,
@@ -169,19 +172,22 @@ export function DisclosureRow({
           onClick={() => onToggle(id)}
         >
           <div className="min-w-0 flex-1">
-            <Heading className="m-0 flex flex-wrap items-center gap-x-2.5 gap-y-1">
-              {leading}
-              <button
-                id={buttonId}
-                type="button"
-                aria-expanded={open}
-                aria-controls={panelId}
-                title={open ? labels.collapse : labels.expand}
-                className="m-0 block rounded-sm p-0 text-left text-heading font-medium text-ink"
-              >
-                {title}
-              </button>
-            </Heading>
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+              <Heading className="m-0 flex flex-wrap items-center gap-x-2.5 gap-y-1">
+                {leading}
+                <button
+                  id={buttonId}
+                  type="button"
+                  aria-expanded={open}
+                  aria-controls={panelId}
+                  title={open ? labels.collapse : labels.expand}
+                  className="m-0 block rounded-sm p-0 text-left text-heading font-medium text-ink"
+                >
+                  {title}
+                </button>
+              </Heading>
+              {badge}
+            </div>
             {subtitle ? <p className="mt-0.5 text-body-15 text-ink-2">{subtitle}</p> : null}
             <p className="mt-2.5 max-w-measure text-body-15 text-ink-2">{summary}</p>
           </div>
