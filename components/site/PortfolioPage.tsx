@@ -15,6 +15,9 @@ import { prefersReducedMotion } from '@/lib/useReducedMotion';
 import { resumePage, site, type Locale } from '@/lib/site';
 import type { Copy } from '@/lib/types';
 
+/** Longer than any panel takes to close, so a hold can never outlive its reason. */
+const HOLD_LIMIT_MS = 2000;
+
 /**
  * The whole page. Only three pieces of state: which experience row is open,
  * which project row is open, and the toast. One row per list at a time.
@@ -25,40 +28,60 @@ export function PortfolioPage({ copy, locale }: { copy: Copy; locale: Locale }) 
   const [toast, setToast] = useState<string | null>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout>>();
 
-  /** Bring a row back under the header if opening pushed it off-screen. */
-  const keepInView = useCallback((id: string) => {
-    setTimeout(() => {
-      const row = document.getElementById('row-' + id);
-      if (!row) return;
-      const { top } = row.getBoundingClientRect();
-      if (top >= 0) return;
-      window.scrollTo({
-        top: Math.max(0, window.scrollY + top - 24),
-        behavior: prefersReducedMotion() ? 'auto' : 'smooth',
-      });
-    }, 80);
+  /**
+   * Opening a row closes the one already open in its list, and when that one
+   * sits above, its panel collapsing drags the row just clicked up the page —
+   * over 900px for a selected-work panel, clean off the top of the screen and
+   * out of reach. So while the panel above closes, the page gives back exactly
+   * the height it loses, frame by frame, and the row stays under the pointer
+   * that opened it. The browser's own scroll anchoring cannot do this: it
+   * anchors to the closing panel's content, which never moves.
+   *
+   * The compensation is the panel's change in height, never the row's change
+   * in position, so a reader who scrolls at the same time is not fought. And it
+   * is kept as a running balance — what the panel has lost against what the
+   * page has actually given back — because Safari and Firefox round each
+   * scroll to the pixel grid, and forty frames of dropped fractions left the
+   * row 20px from where it was clicked.
+   */
+  const holdBelow = useCallback((closingId: string, id: string) => {
+    const panel = document.getElementById('panel-' + closingId);
+    const row = document.getElementById('row-' + id);
+    if (!panel || !row) return;
+    if (!(panel.compareDocumentPosition(row) & Node.DOCUMENT_POSITION_FOLLOWING)) return;
+
+    const from = panel.getBoundingClientRect().height;
+    let given = 0;
+    const until = performance.now() + HOLD_LIMIT_MS;
+    const hold = () => {
+      // Reopened before it finished: the hold has nothing left to give back.
+      if (panel.dataset.open === 'true') return;
+      const height = panel.getBoundingClientRect().height;
+      const owed = from - height - given;
+      if (owed > 0) {
+        const before = window.scrollY;
+        window.scrollBy({ top: -owed, behavior: 'instant' });
+        given += before - window.scrollY;
+      }
+      if (height > 0 && performance.now() < until) requestAnimationFrame(hold);
+    };
+    requestAnimationFrame(hold);
   }, []);
 
   const toggleExperience = useCallback(
     (id: string) => {
-      setOpenExperience((current) => {
-        if (current === id) return null;
-        keepInView(id);
-        return id;
-      });
+      if (openExperience !== null && openExperience !== id) holdBelow(openExperience, id);
+      setOpenExperience(openExperience === id ? null : id);
     },
-    [keepInView]
+    [openExperience, holdBelow]
   );
 
   const toggleProject = useCallback(
     (id: string) => {
-      setOpenProject((current) => {
-        if (current === id) return null;
-        keepInView(id);
-        return id;
-      });
+      if (openProject !== null && openProject !== id) holdBelow(openProject, id);
+      setOpenProject(openProject === id ? null : id);
     },
-    [keepInView]
+    [openProject, holdBelow]
   );
 
   /** "Related work" in an experience entry opens the project and scrolls to it. */
