@@ -45,11 +45,22 @@ test.describe("disclosure rows", () => {
     await page.goto("/");
 
     await page.locator("#button-exp-feitian").click();
-    const related = page.locator("#panel-exp-feitian button").first();
-    await related.click();
+    const related = page.locator("#panel-exp-feitian button");
 
-    await expect(page.locator("#button-work-webauthn")).toHaveAttribute("aria-expanded", "true");
-    await expect(page.locator("#row-work-webauthn")).toBeInViewport();
+    // The authenticator first, then the developer platform, then the demo.
+    await expect(related).toHaveText([
+      "FIDO2 Software Authenticator",
+      "WebAuthn Developer Platform",
+      "Authentication Demo Platform",
+    ]);
+
+    await related.first().click();
+
+    await expect(page.locator("#button-work-authenticator")).toHaveAttribute(
+      "aria-expanded",
+      "true"
+    );
+    await expect(page.locator("#row-work-authenticator")).toBeInViewport();
   });
 
   test("opens a short row and a tall row at the same speed", async ({ page }) => {

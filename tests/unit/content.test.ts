@@ -43,6 +43,13 @@ describe('content', () => {
     expect(shape(ja)).toEqual(shape(en));
   });
 
+  it('lists the FEITIAN related work as authenticator, developer platform, demo', () => {
+    for (const copy of [en, ja]) {
+      const feitian = copy.experiences.find((e) => e.id === 'exp-feitian')!;
+      expect(feitian.related).toEqual(['work-authenticator', 'work-webauthn', 'work-demo']);
+    }
+  });
+
   it('translates the prose — the two locales are not the same text', () => {
     expect(ja.intro.heading).not.toBe(en.intro.heading);
     expect(ja.sections.experience).not.toBe(en.sections.experience);
