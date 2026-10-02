@@ -1,6 +1,13 @@
 'use client';
 
-import { useId, type ChangeEvent, type FocusEvent } from 'react';
+import {
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useRef,
+  type ChangeEvent,
+  type FocusEvent,
+} from 'react';
 
 interface FieldProps {
   label: string;
@@ -16,6 +23,8 @@ interface FieldProps {
   /** Optional: the contact form validates on submit, not on blur. */
   onBlur?: (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 }
+
+const useBeforePaint = typeof window === 'undefined' ? useEffect : useLayoutEffect;
 
 const frame =
   'flex items-center gap-2 rounded-control border bg-sheet px-3 transition-colors duration-fast ease-out';
@@ -72,6 +81,14 @@ export function TextField({
   );
 }
 
+/**
+ * A message field that sizes itself. It cannot be dragged, and instead grows
+ * with what is typed into it: `rows` is the height it starts at and never goes
+ * below, and every line past that adds one. Measured before paint, so a new
+ * line never shows a frame of scrollbar first, and again when the window
+ * changes width, because the same text wraps onto a different number of lines.
+ * Without JavaScript it is simply `rows` lines tall and scrolls.
+ */
 export function TextAreaField({
   label,
   name,
@@ -84,6 +101,22 @@ export function TextAreaField({
   onBlur,
 }: FieldProps) {
   const id = useId();
+  const ref = useRef<HTMLTextAreaElement>(null);
+
+  useBeforePaint(() => {
+    const el = ref.current;
+    if (!el) return;
+    // The scrollbar goes only once the height follows the text; with no
+    // script to grow it, the field has to be able to scroll.
+    el.style.overflowY = 'hidden';
+    const fit = () => {
+      el.style.height = 'auto';
+      if (el.scrollHeight > 0) el.style.height = el.scrollHeight + 'px';
+    };
+    fit();
+    window.addEventListener('resize', fit);
+    return () => window.removeEventListener('resize', fit);
+  }, [value]);
 
   return (
     <div className="flex flex-col gap-1.5">
@@ -98,6 +131,7 @@ export function TextAreaField({
         }
       >
         <textarea
+          ref={ref}
           id={id}
           name={name}
           rows={rows}
@@ -108,7 +142,7 @@ export function TextAreaField({
           aria-describedby={error ? id + '-error' : undefined}
           onChange={onChange}
           onBlur={onBlur}
-          className={control + ' block resize-y leading-relaxed'}
+          className={control + ' block resize-none leading-relaxed'}
         />
       </div>
       {error ? (
