@@ -1,9 +1,11 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import {
   panelMotion,
+  panelTimeAt,
   panelTokens,
   settleDistance,
   supportsLinearEasing,
+  unseenCloseMs,
   type PanelMotion,
 } from '@/lib/panelMotion';
 
@@ -98,6 +100,60 @@ describe('one motion across every panel', () => {
 
   it('cannot blink a tiny panel open: it rides the slow end of the settle', () => {
     expect(motionFor(20).durationMs).toBeGreaterThan(SETTLE / 2);
+  });
+});
+
+describe('panelTimeAt', () => {
+  it('reads the curve the other way: the time at which a panel has come so far', () => {
+    for (const h of [120, 597, 1183]) {
+      const motion = motionFor(h);
+      for (const fraction of [0, 0.1, 0.5, 0.8, 0.95, 1]) {
+        const t = panelTimeAt(h, h * fraction, SPEED, SETTLE);
+        expect(Math.abs(travelled(motion, h, t) - h * fraction)).toBeLessThan(1);
+      }
+    }
+  });
+
+  it('ends where the motion ends', () => {
+    expect(panelTimeAt(1183, 1183, SPEED, SETTLE)).toBeCloseTo(motionFor(1183).durationMs, 0);
+  });
+});
+
+/**
+ * A close is wound forward past whatever happens below the fold, so a tall
+ * panel shut from the top of the screen moves something visible on its first
+ * frame, exactly as a short one does.
+ */
+describe('unseenCloseMs', () => {
+  const VIEWPORT = 800;
+
+  it('skips nothing when the panel ends on screen', () => {
+    expect(unseenCloseMs(597, 150, VIEWPORT, SPEED, SETTLE)).toBe(0);
+  });
+
+  it('skips the travel below the fold, leaving the edge at the fold', () => {
+    const h = 1183;
+    const top = 250;
+    const skip = unseenCloseMs(h, top, VIEWPORT, SPEED, SETTLE);
+    // Closing, progress runs from the bottom edge upward: after the skip the
+    // edge has risen exactly as far as it started below the fold.
+    expect(travelled(motionFor(h), h, skip)).toBeCloseTo(top + h - VIEWPORT, 0);
+  });
+
+  it('leaves exactly the close a panel the height of the visible part would have', () => {
+    const h = 1183;
+    const top = 250;
+    const visible = VIEWPORT - top;
+    const left = motionFor(h).durationMs - unseenCloseMs(h, top, VIEWPORT, SPEED, SETTLE);
+
+    expect(left).toBeCloseTo(motionFor(visible).durationMs, 0);
+  });
+
+  it('skips the whole close of a panel that is entirely below the fold', () => {
+    expect(unseenCloseMs(700, 900, VIEWPORT, SPEED, SETTLE)).toBeCloseTo(
+      motionFor(700).durationMs,
+      0
+    );
   });
 });
 

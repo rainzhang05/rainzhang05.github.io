@@ -105,6 +105,88 @@ test.describe("disclosure rows", () => {
     }
   });
 
+  test("closes a tall row with no wait while its edge is below the fold", async ({ page }) => {
+    await page.goto("/");
+    const panel = page.locator("#panel-work-mnt-platform");
+    await expect(panel).toHaveAttribute("style", /--panel-ease/);
+
+    await page.locator("#button-work-mnt-platform").click();
+    await expect
+      .poll(() =>
+        panel.evaluate(
+          (el) => el.getBoundingClientRect().height - el.firstElementChild!.scrollHeight
+        )
+      )
+      .toBeGreaterThan(-1);
+
+    // Its row near the top of the screen, so the panel runs far past the fold.
+    const edge = await page.evaluate(async () => {
+      const row = document.getElementById("row-work-mnt-platform")!;
+      const panel = document.getElementById("panel-work-mnt-platform")!;
+      window.scrollTo({
+        top: window.scrollY + row.getBoundingClientRect().top - 100,
+        behavior: "instant",
+      });
+      await new Promise((r) => setTimeout(r, 200));
+      const fold = document.documentElement.clientHeight;
+      const before = panel.getBoundingClientRect().bottom - fold;
+
+      document.getElementById("button-work-mnt-platform")!.click();
+      await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+      return { before, after: panel.getBoundingClientRect().bottom - fold };
+    });
+
+    // It started well below the fold, and two frames in it is already on screen
+    // rather than still travelling where nobody can see it.
+    expect(edge.before).toBeGreaterThan(200);
+    expect(edge.after).toBeLessThanOrEqual(1);
+  });
+
+  test("keeps the clicked row in place when the open row above it closes", async ({ page }) => {
+    await page.goto("/");
+    const above = page.locator("#panel-work-mnt-platform");
+    await expect(above).toHaveAttribute("style", /--panel-ease/);
+
+    await page.locator("#button-work-mnt-platform").click();
+    await expect
+      .poll(() =>
+        above.evaluate(
+          (el) => el.getBoundingClientRect().height - el.firstElementChild!.scrollHeight
+        )
+      )
+      .toBeGreaterThan(-1);
+
+    const drift = await page.evaluate(async () => {
+      const row = document.getElementById("row-work-authenticator")!;
+      window.scrollTo({
+        top: window.scrollY + row.getBoundingClientRect().top - 300,
+        behavior: "instant",
+      });
+      await new Promise((r) => setTimeout(r, 200));
+      const start = row.getBoundingClientRect().top;
+
+      document.getElementById("button-work-authenticator")!.click();
+      let worst = 0;
+      const t0 = performance.now();
+      await new Promise<void>((done) => {
+        const frame = () => {
+          worst = Math.max(worst, Math.abs(row.getBoundingClientRect().top - start));
+          if (performance.now() - t0 < 1000) requestAnimationFrame(frame);
+          else done();
+        };
+        requestAnimationFrame(frame);
+      });
+      return worst;
+    });
+
+    // Without the hold, the panel above collapsing carried it 900px off the top.
+    expect(drift).toBeLessThanOrEqual(3);
+    await expect(page.locator("#button-work-authenticator")).toHaveAttribute(
+      "aria-expanded",
+      "true"
+    );
+  });
+
   test("is operable from the keyboard", async ({ page }) => {
     await page.goto("/");
 
