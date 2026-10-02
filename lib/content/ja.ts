@@ -47,7 +47,7 @@ export const ja: Copy = {
   sections: {
     intro: '自己紹介',
     experience: '経歴',
-    work: '主な制作物',
+    work: '制作物',
     background: '学歴と技術',
     contact: '連絡先',
   },

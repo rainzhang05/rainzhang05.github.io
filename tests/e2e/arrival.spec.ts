@@ -5,10 +5,10 @@ import { expect, test } from "./fixtures";
  * home page, and each of those has an arrival of its own — the first screen's
  * cascade belongs to the first screen.
  */
-/** The section, and the footer link that goes to it — "work" reads "Selected Work". */
+/** The section, and the footer link that goes to it — "work" reads "Projects". */
 const sections = [
   { id: "experience", link: /^Experience$/ },
-  { id: "work", link: /^Selected Work$/ },
+  { id: "work", link: /^Projects$/ },
   { id: "background", link: /^Background$/ },
   { id: "contact", link: /^Contact$/ },
 ] as const;

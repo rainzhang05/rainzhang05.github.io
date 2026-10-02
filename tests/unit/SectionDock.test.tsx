@@ -31,7 +31,7 @@ describe("SectionDock", () => {
     expect(buttons.map((b) => b.textContent)).toEqual([
       "Introduction",
       "Experience",
-      "Selected Work",
+      "Projects",
       "Background",
       "Contact",
     ]);

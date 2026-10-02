@@ -21,7 +21,7 @@ export const en: Copy = {
     },
     {
       id: 'work',
-      label: 'Work',
+      label: 'Projects',
       href: '#work',
     },
     {
@@ -47,7 +47,7 @@ export const en: Copy = {
   sections: {
     intro: 'Introduction',
     experience: 'Experience',
-    work: 'Selected Work',
+    work: 'Projects',
     background: 'Background',
     contact: 'Contact',
   },

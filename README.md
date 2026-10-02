@@ -16,7 +16,7 @@ As a university student actively seeking internship opportunities and profession
 Two pages, each in two languages:
 
 - `/` and `/ja` — one scrolling page:
-  intro → Experience → Selected work → Other work → Background → Contact.
+  intro → Experience → Projects → Background → Contact.
 - `/resume` and `/ja/resume` — my resume, readable in the page, with the PDF a
   download away.
 

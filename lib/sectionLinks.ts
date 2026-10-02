@@ -14,8 +14,8 @@ import type { Copy, NavLink } from './types';
  * Deliberately not derived from copy.nav: that list adds the resume PDF and
  * leaves out Background, so no filter of it produces this set. The footer and
  * the section dock both navigate exactly these, and both read them from here —
- * a second hand-written copy is how the header ended up calling #work "Work"
- * while the footer calls it "Selected Work".
+ * a second hand-written copy is how the header once called #work "Work" while
+ * the footer called it "Selected Work".
  *
  * Section ids are English in both locales because hash links depend on them;
  * only the labels are translated.

@@ -437,7 +437,7 @@ test.describe("section dock", () => {
     await settleAt(page, 900);
 
     const dock = page.getByRole("navigation", { name: "On this page" });
-    for (const name of ["Introduction", "Experience", "Selected Work", "Background", "Contact"]) {
+    for (const name of ["Introduction", "Experience", "Projects", "Background", "Contact"]) {
       await expect(dock.getByRole("button", { name })).toBeAttached();
     }
   });
