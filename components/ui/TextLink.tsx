@@ -8,7 +8,16 @@ interface TextLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   children: ReactNode;
 }
 
-/** Text link. The accent colour lives here and nowhere else. */
+/**
+ * Text link. The accent colour lives here and nowhere else.
+ *
+ * The underline is always drawn and only its colour changes: transparent at
+ * rest, faded in with the text on hover and out again on leave. Switching the
+ * line itself on and off is not animatable, so it used to snap in at the
+ * text's full colour, fade to its lighter hover colour, and snap out again.
+ * The hover variants of the offset and thickness are there to outrank the
+ * a:hover rule in globals.css, which would otherwise move the line on hover.
+ */
 export function TextLink({
   href,
   tone = 'accent',
@@ -19,7 +28,7 @@ export function TextLink({
 }: TextLinkProps) {
   const colour =
     tone === 'accent'
-      ? 'text-sage hover:text-sage-strong'
+      ? 'text-sage hover:text-sage-strong hover:decoration-sage-strong'
       : 'text-ink-2 hover:text-ink hover:decoration-rule-strong';
 
   return (
@@ -28,7 +37,7 @@ export function TextLink({
       target={external ? '_blank' : undefined}
       rel={external ? 'noreferrer' : undefined}
       className={
-        'inline-flex items-center gap-0.5 no-underline transition-colors duration-fast ease-out hover:underline hover:decoration-1 hover:underline-offset-2 ' +
+        'inline-flex items-center gap-0.5 underline decoration-transparent decoration-1 underline-offset-2 transition-colors duration-fast ease-out hover:decoration-1 hover:underline-offset-2 ' +
         colour +
         (className ? ' ' + className : '')
       }
