@@ -49,8 +49,9 @@ interface MeasuredMotion {
  * The row opens from one control and nothing else: a chevron and the words
  * "Show details", last in the row and on the content's left edge, right where
  * the panel unfolds — rows have no rule between them, so it is also what marks
- * where a row ends. It is quiet at rest, in --ink-3 with no fill; while its
- * row is open the chevron turns over, the words become "Hide details" and both
+ * where a row ends. It is quiet at rest, in --ink-3 with no fill, and hover
+ * changes its colour and nothing else, as the header's links do. While its row
+ * is open the chevron turns over, the words become "Hide details" and both
  * darken. The title, summary and the rest of the row are plain text, so they
  * can be selected like any other prose on the page.
  *
@@ -197,7 +198,7 @@ export function DisclosureRow({
           aria-controls={panelId}
           onClick={() => onToggle(id)}
           className={
-            'no-copy -ml-2 mt-3 flex h-8 items-center gap-1.5 rounded-pill pl-2 pr-3 text-body-14 font-medium transition-colors duration-fast ease-out hover:bg-surface hover:text-ink ' +
+            'no-copy mt-3 flex h-8 items-center gap-1.5 text-body-14 font-medium transition-colors duration-fast ease-out hover:text-ink ' +
             (open ? 'text-ink' : 'text-ink-3')
           }
         >
