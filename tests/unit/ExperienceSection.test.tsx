@@ -31,7 +31,9 @@ describe('ExperienceSection', () => {
     setup();
 
     en.experiences.forEach((item) => {
-      expect(screen.getByRole('button', { name: item.role })).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: `${en.labels.expand} ${item.role}` })
+      ).toBeInTheDocument();
       expect(screen.getByText(item.orgLine)).toBeInTheDocument();
       expect(screen.getByText(item.dates)).toBeInTheDocument();
     });
@@ -74,7 +76,7 @@ describe('ExperienceSection', () => {
     const { onToggle } = setup();
     const first = en.experiences[0];
 
-    await user.click(screen.getByRole('button', { name: first.role }));
+    await user.click(screen.getByRole('button', { name: `${en.labels.expand} ${first.role}` }));
 
     expect(onToggle).toHaveBeenCalledWith(first.id);
   });

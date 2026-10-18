@@ -28,7 +28,9 @@ describe('WorkSection', () => {
     setup();
 
     en.projects.forEach((project) => {
-      expect(screen.getByRole('button', { name: project.title })).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: `${en.labels.expand} ${project.title}` })
+      ).toBeInTheDocument();
     });
   });
 
@@ -110,7 +112,7 @@ describe('WorkSection', () => {
     const { onToggle } = setup();
     const project = en.projects[0];
 
-    await user.click(screen.getByRole('button', { name: project.title }));
+    await user.click(screen.getByRole('button', { name: `${en.labels.expand} ${project.title}` }));
 
     expect(onToggle).toHaveBeenCalledWith(project.id);
   });

@@ -30,13 +30,14 @@ describe('DisclosureRow', () => {
   it('wires the button to its panel', () => {
     renderRow();
 
-    const button = screen.getByRole('button', { name: 'Travel advisor' });
+    const button = screen.getByRole('button', { name: 'Show details Travel advisor' });
     expect(button).toHaveAttribute('aria-expanded', 'false');
     expect(button).toHaveAttribute('aria-controls', 'panel-work-travel');
     expect(document.getElementById('panel-work-travel')).toHaveAttribute(
       'aria-labelledby',
-      'button-work-travel'
+      'title-work-travel'
     );
+    expect(document.getElementById('title-work-travel')).toHaveTextContent('Travel advisor');
   });
 
   it('gives the row an id the page can scroll to', () => {
@@ -54,7 +55,7 @@ describe('DisclosureRow', () => {
   it('reveals the panel when open', () => {
     renderRow({ open: true });
 
-    const button = screen.getByRole('button', { name: 'Travel advisor' });
+    const button = screen.getByRole('button', { name: 'Hide details Travel advisor' });
     expect(button).toHaveAttribute('aria-expanded', 'true');
     expect(document.getElementById('panel-work-travel')).toHaveAttribute('data-open', 'true');
   });
@@ -69,7 +70,7 @@ describe('DisclosureRow', () => {
     const user = userEvent.setup();
     const { onToggle } = renderRow();
 
-    await user.click(screen.getByRole('button', { name: 'Travel advisor' }));
+    await user.click(screen.getByRole('button', { name: 'Show details Travel advisor' }));
     expect(onToggle).toHaveBeenCalledWith('work-travel');
   });
 
@@ -82,7 +83,7 @@ describe('DisclosureRow', () => {
     await user.click(screen.getByText('A trip planner.'));
     expect(onToggle).not.toHaveBeenCalled();
 
-    await user.click(screen.getByRole('button', { name: 'Travel advisor' }));
+    await user.click(screen.getByRole('button', { name: 'Show details Travel advisor' }));
     expect(onToggle).toHaveBeenCalledTimes(1);
   });
 
@@ -112,7 +113,8 @@ describe('DisclosureRow', () => {
         </DisclosureRow>
       </ul>
     );
-    expect(screen.getByRole('button', { name: 'A' })).toHaveAttribute('title', 'Show details');
+    expect(document.getElementById('button-a')).toHaveTextContent('Show details');
+    expect(screen.getByRole('button', { name: 'Show details A' })).toBeInTheDocument();
 
     rerender(
       <ul>
@@ -129,7 +131,8 @@ describe('DisclosureRow', () => {
         </DisclosureRow>
       </ul>
     );
-    expect(screen.getByRole('button', { name: 'A' })).toHaveAttribute('title', 'Hide details');
+    expect(document.getElementById('button-a')).toHaveTextContent('Hide details');
+    expect(screen.getByRole('button', { name: 'Hide details A' })).toBeInTheDocument();
   });
 
   it('renders the date column, subtitle and summary', () => {
