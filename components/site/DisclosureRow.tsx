@@ -46,16 +46,18 @@ interface MeasuredMotion {
  * One row of the site's only interactive pattern. Experience entries and
  * projects are the same component, so they open, close and read alike.
  *
- * The row opens from one control and nothing else: a chevron, last in the row
- * and on the content's left edge, right where the panel unfolds — rows have no
- * rule between them, so it is also what marks where a row ends. It is quiet
- * at rest, in --ink-3 with no fill, and turns over and darkens while its row
- * is open. The title, summary and the rest of the row are plain text, so they
+ * The row opens from one control and nothing else: a chevron and the words
+ * "Show details", last in the row and on the content's left edge, right where
+ * the panel unfolds — rows have no rule between them, so it is also what marks
+ * where a row ends. It is quiet at rest, in --ink-3 with no fill; while its
+ * row is open the chevron turns over, the words become "Hide details" and both
+ * darken. The title, summary and the rest of the row are plain text, so they
  * can be selected like any other prose on the page.
  *
- * The chevron carries aria-expanded and aria-controls and is named by the
- * row's title, so a screen reader hears "Travel Advisor, button, collapsed";
- * its tooltip says what pressing it does. An experience row leads with its
+ * The control carries aria-expanded and aria-controls. Its name starts with
+ * the words it shows and ends with the row's title, hidden visually, so a
+ * screen reader hears "Show details Travel Advisor, button, collapsed" and
+ * the rows still tell apart in a list of controls. An experience row leads with its
  * company mark, which is what tells the two lists apart at a glance. The
  * panel is in the DOM at all times and animates height and opacity, the same
  * in both directions — see .disclosure-panel in globals.css.
@@ -78,6 +80,7 @@ export function DisclosureRow({
   const Heading = headingLevel;
   const panelId = 'panel-' + id;
   const buttonId = 'button-' + id;
+  const titleId = 'title-' + id;
 
   /**
    * The panel's own content height decides how long it takes to open and the
@@ -171,7 +174,10 @@ export function DisclosureRow({
 
       <div className="min-w-0 flex-1 basis-[420px]">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
-          <Heading className="m-0 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-heading font-medium text-ink">
+          <Heading
+            id={titleId}
+            className="m-0 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-heading font-medium text-ink"
+          >
             {leading}
             {title}
           </Heading>
@@ -189,11 +195,9 @@ export function DisclosureRow({
           type="button"
           aria-expanded={open}
           aria-controls={panelId}
-          aria-label={title}
-          title={open ? labels.collapse : labels.expand}
           onClick={() => onToggle(id)}
           className={
-            'no-copy -ml-2 mt-3 flex h-8 w-8 items-center justify-center rounded-pill transition-colors duration-fast ease-out hover:bg-surface hover:text-ink ' +
+            'no-copy -ml-2 mt-3 flex h-8 items-center gap-1.5 rounded-pill pl-2 pr-3 text-body-14 font-medium transition-colors duration-fast ease-out hover:bg-surface hover:text-ink ' +
             (open ? 'text-ink' : 'text-ink-3')
           }
         >
@@ -203,15 +207,17 @@ export function DisclosureRow({
               (open ? ' rotate-180' : '')
             }
           >
-            <Icon name="chevron-down" size={18} />
+            <Icon name="chevron-down" size={16} />
           </span>
+          {open ? labels.collapse : labels.expand}
+          <span className="sr-only"> {title}</span>
         </button>
 
         <div
           ref={panelRef}
           id={panelId}
           role="region"
-          aria-labelledby={buttonId}
+          aria-labelledby={titleId}
           data-open={open}
           className="disclosure-panel"
           style={
