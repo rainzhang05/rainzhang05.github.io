@@ -237,6 +237,57 @@ test.describe("section dock", () => {
     }
   });
 
+  test("glides to the next section in seconds, not frames, however slowly they come", async ({
+    page,
+  }) => {
+    // Hold every frame for 60ms, past the loop's 50ms cap on dt, so each frame
+    // is exactly one capped step. A one-pitch glide then lands in about 33
+    // frames; timed in frames instead, at a fixed 1/60s each, it takes about 98
+    // — which is what left CI's slow mobile WebKit at the 300-frame cap.
+    await page.addInitScript(() => {
+      const hold = () => {
+        const end = performance.now() + 60;
+        while (performance.now() < end) {
+          // Spin: the point is to make the frame late.
+        }
+        requestAnimationFrame(hold);
+      };
+      requestAnimationFrame(hold);
+    });
+    await page.setViewportSize(DESKTOP);
+    await open(page);
+
+    const moving = await page.evaluate(async () => {
+      const el = document.getElementById("experience")!;
+      const top = el.getBoundingClientRect().top + window.scrollY;
+      const dots = [...document.querySelectorAll<HTMLElement>(".section-dock .dock-dot")];
+      const read = () => dots.map((d) => d.style.transform).join();
+
+      window.scrollTo({
+        top: top - document.documentElement.clientHeight * 0.45 + 10,
+        behavior: "instant",
+      });
+
+      let previous = read();
+      let changed = 0;
+      let stable = 0;
+      for (let i = 0; i < 200 && (i < 10 || stable < 6); i += 1) {
+        await new Promise((r) => requestAnimationFrame(() => r(null)));
+        const now = read();
+        if (now === previous) stable += 1;
+        else {
+          changed += 1;
+          stable = 0;
+        }
+        previous = now;
+      }
+      return changed;
+    });
+
+    expect(moving, "the lens glided at all").toBeGreaterThan(0);
+    expect(moving, "frames the glide took").toBeLessThan(60);
+  });
+
   test("navigates from a dock bubble without flickering through the sections", async ({ page }) => {
     await page.setViewportSize(DESKTOP);
     await open(page);
