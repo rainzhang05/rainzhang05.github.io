@@ -289,11 +289,11 @@ export const en: Copy = {
         'Vitest',
       ],
       status:
-        'Live at webauthnlab.tech and maintained in FEITIAN’s GitHub organization. CI runs about 120 server test files, plus front-end and post-quantum tests.',
+        'Live at webauthndev.com and maintained in FEITIAN’s GitHub organization. CI runs about 120 server test files, plus front-end and post-quantum tests.',
       links: [
         {
-          label: 'webauthnlab.tech',
-          href: 'https://webauthnlab.tech',
+          label: 'webauthndev.com',
+          href: 'https://webauthndev.com',
         },
         {
           label: 'Repository',

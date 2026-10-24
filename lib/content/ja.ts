@@ -293,11 +293,11 @@ export const ja: Copy = {
         'Vitest',
       ],
       status:
-        'webauthnlab.tech で公開中で、FeitianTech の GitHub で保守しています。CI では、サーバー側の約120のテストファイルに加え、フロントエンドと PQC のテストを実行しています。',
+        'webauthndev.com で公開中で、FeitianTech の GitHub で保守しています。CI では、サーバー側の約120のテストファイルに加え、フロントエンドと PQC のテストを実行しています。',
       links: [
         {
-          label: 'webauthnlab.tech',
-          href: 'https://webauthnlab.tech',
+          label: 'webauthndev.com',
+          href: 'https://webauthndev.com',
         },
         {
           label: 'リポジトリ',
