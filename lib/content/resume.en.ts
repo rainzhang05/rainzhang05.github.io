@@ -98,7 +98,7 @@ export const resumeEn: ResumeCopy = {
         { text: 'Flask' },
         { text: 'Docker' },
         { text: 'liboqs' },
-        { text: 'webauthnlab.tech', href: 'https://webauthnlab.tech' },
+        { text: 'webauthndev.com', href: 'https://webauthndev.com' },
         {
           text: 'repository',
           href: 'https://github.com/feitiantech/postquantum-webauthn-platform',
