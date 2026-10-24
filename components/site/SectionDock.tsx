@@ -346,10 +346,13 @@ export function SectionDock({
 
       // The lens eases towards its target, so the loop has to keep running
       // until it arrives — including while the pointer sits still beside the
-      // rail, which is exactly when nothing else would wake it.
+      // rail, which is exactly when nothing else would wake it. Not through
+      // wake(): that zeroes `last` for a loop starting cold, and doing it every
+      // frame pins dt at 1/60, so the glide counts frames instead of seconds
+      // and crawls wherever frames come slowly.
       if (y !== lastY || !lensSettled) {
         lastY = y;
-        wake();
+        rafId = requestAnimationFrame(tick);
       }
     }
 
