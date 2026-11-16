@@ -102,9 +102,11 @@ const EMPTY: Landmarks = {
  * transition reverses itself. Nothing here is scroll-scrubbed, which is what
  * keeps the motion at its own speed rather than the trackpad's.
  *
- * JavaScript owns four things and no more: data-shown on the rail, data-active
- * and data-open on each button, and the magnifying scale() on each dot. Every
- * property those drive is declared in the stylesheet.
+ * JavaScript owns five things and no more: data-shown on the rail, data-active
+ * and data-open on each button, aria-current beside data-active, and the
+ * magnifying scale() on each dot. Every property those drive is declared in
+ * the stylesheet; aria-current drives none, and is there for whoever cannot
+ * see the dot.
  *
  * Below 640px this never renders: the gate is a media query, not a width read
  * here, so nothing about it depends on hydration.
@@ -336,6 +338,11 @@ export function SectionDock({
         if (wroteActive[i] !== activeNext) {
           wroteActive[i] = activeNext;
           item.dataset.active = activeNext;
+          // The dot says which section this is to the eye; this says it to
+          // everything else. Removed rather than set to "false", which some
+          // screen readers still read out.
+          if (i === active) item.setAttribute('aria-current', 'true');
+          else item.removeAttribute('aria-current');
         }
         const openNext = i === openIndex ? 'true' : 'false';
         if (wroteOpen[i] !== openNext) {

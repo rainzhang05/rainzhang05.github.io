@@ -23,8 +23,13 @@ export function ContactSection({ copy, onCopyEmail }: { copy: Copy; onCopyEmail:
   const { channels } = copy.contact;
 
   return (
-    <section tabIndex={-1} id="contact" className="pt-section-space">
-      <SectionHeading>{copy.sections.contact}</SectionHeading>
+    <section
+      tabIndex={-1}
+      id="contact"
+      aria-labelledby="contact-heading"
+      className="pt-section-space"
+    >
+      <SectionHeading id="contact-heading">{copy.sections.contact}</SectionHeading>
 
       <div className="grid items-start gap-x-gutter gap-y-10 md:grid-cols-2">
         <div className="min-w-0">

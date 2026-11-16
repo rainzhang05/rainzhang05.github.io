@@ -557,9 +557,9 @@ html[data-entrance='contact'] :is(.enter, .enter-fade) {
    The entrance is entirely CSS: crossing the threshold flips one attribute and
    the transitions below do the rest, so reversal is whatever an interrupted
    transition naturally does and there is no second code path. JavaScript
-   writes exactly four things — data-shown on the rail, data-active and
-   data-open on each button, and scale() on each dot — and owns none of the
-   properties declared here. */
+   writes exactly five things — data-shown on the rail, data-active,
+   aria-current and data-open on each button, and scale() on each dot — and
+   owns none of the properties declared here. */
 @layer components {
   .section-dock {
     position: fixed;

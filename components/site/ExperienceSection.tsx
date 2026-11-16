@@ -19,8 +19,13 @@ export function ExperienceSection({ copy, openId, onToggle, onOpenProject }: Pro
   const titleOf = (id: string) => copy.projects.find((p) => p.id === id)?.title ?? id;
 
   return (
-    <section tabIndex={-1} id="experience" className="enter enter-6 pt-section-space-first">
-      <SectionHeading>{copy.sections.experience}</SectionHeading>
+    <section
+      tabIndex={-1}
+      id="experience"
+      aria-labelledby="experience-heading"
+      className="enter enter-6 pt-section-space-first"
+    >
+      <SectionHeading id="experience-heading">{copy.sections.experience}</SectionHeading>
       <ul className="m-0 grid list-none gap-row-space p-0">
         {copy.experiences.map((item) => (
           <DisclosureRow

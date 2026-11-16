@@ -96,8 +96,8 @@ function ProjectRow({
 
 export function WorkSection({ copy, openId, onToggle }: Props) {
   return (
-    <section tabIndex={-1} id="work" className="pt-section-space">
-      <SectionHeading>{copy.sections.work}</SectionHeading>
+    <section tabIndex={-1} id="work" aria-labelledby="work-heading" className="pt-section-space">
+      <SectionHeading id="work-heading">{copy.sections.work}</SectionHeading>
       <ul className="m-0 grid list-none gap-row-space p-0">
         {copy.projects.map((project) => (
           <ProjectRow

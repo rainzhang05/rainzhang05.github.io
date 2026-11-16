@@ -10,8 +10,13 @@ import type { Copy } from '@/lib/types';
  */
 export function BackgroundSection({ copy }: { copy: Copy }) {
   return (
-    <section tabIndex={-1} id="background" className="pt-section-space">
-      <SectionHeading>{copy.sections.background}</SectionHeading>
+    <section
+      tabIndex={-1}
+      id="background"
+      aria-labelledby="background-heading"
+      className="pt-section-space"
+    >
+      <SectionHeading id="background-heading">{copy.sections.background}</SectionHeading>
 
       <div className="flex flex-wrap items-start gap-x-8 gap-y-2">
         <span className="tabular w-full flex-none pt-0.5 text-body-14 text-ink-3 sm:w-label">
