@@ -10,6 +10,7 @@ import { content } from '@/lib/content';
 import { personJsonLd } from '@/lib/jsonLd';
 import { locales, site, type Locale } from '@/lib/site';
 import { themeScript } from '@/lib/theme';
+import { siteViewport } from '@/lib/viewport';
 import '../globals.css';
 
 /** Both languages are prerendered at build time. */
@@ -19,23 +20,8 @@ export function generateStaticParams() {
 
 export const dynamicParams = false;
 
-/**
- * Two grounds, ivory and charcoal, and System — the device's own preference —
- * picks between them unless the reader has chosen (see lib/theme.ts). The
- * theme-color pair follows the same preference; an explicit choice repoints
- * both once the page is hydrated. Exporting `viewport` replaces Next's
- * default, so width and scale are restated here; pinch-zoom is deliberately
- * left alone.
- */
-export const viewport: Viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: site.themeColor.light },
-    { media: '(prefers-color-scheme: dark)', color: site.themeColor.dark },
-  ],
-  colorScheme: 'light dark',
-};
+/** One object for every document the site answers with: see lib/viewport.ts. */
+export const viewport: Viewport = siteViewport;
 
 function assertLocale(value: string): Locale {
   if (!locales.includes(value as Locale)) notFound();
