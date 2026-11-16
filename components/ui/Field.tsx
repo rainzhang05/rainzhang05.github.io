@@ -26,10 +26,27 @@ interface FieldProps {
 
 const useBeforePaint = typeof window === 'undefined' ? useEffect : useLayoutEffect;
 
+/**
+ * The box is the frame; the control inside it has no border of its own. The
+ * padding belongs to the control, not the frame, so the control fills the box
+ * edge to edge and a press anywhere inside the outline lands on it. With the
+ * padding on the frame, the top, bottom and sides of the box were a dead `div`
+ * around a 23px strip of input.
+ *
+ * `.field-frame` (globals.css) draws the focus ring on the frame, in the error
+ * state as well as the resting one: the control is `outline-none`, so without
+ * it a field sent back by a failed submit would show focus with a caret alone.
+ *
+ * 16px on a phone and 15px from `sm` up. iOS Safari zooms into any control
+ * under 16px and never zooms back out; the base rule in globals.css that says
+ * the same thing cannot do it for a control that carries a size class, because
+ * a utility out-ranks an element selector.
+ */
 const frame =
-  'flex items-center gap-2 rounded-control border bg-sheet px-3 transition-colors duration-fast ease-out';
+  'field-frame flex rounded-control border bg-sheet transition-colors duration-fast ease-out has-[:disabled]:opacity-60';
 const control =
-  'w-full min-w-0 flex-1 border-0 bg-transparent p-0 text-body-15 text-ink outline-none placeholder:text-ink-3';
+  'w-full min-w-0 flex-1 rounded-control border-0 bg-transparent px-3 text-body text-ink outline-none placeholder:text-ink-3 sm:text-body-15';
+const resting = 'border-rule-strong hover:border-ink-3';
 
 export function TextField({
   label,
@@ -51,11 +68,7 @@ export function TextField({
         {label}
       </label>
       <div
-        className={
-          frame +
-          ' h-10 ' +
-          (error ? 'border-clay' : 'border-rule-strong focus-within:border-sage hover:border-ink-3')
-        }
+        className={frame + ' h-10 ' + (error ? 'border-clay' : resting)}
       >
         <input
           id={id}
@@ -124,11 +137,7 @@ export function TextAreaField({
         {label}
       </label>
       <div
-        className={
-          frame +
-          ' items-stretch py-2.5 ' +
-          (error ? 'border-clay' : 'border-rule-strong focus-within:border-sage hover:border-ink-3')
-        }
+        className={frame + ' ' + (error ? 'border-clay' : resting)}
       >
         <textarea
           ref={ref}
@@ -142,7 +151,7 @@ export function TextAreaField({
           aria-describedby={error ? id + '-error' : undefined}
           onChange={onChange}
           onBlur={onBlur}
-          className={control + ' block resize-none leading-relaxed'}
+          className={control + ' block resize-none py-2.5 leading-relaxed sm:leading-relaxed'}
         />
       </div>
       {error ? (

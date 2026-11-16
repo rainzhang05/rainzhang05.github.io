@@ -351,7 +351,9 @@ html[data-locale='ja'] {
 
   /* iOS Safari zooms into any control under 16px on focus and never zooms back
      out. Phones get the body size; the 15px control text stays on desktop.
-     639.98px is the complement of Tailwind's sm breakpoint. */
+     639.98px is the complement of Tailwind's sm breakpoint.
+     This only reaches a control with no size class of its own: a utility
+     out-ranks an element selector, so Field sets its own phone size too. */
   @media (max-width: 639.98px) {
     input,
     textarea,
@@ -462,6 +464,17 @@ html[data-entrance='work'] :is(.enter, .enter-fade),
 html[data-entrance='background'] :is(.enter, .enter-fade),
 html[data-entrance='contact'] :is(.enter, .enter-fade) {
   animation: none;
+}
+
+/* A form field's focus ring. The control inside the frame draws none, so the
+   frame does — the system ring, pulled in over the frame's own 1px border
+   rather than standing off it, so focus is a 2px sage edge and nothing moves.
+   It applies whatever the border is doing, the error state included. */
+@layer components {
+  .field-frame:focus-within {
+    outline: var(--focus-ring-width) solid var(--sage);
+    outline-offset: -1px;
+  }
 }
 
 /* Controls, marks and images are things you press or look at, not text you
