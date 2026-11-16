@@ -114,6 +114,8 @@ describe('PortfolioPage', () => {
     );
 
     expect(expanded(targetId)).toBe('true');
+    // The button that was pressed is left behind; focus goes to the project.
+    expect(document.getElementById(`button-${targetId}`)).toHaveFocus();
   });
 
   it('copies the email address and confirms it in a live region', async () => {
@@ -130,10 +132,11 @@ describe('PortfolioPage', () => {
     expect(toast).toHaveAttribute('aria-live', 'polite');
   });
 
-  it('shows no toast until something is copied', () => {
+  it('shows no toast until something is copied, but has the live region ready', () => {
     render(<PortfolioPage copy={en} locale="en" />);
 
     expect(screen.queryByText(en.contact.copied)).toBeNull();
+    expect(screen.getByRole('status')).toBeEmptyDOMElement();
   });
 
   it('renders the Japanese page from the Japanese content', () => {

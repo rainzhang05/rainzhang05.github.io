@@ -63,6 +63,52 @@ test.describe("disclosure rows", () => {
     await expect(page.locator("#row-work-authenticator")).toBeInViewport();
   });
 
+  test("lands on a related project when another project above it is open", async ({ page }) => {
+    await page.goto("/");
+
+    // The tallest panel on the page, and above the row about to be asked for:
+    // as it folds shut it carries every row below it up the page.
+    await page.locator("#button-work-mnt-platform").click();
+    await expect(page.locator("#panel-work-mnt-platform")).toHaveAttribute("data-open", "true");
+
+    await page.locator("#button-exp-feitian").click();
+    const related = page.locator("#panel-exp-feitian button", {
+      hasText: "WebAuthn Developer Platform",
+    });
+    await expect(related).toBeVisible();
+
+    // Put the button near the top of the screen, so the open project below it
+    // is partly in view. That is the case that went wrong: a panel closing
+    // below the fold is wound straight to its end, but the part of one still
+    // on screen closes in its own time, after the scroll had been aimed.
+    await related.evaluate((button) => {
+      const root = document.documentElement;
+      root.style.scrollBehavior = "auto";
+      window.scrollTo(0, button.getBoundingClientRect().top + window.scrollY - 40);
+      root.style.scrollBehavior = "";
+    });
+    await expect(page.locator("#panel-work-mnt-platform")).toBeInViewport();
+
+    await related.click();
+    await expect(page.locator("#button-work-webauthn")).toHaveAttribute("aria-expanded", "true");
+
+    // Wait for the panel above to finish closing and the page to stop moving,
+    // so this reads where the reader was left rather than a frame on the way.
+    await page.waitForFunction(() => {
+      const w = window as unknown as { y?: number; still?: number };
+      const closed =
+        document.getElementById("panel-work-mnt-platform")!.getBoundingClientRect().height === 0;
+      const y = Math.round(window.scrollY);
+      w.still = closed && y === w.y ? (w.still ?? 0) + 1 : 0;
+      w.y = y;
+      return (w.still ?? 0) > 5;
+    });
+
+    await expect(page.locator("#title-work-webauthn")).toBeInViewport();
+    // The button that was pressed is a screen away by now; focus goes with the reader.
+    await expect(page.locator("#button-work-webauthn")).toBeFocused();
+  });
+
   test("opens a short row and a tall row at the same speed", async ({ page }) => {
     await page.goto("/");
 

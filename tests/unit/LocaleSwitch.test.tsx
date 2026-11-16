@@ -1,5 +1,5 @@
-import { afterEach, describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { LocaleSwitch } from '@/components/site/LocaleSwitch';
 import { localeCookie } from '@/lib/site';
@@ -50,6 +50,24 @@ describe('LocaleSwitch', () => {
     expect(container.querySelector('[aria-hidden="true"]')?.className).toContain(
       'translate-x-full'
     );
+  });
+
+  it('leaves this page alone when the other language is opened somewhere else', async () => {
+    const onNavigate = vi.fn();
+    const { container } = render(<LocaleSwitch current="en" onNavigate={onNavigate} />);
+    const ja = screen.getByRole('radio', { name: '日本語' });
+    document.cookie = 'portfolio.locale=en; path=/';
+
+    // A new tab, a new window, a middle click: this page is staying put.
+    fireEvent.click(ja, { metaKey: true });
+    fireEvent.click(ja, { ctrlKey: true });
+    fireEvent.click(ja, { shiftKey: true });
+    fireEvent.click(ja, { button: 1 });
+
+    expect(onNavigate).not.toHaveBeenCalled();
+    expect(document.cookie).toContain('portfolio.locale=en');
+    expect(window.sessionStorage.getItem('portfolio.localeFrom')).toBeNull();
+    expect(container.querySelector('[aria-hidden="true"]')?.className).toContain('translate-x-0');
   });
 
   it('finishes the slide on the page it lands on', () => {

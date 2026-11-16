@@ -170,6 +170,30 @@ test.describe("contact form", () => {
   });
 });
 
+test.describe("copy confirmation", () => {
+  test("stays on one line on a phone, in the longer of the two languages", async ({
+    page,
+    context,
+    browserName,
+  }) => {
+    test.skip(browserName !== "chromium", "clipboard permissions are Chromium-only here");
+    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+    await page.setViewportSize({ width: 375, height: 812 });
+
+    await page.goto("/ja");
+    await page.getByRole("button", { name: ja.intro.copyEmail }).click();
+
+    const toast = page.getByRole("status").locator(".toast");
+    await expect(toast).toHaveText(ja.contact.copied);
+
+    // Centred with left: 50%, it had half the screen to fit in and wrapped.
+    const box = (await toast.boundingBox())!;
+    const line = await toast.evaluate((el) => parseFloat(getComputedStyle(el).lineHeight));
+    expect(box.height).toBeLessThan(line * 2 + 24);
+    expect(Math.abs(box.x + box.width / 2 - 375 / 2)).toBeLessThan(2);
+  });
+});
+
 test.describe("native contact form", () => {
   test.use({ javaScriptEnabled: false });
 

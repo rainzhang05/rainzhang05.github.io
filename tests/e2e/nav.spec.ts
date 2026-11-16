@@ -127,7 +127,11 @@ test.describe("modal navigation", () => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await expect(page.getByRole("dialog")).toBeHidden();
     await expect(page.getByRole("navigation", { name: "Primary" })).toBeVisible();
-    expect(await page.evaluate(() => document.documentElement.style.overflow)).toBe("");
+    // Polled: the lock comes off in the effect's cleanup, a commit after the
+    // sheet itself has gone, and a single read can land between the two.
+    await expect
+      .poll(() => page.evaluate(() => document.documentElement.style.overflow))
+      .toBe("");
     await page.getByRole("navigation", { name: "Primary" }).getByRole("link", { name: "Contact" }).click();
     await expect(page.locator("section#contact")).toBeInViewport();
   });
