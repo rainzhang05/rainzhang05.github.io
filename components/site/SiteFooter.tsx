@@ -96,7 +96,12 @@ export function SiteFooter({ copy, sectionBase = '' }: { copy: Copy; sectionBase
       </div>
 
       <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-rule pb-10 pt-5 text-caption text-ink-3">
-        <span>
+        {/* The year is read when the page is built and again when it wakes up
+            in the browser. From the first of January until the next deploy
+            those two disagree, and a text mismatch makes React throw away the
+            server's HTML for the whole page. Suppressed here, it keeps the
+            year the page was built with instead. */}
+        <span suppressHydrationWarning>
           {copy.footer.credit} · © {year}
         </span>
         {sectionBase ? (
