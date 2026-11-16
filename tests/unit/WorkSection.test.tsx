@@ -47,11 +47,7 @@ describe('WorkSection', () => {
     setup();
 
     const maintained = en.projects.filter((p) => p.maintained).map((p) => p.title);
-    expect(maintained).toEqual([
-      'MNT Realty Platform',
-      'FIDO2 Software Authenticator',
-      'WebAuthn Developer Platform',
-    ]);
+    expect(maintained).toEqual(['FIDO2 Software Authenticator', 'WebAuthn Developer Platform']);
 
     en.projects.forEach((project) => {
       const row = document.getElementById(`row-${project.id}`)!;
@@ -77,7 +73,7 @@ describe('WorkSection', () => {
 
   it('shows the primary marks and every project link while collapsed', () => {
     setup();
-    const project = en.projects[0];
+    const project = en.projects.find((p) => p.links.length > 0)!;
     const row = document.getElementById(`row-${project.id}`)!;
 
     // The panel is always in the DOM, and its stack repeats these names, so
@@ -94,6 +90,18 @@ describe('WorkSection', () => {
         'href',
         link.href
       );
+    });
+  });
+
+  it('gives a project that lists no links a row with none', () => {
+    setup();
+    const project = en.projects.find((p) => p.links.length === 0)!;
+    const row = document.getElementById(`row-${project.id}`)!;
+
+    expect(row.querySelectorAll('a')).toHaveLength(0);
+    // The marks still sit where the links would have followed them.
+    project.primary.forEach((name) => {
+      expect(within(row).queryAllByText(name).length).toBeGreaterThan(0);
     });
   });
 

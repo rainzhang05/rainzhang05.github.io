@@ -55,9 +55,9 @@ describe('ResumePage', () => {
   it('turns the links inside a project meta line into links', () => {
     renderEn();
 
-    expect(screen.getByRole('link', { name: 'mntrealty.vercel.app' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'webauthndev.com' })).toHaveAttribute(
       'href',
-      'https://mntrealty.vercel.app'
+      'https://webauthndev.com'
     );
     const repository = screen.getByRole('link', { name: 'repository' });
     expect(repository).toHaveAttribute('target', '_blank');

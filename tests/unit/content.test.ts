@@ -21,7 +21,13 @@ const shape = (copy: Copy) => ({
   nav: copy.nav.map((n) => [n.id, unprefix(n.href), n.external ?? false]),
   sectionLinks: sectionLinks(copy).map((n) => [n.id, n.href]),
   footerLinks: copy.footer.links.map((n) => [n.id, unprefix(n.href), n.external ?? false]),
-  experiences: copy.experiences.map((e) => [e.id, e.tech, e.related, e.mark?.src ?? null]),
+  experiences: copy.experiences.map((e) => [
+    e.id,
+    e.tech,
+    e.related,
+    e.mark?.src ?? null,
+    e.current ?? false,
+  ]),
   education: copy.education.mark?.src ?? null,
   projects: copy.projects.map((p) => [
     p.id,
