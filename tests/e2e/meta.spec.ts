@@ -84,6 +84,16 @@ test.describe("404", () => {
     expect((await page.goto("/ja"))?.status()).toBe(200);
   });
 
+  test("has a title and a theme colour of its own", async ({ page }) => {
+    await page.goto("/no-such-page");
+
+    // No locale layout wraps this page, so nothing else would supply either:
+    // the tab read as the raw address.
+    await expect(page).toHaveTitle("Page not found — Rain Zhang");
+    await expect(page.locator('meta[name="theme-color"]')).toHaveCount(2);
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+  });
+
   test("answers a deeper unknown path the same way", async ({ page }) => {
     const response = await page.goto("/no/such/page");
 
