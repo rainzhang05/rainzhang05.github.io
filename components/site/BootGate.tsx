@@ -151,7 +151,13 @@ export function BootGate() {
       await Promise.allSettled(late.map((img) => settle(img, bootImageMs).then(progress)));
     };
 
-    Promise.race([work(), after(reduced ? bootReducedMotionMs : bootDeadlineMs)]).then(finish);
+    // Finish either way. Mounting has already stood the inline script's own
+    // failsafe down, so a rejection here that nothing handled would leave the
+    // sheet over the page for good.
+    Promise.race([work(), after(reduced ? bootReducedMotionMs : bootDeadlineMs)]).then(
+      finish,
+      finish
+    );
 
     return () => {
       cancelled = true;
