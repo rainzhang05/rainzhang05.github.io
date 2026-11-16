@@ -39,6 +39,34 @@ const securityHeaders = [
   { key: 'X-DNS-Prefetch-Control', value: 'on' },
 ];
 
+const resumePdf = '/rain-zhang-resume.pdf';
+
+/*
+ * Addresses earlier versions of this site answered at. The resume was
+ * "/Rain Zhang Resume.pdf" until May 2026 and "/Resume.pdf" before that, and
+ * both went out in applications; a link in one of those must still open the
+ * resume. These files are never coming back, so the redirect is permanent.
+ * The source is written percent-encoded because that is what is matched, and
+ * matching ignores case, so "/Resume.pdf" answers for "/resume.pdf" as well.
+ */
+const formerAddresses = [
+  { source: '/Rain%20Zhang%20Resume.pdf', destination: resumePdf, permanent: true },
+  { source: '/Resume.pdf', destination: resumePdf, permanent: true },
+  { source: '/index.html', destination: '/', permanent: true },
+];
+
+/*
+ * Addresses the site never had but that are the obvious thing to type. They
+ * are temporary: nothing has ever been promised at them, so they stay free
+ * to mean something else later.
+ */
+const guessedAddresses = [
+  { source: '/cv.pdf', destination: resumePdf, permanent: false },
+  { source: '/cv', destination: '/resume', permanent: false },
+  { source: '/ja/resume.pdf', destination: '/rain-zhang-resume-ja.pdf', permanent: false },
+  { source: '/ja/cv', destination: '/ja/resume', permanent: false },
+];
+
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
@@ -67,6 +95,8 @@ const nextConfig = {
     return [
       { source: '/en', destination: '/', permanent: true },
       { source: '/en/resume', destination: '/resume', permanent: true },
+      ...formerAddresses,
+      ...guessedAddresses,
     ];
   },
   async headers() {
