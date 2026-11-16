@@ -24,6 +24,9 @@ const TOAST_MS = 2200;
 /** The air left above a project a "Related work" button has scrolled to. */
 const REVEAL_OFFSET = 24;
 
+/** Long enough for the opened row to be committed and laid out before the scroll is aimed. */
+const REVEAL_DELAY_MS = 60;
+
 /**
  * The whole page. Only three pieces of state: which experience row is open,
  * which project row is open, and the toast. One row per list at a time.
@@ -33,10 +36,52 @@ export function PortfolioPage({ copy, locale }: { copy: Copy; locale: Locale }) 
   const [openProject, setOpenProject] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout>>();
+  const revealTimer = useRef<ReturnType<typeof setTimeout>>();
 
   // A change of language replaces this tree; a timer left running would then
-  // set state on a page that is no longer there.
-  useEffect(() => () => clearTimeout(toastTimer.current), []);
+  // set state, or scroll, on a page that is no longer there.
+  useEffect(
+    () => () => {
+      clearTimeout(toastTimer.current);
+      clearTimeout(revealTimer.current);
+    },
+    []
+  );
+
+  /**
+   * Scroll anchoring, switched off for as long as a panel takes to close.
+   *
+   * revealProject aims a scroll at where a row is going to be. A browser that
+   * anchors — Chrome, Firefox, and WebKit on a phone — may also move the page
+   * to keep what is on screen still while the panel above it shrinks, and the
+   * two corrections add: the row then stops short of its place by however much
+   * the browser gave back, which depends on what was at the top of the screen
+   * that frame. With anchoring off there is one correction, and it is exact.
+   *
+   * The value it puts back is the one from before the first hold, so a second
+   * jump made inside the first one's two seconds does not restore "none".
+   */
+  const anchorHold = useRef<{ timer: ReturnType<typeof setTimeout>; previous: string } | null>(
+    null
+  );
+
+  const releaseAnchoring = useCallback(() => {
+    const held = anchorHold.current;
+    if (!held) return;
+    clearTimeout(held.timer);
+    document.documentElement.style.overflowAnchor = held.previous;
+    anchorHold.current = null;
+  }, []);
+
+  const suspendAnchoring = useCallback(() => {
+    const root = document.documentElement;
+    const previous = anchorHold.current?.previous ?? root.style.overflowAnchor;
+    if (anchorHold.current) clearTimeout(anchorHold.current.timer);
+    root.style.overflowAnchor = 'none';
+    anchorHold.current = { previous, timer: setTimeout(releaseAnchoring, HOLD_LIMIT_MS) };
+  }, [releaseAnchoring]);
+
+  useEffect(() => releaseAnchoring, [releaseAnchoring]);
 
   /**
    * Opening a row closes the one already open in its list, and when that one
@@ -98,41 +143,55 @@ export function PortfolioPage({ copy, locale }: { copy: Copy; locale: Locale }) 
    * "Related work" in an experience entry opens the project and goes to it.
    *
    * Where the row will be, not where it is. If another project is open above
-   * it, that panel is about to close and carry the row up the page by its own
-   * height, so that height comes off the target before the scroll starts. It
-   * used to be read 60ms after the click instead, which is right only when the
-   * closing panel is below the fold — its close is wound straight to the end
-   * there (see unseenCloseMs) — and wrong by whatever is still on screen when
-   * it is not: the page then glided to where the row had been and left its
-   * title above the top of the screen.
+   * it, that panel is closing and will carry the row up the page by whatever
+   * height it still has, so that height comes off the target. Without it the
+   * scroll was right only when the closing panel was below the fold — its
+   * close is wound straight to the end there (see unseenCloseMs) — and wrong
+   * by whatever was still on screen when it was not: the page glided to where
+   * the row had been and left its title above the top of the screen.
+   *
+   * It waits a beat first, as it always has. A smooth scroll begun in the same
+   * task as the change that reshapes the page is one WebKit drops, so the
+   * scroll is aimed once that change has been committed and laid out.
    *
    * Focus goes too, as it does from the dock. The button that was pressed is
    * in a panel the reader has just been taken away from, and focus left there
-   * means the next Tab scrolls the page straight back to it.
+   * means the next Tab scrolls the page straight back to it. It is moved
+   * before the scroll starts, never during it.
    */
   const revealProject = useCallback(
     (id: string) => {
-      const row = document.getElementById('row-' + id);
-      const closing =
-        openProject !== null && openProject !== id
-          ? document.getElementById('panel-' + openProject)
-          : null;
-      const above =
-        closing !== null &&
+      const closingId = openProject !== null && openProject !== id ? openProject : null;
+      const isAbove = (panel: HTMLElement | null, row: HTMLElement | null) =>
+        panel !== null &&
         row !== null &&
-        (closing.compareDocumentPosition(row) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0;
-      const lost = above ? closing.getBoundingClientRect().height : 0;
+        (panel.compareDocumentPosition(row) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0;
+
+      // Before the close begins, not once it is under way.
+      if (
+        closingId !== null &&
+        isAbove(document.getElementById('panel-' + closingId), document.getElementById('row-' + id))
+      ) {
+        suspendAnchoring();
+      }
 
       setOpenProject(id);
-      if (!row) return;
+      clearTimeout(revealTimer.current);
+      revealTimer.current = setTimeout(() => {
+        const row = document.getElementById('row-' + id);
+        if (!row) return;
+        const closing = closingId === null ? null : document.getElementById('panel-' + closingId);
+        const lost =
+          closing !== null && isAbove(closing, row) ? closing.getBoundingClientRect().height : 0;
 
-      window.scrollTo({
-        top: Math.max(0, window.scrollY + row.getBoundingClientRect().top - lost - REVEAL_OFFSET),
-        behavior: prefersReducedMotion() ? 'auto' : 'smooth',
-      });
-      document.getElementById('button-' + id)?.focus({ preventScroll: true });
+        document.getElementById('button-' + id)?.focus({ preventScroll: true });
+        window.scrollTo({
+          top: Math.max(0, window.scrollY + row.getBoundingClientRect().top - lost - REVEAL_OFFSET),
+          behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+        });
+      }, REVEAL_DELAY_MS);
     },
-    [openProject]
+    [openProject, suspendAnchoring]
   );
 
   const dockLinks = useMemo(() => sectionLinks(copy), [copy]);
