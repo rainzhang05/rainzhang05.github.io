@@ -436,6 +436,16 @@ html[data-locale='ja'] {
   }
 }
 
+/* The copy confirmation rises into place the way the first screen does, only
+   quicker: it answers a press, so it should be there by the time the reader
+   looks. A class of its own rather than .enter — the boot hold and the
+   arrival rules below both act on .enter, and neither is about this. */
+@layer components {
+  .toast-in {
+    animation: enter var(--duration-base) var(--ease-out) both;
+  }
+}
+
 /* One thing arrives per navigation: the first screen, or the section the
    reader came for. `data-entrance` on the page root says which, and
    PortfolioPage sets it before paint (see lib/entrance.ts), so nothing is ever

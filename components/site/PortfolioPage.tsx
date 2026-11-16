@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { SectionDock } from './SectionDock';
 import { SiteHeader } from './SiteHeader';
 import { SiteFooter } from './SiteFooter';
@@ -18,6 +18,9 @@ import type { Copy } from '@/lib/types';
 /** Longer than any panel takes to close, so a hold can never outlive its reason. */
 const HOLD_LIMIT_MS = 2000;
 
+/** How long the copy confirmation stays up. */
+const TOAST_MS = 2200;
+
 /**
  * The whole page. Only three pieces of state: which experience row is open,
  * which project row is open, and the toast. One row per list at a time.
@@ -27,6 +30,10 @@ export function PortfolioPage({ copy, locale }: { copy: Copy; locale: Locale }) 
   const [openProject, setOpenProject] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout>>();
+
+  // A change of language replaces this tree; a timer left running would then
+  // set state on a page that is no longer there.
+  useEffect(() => () => clearTimeout(toastTimer.current), []);
 
   /**
    * Opening a row closes the one already open in its list, and when that one
@@ -125,7 +132,7 @@ export function PortfolioPage({ copy, locale }: { copy: Copy; locale: Locale }) 
       await navigator.clipboard.writeText(site.email);
       clearTimeout(toastTimer.current);
       setToast(copy.contact.copied);
-      toastTimer.current = setTimeout(() => setToast(null), 2200);
+      toastTimer.current = setTimeout(() => setToast(null), TOAST_MS);
     } catch {
       window.location.href = 'mailto:' + site.email;
     }
@@ -166,7 +173,7 @@ export function PortfolioPage({ copy, locale }: { copy: Copy; locale: Locale }) 
         <SiteFooter copy={copy} />
       </div>
       <SectionDock links={dockLinks} label={copy.labels.sectionNav} onNavigate={scrollToSection} />
-      {toast ? <Toast message={toast} /> : null}
+      <Toast message={toast} />
     </>
   );
 }
