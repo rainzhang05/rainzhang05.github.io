@@ -2,7 +2,7 @@
  * Reports how many lines every block of the resume sets to, and how much room
  * is left on its last line.
  *
- * Both PDFs are full to the bottom edge — the English column ends 35pt from the
+ * Both PDFs are full to the bottom edge — the English column ends 47pt from the
  * foot of the page, the Japanese one 22pt — so one extra wrapped line anywhere
  * spills the resume onto a second page. Run this after rewording anything, and
  * before printing: it answers the only question that matters (did the line
