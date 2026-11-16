@@ -346,6 +346,8 @@ Marks are shown in their original colours and are never tinted or greyscaled —
 
 A change that breaks CI on one matrix entry will block the whole PR. Don't disable a project to make CI green; fix the test or the underlying code.
 
+The `e2e` jobs run on `ubuntu-24.04`, not `ubuntu-latest`. `ubuntu-latest` is Ubuntu 26.04, where the locked Playwright (1.60) cannot install its browser dependencies, so every matrix entry failed at the install step before a single test had run. The pin comes off when Playwright is upgraded to a release that supports 26.04 — change the two together.
+
 ---
 
 ## Deployment
