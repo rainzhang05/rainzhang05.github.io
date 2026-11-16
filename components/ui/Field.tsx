@@ -67,9 +67,7 @@ export function TextField({
       <label htmlFor={id} className="text-caption font-medium text-ink-2">
         {label}
       </label>
-      <div
-        className={frame + ' h-10 ' + (error ? 'border-clay' : resting)}
-      >
+      <div className={frame + ' h-10 ' + (error ? 'border-clay' : resting)}>
         <input
           id={id}
           name={name}
@@ -136,9 +134,7 @@ export function TextAreaField({
       <label htmlFor={id} className="text-caption font-medium text-ink-2">
         {label}
       </label>
-      <div
-        className={frame + ' ' + (error ? 'border-clay' : resting)}
-      >
+      <div className={frame + ' ' + (error ? 'border-clay' : resting)}>
         <textarea
           ref={ref}
           id={id}
