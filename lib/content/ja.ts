@@ -480,7 +480,7 @@ export const ja: Copy = {
       another: 'もう一度送る',
       required: '必須です',
       invalidEmail: 'メールアドレスの形式が違うようです。',
-      failed: 'サーバーに接続できませんでした。直接メールをお送りください。',
+      failed: '送信できませんでした。もう一度お試しいただくか、直接メールをお送りください。',
     },
   },
   footer: {

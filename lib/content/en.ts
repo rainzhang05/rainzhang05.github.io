@@ -476,7 +476,7 @@ export const en: Copy = {
       another: 'Send another',
       required: 'Required',
       invalidEmail: 'That doesn’t look like an email address.',
-      failed: 'Couldn’t reach the server. Please email me directly instead.',
+      failed: 'Your message wasn’t sent. Try again, or email me directly.',
     },
   },
   footer: {
