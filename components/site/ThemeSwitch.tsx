@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { Icon, type IconName } from '@/components/ui/Icon';
 import { chooseTheme, readTheme, themes, type Theme } from '@/lib/theme';
 import type { Copy } from '@/lib/types';
@@ -27,6 +27,11 @@ const ICONS: Record<Theme, IconName> = { system: 'monitor', light: 'sun', dark: 
  * Three equal grid columns and no gap, as in LocaleSwitch: the pill is one
  * column wide, calc((100% - 4px) / 3) of the padding box, and translateX(100%)
  * moves it by exactly one column.
+ *
+ * It is a radio group, so it keeps a radio group's keyboard: one tab stop, on
+ * the chosen option, and the arrow keys move the choice — Home and End to the
+ * ends, wrapping at both. Three tab stops whose arrows did nothing was a row
+ * of buttons that only said it was something else.
  */
 export function ThemeSwitch({ labels }: { labels: Copy['labels']['theme'] }) {
   const [theme, setTheme] = useState<Theme>('system');
@@ -35,15 +40,42 @@ export function ThemeSwitch({ labels }: { labels: Copy['labels']['theme'] }) {
     setTheme(readTheme());
   }, []);
 
+  const options = useRef<Partial<Record<Theme, HTMLButtonElement | null>>>({});
+
   function choose(next: Theme) {
     chooseTheme(next);
     setTheme(next);
+  }
+
+  function onKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+    const at = themes.indexOf(theme);
+    const last = themes.length - 1;
+    const to =
+      event.key === 'ArrowRight' || event.key === 'ArrowDown'
+        ? at === last
+          ? 0
+          : at + 1
+        : event.key === 'ArrowLeft' || event.key === 'ArrowUp'
+          ? at === 0
+            ? last
+            : at - 1
+          : event.key === 'Home'
+            ? 0
+            : event.key === 'End'
+              ? last
+              : -1;
+    if (to < 0) return;
+
+    event.preventDefault();
+    choose(themes[to]);
+    options.current[themes[to]]?.focus();
   }
 
   return (
     <div
       role="radiogroup"
       aria-label={labels.group}
+      onKeyDown={onKeyDown}
       className="no-copy relative inline-grid shrink-0 grid-cols-3 rounded-pill border border-rule p-0.5"
     >
       <span
@@ -56,7 +88,11 @@ export function ThemeSwitch({ labels }: { labels: Copy['labels']['theme'] }) {
           key={option}
           type="button"
           role="radio"
+          ref={(el) => {
+            options.current[option] = el;
+          }}
           aria-checked={option === theme}
+          tabIndex={option === theme ? 0 : -1}
           aria-label={labels[option]}
           title={labels[option]}
           data-theme-option={option}

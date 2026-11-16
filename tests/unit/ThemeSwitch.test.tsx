@@ -12,6 +12,65 @@ afterEach(() => {
   root.removeAttribute('data-theme');
 });
 
+describe('ThemeSwitch on the keyboard', () => {
+  it('is one tab stop, on the chosen option', () => {
+    window.localStorage.setItem(themeKey, 'light');
+    render(<ThemeSwitch labels={en.labels.theme} />);
+
+    expect(screen.getByRole('radio', { name: 'Light' })).toHaveAttribute('tabindex', '0');
+    expect(screen.getByRole('radio', { name: 'System' })).toHaveAttribute('tabindex', '-1');
+    expect(screen.getByRole('radio', { name: 'Dark' })).toHaveAttribute('tabindex', '-1');
+  });
+
+  it('moves the choice with the arrow keys, and focus with it', async () => {
+    const user = userEvent.setup();
+    render(<ThemeSwitch labels={en.labels.theme} />);
+
+    screen.getByRole('radio', { name: 'System' }).focus();
+    await user.keyboard('{ArrowRight}');
+
+    expect(screen.getByRole('radio', { name: 'Light' })).toHaveAttribute('aria-checked', 'true');
+    expect(screen.getByRole('radio', { name: 'Light' })).toHaveFocus();
+    expect(root.getAttribute('data-theme')).toBe('light');
+
+    await user.keyboard('{ArrowDown}');
+    expect(screen.getByRole('radio', { name: 'Dark' })).toHaveFocus();
+    expect(window.localStorage.getItem(themeKey)).toBe('dark');
+
+    await user.keyboard('{ArrowLeft}{ArrowUp}');
+    expect(screen.getByRole('radio', { name: 'System' })).toHaveFocus();
+    expect(root.hasAttribute('data-theme')).toBe(false);
+  });
+
+  it('wraps at both ends, and goes to either end with Home and End', async () => {
+    const user = userEvent.setup();
+    render(<ThemeSwitch labels={en.labels.theme} />);
+
+    screen.getByRole('radio', { name: 'System' }).focus();
+    await user.keyboard('{ArrowLeft}');
+    expect(screen.getByRole('radio', { name: 'Dark' })).toHaveAttribute('aria-checked', 'true');
+
+    await user.keyboard('{ArrowRight}');
+    expect(screen.getByRole('radio', { name: 'System' })).toHaveAttribute('aria-checked', 'true');
+
+    await user.keyboard('{End}');
+    expect(screen.getByRole('radio', { name: 'Dark' })).toHaveFocus();
+
+    await user.keyboard('{Home}');
+    expect(screen.getByRole('radio', { name: 'System' })).toHaveFocus();
+  });
+
+  it('leaves every other key alone', async () => {
+    const user = userEvent.setup();
+    render(<ThemeSwitch labels={en.labels.theme} />);
+
+    screen.getByRole('radio', { name: 'System' }).focus();
+    await user.keyboard('a');
+
+    expect(screen.getByRole('radio', { name: 'System' })).toHaveAttribute('aria-checked', 'true');
+  });
+});
+
 describe('ThemeSwitch', () => {
   it('offers System, Light and Dark as one radio group, System first and chosen', () => {
     render(<ThemeSwitch labels={en.labels.theme} />);
