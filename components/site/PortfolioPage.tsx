@@ -21,6 +21,9 @@ const HOLD_LIMIT_MS = 2000;
 /** How long the copy confirmation stays up. */
 const TOAST_MS = 2200;
 
+/** The air left above a project a "Related work" button has scrolled to. */
+const REVEAL_OFFSET = 24;
+
 /**
  * The whole page. Only three pieces of state: which experience row is open,
  * which project row is open, and the toast. One row per list at a time.
@@ -91,18 +94,46 @@ export function PortfolioPage({ copy, locale }: { copy: Copy; locale: Locale }) 
     [openProject, holdBelow]
   );
 
-  /** "Related work" in an experience entry opens the project and scrolls to it. */
-  const revealProject = useCallback((id: string) => {
-    setOpenProject(id);
-    setTimeout(() => {
+  /**
+   * "Related work" in an experience entry opens the project and goes to it.
+   *
+   * Where the row will be, not where it is. If another project is open above
+   * it, that panel is about to close and carry the row up the page by its own
+   * height, so that height comes off the target before the scroll starts. It
+   * used to be read 60ms after the click instead, which is right only when the
+   * closing panel is below the fold — its close is wound straight to the end
+   * there (see unseenCloseMs) — and wrong by whatever is still on screen when
+   * it is not: the page then glided to where the row had been and left its
+   * title above the top of the screen.
+   *
+   * Focus goes too, as it does from the dock. The button that was pressed is
+   * in a panel the reader has just been taken away from, and focus left there
+   * means the next Tab scrolls the page straight back to it.
+   */
+  const revealProject = useCallback(
+    (id: string) => {
       const row = document.getElementById('row-' + id);
+      const closing =
+        openProject !== null && openProject !== id
+          ? document.getElementById('panel-' + openProject)
+          : null;
+      const above =
+        closing !== null &&
+        row !== null &&
+        (closing.compareDocumentPosition(row) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0;
+      const lost = above ? closing.getBoundingClientRect().height : 0;
+
+      setOpenProject(id);
       if (!row) return;
+
       window.scrollTo({
-        top: Math.max(0, window.scrollY + row.getBoundingClientRect().top - 24),
+        top: Math.max(0, window.scrollY + row.getBoundingClientRect().top - lost - REVEAL_OFFSET),
         behavior: prefersReducedMotion() ? 'auto' : 'smooth',
       });
-    }, 60);
-  }, []);
+      document.getElementById('button-' + id)?.focus({ preventScroll: true });
+    },
+    [openProject]
+  );
 
   const dockLinks = useMemo(() => sectionLinks(copy), [copy]);
 
