@@ -57,7 +57,8 @@ export function SiteHeader({
   const dialogId = useId();
 
   function closeMenu() {
-    dialogRef.current?.close();
+    const dialog = dialogRef.current;
+    if (dialog?.open) dialog.close();
     triggerRef.current?.focus({ preventScroll: true });
     setOpen(false);
   }
@@ -78,19 +79,28 @@ export function SiteHeader({
     roots.forEach((root) => {
       root.style.overflow = 'hidden';
     });
-    dialog.showModal();
+    // Both are guarded, as they are in DisclosureRow and SectionDock. This
+    // runs in an effect, and with no boundary below it an exception here would
+    // take the whole page down — for want of a menu. Without showModal the
+    // sheet still opens, as a plain dialog; without the observer it simply
+    // stays open if the window is widened past the breakpoint.
+    if (typeof dialog.showModal === 'function') dialog.showModal();
+    else dialog.setAttribute('open', '');
     closeRef.current?.focus({ preventScroll: true });
 
-    const observer = new ResizeObserver(() => {
-      if (getComputedStyle(trigger).display === 'none') {
-        dialog.close();
-        setOpen(false);
-      }
-    });
-    observer.observe(trigger);
+    const observer =
+      typeof ResizeObserver === 'undefined'
+        ? null
+        : new ResizeObserver(() => {
+            if (getComputedStyle(trigger).display === 'none') {
+              dialog.close();
+              setOpen(false);
+            }
+          });
+    observer?.observe(trigger);
 
     return () => {
-      observer.disconnect();
+      observer?.disconnect();
       if (dialog.open) dialog.close();
       roots.forEach((root, index) => {
         root.style.removeProperty('overflow');
