@@ -33,7 +33,10 @@ jobs:
 
   e2e:
     name: E2E (${{ matrix.project }})
-    runs-on: ubuntu-latest
+    # Pinned. ubuntu-latest is Ubuntu 26.04, where the locked Playwright (1.60)
+    # cannot install its browser dependencies. Go back to ubuntu-latest once
+    # Playwright is upgraded to a release that supports it.
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     strategy:
       fail-fast: false
