@@ -21,6 +21,8 @@ export interface Experience {
   id: string;
   dates: string;
   role: string;
+  /** Still held: the structured data names it as the present job. */
+  current?: boolean;
   /** Accessible name for the company mark. */
   org: string;
   /** Organisation, department and place, joined with middle dots. */
