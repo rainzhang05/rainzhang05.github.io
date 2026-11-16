@@ -166,6 +166,48 @@ describe('ContactForm', () => {
     expect(screen.getByLabelText(copy.name)).toHaveValue('');
   });
 
+  it('moves focus to the confirmation when the message is sent', async () => {
+    const user = userEvent.setup();
+    const { name, email, message, submit } = setup();
+
+    await user.type(name, 'Ada');
+    await user.type(email, 'ada@example.com');
+    await user.type(message, 'Hello');
+    await user.click(submit);
+
+    const heading = await screen.findByRole('heading', { name: copy.sentTitle });
+    await waitFor(() => expect(heading).toHaveFocus());
+  });
+
+  it('returns focus to the first field when another message is started', async () => {
+    const user = userEvent.setup();
+    const { name, email, message, submit } = setup();
+
+    await user.type(name, 'Ada');
+    await user.type(email, 'ada@example.com');
+    await user.type(message, 'Hello');
+    await user.click(submit);
+    await user.click(await screen.findByRole('button', { name: copy.another }));
+
+    await waitFor(() => expect(screen.getByLabelText(copy.name)).toHaveFocus());
+  });
+
+  it('sends what was typed without the spaces around it', async () => {
+    setup();
+    fireEvent.change(screen.getByLabelText(copy.name), { target: { value: '  Ada ' } });
+    fireEvent.change(screen.getByLabelText(copy.email), { target: { value: ' ada@example.com ' } });
+    fireEvent.change(screen.getByLabelText(copy.message), { target: { value: ' Hello\n' } });
+    fireEvent.submit(document.querySelector('form')!);
+
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
+    const [, init] = fetchMock.mock.calls[0] as [string, RequestInit];
+    expect(JSON.parse(String(init.body))).toEqual({
+      name: 'Ada',
+      email: 'ada@example.com',
+      message: 'Hello',
+    });
+  });
+
   it('reports a rejected submission without losing what was typed', async () => {
     fetchMock.mockResolvedValue({ ok: false } as Response);
     const user = userEvent.setup();
@@ -212,6 +254,17 @@ describe('ContactForm', () => {
     await user.type(screen.getByLabelText(copy.message), 'spam');
     await user.type(honeypot, 'spam');
     await user.click(screen.getByRole('button', { name: copy.submit }));
+
+    expect(await screen.findByText(copy.sentTitle)).toBeInTheDocument();
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('catches a honeypot filled by a script that fires no event', async () => {
+    const { container } = setup();
+    fillValidForm();
+    // Set straight on the element: no input or change event for React to hear.
+    (container.querySelector('[name="_gotcha"]') as HTMLInputElement).value = 'spam';
+    fireEvent.submit(container.querySelector('form')!);
 
     expect(await screen.findByText(copy.sentTitle)).toBeInTheDocument();
     expect(fetchMock).not.toHaveBeenCalled();

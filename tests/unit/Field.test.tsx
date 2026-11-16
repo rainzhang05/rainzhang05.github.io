@@ -46,6 +46,30 @@ describe('TextField', () => {
   });
 });
 
+describe('a field and its box', () => {
+  it('puts the padding on the control, so the whole box takes a press', () => {
+    render(<TextField label="Name" name="name" value="" onChange={noop} />);
+
+    const input = screen.getByLabelText('Name');
+    expect(input).toHaveClass('px-3');
+    expect(input.parentElement).not.toHaveClass('px-3');
+  });
+
+  it('draws the focus ring on the frame, in the error state as well', () => {
+    const { rerender } = render(<TextField label="Name" name="name" value="" onChange={noop} />);
+    expect(screen.getByLabelText('Name').parentElement).toHaveClass('field-frame');
+
+    rerender(<TextField label="Name" name="name" value="" error="Required" onChange={noop} />);
+    expect(screen.getByLabelText('Name').parentElement).toHaveClass('field-frame', 'border-clay');
+  });
+
+  it('is 16px on a phone, where iOS zooms into anything smaller', () => {
+    render(<TextAreaField label="Message" name="message" value="" onChange={noop} />);
+
+    expect(screen.getByLabelText('Message')).toHaveClass('text-body', 'sm:text-body-15');
+  });
+});
+
 describe('TextAreaField', () => {
   it('sizes itself to its text rather than being dragged', () => {
     render(<TextAreaField label="Message" name="message" value="" onChange={noop} />);

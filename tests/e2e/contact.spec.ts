@@ -55,6 +55,68 @@ test.describe("contact form", () => {
     await expect(page.getByText(/doesn.t look like an email/i)).toBeVisible();
   });
 
+  test("focuses a field from anywhere inside its box", async ({ page }) => {
+    await openContact(page);
+
+    // The box is the input's frame. Its top, bottom and side edges used to be
+    // padding on a div around a 23px input, and a press there focused nothing.
+    for (const label of ["Name", "Message"]) {
+      const field = page.getByLabel(label);
+      const box = (await field.locator("xpath=..").boundingBox())!;
+
+      for (const [x, y] of [
+        [box.width / 2, 3],
+        [box.width / 2, box.height - 3],
+        [4, box.height / 2],
+      ]) {
+        await page.locator("h2", { hasText: "Contact" }).click();
+        await expect(field).not.toBeFocused();
+        await page.mouse.click(box.x + x, box.y + y);
+        await expect(field).toBeFocused();
+      }
+    }
+  });
+
+  test("shows focus on a field that was sent back as invalid", async ({ page }) => {
+    await openContact(page);
+    await page.getByRole("button", { name: "Send message" }).click();
+
+    const name = page.getByLabel("Name");
+    await expect(name).toBeFocused();
+    await expect(name).toHaveAttribute("aria-invalid", "true");
+
+    const ring = await name.locator("xpath=..").evaluate((frame) => {
+      const style = getComputedStyle(frame);
+      return { style: style.outlineStyle, width: style.outlineWidth };
+    });
+    expect(ring).toEqual({ style: "solid", width: "2px" });
+  });
+
+  test("keeps the fields at 16px on a phone, so iOS does not zoom into them", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await openContact(page);
+
+    for (const label of ["Name", "Email", "Message"]) {
+      const size = await page.getByLabel(label).evaluate((el) => getComputedStyle(el).fontSize);
+      expect(size, label).toBe("16px");
+    }
+  });
+
+  test("moves focus to the confirmation, and back to the form for another", async ({ page }) => {
+    await page.route(FORMSPREE, (route) => route.fulfill({ status: 200, body: "{}" }));
+    await openContact(page);
+
+    await page.getByLabel("Name").fill("Ada");
+    await page.getByLabel("Email").fill("ada@example.com");
+    await page.getByLabel("Message").fill("Hello");
+    await page.getByRole("button", { name: "Send message" }).click();
+
+    await expect(page.getByRole("heading", { name: en.contact.form.sentTitle })).toBeFocused();
+
+    await page.getByRole("button", { name: en.contact.form.another }).click();
+    await expect(page.getByLabel("Name")).toBeFocused();
+  });
+
   test("sends a complete message and confirms it", async ({ page }) => {
     await page.route(FORMSPREE, async (route) => {
       expect(route.request().method()).toBe("POST");
@@ -79,9 +141,7 @@ test.describe("contact form", () => {
     await page.getByLabel("Message").fill("Hello from a test.");
     await page.getByRole("button", { name: "Send message" }).click();
 
-    await expect(page.locator("form").getByRole("alert")).toContainText(
-      /Couldn.t reach the server/
-    );
+    await expect(page.locator("form").getByRole("alert")).toContainText(en.contact.form.failed);
   });
 
   test("carries a honeypot that people never see", async ({ page }) => {
