@@ -99,7 +99,13 @@ export function LocaleSwitch({
           hrefLang={locale}
           role="radio"
           aria-checked={locale === current}
-          onClick={() => {
+          onClick={(event) => {
+            // A click that opens the other language somewhere else — a new
+            // tab, a new window, a download — leaves this page where it is,
+            // so nothing about this page should change: not the pill, not the
+            // remembered language, not the menu it was pressed in.
+            if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+            if (event.button !== 0) return;
             remember(locale);
             onNavigate?.();
           }}
