@@ -67,7 +67,7 @@ export const en: Copy = {
   experiences: [
     {
       id: 'exp-mnt',
-      dates: 'Aug 2026 – Present',
+      dates: 'Aug – Nov 2026',
       role: 'Software and IT Systems Specialist',
       org: 'MNT Realty',
       orgLine: 'MNT Realty · Vancouver, BC, Canada',
@@ -78,22 +78,22 @@ export const en: Copy = {
         scale: 1.45,
       },
       summary:
-        'I’m responsible for software and IT at a property and strata management company. I work with staff to understand what the office needs, then build and maintain the internal systems they use, connected to the company’s Microsoft 365 accounts and data.',
+        'I was responsible for software and IT at a property and strata management company. I worked with staff to understand what the office needed, then built internal systems to meet those needs, connected to the company’s Microsoft 365 accounts and data.',
       groups: [
         {
           label: 'Work',
           items: [
             'Planned and rebuilt the MNT Realty platform from scratch as one application for three sites: a public website, an owner portal for residents, and an admin console for staff.',
-            'Designed and built MNT Control Center, an internal platform in Next.js, Node.js and PostgreSQL that replaces the separate tools the office used before.',
+            'Designed and built MNT Control Center, an internal platform in Next.js, Node.js and PostgreSQL that brings the office’s separate tools into one place.',
             'Set up organization sign-in and role-based access with Microsoft Entra ID, the Graph API and OAuth 2.0.',
-            'Automated the recurring office tasks that took staff the most time: sorting incoming email, looking up owner information, and answering staff questions from company documents with an internal assistant.',
+            'Built automation for the recurring office tasks that took staff the most time: sorting incoming email, looking up owner information, and answering staff questions from company documents with an internal assistant.',
           ],
         },
         {
           label: 'Operations',
           items: [
-            'Manage hosting, deployment, domains and DNS, and the release process on Vercel and GitHub Actions.',
-            'Write tests and documentation so that someone else can take over the systems later.',
+            'Managed hosting, deployment, domains and DNS, and the release process on Vercel and GitHub Actions.',
+            'Wrote tests and documentation so that someone else could take over the systems.',
           ],
         },
       ],
@@ -169,29 +169,28 @@ export const en: Copy = {
   projects: [
     {
       id: 'work-mnt-platform',
-      dates: 'Aug 2026 – Present',
+      dates: 'Aug – Nov 2026',
       title: 'MNT Realty Platform',
-      maintained: true,
       summary:
-        'One Next.js application serving three sites for a property management company: a public website, an owner portal for residents, and an admin console for staff.',
+        'Three sites for a property management company, built as one Next.js application: a public website, an owner portal for residents, and an admin console for staff.',
       primary: ['Next.js', 'TypeScript', 'React'],
       sections: [
         {
           label: 'What it is',
-          text: 'MNT Realty’s website and online services. Prospective clients see the public website. Residents of the stratas MNT manages sign in to the owner portal to read notices, book amenities and download documents. Staff manage all of it from the admin console.',
+          text: 'A website and online services built for MNT Realty. The public website is for prospective clients. The owner portal lets residents of the stratas MNT manages sign in to read notices, book amenities and download documents. The admin console lets staff manage all of it.',
         },
         {
           label: 'How it works',
-          text: 'The three sites come from one build, each on its own subdomain. A proxy sends each subdomain to its own pages (admin to the console, owners to the portal), and the public site returns a not-found page for those paths. Each site has its own layout and its own host-only session cookie. Public pages are prerendered, and the console and the portal are rendered on each request. All reads and writes go through one data store interface, so changes staff make show up for residents right away, and the store can later be switched to the drafted PostgreSQL schema without changing any screens.',
+          text: 'The three sites come from one build, each on its own subdomain. A proxy sends each subdomain to its own pages (admin to the console, owners to the portal), and the public site returns a not-found page for those paths. Each site has its own layout and its own host-only session cookie. Public pages are prerendered, and the console and the portal are rendered on each request. All reads and writes go through one data store interface, so a change made in the console shows up in the portal right away, and the store behind it can be switched to PostgreSQL without changing any screens.',
         },
         {
           label: 'Technical challenges',
-          text: 'Access rules are defined once, in a table that the navigation, the page guards and the file route all read. A section outside a user’s role returns not-found rather than forbidden, so the portal does not reveal what other roles can see. Each strata is kept separate: while one is open, nothing from another can be reached. MNT’s own business details, such as company information, the fee schedule for strata documents and the template for amenity booking slots, are versioned data that an administrator edits under Settings, not values in the code. Any saved version can be restored.',
+          text: 'Access rules are defined once, in a table that the navigation, the page guards and the file route all read. A section outside a user’s role returns not-found rather than forbidden, so the portal does not reveal what other roles can see. Each strata is kept separate: while one is open, nothing from another can be reached. MNT’s own business details, such as company information, the fee schedule for strata documents and the template for amenity booking slots, are versioned data that an administrator can edit under Settings, not values in the code. Any saved version can be restored.',
         },
       ],
       image: {
         src: '/projects/mnt-platform.webp',
-        alt: 'The MNT Realty home page, with the Owner portal and Request a proposal buttons above a photo of the Vancouver skyline',
+        alt: 'The public website’s home page, with the Owner portal and Request a proposal buttons above a photo of the Vancouver skyline',
         width: 1600,
         height: 800,
       },
@@ -206,14 +205,8 @@ export const en: Copy = {
         'Vercel',
         'GitHub Actions',
       ],
-      status:
-        'All three sites are built and deployed. The next steps are cloud data storage and backend workflows. The source code belongs to MNT Realty and is not public.',
-      links: [
-        {
-          label: 'mntrealty.vercel.app',
-          href: 'https://mntrealty.vercel.app',
-        },
-      ],
+      status: 'The source code belongs to MNT Realty and is not public.',
+      links: [],
     },
     {
       id: 'work-authenticator',
