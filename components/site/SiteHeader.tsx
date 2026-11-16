@@ -164,7 +164,7 @@ export function SiteHeader({
                 )
               )}
             </nav>
-            <LocaleSwitch current={locale} hrefs={localeHrefs} />
+            <LocaleSwitch current={locale} label={navigationLabels.language} hrefs={localeHrefs} />
           </div>
 
           <ThemeSwitch labels={themeLabels} />
@@ -233,7 +233,12 @@ export function SiteHeader({
             )}
           </nav>
           <div className="mt-8">
-            <LocaleSwitch current={locale} hrefs={localeHrefs} onNavigate={closeMenu} />
+            <LocaleSwitch
+              current={locale}
+              label={navigationLabels.language}
+              hrefs={localeHrefs}
+              onNavigate={closeMenu}
+            />
           </div>
         </dialog>
       ) : null}

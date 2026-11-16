@@ -127,7 +127,19 @@ export interface Copy {
      * that name.
      */
     theme: { group: string; system: string; light: string; dark: string };
-    navigation: { primary: string; menu: string; closeMenu: string };
+    /**
+     * Names for the landmarks and controls that have no visible words of their
+     * own. `footer` names the footer's link list and `language` the EN / 日本語
+     * switch; they are in the page's language like everything else a screen
+     * reader says, so /ja is not read out in English.
+     */
+    navigation: {
+      primary: string;
+      menu: string;
+      closeMenu: string;
+      footer: string;
+      language: string;
+    };
   };
   experiences: Experience[];
   projects: Project[];

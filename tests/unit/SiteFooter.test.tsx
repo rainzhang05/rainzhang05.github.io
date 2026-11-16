@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { render, screen, within } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { SiteFooter } from '@/components/site/SiteFooter';
-import { en } from '@/lib/content';
+import { en, ja } from '@/lib/content';
 import { site } from '@/lib/site';
 
 describe('SiteFooter', () => {
@@ -19,6 +19,15 @@ describe('SiteFooter', () => {
     ['#experience', '#work', '#background', '#contact'].forEach((href) => {
       expect(nav.querySelector(`a[href="${href}"]`)).toBeInTheDocument();
     });
+  });
+
+  it('names its nav in the language of the page', () => {
+    render(<SiteFooter copy={ja} />);
+
+    expect(
+      screen.getByRole('navigation', { name: ja.labels.navigation.footer })
+    ).toBeInTheDocument();
+    expect(screen.queryByRole('navigation', { name: 'Footer' })).toBeNull();
   });
 
   it('lists the elsewhere links, external ones in a new tab', () => {

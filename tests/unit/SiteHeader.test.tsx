@@ -184,4 +184,13 @@ describe('SiteHeader', () => {
 
     expect(screen.getByRole('radiogroup', { name: 'Language' })).toBeInTheDocument();
   });
+
+  it('names the language switch in the language of the page', () => {
+    render(
+      <SiteHeader name="Rain Zhang" links={ja.nav} locale="ja" themeLabels={ja.labels.theme} navigationLabels={ja.labels.navigation} />
+    );
+
+    expect(screen.getByRole('radiogroup', { name: ja.labels.navigation.language })).toBeInTheDocument();
+    expect(screen.queryByRole('radiogroup', { name: 'Language' })).toBeNull();
+  });
 });

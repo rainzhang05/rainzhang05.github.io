@@ -49,10 +49,13 @@ function cameFrom(): Locale | null {
  */
 export function LocaleSwitch({
   current,
+  label,
   hrefs = localeHome,
   onNavigate,
 }: {
   current: Locale;
+  /** The group's accessible name, in the page's language. */
+  label: string;
   /** Where each language goes. Defaults to the two home pages. */
   hrefs?: Record<Locale, string>;
   onNavigate?: () => void;
@@ -79,7 +82,7 @@ export function LocaleSwitch({
   return (
     <div
       role="radiogroup"
-      aria-label="Language"
+      aria-label={label}
       className="no-copy relative inline-grid grid-cols-2 rounded-pill border border-rule p-0.5"
     >
       <span
@@ -99,6 +102,13 @@ export function LocaleSwitch({
           hrefLang={locale}
           role="radio"
           aria-checked={locale === current}
+          onKeyDown={(event) => {
+            // Announced as a radio, so it has to answer the key a radio
+            // answers. A link only hears Enter.
+            if (event.key !== ' ') return;
+            event.preventDefault();
+            event.currentTarget.click();
+          }}
           onClick={(event) => {
             // A click that opens the other language somewhere else — a new
             // tab, a new window, a download — leaves this page where it is,

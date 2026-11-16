@@ -46,7 +46,7 @@ export function SiteFooter({ copy, sectionBase = '' }: { copy: Copy; sectionBase
         <div>
           <div className="text-label font-medium uppercase text-ink-3">{copy.footer.navigate}</div>
           <nav
-            aria-label="Footer"
+            aria-label={copy.labels.navigation.footer}
             className="mt-3.5 grid grid-cols-[repeat(2,max-content)] gap-x-8 gap-y-2.5"
           >
             {sectionLinks(copy).map((link) =>

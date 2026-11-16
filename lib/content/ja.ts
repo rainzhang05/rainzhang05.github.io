@@ -66,6 +66,8 @@ export const ja: Copy = {
       primary: 'メインナビゲーション',
       menu: 'メニュー',
       closeMenu: 'メニューを閉じる',
+      footer: 'フッター',
+      language: '言語',
     },
   },
   experiences: [

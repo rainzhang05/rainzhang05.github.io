@@ -62,7 +62,13 @@ export const en: Copy = {
     skipToContent: 'Skip to content',
     sectionNav: 'On this page',
     theme: { group: 'Theme', system: 'System', light: 'Light', dark: 'Dark' },
-    navigation: { primary: 'Primary', menu: 'Menu', closeMenu: 'Close menu' },
+    navigation: {
+      primary: 'Primary',
+      menu: 'Menu',
+      closeMenu: 'Close menu',
+      footer: 'Footer',
+      language: 'Language',
+    },
   },
   experiences: [
     {
