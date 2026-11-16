@@ -1,26 +1,23 @@
-import Link from 'next/link';
+import { FullPageMessage } from './FullPageMessage';
+import { TextLink } from '@/components/ui/TextLink';
 import { site } from '@/lib/site';
 
 /**
- * The body of the global 404 page. A missing URL carries no locale to read, so this is
- * the one place in the site with English copy of its own rather than a key in
- * the content files.
+ * The body of the global 404 page. A missing URL carries no locale to read, so
+ * this is one of the two places in the site with English copy of its own
+ * rather than a key in the content files; app/global-error.tsx is the other.
+ *
+ * The way home is a plain anchor: this page is a document of its own, outside
+ * the locale layout, so leaving it is a document load either way.
  */
 export function NotFound() {
   return (
-    <main className="mx-auto box-border flex min-h-screen w-full max-w-container flex-col justify-center px-gutter-mobile sm:px-gutter">
-      <p className="m-0 text-label font-medium uppercase tracking-label text-ink-3">404</p>
-      <h1 className="mt-4 max-w-measure text-hero font-light leading-display-1 tracking-display-1 text-ink">
-        This page does not exist.
-      </h1>
-      <p className="mt-5 max-w-measure text-body-lg text-ink-2">
-        The link may be out of date, or the address may have a typo in it.
-      </p>
-      <p className="mt-8">
-        <Link href="/" className="text-body-15">
-          Back to {site.name}
-        </Link>
-      </p>
-    </main>
+    <FullPageMessage
+      label="404"
+      heading="This page does not exist."
+      body="The link may be out of date, or the address may have a typo in it."
+    >
+      <TextLink href="/">Back to {site.name}</TextLink>
+    </FullPageMessage>
   );
 }
