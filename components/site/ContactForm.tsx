@@ -21,13 +21,25 @@ type Status = 'idle' | 'sending' | 'sent' | 'error';
  * for being empty while someone is still filling the form in is a complaint
  * about work in progress; after the first attempt the errors do follow every
  * keystroke, so a correction clears as soon as it is made.
+ *
+ * The honeypot is read from the form when it is submitted, not followed through
+ * a change handler: a script that fills a field by setting its value fires no
+ * event React would hear, and that is exactly the visitor the field is for.
+ *
+ * Focus follows the two swaps. The form unmounts when a message is sent, and
+ * the confirmation unmounts when another is started; each takes the focused
+ * button with it, and focus left on nothing drops to the top of the document.
+ * So the confirmation's heading takes it on the way out, and the first field
+ * takes it on the way back.
  */
 export function ContactForm({ copy }: { copy: Copy['contact']['form'] }) {
   const [values, setValues] = useState(EMPTY);
   const [attempted, setAttempted] = useState(false);
   const [status, setStatus] = useState<Status>('idle');
   const [hydrated, setHydrated] = useState(false);
-  const honeypot = useRef('');
+  const formRef = useRef<HTMLFormElement>(null);
+  const sentRef = useRef<HTMLHeadingElement>(null);
+  const startingAnother = useRef(false);
   const activeRequest = useRef<{
     controller: AbortController;
     timer: ReturnType<typeof setTimeout>;
@@ -45,14 +57,27 @@ export function ContactForm({ copy }: { copy: Copy['contact']['form'] }) {
     };
   }, []);
 
+  useEffect(() => {
+    if (status === 'sent') {
+      sentRef.current?.focus();
+    } else if (status === 'idle' && startingAnother.current) {
+      startingAnother.current = false;
+      const first = formRef.current?.elements.namedItem('name');
+      if (first instanceof HTMLElement) first.focus();
+    }
+  }, [status]);
+
+  /** What is checked is what is sent: stray spaces around a value are not part of it. */
+  const clean = {
+    name: values.name.trim(),
+    email: values.email.trim(),
+    message: values.message.trim(),
+  };
+
   const errors = {
-    name: values.name.trim() ? null : copy.required,
-    email: !values.email.trim()
-      ? copy.required
-      : EMAIL.test(values.email)
-        ? null
-        : copy.invalidEmail,
-    message: values.message.trim() ? null : copy.required,
+    name: clean.name ? null : copy.required,
+    email: !clean.email ? copy.required : EMAIL.test(clean.email) ? null : copy.invalidEmail,
+    message: clean.message ? null : copy.required,
   };
 
   const shown = (key: keyof typeof errors) => (attempted ? errors[key] : null);
@@ -71,13 +96,14 @@ export function ContactForm({ copy }: { copy: Copy['contact']['form'] }) {
       return;
     }
 
-    setStatus('sending');
-
     // A filled honeypot means a bot: pretend to succeed, send nothing.
-    if (honeypot.current) {
+    const trap = e.currentTarget.elements.namedItem('_gotcha');
+    if (trap instanceof HTMLInputElement && trap.value) {
       setStatus('sent');
       return;
     }
+
+    setStatus('sending');
 
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), site.formTimeoutMs);
@@ -88,7 +114,7 @@ export function ContactForm({ copy }: { copy: Copy['contact']['form'] }) {
       const response = await fetch(site.formspreeEndpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify(values),
+        body: JSON.stringify(clean),
         signal: controller.signal,
       });
       if (activeRequest.current === request) setStatus(response.ok ? 'sent' : 'error');
@@ -106,7 +132,9 @@ export function ContactForm({ copy }: { copy: Copy['contact']['form'] }) {
         <div className="inline-flex h-10 w-10 items-center justify-center rounded-pill bg-sage-tint text-sage-strong">
           <Icon name="check" size={20} />
         </div>
-        <h3 className="mb-1 mt-4 text-heading font-medium">{copy.sentTitle}</h3>
+        <h3 ref={sentRef} tabIndex={-1} className="mb-1 mt-4 text-heading font-medium outline-none">
+          {copy.sentTitle}
+        </h3>
         <p className="m-0 max-w-measure text-body-15 text-ink-2">{copy.sentBody}</p>
         <div className="mt-5">
           <Button
@@ -114,8 +142,8 @@ export function ContactForm({ copy }: { copy: Copy['contact']['form'] }) {
             size="sm"
             onClick={() => {
               setValues(EMPTY);
-              honeypot.current = '';
               setAttempted(false);
+              startingAnother.current = true;
               setStatus('idle');
             }}
           >
@@ -128,6 +156,7 @@ export function ContactForm({ copy }: { copy: Copy['contact']['form'] }) {
 
   return (
     <form
+      ref={formRef}
       action={site.formspreeEndpoint}
       method="post"
       onSubmit={submit}
@@ -141,9 +170,6 @@ export function ContactForm({ copy }: { copy: Copy['contact']['form'] }) {
         tabIndex={-1}
         autoComplete="off"
         aria-hidden="true"
-        onChange={(e) => {
-          honeypot.current = e.target.value;
-        }}
         className="absolute left-[-9999px] h-px w-px opacity-0"
       />
 
