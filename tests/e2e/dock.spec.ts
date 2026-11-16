@@ -234,6 +234,12 @@ test.describe("section dock", () => {
       }, id);
       const state = await settleAt(page, target);
       expect(state?.active, `active while reading #${id}`).toBe(offset + 1);
+
+      // And said, not only drawn: the dot is all a sighted reader gets, and
+      // nothing at all to anyone else.
+      const current = page.locator('.section-dock [aria-current="true"]');
+      await expect(current).toHaveCount(1);
+      await expect(current).toHaveAttribute("data-active", "true");
     }
   });
 

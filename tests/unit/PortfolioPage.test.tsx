@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { PortfolioPage } from '@/components/site/PortfolioPage';
 import { en, ja } from '@/lib/content';
@@ -114,8 +114,22 @@ describe('PortfolioPage', () => {
     );
 
     expect(expanded(targetId)).toBe('true');
-    // The button that was pressed is left behind; focus goes to the project.
-    expect(document.getElementById(`button-${targetId}`)).toHaveFocus();
+    // The button that was pressed is left behind; focus goes to the project,
+    // a beat later, once the opened row has been laid out.
+    await waitFor(() => expect(document.getElementById(`button-${targetId}`)).toHaveFocus());
+  });
+
+  it('names each section after its heading, so a jump there says where it landed', () => {
+    render(<PortfolioPage copy={en} locale="en" />);
+
+    for (const [id, name] of [
+      ['experience', en.sections.experience],
+      ['work', en.sections.work],
+      ['background', en.sections.background],
+      ['contact', en.sections.contact],
+    ]) {
+      expect(screen.getByRole('region', { name })).toHaveAttribute('id', id);
+    }
   });
 
   it('copies the email address and confirms it in a live region', async () => {
@@ -127,8 +141,10 @@ describe('PortfolioPage', () => {
     await user.click(screen.getByRole('button', { name: en.intro.copyEmail }));
 
     expect(clipboard.writeText).toHaveBeenCalledWith(site.email);
-    const toast = await screen.findByRole('status');
-    expect(toast).toHaveTextContent(en.contact.copied);
+    // The region is there from the start, so wait for what goes into it: the
+    // clipboard write is async and the message follows it.
+    const toast = screen.getByRole('status');
+    await waitFor(() => expect(toast).toHaveTextContent(en.contact.copied));
     expect(toast).toHaveAttribute('aria-live', 'polite');
   });
 

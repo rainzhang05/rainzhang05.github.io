@@ -70,6 +70,11 @@ test.describe("disclosure rows", () => {
     // as it folds shut it carries every row below it up the page.
     await page.locator("#button-work-mnt-platform").click();
     await expect(page.locator("#panel-work-mnt-platform")).toHaveAttribute("data-open", "true");
+    // Fully open before anything else moves, so what closes is the whole panel.
+    await page.waitForFunction(() => {
+      const panel = document.getElementById("panel-work-mnt-platform")!;
+      return panel.getAnimations().length === 0 && panel.getBoundingClientRect().height > 400;
+    });
 
     await page.locator("#button-exp-feitian").click();
     const related = page.locator("#panel-exp-feitian button", {
@@ -104,9 +109,25 @@ test.describe("disclosure rows", () => {
       return (w.still ?? 0) > 5;
     });
 
+    // Where it was aimed, not merely somewhere on screen: 24px of air above
+    // the row. Aimed at where the row *was*, the page stopped over a hundred
+    // pixels past it and the title was above the top of the screen.
+    const top = await page
+      .locator("#row-work-webauthn")
+      .evaluate((row) => row.getBoundingClientRect().top);
+    expect(top).toBeGreaterThan(16);
+    expect(top).toBeLessThan(32);
     await expect(page.locator("#title-work-webauthn")).toBeInViewport();
+
     // The button that was pressed is a screen away by now; focus goes with the reader.
     await expect(page.locator("#button-work-webauthn")).toBeFocused();
+
+    // Anchoring is only held off while the panel closes, and is given back.
+    await expect
+      .poll(() => page.evaluate(() => document.documentElement.style.overflowAnchor), {
+        timeout: 5000,
+      })
+      .toBe("");
   });
 
   test("opens a short row and a tall row at the same speed", async ({ page }) => {

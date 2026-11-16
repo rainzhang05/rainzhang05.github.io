@@ -7,12 +7,13 @@ import { en, ja } from "@/lib/content";
  * on a narrow one. Reach whichever one this viewport actually shows.
  */
 async function languageSwitch(page: Page) {
-  const inHeader = page.getByRole("radiogroup", { name: "Language" }).first();
+  // Named in the page's own language, like everything else on it.
+  const labels = (await page.locator("html").getAttribute("lang") === "ja" ? ja : en).labels.navigation;
+  const inHeader = page.getByRole("radiogroup", { name: labels.language }).first();
   if (await inHeader.isVisible()) return inHeader;
 
-  const labels = (await page.locator("html").getAttribute("lang") === "ja" ? ja : en).labels.navigation;
   await page.getByRole("button", { name: labels.menu, exact: true }).click();
-  return page.getByRole("dialog", { name: labels.menu }).getByRole("radiogroup", { name: "Language" });
+  return page.getByRole("dialog", { name: labels.menu }).getByRole("radiogroup", { name: labels.language });
 }
 
 /**
