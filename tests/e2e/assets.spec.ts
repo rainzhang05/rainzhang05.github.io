@@ -79,4 +79,18 @@ test.describe("static assets", () => {
     const response = await request.get("/icon.svg");
     expect(response.status()).toBe(200);
   });
+
+  test("also answers at /favicon.ico, where anything that is not a browser looks", async ({
+    page,
+    request,
+  }) => {
+    const response = await request.get("/favicon.ico");
+    expect(response.status()).toBe(200);
+    expect(response.headers()["content-type"]).toMatch(/image\/(x-icon|vnd\.microsoft\.icon)/);
+
+    // Both are declared: the .ico for what cannot draw an SVG, the SVG for the rest.
+    await page.goto("/");
+    await expect(page.locator('link[rel="icon"][href^="/favicon.ico"]')).toHaveCount(1);
+    await expect(page.locator('link[rel="icon"][href^="/icon.svg"]')).toHaveCount(1);
+  });
 });

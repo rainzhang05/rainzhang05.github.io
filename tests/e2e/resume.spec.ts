@@ -15,6 +15,42 @@ async function languageSwitch(page: Page) {
   return page.getByRole("dialog", { name: labels.menu }).getByRole("radiogroup", { name: "Language" });
 }
 
+/**
+ * The resume has lived at other addresses, and those went out in applications:
+ * a link in one of them has to keep opening it. The first three are files the
+ * site really served and are gone for good; the rest were never addresses at
+ * all, only the obvious thing to type.
+ */
+test.describe("addresses the resume used to have, or is guessed at", () => {
+  const moved = [
+    ["/Rain%20Zhang%20Resume.pdf", "/rain-zhang-resume.pdf", 308],
+    ["/Resume.pdf", "/rain-zhang-resume.pdf", 308],
+    ["/index.html", "/", 308],
+    // Matching ignores case, so this is the rule above answering.
+    ["/resume.pdf", "/rain-zhang-resume.pdf", 308],
+    ["/cv.pdf", "/rain-zhang-resume.pdf", 307],
+    ["/cv", "/resume", 307],
+    ["/ja/resume.pdf", "/rain-zhang-resume-ja.pdf", 307],
+    ["/ja/cv", "/ja/resume", 307],
+  ] as const;
+
+  for (const [from, to, status] of moved) {
+    test(`sends ${from} to ${to}`, async ({ request }) => {
+      const response = await request.get(from, { maxRedirects: 0 });
+
+      expect(response.status()).toBe(status);
+      expect(new URL(response.headers().location, "http://site").pathname).toBe(to);
+    });
+  }
+
+  test("lands an old resume link on the PDF itself", async ({ request }) => {
+    const response = await request.get("/Rain%20Zhang%20Resume.pdf");
+
+    expect(response.status()).toBe(200);
+    expect(response.headers()["content-type"]).toContain("application/pdf");
+  });
+});
+
 test.describe("resume routing", () => {
   test("serves the English resume at /resume", async ({ page }) => {
     await page.goto("/resume");
