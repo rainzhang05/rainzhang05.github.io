@@ -33,9 +33,12 @@ const useBeforePaint = typeof window === 'undefined' ? useEffect : useLayoutEffe
  * padding on the frame, the top, bottom and sides of the box were a dead `div`
  * around a 23px strip of input.
  *
- * `.field-frame` (globals.css) draws the focus ring on the frame, in the error
- * state as well as the resting one: the control is `outline-none`, so without
- * it a field sent back by a failed submit would show focus with a caret alone.
+ * Focus is quiet: the frame's own hairline turns sage and nothing is drawn
+ * around it. It turns in the error state as well as the resting one — the
+ * control is `outline-none`, so a field sent back by a failed submit would
+ * otherwise show focus with a caret alone — and it is marked important so that
+ * neither the error colour nor a hover can take it back while the field is in
+ * use.
  *
  * 16px on a phone and 15px from `sm` up. iOS Safari zooms into any control
  * under 16px and never zooms back out; the base rule in globals.css that says
@@ -43,7 +46,7 @@ const useBeforePaint = typeof window === 'undefined' ? useEffect : useLayoutEffe
  * a utility out-ranks an element selector.
  */
 const frame =
-  'field-frame flex rounded-control border bg-sheet transition-colors duration-fast ease-out has-[:disabled]:opacity-60';
+  'flex rounded-control border bg-sheet transition-colors duration-fast ease-out focus-within:!border-sage has-[:disabled]:opacity-60';
 const control =
   'w-full min-w-0 flex-1 rounded-control border-0 bg-transparent px-3 text-body text-ink outline-none placeholder:text-ink-3 sm:text-body-15';
 const resting = 'border-rule-strong hover:border-ink-3';

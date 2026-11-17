@@ -488,17 +488,6 @@ html[data-entrance='contact'] :is(.enter, .enter-fade) {
   animation: none;
 }
 
-/* A form field's focus ring. The control inside the frame draws none, so the
-   frame does — the system ring, pulled in over the frame's own 1px border
-   rather than standing off it, so focus is a 2px sage edge and nothing moves.
-   It applies whatever the border is doing, the error state included. */
-@layer components {
-  .field-frame:focus-within {
-    outline: var(--focus-ring-width) solid var(--sage);
-    outline-offset: -1px;
-  }
-}
-
 /* More to press, nothing more to see. Under a finger, the control's target is
    stretched to --hit-min by a pseudo-element the control still owns, so a
    press that lands just above or below a 22px switch reaches it. Up and down
