@@ -67,6 +67,8 @@ test.describe("crawling", () => {
     expect(body).toContain("<loc>https://rainzhang.me</loc>");
     expect(body).toContain("<loc>https://rainzhang.me/ja</loc>");
     expect(body).toContain('hreflang="ja"');
+    expect(body).toContain('hreflang="x-default" href="https://rainzhang.me"');
+    expect(body).toContain('hreflang="x-default" href="https://rainzhang.me/resume"');
     expect(body).not.toContain("rainzhang.me/en");
   });
 });

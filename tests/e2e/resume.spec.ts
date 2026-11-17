@@ -83,6 +83,7 @@ test.describe("resume routing", () => {
 
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /\/resume$/);
     await expect(page.locator('link[hreflang="ja"]')).toHaveAttribute("href", /\/ja\/resume$/);
+    await expect(page.locator('link[hreflang="x-default"]')).toHaveAttribute("href", /\.me\/resume$/);
     await expect(page.locator('meta[property="og:url"]')).toHaveAttribute("content", /\/resume$/);
   });
 

@@ -64,7 +64,7 @@ describe.each(locales)('%s metadata', (locale) => {
     const meta = await metadataFor(locale);
 
     expect(meta.alternates?.canonical).toBe(locale === 'en' ? '/' : '/ja');
-    expect(meta.alternates?.languages).toEqual({ 'en-CA': '/', ja: '/ja' });
+    expect(meta.alternates?.languages).toEqual({ 'en-CA': '/', ja: '/ja', 'x-default': '/' });
   });
 });
 

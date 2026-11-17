@@ -110,6 +110,11 @@ test.describe("languages", () => {
     await page.goto("/");
 
     await expect(page.locator('link[hreflang="ja"]')).toHaveAttribute("href", /\/ja$/);
+    // And the page for everyone neither language is aimed at: English.
+    await expect(page.locator('link[hreflang="x-default"]')).toHaveAttribute(
+      "href",
+      /rainzhang\.me\/?$/
+    );
     await expect(page.locator('link[rel="canonical"]')).toHaveCount(1);
   });
 
