@@ -7,8 +7,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "typecheck": "tsc --noEmit",
+    "lint": "next lint --dir app --dir components --dir lib --dir tests --file middleware.ts --file tailwind.config.ts --file playwright.config.ts --file vitest.config.ts",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tests/e2e",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
@@ -52,6 +52,6 @@
     "sharp": "0.35.4"
   },
   "engines": {
-    "node": "^20.19.0 || >=22.12.0"
+    "node": ">=22.12.0"
   }
 }

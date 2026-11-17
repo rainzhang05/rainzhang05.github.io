@@ -5,6 +5,16 @@ on:
     branches: [main]
   pull_request:
 
+# Nothing here writes to the repository; say so rather than inherit the default.
+permissions:
+  contents: read
+
+# A newer push to a pull request makes the run before it pointless. A push to
+# main is a deploy, so each of those runs to the end.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   quick-checks:
     name: Lint, types & unit tests
@@ -16,7 +26,8 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          # One place says which Node this project runs on: .nvmrc.
+          node-version-file: .nvmrc
           cache: npm
 
       - name: Install dependencies
@@ -56,7 +67,8 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          # One place says which Node this project runs on: .nvmrc.
+          node-version-file: .nvmrc
           cache: npm
 
       - name: Install dependencies
@@ -73,8 +85,10 @@ jobs:
         env:
           CI: "true"
 
-      - name: Upload Playwright report on failure
-        if: failure()
+      # Not only on failure: a test that fails and then passes on a retry
+      # leaves the job green, and its trace is the one worth reading.
+      - name: Upload Playwright report
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report-${{ matrix.project }}
