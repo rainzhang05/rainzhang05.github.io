@@ -130,6 +130,22 @@ test.describe("disclosure rows", () => {
       .toBe("");
   });
 
+  test("still answers a mouse over its toggle", async ({ page }) => {
+    // Hover is only for a pointer that can hover, so a tap does not leave it
+    // behind. This is the other half: with a mouse it still has to be there.
+    const hovers = await page.evaluate(() => matchMedia("(hover: hover) and (pointer: fine)").matches);
+    test.skip(!hovers, "no hover hardware in this project");
+
+    await page.goto("/");
+    const toggle = page.locator("#button-work-travel");
+    await toggle.scrollIntoViewIfNeeded();
+    const colour = () => toggle.evaluate((el) => getComputedStyle(el).color);
+
+    const resting = await colour();
+    await toggle.hover();
+    await expect.poll(colour).not.toBe(resting);
+  });
+
   test("opens a short row and a tall row at the same speed", async ({ page }) => {
     await page.goto("/");
 

@@ -153,6 +153,67 @@ test.describe("theme", () => {
     }
   });
 
+  test("gives a finger more to press than it draws", async ({ page }) => {
+    await page.goto("/");
+    const option = themeSwitch(page).getByRole("radio", { name: "Dark" });
+    await expect(option).toBeVisible();
+
+    const coarse = await page.evaluate(() => matchMedia("(pointer: coarse)").matches);
+    const target = await option.evaluate((el) => {
+      const after = getComputedStyle(el, "::after");
+      return { content: after.content, height: after.height };
+    });
+    const drawn = (await option.boundingBox())!;
+
+    // The option is drawn 22px tall either way; only what answers a press changes.
+    expect(Math.round(drawn.height)).toBe(22);
+    if (!coarse) {
+      expect(target.content).toBe("none");
+      return;
+    }
+    expect(target.height).toBe("44px");
+
+    // A press that lands above the drawn option, inside the stretched target.
+    await page.touchscreen.tap(drawn.x + drawn.width / 2, drawn.y - 7);
+    await expect(option).toHaveAttribute("aria-checked", "true");
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  });
+
+  test("keeps the chosen option and the current section drawn under forced colours", async ({
+    page,
+    browserName,
+  }) => {
+    test.skip(browserName !== "chromium", "forced colours are emulated in Chromium only");
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.emulateMedia({ forcedColors: "active" });
+    await page.goto("/#work");
+
+    // The pill is a background, which a forced palette replaces; the outline is what is left.
+    const pill = await page.locator(".theme-pill").evaluate((el) => {
+      const style = getComputedStyle(el);
+      return { style: style.outlineStyle, width: style.outlineWidth };
+    });
+    expect(pill).toEqual({ style: "solid", width: "2px" });
+
+    // The dot's fill is a box-shadow, which is dropped; a system background stands in.
+    const dot = page.locator('.section-dock [aria-current="true"] .dock-dot');
+    await expect(dot).toHaveCount(1);
+    const fill = await dot.evaluate((el) => getComputedStyle(el).backgroundColor);
+    expect(fill).not.toBe("rgba(0, 0, 0, 0)");
+  });
+
+  test("leaves the dock and the loading sheet off a printed page", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto("/#work");
+    await expect(page.locator(".section-dock")).toHaveAttribute("data-shown", "true");
+
+    await page.emulateMedia({ media: "print" });
+    for (const selector of [".section-dock", ".toast-region", "#boot"]) {
+      const display = await page.locator(selector).evaluate((el) => getComputedStyle(el).display);
+      expect(display, selector).toBe("none");
+    }
+  });
+
   test("prints on ivory whatever the screen is showing", async ({ page }) => {
     await page.goto("/resume");
     await themeSwitch(page).getByRole("radio", { name: "Dark" }).click();

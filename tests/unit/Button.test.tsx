@@ -24,6 +24,15 @@ describe('Button', () => {
     expect(button.className).toContain('h-8');
   });
 
+  it('does not answer a pointer while it is disabled', () => {
+    render(<Button disabled>Send</Button>);
+
+    // Without it a disabled button still took its hover colours.
+    expect(screen.getByRole('button', { name: 'Send' }).className).toContain(
+      'disabled:pointer-events-none'
+    );
+  });
+
   it('forwards clicks and honours disabled', async () => {
     const onClick = vi.fn();
     const user = userEvent.setup();
