@@ -62,16 +62,19 @@ test.describe("contact form", () => {
     // padding on a div around a 23px input, and a press there focused nothing.
     for (const label of ["Name", "Message"]) {
       const field = page.getByLabel(label);
-      const box = (await field.locator("xpath=..").boundingBox())!;
+      const frame = field.locator("xpath=..");
+      const { width, height } = (await frame.boundingBox())!;
 
-      for (const [x, y] of [
-        [box.width / 2, 3],
-        [box.width / 2, box.height - 3],
-        [4, box.height / 2],
+      // Positions are relative to the frame, so they hold wherever the page
+      // has scrolled to by the time each press lands.
+      for (const position of [
+        { x: width / 2, y: 3 },
+        { x: width / 2, y: height - 3 },
+        { x: 4, y: height / 2 },
       ]) {
-        await page.locator("h2", { hasText: "Contact" }).click();
+        await field.evaluate((el: HTMLElement) => el.blur());
         await expect(field).not.toBeFocused();
-        await page.mouse.click(box.x + x, box.y + y);
+        await frame.click({ position });
         await expect(field).toBeFocused();
       }
     }
