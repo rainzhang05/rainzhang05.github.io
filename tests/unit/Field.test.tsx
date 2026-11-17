@@ -55,12 +55,15 @@ describe('a field and its box', () => {
     expect(input.parentElement).not.toHaveClass('px-3');
   });
 
-  it('draws the focus ring on the frame, in the error state as well', () => {
+  it('shows focus by turning the frame sage, in the error state as well', () => {
     const { rerender } = render(<TextField label="Name" name="name" value="" onChange={noop} />);
-    expect(screen.getByLabelText('Name').parentElement).toHaveClass('field-frame');
+    expect(screen.getByLabelText('Name').parentElement).toHaveClass('focus-within:!border-sage');
 
     rerender(<TextField label="Name" name="name" value="" error="Required" onChange={noop} />);
-    expect(screen.getByLabelText('Name').parentElement).toHaveClass('field-frame', 'border-clay');
+    expect(screen.getByLabelText('Name').parentElement).toHaveClass(
+      'focus-within:!border-sage',
+      'border-clay'
+    );
   });
 
   it('is 16px on a phone, where iOS zooms into anything smaller', () => {

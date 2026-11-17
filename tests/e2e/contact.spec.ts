@@ -88,11 +88,26 @@ test.describe("contact form", () => {
     await expect(name).toBeFocused();
     await expect(name).toHaveAttribute("aria-invalid", "true");
 
-    const ring = await name.locator("xpath=..").evaluate((frame) => {
-      const style = getComputedStyle(frame);
-      return { style: style.outlineStyle, width: style.outlineWidth };
-    });
-    expect(ring).toEqual({ style: "solid", width: "2px" });
+    // Quietly: the frame's hairline turns sage, in place of the error colour it
+    // would otherwise keep, and no ring is drawn around the field.
+    const read = () =>
+      name.locator("xpath=..").evaluate((frame) => {
+        const probe = document.createElement("span");
+        probe.style.color = "var(--sage)";
+        document.body.append(probe);
+        const sage = getComputedStyle(probe).color;
+        probe.remove();
+        const style = getComputedStyle(frame);
+        return { border: style.borderTopColor === sage, outline: style.outlineStyle };
+      });
+    await expect.poll(read).toEqual({ border: true, outline: "none" });
+
+    // The other invalid fields, not in use, keep the error colour.
+    const email = await page
+      .getByLabel("Email")
+      .locator("xpath=..")
+      .evaluate((frame) => getComputedStyle(frame).borderTopColor);
+    expect(email).toBe("rgb(141, 90, 84)");
   });
 
   test("keeps the fields at 16px on a phone, so iOS does not zoom into them", async ({ page }) => {
