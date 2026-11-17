@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { content, en, ja, resumeEn, resumeJa } from '@/lib/content';
-import { TECH_ICONS, type TechName } from '@/lib/tech';
+import { TECH_ICONS } from '@/lib/tech';
 import { sectionLinks, targetId } from '@/lib/sectionLinks';
 import { locales, resumePage } from '@/lib/site';
 import type { Copy, Project } from '@/lib/types';

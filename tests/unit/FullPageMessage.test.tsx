@@ -20,7 +20,7 @@ describe('FullPageMessage', () => {
   it('is one main landmark with the page’s only h1 and a way out', () => {
     render(
       <FullPageMessage label="404" heading="Gone." body="Nothing here.">
-        <a href="/">Home</a>
+        <a href="#top">Home</a>
       </FullPageMessage>
     );
 
@@ -28,7 +28,7 @@ describe('FullPageMessage', () => {
     expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1);
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Gone.');
     expect(screen.getByText('Nothing here.')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Home' })).toHaveAttribute('href', '/');
+    expect(screen.getByRole('link', { name: 'Home' })).toHaveAttribute('href', '#top');
   });
 
   it('fills the visible screen, not the one behind a phone’s toolbar', () => {
