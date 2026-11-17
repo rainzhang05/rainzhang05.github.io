@@ -208,7 +208,10 @@ test.describe("copy confirmation", () => {
     const box = (await toast.boundingBox())!;
     const line = await toast.evaluate((el) => parseFloat(getComputedStyle(el).lineHeight));
     expect(box.height).toBeLessThan(line * 2 + 24);
-    expect(Math.abs(box.x + box.width / 2 - 375 / 2)).toBeLessThan(2);
+    // A fixed box is laid out in the viewport less its scrollbar: none on a
+    // Mac, 15px of it in Chromium on Linux. Centre on what is left, not on 375.
+    const width = await page.evaluate(() => document.documentElement.clientWidth);
+    expect(Math.abs(box.x + box.width / 2 - width / 2)).toBeLessThan(2);
   });
 });
 
