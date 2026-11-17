@@ -208,10 +208,19 @@ test.describe("copy confirmation", () => {
     const box = (await toast.boundingBox())!;
     const line = await toast.evaluate((el) => parseFloat(getComputedStyle(el).lineHeight));
     expect(box.height).toBeLessThan(line * 2 + 24);
-    // A fixed box is laid out in the viewport less its scrollbar: none on a
-    // Mac, 15px of it in Chromium on Linux. Centre on what is left, not on 375.
-    const width = await page.evaluate(() => document.documentElement.clientWidth);
-    expect(Math.abs(box.x + box.width / 2 - width / 2)).toBeLessThan(2);
+    // Centred on the width the page is laid out in, not on 375. On Linux,
+    // Chromium reserves html's stable scrollbar gutter (15px) even with the
+    // scrollbar hidden, and documentElement.clientWidth still reports 375;
+    // body's box is the one that agrees with where a fixed box is placed.
+    const laidOut = await page.evaluate(() => {
+      const { x, width } = document.body.getBoundingClientRect();
+      return { centre: x + width / 2, width };
+    });
+    const centre = box.x + box.width / 2;
+    expect(
+      Math.abs(centre - laidOut.centre),
+      `toast centred at ${centre}, page laid out ${laidOut.width}px wide`
+    ).toBeLessThan(2);
   });
 });
 
