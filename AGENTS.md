@@ -30,10 +30,10 @@ That's it. No body. No trailer. No `--amend` on already-pushed commits.
 
 - **What it is:** Rain Zhang's personal portfolio website (live at https://rainzhang.me).
 - **Four routes, two pages:** `/` and `/ja` are the same single scrolling page in two languages; `/resume` and `/ja/resume` are the resume, also the same page in two languages. There is no fifth route.
-- **Framework:** Next.js 15 App Router + React 18 + TypeScript (strict) + Tailwind CSS 3.
+- **Framework:** Next.js 15 App Router + React + TypeScript (strict) + Tailwind CSS 3. The App Router runs on the React 19 that Next bundles; the `react` 18.3.1 pinned in `package.json` is what Vitest and the type definitions use, so a behaviour that differs between the two majors shows up in the browser, not in a unit test.
 - **Deployed on:** Vercel (`vercel.json` pins `framework: nextjs`).
 - **Forms:** Contact form posts to Formspree. The endpoint lives in [lib/site.ts](lib/site.ts) and can be overridden with `NEXT_PUBLIC_FORMSPREE_ENDPOINT`.
-- **Node:** `>=20` (CI uses Node 20).
+- **Node:** `>=22.12` (`engines` in `package.json`). [.nvmrc](.nvmrc) says which version CI installs; change it there and nowhere else.
 
 The design is deliberately quiet: one palette, one typeface, one accent, no borders or shadows, and two interactions — rows that expand in place, and the section dock down the left edge. If a change adds a third interaction pattern or a second accent, it is working against the design, not with it.
 
@@ -52,12 +52,17 @@ app/
   globals.css              Design tokens (colour, type, spacing, radius, motion) + base rules.
                            The only file in the repo with raw values.
   global-not-found.tsx     Full-document 404 for unmatched paths, outside the locale layout
+  global-error.tsx         Full-document error page, for a throw in the layout itself
+  robots.ts / sitemap.ts   /robots.txt and /sitemap.xml
   fonts.ts                 Albert Sans, self-hosted through next/font/local
-  fonts/*.woff2            The four font files (upright/italic x latin/latin-ext)
+  fonts/*.woff2            The two font files (upright; latin and latin-ext)
   icon.svg                 Favicon, applied to every route
+  favicon.ico              The same mark at 16/32/48px, for whatever asks for /favicon.ico
+  apple-icon.png           Home-screen icon, 180px
   [locale]/
     layout.tsx             Root layout: <html lang>, fonts, metadata, generateStaticParams
     page.tsx               Renders <PortfolioPage> with that language's content
+    error.tsx              What a reader sees if a page throws; keeps the layout
     resume/page.tsx        Renders <ResumePage> with that language's resume
 
 components/
@@ -77,12 +82,17 @@ components/
     ContactSection.tsx / ContactForm.tsx
     SectionHeading.tsx / CompanyMark.tsx / LocaleSwitch.tsx / SiteFooter.tsx
     LocaleMemory.tsx       Renders nothing; records the language being read in the cookie
+    BootGate.tsx           Renders nothing; waits for fonts and images, then lifts the boot sheet
+    FullPageMessage.tsx    One message on a whole screen: the 404 and the two error pages
+    NotFound.tsx           The 404's own words
 
 lib/
   dockMotion.ts            The dock's maths: progress, gaussian falloff, bezier sampling
-  sectionLinks.ts          The four in-page sections, shared by the footer and the dock
-
-lib/
+  sectionLinks.ts          The five in-page sections, shared by the footer and the dock
+  boot.ts                  The boot gate's inline script and its timings
+  entrance.ts              Which section a navigation arrives at, and EntranceRouter
+  jsonLd.ts                The Person structured data
+  viewport.ts              The one viewport every document exports (theme-color pair)
   site.ts                  Email, links, resume routes and PDFs, Formspree endpoint, locales,
                            the language cookie and the one function that writes it
   types.ts                 The content model (Copy, Experience, Project, SkillGroup, …)
@@ -92,6 +102,7 @@ lib/
   content/resume.en.ts     The English resume, transcribed verbatim from its PDF
   content/resume.ja.ts     The Japanese resume, transcribed verbatim from its PDF
   content/index.ts         Assembles both into Record<Locale, Copy>, and the resumes
+  content/error.ts         The error page's five strings, in both languages, outside Copy
   useReducedMotion.ts      Hook + a plain function for the two JS scroll nudges
   panelMotion.ts           Expand/collapse duration and linear() easing from content height,
                            --panel-speed and --panel-settle
@@ -116,6 +127,7 @@ resume/                    The source the two PDFs in public/ are printed from. 
 public/
   rain-zhang-resume.pdf    English resume; printed from resume/, downloaded from /resume
   rain-zhang-resume-ja.pdf Japanese resume; printed from resume/, downloaded from /ja/resume
+  og.png                   The share card, 1200x630
   logos/                   Company and school marks (feitian.png, mnt-realty.svg, sfu.png)
   projects/                Project screenshots
   tech/                    Technology marks, looked up by lib/tech.ts
@@ -124,7 +136,9 @@ tests/
   setup/vitest.setup.ts    jest-dom matchers + cleanup between tests
   setup/dom-mocks.ts       Reusable mocks: matchMedia, clipboard, rAF, scroll, location
   unit/*.test.ts(x)        Vitest + React Testing Library
-  e2e/*.spec.ts            Playwright (excluded from tsconfig + vitest)
+  e2e/*.spec.ts            Playwright (its own tsconfig; excluded from the root one and vitest)
+  e2e/fixtures.ts          Playwright's `test` with the boot gate already satisfied
+  e2e/images.setup.ts      Warms every optimised image size before the browsers start
 
 .github/workflows/ci.yml   CI: lint + typecheck + unit + E2E matrix (chromium/firefox/safari/mobile)
 ```
@@ -152,8 +166,8 @@ import type { Project } from "@/lib/types";
 | `npm run dev` | Next.js dev server on `http://localhost:3000` |
 | `npm run build` | Production build (used in CI before E2E) |
 | `npm run start` | Production server (used by Playwright in CI) |
-| `npm run lint` | ESLint (`next/core-web-vitals` + `next/typescript`) |
-| `npm run typecheck` | `tsc --noEmit` |
+| `npm run lint` | ESLint (`next/core-web-vitals` + `next/typescript`) over `app`, `components`, `lib`, `tests`, `middleware.ts` and the three TypeScript config files |
+| `npm run typecheck` | `tsc --noEmit` for the app and unit tests, then again for `tests/e2e` through its own tsconfig |
 | `npm run test` | Vitest unit tests (one-shot) |
 | `npm run test:watch` | Vitest in watch mode |
 | `npm run test:coverage` | Vitest with v8 coverage (`coverage/` output) |
@@ -174,14 +188,14 @@ import type { Project } from "@/lib/types";
 - **Dock:** `--dock-pitch` (40 — centre to centre, and the button's own height, so n bubbles are exactly n x pitch tall; `SPREAD` in [lib/dockMotion.ts](lib/dockMotion.ts) is 0.95 x this, so retuning one means retuning the other), `--dock-dot` (10 — the nominal diameter, scaled between 0.7 and 1.5 by the lens), `--dock-rise` (10 — the travel on the way in, the same distance the first screen rises) and `--dock-reach` (120 — how far right of the rail a pointer is felt, clamped at runtime to the gutter that actually exists). `--dock-hit` and `--dock-inset` **step at 1176px**: 36/12 below it, where the content column starts at exactly 48px and the rail's box has to end there, and 44/16 above it, where the gutter has room. That step is a media query, not a width read in JavaScript, for the same reason the 640px gate is one.
 - **Colour:** `--paper`, `--sheet`, `--surface`, `--surface-2`; ink scale `--ink`, `--ink-hover`, `--ink-2`, `--ink-3`; rules `--rule`, `--rule-strong`; accent `--sage`, `--sage-strong`, `--sage-tint`; and two semantic colours, `--clay` (errors) and `--ochre`. Every one has a dark value too (below), as do `--shadow-toast` and the two mark filters `--mark-invert` / `--mark-outline`, which are `none` on ivory.
 - **Type:** one family. `--font-sans` is Albert Sans from [app/fonts.ts](app/fonts.ts); `--font-sans-jp` is a system Japanese stack that `html[data-locale='ja']` swaps in. The size scale runs `--text-label` (12) through `--text-hero`.
-- **Spacing and layout:** `--container` (1080), `--gutter` / `--gutter-mobile`, `--label-col` (160 — the date column), `--reading-col`, `--section-gap` (the resume's), `--hero-pad`.
+- **Spacing and layout:** `--container` (1080), `--gutter` / `--gutter-mobile`, `--label-col` (160 — the date column), `--reading-col`, `--section-gap` (the resume's), `--hero-pad`. `--hit-min` (44) is the least a control should be to a finger; see `.hit-y` under Accessibility.
 - **Home page spacing.** With no rules, four gaps carry the structure: `--section-space` (168, 112 on phones) into each section after the first, `--section-space-first` (104 / 72) into Experience, short enough that the first screen still shows it, `--heading-space` (36 / 28) from a section's label to its first row, and `--row-space` (60 / 48) between rows. The phone values are on `:root` and the wider ones in a `min-width: 640px` block.
 - **Two grounds, one palette.** The light tokens live on `:root`. The dark ones are written **twice, identically**: once under `@media screen and (prefers-color-scheme: dark)` for `:root:not([data-theme='light'])` (System), once under `@media screen` for `:root[data-theme='dark']` (an explicit Dark). CSS cannot share one block between a media query and a selector; [tests/unit/theme.test.ts](tests/unit/theme.test.ts) fails if the two drift apart or a light colour token has no dark value. Change a colour in one, change it in both. `screen` on both is what keeps a printed resume on ivory. In the dark blocks the surfaces step *up* from the paper, because a fill darker than the ground cannot be seen. `color-scheme` is declared with the palette, so form controls and scrollbars follow the ground.
 - **How the theme reaches the page** ([lib/theme.ts](lib/theme.ts)). System is the *absence* of `data-theme` and needs no JavaScript, so a reader with scripts off still gets their device's theme. Only an explicit Light or Dark is written — to `localStorage` under `portfolio.theme`, and to `<html>` by an inline script placed beside the boot script as the first thing in `<body>`, so the first paint is already right (the pages are prerendered; the server never knows the choice). A locale change remounts `<html>` and drops the attribute, exactly as it drops `data-boot`; [ThemeMemory](components/site/ThemeMemory.tsx), in the layout, puts it back in a layout effect before that commit paints. `chooseTheme` withdraws transitions for one flushed frame (`data-theme-switching`) so nothing fades its colour behind a ground that has already changed; the theme pill is the one exemption. The theme pill's position and the selected icon are styled from `<html>`'s attribute, not React state, so they are right on the first paint; `aria-checked` alone comes from state. The script touches nothing but the attribute: the `theme-color` metas are React's, so `showTheme` repoints them after hydration.
 
 ### Motion
 
-Three values in the `:root` block of `app/globals.css` drive every transition on the site:
+The motion tokens in the `:root` block of `app/globals.css` drive every transition on the site:
 
 | Token | Value | Used by |
 | --- | --- | --- |
@@ -192,7 +206,7 @@ Three values in the `:root` block of `app/globals.css` drive every transition on
 | `--panel-speed` | 2435 | expand / collapse: the glide, in **pixels per second** — not a duration |
 | `--panel-settle` | 460ms | expand / collapse: the one landing every panel shares, decelerating from `--panel-speed` |
 | `--panel-fade` | 370ms | expand / collapse: every panel's fade, its content settling `--panel-rise`, and its chevron turning. The three panel tokens were 2800, 400ms and 320ms; each moved 15% slower together, which slows the whole motion by exactly 15% without changing its shape |
-| `--panel-rise` | 8px | how far a panel's content settles down into place as it fades in, over `--duration-slow`, so it unfolds out of the row rather than appearing under it |
+| `--panel-rise` | 8px | how far a panel's content settles down into place as it fades in, over `--panel-fade`, so it unfolds out of the row rather than appearing under it |
 | `--ease-panel` | `cubic-bezier(.3,.45,.15,1)` | a panel in a browser without `linear()`; the dock's ring |
 | `--duration-enter` | 620ms | the first-screen entrance |
 | `--duration-dock` | 420ms | one section-dock bubble's rise and fade |
@@ -228,8 +242,10 @@ In `sectionLinks`, **`id` is the element the dock watches and `href` is where th
 Both languages come from one `app/[locale]` tree:
 
 - `generateStaticParams` prerenders `en` and `ja`; `dynamicParams = false`, so anything else 404s.
-- There is no `app/layout.tsx`. `app/[locale]/layout.tsx` owns `<html lang>` and `data-locale` for the four valid routes. `experimental.globalNotFound` makes `app/global-not-found.tsx` answer unmatched paths at the routing level in both development and production; it supplies its own document, global CSS, fonts and theme script because no locale layout wraps it. Keep this boundary when changing the 404 page: a root `app/not-found.tsx` without `app/layout.tsx` causes a persistent build error in `next dev` after an unknown URL.
+- There is no `app/layout.tsx`. `app/[locale]/layout.tsx` owns `<html lang>` and `data-locale` for the four valid routes. `experimental.globalNotFound` makes `app/global-not-found.tsx` answer unmatched paths at the routing level in both development and production; it supplies its own document, global CSS, fonts and theme script because no locale layout wraps it. Keep this boundary when changing the 404 page: a root `app/not-found.tsx` without `app/layout.tsx` causes a persistent build error in `next dev` after an unknown URL. It also exports its own `metadata` and `viewport`: with no layout above it nothing else supplies a title or a theme-color, and the tab read as the raw address. [app/global-error.tsx](app/global-error.tsx) is its twin for a throw in the layout itself, and [app/[locale]/error.tsx](app/[locale]/error.tsx) catches a throw in a page while keeping the layout — without them a client error replaces the document with Next's bare "Application error". All three are one [FullPageMessage](components/site/FullPageMessage.tsx).
 - `/` is rewritten to `/en` internally and `/en` redirects to `/`, and `/resume` and `/en/resume` are the same pair (both in [next.config.mjs](next.config.mjs)), so each language has exactly one canonical URL per page. Redirects are evaluated before rewrites and a rewrite does not re-enter them, so there is no loop. The rewrite is also what stops `/resume` being read as the `[locale]` segment and 404ing under `dynamicParams: false` — add a route here and it needs its own pair.
+- **Addresses the site used to answer at still do.** The resume was `/Rain Zhang Resume.pdf` until May 2026 and `/Resume.pdf` before that, and both went out in applications, so `formerAddresses` in [next.config.mjs](next.config.mjs) sends them — and `/index.html` — where they now live, permanently. `guessedAddresses` (`/cv`, `/cv.pdf`, `/ja/resume.pdf`, `/ja/cv`) were never addresses at all, only the obvious thing to type, so those are temporary. A redirect's `source` is matched percent-encoded (`%20`, never a space) and without regard to case, which is why there is no separate `/resume.pdf` entry. Rename a PDF and its old name goes in the first list.
+- **hreflang names three things:** `en-CA`, `ja`, and `x-default` at the English URL — the page for a reader neither language was aimed at, and what a page that picks a language for its reader is expected to declare. The layout, the resume page and [app/sitemap.ts](app/sitemap.ts) all state it; change one and change all three.
 - **A nested page's metadata replaces the layout's one key at a time.** `app/[locale]/resume/page.tsx` restates `alternates`, `openGraph` and `twitter` in full; drop one and the resume page silently advertises the home page's canonical URL and `og:url`.
 - **Which language an arrival gets, in order:** the `portfolio.locale` cookie if it holds a language this site has; otherwise `x-vercel-ip-country` — `JP` gets Japanese, everyone else English. Location decides the first visit of all and is never consulted again. [middleware.ts](middleware.ts) is where this lives; it 307s `/` to `/ja` and `/resume` to `/ja/resume`, and its matcher is an explicit list of the English routes, never a pattern: a catch-all would match `/ja` and redirect it to itself. It only ever redirects *into* Japanese, so a link to `/ja` is never bounced back to `/`. Local `next dev` has no country header, so an unremembered `/` stays English.
 - **Two things write the cookie, both in the browser.** [LocaleSwitch](components/site/LocaleSwitch.tsx) writes it on a click, and [LocaleMemory](components/site/LocaleMemory.tsx) — mounted in the layout, renders nothing — writes the language of the page being read, so a reader who arrived at `/ja` from a link or from the geo redirect is opened in Japanese next time too. Both go through `rememberLocale` in [lib/site.ts](lib/site.ts); do not write `document.cookie` for this anywhere else. A deliberate choice always wins, because the switch writes the cookie before it navigates.
@@ -244,7 +260,7 @@ There is **no `app/layout.tsx`** and no locale React context. `app/[locale]/layo
 
 Everything a recruiter reads is in [lib/content/en.ts](lib/content/en.ts) and [lib/content/ja.ts](lib/content/ja.ts), typed by [lib/types.ts](lib/types.ts). Updating site content means editing a content file, **not** the JSX.
 
-- **Adding a project** is one object in `projects`, in the order it should appear; the row, the panel, the pills and the links all follow. `maintained: true` adds the "Actively maintained" badge beside the title. `links` (live site, repository) render on the collapsed row beside the pills, never inside the panel; `links` may be `[]`, and the row then ends with the pills. Screenshots go in `/public/projects/` as WebP, 1760px wide — twice the 880px frame the `sizes` attribute asks for, which is as much as any display can use. They were 3MB PNGs at 2980×1530 until that was measured.
+- **Adding a project** is one object in `projects`, in the order it should appear; the row, the panel, the pills and the links all follow. `maintained: true` adds the "Actively maintained" badge beside the title. `links` (live site, repository) render on the collapsed row beside the pills, never inside the panel; `links` may be `[]`, and the row then ends with the pills. Screenshots go in `/public/projects/` as WebP, 1760px wide — a little over twice the 792px frame the `sizes` attribute settles at, which is as much as any display can use. A project's `image` is `src` and `alt` only: it is drawn with `fill` inside a fixed-ratio frame, so it carries no dimensions. They were 3MB PNGs at 2980×1530 until that was measured.
 - **Adding an experience** is one object in `experiences`. `mark` is optional — omit it and no logo renders. `related` may be `[]`, which drops the related-work block. `current: true` marks a role that is still held: the structured data in [lib/jsonLd.ts](lib/jsonLd.ts) names that role and its organisation as the present job, and names neither when no role carries it — the first row is the most recent role, not necessarily a current one.
 - **Technology pills** are looked up by name in [lib/tech.ts](lib/tech.ts). A name mapped to `null` still renders as a plain pill, so nothing breaks if a mark is missing. Adding one: drop the file in `/public/tech/` and add a line to `TECH_ICONS`.
 - **Edit both locales.** [tests/unit/content.test.ts](tests/unit/content.test.ts) fails if ids, hrefs, technology arrays, marks or skill items drift apart between `en` and `ja`, so you cannot forget one. Only prose differs. A resume href is the one exception: `/resume` and `/ja/resume` legitimately differ, so `shape()` strips the `/ja` prefix before comparing and a separate test pins the prefix itself.
@@ -258,12 +274,12 @@ Everything a recruiter reads is in [lib/content/en.ts](lib/content/en.ts) and [l
 Two rules, and the ESLint config depends on them:
 
 - **`next/image`** for project screenshots (inside a fixed 16:8 frame, so space is reserved before they load), with `loading="eager"`. The hero is type only — it carries no image.
-- **Nothing on the page is lazy.** Both the screenshots and the technology marks load eagerly, and both had to. A screenshot sits inside a panel that is always in the DOM but collapsed to a zero-height track, which never intersects, so lazily it would not begin loading until the row was clicked. The marks are a few kilobytes each and under 80KB for the set, so there is nothing to defer — and the boot gate can only wait for a request that exists.
-- **Keep the source files the size they are drawn.** The marks are 96px, eight times the 12px they render at; the screenshots are 1760px. `public/` was 9.7MB and is now 1.2MB, and almost all of the difference was a 2048px PNG being downloaded to draw a pill glyph. Before adding an asset, check its pixel dimensions against the box it goes in.
+- **Nothing on the page is lazy.** Both the screenshots and the technology marks load eagerly, and both had to. A screenshot sits inside a panel that is always in the DOM but collapsed to a zero-height track, which never intersects, so lazily it would not begin loading until the row was clicked. The marks are a few kilobytes each and about 128KB for the set, so there is nothing to defer — and the boot gate can only wait for a request that exists.
+- **Keep the source files the size they are drawn.** The technology marks are 96px, eight times the 12px they render at; the company and school marks are 144px tall, eight times their 18px; the screenshots are 1760px. `public/` was 9.7MB and is now 1.2MB, and almost all of the difference was a 2048px PNG being downloaded to draw a pill glyph. Before adding an asset, check its pixel dimensions against the box it goes in.
 - **Plain `<img>` with explicit `width`/`height`** for technology marks and company logos — they are 12–20px tall, several are SVG, and this avoids turning on SVG handling in `next/image`. [.eslintrc.json](.eslintrc.json) therefore keeps `@next/next/no-img-element` **off**; do not turn it back on.
 - A company `mark` in the content files carries the file's own dimensions; [CompanyMark](components/site/CompanyMark.tsx) renders every one at a shared 18px height and derives the width from that ratio. A square logo and a wordmark five times as wide have to weigh the same when they sit in front of a title.
 - A mark may also declare `scale`, an optical adjustment against that shared height for when equal ink still does not read as equal weight — MNT's compact square carries `1.45`, since a single glyph needs noticeably more height than a wide wordmark to carry the same weight.
-- **That height is ink, not canvas.** Both logo `viewBox`es are cropped to their drawn pixels, so 18px of box is 18px of visible mark. `feitian.svg` is cropped to the wordmark alone — its "WE BUILD SECURITY" line is still in the path data but falls outside the viewBox, because at this size it rendered as 4px of unreadable smudge. Widening that viewBox brings it back. Before adding a logo, check its file for padding or a tagline and crop the `viewBox`, never the path data or the `<style>` block.
+- **That height is ink, not canvas.** `mnt-realty.svg`'s `viewBox` is cropped to its drawn pixels and `feitian.png` is trimmed to its ink — the wordmark and the line under it — with no padding, so 18px of box is 18px of visible mark. Before adding a logo, check its file for padding and crop it: the `viewBox` of an SVG, never its path data or its `<style>` block.
 
 Images, technology badges and every control carry `.no-copy` (see `globals.css`), so a click or a double-click on one leaves no text selection and images cannot be dragged out. Prose, panel bodies and the contact links are deliberately left selectable — copying those is the point. A browser's own "copy image" is not blocked; suppressing the context menu to do that is not worth what it breaks.
 
@@ -284,7 +300,7 @@ Marks are shown in their original colours and are never tinted or greyscaled —
 - **The sheet stays blank for `--boot-reveal`** before the wordmark fades in, because most boots are over well inside it and a wordmark that appears and immediately leaves is its own kind of flash. Under `prefers-reduced-motion` the mark is not rendered at all: the global reduced-motion block forces every delay to 0.01ms, so nothing can hold it back there.
 - **Nothing waits on a frame that may never come.** A backgrounded tab paints none, so `requestAnimationFrame` is raced against a 50ms timer, and every image carries its own budget for the stall that fires neither `load` nor `error`. `img.complete` is true for a 404 as well as for a cached hit, which is why a missing file cannot hang the gate. The image scan is two passes and never a loop: `document.images` is live, and iterating it until it comes back clean is how a gate hangs forever.
 - **No content is hidden waiting for JavaScript below the fold.** There is no scroll-reveal. The first screen fades and rises in once, through a CSS animation with `animation-fill-mode: both` — no *content* below the fold waits on a scroll position. The section dock is the one scroll-driven thing on the page, and it is an additional control rather than content: with JavaScript off it never appears and the header and footer navigation still work. Changing language replaces the tree, so the same animation replays and the new language settles in rather than snapping in.
-- **Fonts** are self-hosted through `next/font/local` with `display: swap`, a preloaded latin subset, a lazily fetched latin-ext subset, and a metric-adjusted fallback — no flash of default text and no reflow. Japanese has no face in the design system: `/ja` uses the reader's system Japanese font rather than downloading one.
+- **Fonts** are self-hosted through `next/font/local` with `display: swap`, a preloaded latin subset, a lazily fetched latin-ext subset, and a metric-adjusted fallback — no flash of default text and no reflow. **Upright only.** Nothing on the site is italic, and a face declared in [app/fonts.ts](app/fonts.ts) is preloaded whether or not a glyph of it is drawn; the italic one cost 34KB on every first visit, which the boot gate then waited for. Add it back there if italic text is ever wanted. Japanese has no face in the design system: `/ja` uses the reader's system Japanese font rather than downloading one.
 - **Expand/collapse** keeps panel content in the DOM at all times, so opening is instant; the row animates `grid-template-rows` and `opacity` only. The transition delay in `.disclosure-panel` applies to `visibility` alone, which is what keeps a closed panel's links out of the tab order without also holding up the collapse.
 - **Panels share one motion, not one duration.** Content heights run from about 600px to nearly 1200px. Every panel moves off at `--panel-speed` at once, glides at it, and comes to rest over the same `--panel-settle`; a panel of height H rides the last H pixels of that one motion, so a taller row only glides for longer, and one shorter than the settle joins it part-way. [DisclosureRow](components/site/DisclosureRow.tsx) measures its own content with a `ResizeObserver` and sets `--panel-duration` and `--panel-ease` — a CSS `linear()` easing — from the two tokens (see [lib/panelMotion.ts](lib/panelMotion.ts)). The transition is still CSS, so an interrupted one reverses itself. Change the tokens to retune every row at once — never hard-code a duration or an easing on a panel.
 - **A duration in proportion to height is not one speed.** That is what the panels had before, and it matched only the *average* speed: it stretched one easing curve over a longer time, and stretching a curve stretches its shape. The tall rows took twice as long to get up to speed and twice as long to settle, so in the part anyone sees — the first few hundred pixels under the row — they were visibly the slow ones: 60ms in, the MNT project had opened 24px less than the FEITIAN entry. Now every row is 122px open after 50ms and 243px after 100ms, in both directions, and every one has the same distance left 100, 200 and 300ms before it stops. [disclosure.spec.ts](tests/e2e/disclosure.spec.ts) seeks the paused transitions of a short and a tall row and fails if they part by 2px.
@@ -294,7 +310,7 @@ Marks are shown in their original colours and are never tinted or greyscaled —
 - **`linear()` has a fallback.** Where `CSS.supports` says no, `--panel-ease` is left unset and the row keeps its computed duration under `--ease-panel`. Never write an easing the browser cannot parse: it voids the whole `transition` declaration and the panel snaps.
 - **Measure with `scrollHeight`.** A shut row is a grid track at `0fr` with its overflow hidden, and both `getBoundingClientRect()` and `offsetHeight` of the content inside it report **0** there; only `scrollHeight` reports the real height in either state. Measuring the rect happens to work because the effect runs before the row collapses, which is a figure that is right by timing rather than right. A zero measurement computes no motion, and the row falls back to `--duration-base`, far faster than its neighbours.
 - **Navigation within a page** — the header and the footer on the home page — is plain anchors with CSS smooth scrolling, so it works before hydration. **Navigation that crosses a route is `next/link`**, and that is what `homeHref` on [SiteHeader](components/site/SiteHeader.tsx) and `sectionBase` on [SiteFooter](components/site/SiteFooter.tsx) actually select: empty means this page, so a hash is an anchor; anything else means the link leaves this route, where an anchor is a whole document load. That is what made returning from the resume slow — and why the hero's Resume button takes `internal` on `ButtonLink`. The resume page now prefetches the home page while it is being read, and the trip back is a transition. `<html>` carries `data-scroll-behavior="smooth"` so the router turns the smooth scrolling off for the length of that transition and a cross-route jump to a section lands rather than flies. `scroll-padding-top` is `0` and no section carries a `scroll-mt-*`, so a jump lands on the section's own top edge; give either one a value and the tail of the previous section stays on screen. The dock's buttons go through `scrollToSection` in [PortfolioPage](components/site/PortfolioPage.tsx), which uses the same `window.scrollTo` idiom at offset 0 and then moves focus into the section — a button, unlike an anchor, does not move the focus starting point by itself.
-- **The dock's entrance is CSS, not JavaScript.** Crossing the threshold flips one attribute and the transitions in `globals.css` unfurl the spine and lift the bubbles in from the middle outward; scrolling back up flips it again and an interrupted transition reverses itself, outside-in. Nothing is scroll-scrubbed, which is what keeps the motion at its own speed rather than the trackpad's. JavaScript owns exactly four things — `data-shown` on the rail, `data-active` and `data-open` on each button, and the lens `scale()` on each dot — and none of the properties those drive.
+- **The dock's entrance is CSS, not JavaScript.** Crossing the threshold flips one attribute and the transitions in `globals.css` unfurl the spine and lift the bubbles in from the middle outward; scrolling back up flips it again and an interrupted transition reverses itself, outside-in. Nothing is scroll-scrubbed, which is what keeps the motion at its own speed rather than the trackpad's. JavaScript owns exactly five things — `data-shown` on the rail, `data-active`, `aria-current` and `data-open` on each button, and the lens `scale()` on each dot — and none of the properties those drive. `aria-current` drives no style at all: it is the dot, said aloud.
 - **Two things about the dock will silently break if you change them.** It is hidden with `visibility`, never `display`: a `display` flip has no before-change style, so the whole entrance would snap (`display: none` is only the sub-640px gate). And the first paint after hydration carries `data-immediate`, which sets `transition: none` — because `measure()` calls `getComputedStyle` for the dock tokens *before* the attribute flips, and that resolution is a before-change style a deep-linked load would otherwise animate from.
 - **The dock reads landmarks with `offsetTop`**, never `getBoundingClientRect`, because `#experience` carries `.enter` and is transform-offset by 10px for the first second after paint. Under `prefers-reduced-motion` the frame loop never starts: the CSS `!important` duration reset cannot touch a transform written from JavaScript, so the lens has to opt out in JavaScript too.
 
@@ -305,8 +321,17 @@ Marks are shown in their original colours and are never tinted or greyscaled —
 - Semantic sections and exactly one `h1`.
 - Rows are real `<button>`s with `aria-expanded` and `aria-controls` pointing at a `role="region"` panel. Closed panels are `invisible`, so their links leave the tab order.
 - A row opens from its toggle and nothing else: a chevron and the words "Show details", quiet and unfilled, that end the row on the content's left edge where the panel unfolds; while the row is open the chevron turns over, the words become "Hide details" and both darken. It is the `button-<id>` element and carries `aria-expanded` and `aria-controls`. Its accessible name is the words it shows followed by the row's title in a visually hidden span, so it meets label-in-name and the rows stay distinct in a list of controls. The panel region is labelled by the row's heading (`title-<id>`), not by the button. The title, summary and the rest of the row are plain, selectable text — clicking them does nothing. Inside the panel, block labels are sentence-case subheads rather than eyebrows, because an uppercase label with no rule around it reads as the start of another section.
-- Focus rings are the design system's 2px sage ring on `:focus-visible`.
-- The copy confirmation and the form's sent state are live regions.
+- Focus rings are the design system's 2px sage ring on `:focus-visible`. A form field draws it on its frame (`.field-frame:focus-within`), pulled in over the frame's own border, because the control inside is `outline-none` — and it draws it in the error state too, which is where a failed submit sends focus.
+- **A field is its whole box.** The padding is on the control, not the frame, so the control fills the outline and a press anywhere inside it lands. With the padding on the frame, half the box was a dead `div` around a 23px input.
+- **Fields are 16px on a phone** (`text-body sm:text-body-15`). iOS zooms into any control under 16px. The base rule in `globals.css` says the same, but a utility out-ranks an element selector, so a control with a size class has to say it for itself.
+- The copy confirmation and the form's sent state are live regions. The toast's region is always mounted and empty until there is something to say: a region that arrives already holding its text is a new node, not a change, and is often not announced.
+- **Focus follows a swap.** Sending a message unmounts the form and starting another unmounts the confirmation, each taking the focused button with it; the confirmation's heading and then the first field take the focus instead. A "Related work" button moves focus to the project it opens, as the dock moves it to a section.
+- **The two header switches keep a radio's keyboard.** The theme switch is one tab stop with the arrow keys, Home and End moving the choice. The language switch is links announced as radios, so it answers Space as well as Enter; it is not roved, because each option navigates.
+- **Names are in the page's language.** The language switch and the footer nav are named from `copy.labels.navigation`, like every other label; a hard-coded English `aria-label` is read out in English on `/ja`.
+- Each home section below the intro is named by its heading (`aria-labelledby`), so the focus the dock moves there announces where it landed, and the dock's current button carries `aria-current`.
+- **Small on purpose, but not to a finger.** `.hit-y` stretches a control's target to `--hit-min` (44px) with a pseudo-element, up and down only and only under `pointer: coarse`. The header's two switches and its menu buttons carry it. It is vertical because a switch's options sit side by side, and because a target wider than its button, flush with the header's edge, makes the header overflow.
+- **Hover is for a pointer that can hover.** Tailwind's `future.hoverOnlyWhenSupported` wraps every `hover:` class in `(hover: hover) and (pointer: fine)`, and the hover rules written by hand in `globals.css` carry the same query. A touchscreen keeps `:hover` on the last thing tapped, so a row's toggle stayed in its "open" colour after it was tapped shut. The two must agree — [tests/unit/styles.test.ts](tests/unit/styles.test.ts) fails on a hand-written `:hover` outside the query.
+- **Forced colours.** A forced palette replaces every background and drops every box-shadow, which erased the pill behind the chosen language and theme, the fill of the dock's current dot and the toast's edge. A `forced-colors` block at the foot of `globals.css` redraws those in system colours, and nothing else needs it.
 - The contact form validates on submit, not on blur: nothing is marked wrong until Send has been pressed, after which the errors track every keystroke. [Field](components/ui/Field.tsx) still accepts an `onBlur` for anything that wants the older behaviour.
 - The message field cannot be dragged to a new size. It starts at five lines and grows with what is typed, measured before paint and again on resize; its scrollbar is hidden by the script that sizes it, so with JavaScript off it is a plain five-line field that scrolls.
 - The ink scale is ≥ 4.5:1 on ivory.
@@ -327,8 +352,9 @@ Marks are shown in their original colours and are never tinted or greyscaled —
 ### E2E tests — Playwright
 
 - Live in `tests/e2e/`, run with `npm run test:e2e`.
-- Four projects: `chromium`, `firefox`, `safari` (WebKit), `mobile` (iPhone 13 WebKit). `webServer` starts `npm run dev` locally and `npm run start` in CI.
-- **`tsconfig.json` excludes `tests/e2e`** — Playwright uses its own tsconfig.
+- Four browser projects — `chromium`, `firefox`, `safari` (WebKit), `mobile` (iPhone 13 WebKit) — and an `images` setup project each of them depends on. `webServer` starts `npm run dev` locally and `npm run start` in CI.
+- **`tsconfig.json` excludes `tests/e2e`**, which has [its own](tests/e2e/tsconfig.json), extending the root one. `npm run typecheck` runs both, so the specs are type-checked too.
+- **A smooth scroll already under way wins in WebKit.** A `scrollTo` issued while the page is still gliding is dropped, and nothing cancels the glide. Playwright scrolls a target into view before clicking it and the page's `scroll-behavior: smooth` makes that a glide, so a handler that scrolls must wait for the page to be at rest — `revealProject` does. The same holds for a reader who tabs to a control and presses it at once.
 - **Don't rely on `window.scrollY` checks** — they're flaky in headless browsers. Use `expect(locator).toBeInViewport()`.
 - **Sweep widths by resizing, not by reloading.** Layout is CSS, so one navigation and three `setViewportSize` calls prove exactly what four navigations do, in a fraction of the time. This has timed out CI twice. Since the page began loading its images up front there is a second reason: each viewport asks `next/image` for a different variant, and `next start`'s own optimizer stalls the browser on the first cold request for a second variant. Vercel's does not — the live site was checked at every one of those widths — so this is a CI-only trap, not something to design the page around.
 - **Mind the `mobile` project.** Below 768px the header links and the language switch move into the menu sheet (the theme switch stays in the header at every width). The breakpoint is 768, not the site's usual 640, because at 640 the links and the language switch leave only 15px for the theme switch. A test that drives the wide header must set an explicit desktop viewport; a test that drives the switch should reach whichever copy is visible (see the `languageSwitch` helper in [tests/e2e/i18n.spec.ts](tests/e2e/i18n.spec.ts)).
@@ -342,7 +368,9 @@ Marks are shown in their original colours and are never tinted or greyscaled —
 [.github/workflows/ci.yml](.github/workflows/ci.yml) runs on every PR and push to `main`:
 
 1. **`quick-checks` job:** `npm ci` → `npm run lint` → `npm run typecheck` → `npm run test`.
-2. **`e2e` matrix:** four parallel runs (chromium / firefox / safari / mobile), each does `npm run build`, installs the matching Playwright browser, runs `npx playwright test --project=<name>`. Reports upload on failure.
+2. **`e2e` matrix:** four parallel runs (chromium / firefox / safari / mobile), each does `npm run build`, installs the matching Playwright browser, runs `npx playwright test --project=<name>`. The report uploads unless the run was cancelled, so a test that failed and then passed on a retry still leaves its trace.
+
+Both jobs install the Node version in [.nvmrc](.nvmrc). The workflow asks for read-only permissions, and a newer push to a pull request cancels the run before it; a push to `main` always runs to the end.
 
 A change that breaks CI on one matrix entry will block the whole PR. Don't disable a project to make CI green; fix the test or the underlying code.
 
@@ -362,11 +390,11 @@ The `e2e` jobs run on `ubuntu-24.04`, not `ubuntu-latest`. `ubuntu-latest` is Ub
 ## Conventions and gotchas
 
 - **Strict TypeScript** — no `any`. Prefer importing types from [lib/types.ts](lib/types.ts).
-- **Prettier:** single quotes, semicolons, trailing commas (`es5`), `printWidth: 100`, 2-space indent. See [.prettierrc.json](.prettierrc.json). The `tests/` directory is the exception — it is written in double quotes, matching Playwright's own style.
+- **Prettier:** single quotes, semicolons, trailing commas (`es5`), `printWidth: 100`, 2-space indent. See [.prettierrc.json](.prettierrc.json). The E2E specs are the exception — `tests/e2e` is written in double quotes, matching Playwright's own style; the unit tests mostly follow the rest of the repo.
 - **ESLint:** `@typescript-eslint/no-unused-vars` is warn-only with `argsIgnorePattern: "^_"`. `@next/next/no-img-element` is **off** on purpose (see Images above).
-- **Client vs server components:** server by default; add `"use client"` only when the file uses hooks, browser APIs, or event handlers. `PortfolioPage`, `SiteHeader`, `SectionDock`, `LocaleSwitch`, `ThemeSwitch`, `ThemeMemory`, `ContactForm`, `ContactSection`, `ExperienceSection`, `WorkSection`, `DisclosureRow` and `Field` are client; the rest are server.
+- **Client vs server components:** server by default; add `"use client"` only when the file uses hooks, browser APIs, or event handlers. `PortfolioPage`, `SiteHeader`, `SectionDock`, `LocaleSwitch`, `LocaleMemory`, `ThemeSwitch`, `ThemeMemory`, `BootGate`, `EntranceRouter` (in `lib/entrance.ts`), `ContactForm`, `ContactSection`, `ExperienceSection`, `WorkSection`, `DisclosureRow`, `Field` and the two error boundaries are client; the rest are server.
 - **All interactive state lives in [PortfolioPage.tsx](components/site/PortfolioPage.tsx)** — which experience row is open, which project row is open, and the toast. Sections receive `openId` and `onToggle`. Don't push state down into a section.
-- **No hardcoded UI strings in components.** Add a key to `Copy` in [lib/types.ts](lib/types.ts) and implement it in both content files — TypeScript will fail the build until you do.
+- **No hardcoded UI strings in components** — `aria-label`s included. Add a key to `Copy` in [lib/types.ts](lib/types.ts) and implement it in both content files — TypeScript will fail the build until you do. Three places stand outside `Copy`, each because it cannot be handed one: the 404 and the global error page have no locale to read and are English, and the page-level error boundary takes its five strings from [lib/content/error.ts](lib/content/error.ts), since importing the content files into a client boundary would ship all of the site's text.
 - **No emojis in source** unless explicitly asked.
 - **No new docs files** (READMEs, NOTES, etc.) unless explicitly asked.
 
@@ -381,5 +409,6 @@ The `e2e` jobs run on `ubuntu-24.04`, not `ubuntu-latest`. `ubuntu-latest` is Ub
 - **Update the resume:** reword [resume/resume.en.html](resume/resume.en.html) or [resume.ja.html](resume/resume.ja.html), check `npm run resume:measure` still reports the same line counts (both PDFs are full to the bottom edge — one extra line spills onto a second page), run `npm run resume` to reprint into `/public/`, then carry the same words into [lib/content/resume.en.ts](lib/content/resume.en.ts) or [resume.ja.ts](lib/content/resume.ja.ts). The page has no content of its own.
 - **Change the page title, description or hreflang:** `meta` in both content files, and `generateMetadata` in [app/[locale]/layout.tsx](app/[locale]/layout.tsx).
 - **Change a token (colour, type, spacing, radius, motion):** the `:root` block of [app/globals.css](app/globals.css), and its Tailwind name in [tailwind.config.ts](tailwind.config.ts) if it is new. A colour also has a dark value in **both** dark blocks below it.
+- **Rename or move a public file:** add its old address to `formerAddresses` in [next.config.mjs](next.config.mjs) and a case to the list in [tests/e2e/resume.spec.ts](tests/e2e/resume.spec.ts).
 - **Change contact form behaviour:** [components/site/ContactForm.tsx](components/site/ContactForm.tsx); the endpoint and timeout are in [lib/site.ts](lib/site.ts).
 - **Add an icon glyph:** extend the `PATHS` map in [components/ui/Icon.tsx](components/ui/Icon.tsx) — the `IconName` type is derived from it, so there is nothing else to keep in sync.
