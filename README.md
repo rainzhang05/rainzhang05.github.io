@@ -20,17 +20,18 @@ Two pages, each in two languages:
 - `/resume` and `/ja/resume` — my resume, readable in the page, with the PDF a
   download away.
 
-It is built on a small design system of my own: one typeface, ivory paper, one
-accent, no borders or shadows, and a single interaction — rows that open in
-place. My resume and cover letter use the same system, so everything a
-recruiter sees from me comes from one hand.
+It is built on a small design system of my own: one typeface, one accent, no
+borders or shadows, on ivory paper or — for a reader who prefers it — the same
+palette on charcoal. There are two interactions: rows that open in place, and a
+section dock down the left edge. My resume and cover letter use the same
+system, so everything a recruiter sees from me comes from one hand.
 
 ## Technologies Used
 
 - **Next.js**: For the application framework, routing, and production build
 - **React**: For building the user interface with reusable components
 - **TypeScript**: For type-safe development across the codebase
-- **Tailwind CSS**: For styling and layout, with every value bound to a design token
+- **Tailwind CSS**: For styling and layout, with colour, type, spacing and motion bound to design tokens
 - **Albert Sans**: Self-hosted through `next/font/local`, subset and preloaded
 - **Formspree**: For handling contact form submissions
 - **Vitest and Playwright**: For unit and end-to-end tests
