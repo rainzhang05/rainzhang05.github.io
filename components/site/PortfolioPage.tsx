@@ -27,6 +27,9 @@ const REVEAL_OFFSET = 24;
 /** Long enough for the opened row to be committed and laid out before the scroll is aimed. */
 const REVEAL_DELAY_MS = 60;
 
+/** The longest a jump waits for a scroll already under way to finish. */
+const REVEAL_WAIT_MS = 1000;
+
 /**
  * The whole page. Only three pieces of state: which experience row is open,
  * which project row is open, and the toast. One row per list at a time.
@@ -37,6 +40,7 @@ export function PortfolioPage({ copy, locale }: { copy: Copy; locale: Locale }) 
   const [toast, setToast] = useState<string | null>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout>>();
   const revealTimer = useRef<ReturnType<typeof setTimeout>>();
+  const revealFrame = useRef(0);
 
   // A change of language replaces this tree; a timer left running would then
   // set state, or scroll, on a page that is no longer there.
@@ -44,6 +48,7 @@ export function PortfolioPage({ copy, locale }: { copy: Copy; locale: Locale }) 
     () => () => {
       clearTimeout(toastTimer.current);
       clearTimeout(revealTimer.current);
+      cancelAnimationFrame(revealFrame.current);
     },
     []
   );
@@ -150,9 +155,9 @@ export function PortfolioPage({ copy, locale }: { copy: Copy; locale: Locale }) 
    * by whatever was still on screen when it was not: the page glided to where
    * the row had been and left its title above the top of the screen.
    *
-   * It waits a beat first, as it always has. A smooth scroll begun in the same
-   * task as the change that reshapes the page is one WebKit drops, so the
-   * scroll is aimed once that change has been committed and laid out.
+   * It waits a beat first, as it always has, so the scroll is aimed once the
+   * opened row has been committed and laid out — and then for the page to be
+   * at rest, for the reason given where it does.
    *
    * Focus goes too, as it does from the dock. The button that was pressed is
    * in a panel the reader has just been taken away from, and focus left there
@@ -177,7 +182,9 @@ export function PortfolioPage({ copy, locale }: { copy: Copy; locale: Locale }) 
 
       setOpenProject(id);
       clearTimeout(revealTimer.current);
-      revealTimer.current = setTimeout(() => {
+      cancelAnimationFrame(revealFrame.current);
+
+      const aim = () => {
         const row = document.getElementById('row-' + id);
         if (!row) return;
         const closing = closingId === null ? null : document.getElementById('panel-' + closingId);
@@ -189,6 +196,26 @@ export function PortfolioPage({ copy, locale }: { copy: Copy; locale: Locale }) 
           top: Math.max(0, window.scrollY + row.getBoundingClientRect().top - lost - REVEAL_OFFSET),
           behavior: prefersReducedMotion() ? 'auto' : 'smooth',
         });
+      };
+
+      // Not while the page is still gliding from an earlier scroll — the one
+      // that brought the pressed button into view when it was tabbed to, say.
+      // WebKit lets a smooth scroll already under way run to its end and drops
+      // any asked for meanwhile, and nothing cancels it, so the project opened
+      // somewhere off screen. Two frames at rest, or the limit, then go.
+      const until = performance.now() + REVEAL_WAIT_MS;
+      let last = window.scrollY;
+      let still = 0;
+      const whenStill = () => {
+        const y = window.scrollY;
+        still = y === last ? still + 1 : 0;
+        last = y;
+        if (still >= 2 || performance.now() >= until) aim();
+        else revealFrame.current = requestAnimationFrame(whenStill);
+      };
+
+      revealTimer.current = setTimeout(() => {
+        revealFrame.current = requestAnimationFrame(whenStill);
       }, REVEAL_DELAY_MS);
     },
     [openProject, suspendAnchoring]
