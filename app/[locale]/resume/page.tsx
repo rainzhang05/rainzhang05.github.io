@@ -37,7 +37,7 @@ export async function generateMetadata({
     description: page.meta.description,
     alternates: {
       canonical: path,
-      languages: { 'en-CA': resumePage.en, ja: resumePage.ja },
+      languages: { 'en-CA': resumePage.en, ja: resumePage.ja, 'x-default': resumePage.en },
     },
     openGraph: {
       type: 'profile',

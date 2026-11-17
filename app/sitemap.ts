@@ -1,12 +1,17 @@
 import type { MetadataRoute } from 'next';
 import { site } from '@/lib/site';
 
-const languages = { 'en-CA': site.url, ja: site.url + '/ja' };
-const resumeLanguages = { 'en-CA': site.url + '/resume', ja: site.url + '/ja/resume' };
+const languages = { 'en-CA': site.url, ja: site.url + '/ja', 'x-default': site.url };
+const resumeLanguages = {
+  'en-CA': site.url + '/resume',
+  ja: site.url + '/ja/resume',
+  'x-default': site.url + '/resume',
+};
 
 /**
  * The four canonical URLs, each declaring its own language pair as alternates —
- * the same pairing generateMetadata emits as hreflang. "/en" and "/en/resume"
+ * the same pairing generateMetadata emits as hreflang, x-default included: the
+ * English page is the one for a reader neither language was written for. "/en" and "/en/resume"
  * are left out: they redirect, so they are not URLs of their own. The PDFs are
  * left out too, so they do not compete with the pages that show them.
  */

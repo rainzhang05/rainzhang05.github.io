@@ -43,7 +43,11 @@ export async function generateMetadata({
     description: copy.meta.description,
     alternates: {
       canonical: path,
-      languages: { 'en-CA': '/', ja: '/ja' },
+      // x-default is where a reader goes who matches neither: English, for
+      // anyone outside Canada and Japan. "/" also redirects a first visit
+      // from Japan, and a page that picks a language for its reader is the
+      // case the value exists for.
+      languages: { 'en-CA': '/', ja: '/ja', 'x-default': '/' },
     },
     openGraph: {
       type: 'website',
