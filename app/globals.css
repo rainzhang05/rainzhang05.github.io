@@ -200,6 +200,11 @@
   /* Focus */
   --focus-ring-width: 2px;
   --focus-ring-offset: 2px;
+
+  /* The least a control should be to a finger. The two header switches are
+     22px tall and the menu buttons 32px, drawn that size on purpose; .hit-y
+     gives them this much to press without drawing them any bigger. */
+  --hit-min: 44px;
 }
 
 @media (min-width: 640px) {
@@ -323,11 +328,18 @@ html[data-locale='ja'] {
     transition: color var(--duration-fast) var(--ease-out);
   }
 
-  a:hover {
-    color: var(--sage-strong);
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.2em;
+  /* Only where there is a pointer that can hover. A touchscreen keeps :hover
+     on the last thing tapped, so without the query a tapped link stayed
+     underlined until something else was touched. Tailwind's own hover: classes
+     carry the same query (future.hoverOnlyWhenSupported in tailwind.config.ts);
+     the two have to agree, or `hover:no-underline` stops answering this. */
+  @media (hover: hover) and (pointer: fine) {
+    a:hover {
+      color: var(--sage-strong);
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 0.2em;
+    }
   }
 
   ::selection {
@@ -484,6 +496,31 @@ html[data-entrance='contact'] :is(.enter, .enter-fade) {
   .field-frame:focus-within {
     outline: var(--focus-ring-width) solid var(--sage);
     outline-offset: -1px;
+  }
+}
+
+/* More to press, nothing more to see. Under a finger, the control's target is
+   stretched to --hit-min by a pseudo-element the control still owns, so a
+   press that lands just above or below a 22px switch reaches it. Up and down
+   only: the options of a switch sit side by side, and growing them sideways
+   would lay one option's target over the next. Only for a coarse pointer — a
+   mouse can hit 22px, and should not find the header's controls reaching into
+   the space around them. */
+@layer components {
+  @media (pointer: coarse) {
+    .hit-y {
+      position: relative;
+    }
+
+    .hit-y::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: 0;
+      left: 0;
+      height: var(--hit-min);
+      transform: translateY(-50%);
+    }
   }
 }
 
@@ -863,11 +900,19 @@ html[data-entrance='contact'] :is(.enter, .enter-fade) {
     color: var(--ink-2);
   }
 
-  .theme-option:hover,
   html:not([data-theme='light'], [data-theme='dark']) .theme-option[data-theme-option='system'],
   html[data-theme='light'] .theme-option[data-theme-option='light'],
   html[data-theme='dark'] .theme-option[data-theme-option='dark'] {
     color: var(--ink);
+  }
+
+  /* Apart from the selected state above, and behind the hover query: full ink
+     is what marks the chosen option, so a hover left behind by a tap made an
+     option that had not been chosen look as though it had. */
+  @media (hover: hover) and (pointer: fine) {
+    .theme-option:hover {
+      color: var(--ink);
+    }
   }
 
   /* Technology marks whose black would vanish on the dark ground. Both tokens
@@ -896,6 +941,16 @@ html[data-theme-switching] *::after {
 @media print {
   body {
     background: #fff;
+  }
+
+  /* Fixed to the viewport, so on paper they would be stamped onto every sheet:
+     the dock, a confirmation that happened to be up, the loading sheet.
+     !important because the dock and the sheet are each shown by a rule with
+     an attribute on it, which a plain selector here would lose to. */
+  .section-dock,
+  .toast-region,
+  #boot {
+    display: none !important;
   }
 
   /* The resume is the one page someone prints on purpose. Give the paper the
@@ -927,6 +982,34 @@ html[data-theme-switching] *::after {
 
   .disclosure-content {
     transform: none;
+  }
+}
+
+/* Forced colours — Windows High Contrast, and anything else that swaps the
+   palette for the reader's own. Every author background is replaced and every
+   box-shadow dropped, which takes three pieces of state with it, because each
+   was drawn with nothing else: the pill behind the chosen language and theme,
+   the fill in the dock's current dot, and the edge of the toast. They are put
+   back in system colours, which a forced palette leaves alone. Everything
+   else on the page is text or a border and survives by itself. */
+@media (forced-colors: active) {
+  .locale-pill,
+  .theme-pill {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+
+  .dock-item[data-active='true'] .dock-dot {
+    border-color: Highlight;
+    background-color: Highlight;
+  }
+
+  .toast {
+    border: 1px solid CanvasText;
+  }
+
+  .boot-rule > span {
+    background-color: Highlight;
   }
 }
 

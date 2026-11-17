@@ -35,7 +35,7 @@ interface CommonProps {
 }
 
 const base =
-  'no-copy inline-flex items-center justify-center rounded-button border font-medium no-underline transition-colors duration-fast ease-out disabled:opacity-45 hover:no-underline';
+  'no-copy inline-flex items-center justify-center rounded-button border font-medium no-underline transition-colors duration-fast ease-out disabled:pointer-events-none disabled:opacity-45 hover:no-underline';
 
 function classes({ variant = 'primary', size = 'md', wrap, className = '' }: CommonProps) {
   return [base, wrap ? WRAPS[size] : FIXED[size], SIZES[size], VARIANTS[variant], className]

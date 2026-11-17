@@ -7,6 +7,15 @@ import type { Config } from 'tailwindcss';
  */
 const config: Config = {
   content: ['./app/**/*.{ts,tsx}', './components/**/*.{ts,tsx}', './lib/**/*.{ts,tsx}'],
+  /*
+   * Every `hover:` here is wrapped in `(hover: hover) and (pointer: fine)`.
+   * A touchscreen has no hover, but it does have :hover: iOS leaves it on the
+   * last thing tapped until something else is, so a row's toggle stayed in its
+   * darker "open" colour after it had been tapped shut, and a tapped button
+   * kept its hover border. The two hover rules written by hand in globals.css
+   * carry the same query; the section dock always did.
+   */
+  future: { hoverOnlyWhenSupported: true },
   theme: {
     extend: {
       colors: {
