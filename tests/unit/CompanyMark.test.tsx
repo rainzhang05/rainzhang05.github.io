@@ -5,7 +5,7 @@ import { CompanyMark } from '@/components/site/CompanyMark';
 describe('CompanyMark', () => {
   it('normalises a wordmark to the shared cap height, keeping its ratio', () => {
     render(
-      <CompanyMark mark={{ src: '/logos/feitian.png', width: 1748, height: 428 }} alt="FEITIAN" />
+      <CompanyMark mark={{ src: '/logos/feitian.png', width: 588, height: 144 }} alt="FEITIAN" />
     );
 
     const mark = screen.getByAltText('FEITIAN');

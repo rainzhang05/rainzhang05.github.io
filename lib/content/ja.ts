@@ -129,8 +129,8 @@ export const ja: Copy = {
       orgLine: '飛天ジャパン · 国際部 · 北京、中国',
       mark: {
         src: '/logos/feitian.png',
-        width: 1748,
-        height: 428,
+        width: 588,
+        height: 144,
       },
       summary:
         '耐量子計算機暗号（PQC）対応の FIDO2 に向けて、3つのシステムを計画・開発し、運用しました。公開用の WebAuthn 開発者向けプラットフォーム、Rust によるソフトウェアセキュリティキー、顧客向けデモサイトです。',
@@ -197,8 +197,6 @@ export const ja: Copy = {
       image: {
         src: '/projects/mnt-platform.webp',
         alt: '公開ウェブサイトのホーム画面。上部に「Owner portal」と「Request a proposal」のボタン、その下にバンクーバーの街並みの写真',
-        width: 1600,
-        height: 800,
       },
       stack: [
         'Next.js',
@@ -271,8 +269,6 @@ export const ja: Copy = {
       image: {
         src: '/projects/webauthn-platform.webp',
         alt: 'WebAuthn 開発者向けプラットフォームの「Advanced Authentication」タブ。登録の設定項目と、credential 作成オプションを編集する JSON エディター',
-        width: 1600,
-        height: 800,
       },
       stack: [
         'Python',
@@ -320,8 +316,6 @@ export const ja: Copy = {
       image: {
         src: '/projects/security-demo.webp',
         alt: '認証デモプラットフォームの「Info」ページ。パスワードの項目と「Add Security Key」ボタン',
-        width: 1600,
-        height: 800,
       },
       stack: ['React', 'JavaScript', 'Python', 'Flask', 'WebAuthn / FIDO2', 'ML-DSA', 'liboqs'],
       status: 'demo.ftsafe.com で公開中。ソースコードは飛天ジャパンのもので、公開されていません。',
@@ -400,8 +394,6 @@ export const ja: Copy = {
       image: {
         src: '/projects/travel-advisor.webp',
         alt: 'Travel Advisor のスタート画面。短い紹介文と「Start Your Journey」ボタン',
-        width: 1600,
-        height: 800,
       },
       stack: [
         'React',
@@ -431,8 +423,8 @@ export const ja: Copy = {
     school: 'サイモンフレーザー大学',
     mark: {
       src: '/logos/sfu.png',
-      width: 2560,
-      height: 1280,
+      width: 288,
+      height: 144,
     },
     meta: 'コンピュータサイエンス学士 · バンクーバー、BC州、カナダ · 2027年12月卒業見込み',
     detail: 'CGPA 3.44 / 4.33。2024年秋学期と2025年夏学期に Dean’s Honour Roll。',

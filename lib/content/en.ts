@@ -129,8 +129,8 @@ export const en: Copy = {
       orgLine: 'FEITIAN Technologies · International Department · Beijing, China',
       mark: {
         src: '/logos/feitian.png',
-        width: 1748,
-        height: 428,
+        width: 588,
+        height: 144,
       },
       summary:
         'I planned, built and ran three systems for FEITIAN’s post-quantum FIDO2 work: a public WebAuthn developer platform, a software security key in Rust, and a customer demo site.',
@@ -197,8 +197,6 @@ export const en: Copy = {
       image: {
         src: '/projects/mnt-platform.webp',
         alt: 'The public website’s home page, with the Owner portal and Request a proposal buttons above a photo of the Vancouver skyline',
-        width: 1600,
-        height: 800,
       },
       stack: [
         'Next.js',
@@ -271,8 +269,6 @@ export const en: Copy = {
       image: {
         src: '/projects/webauthn-platform.webp',
         alt: 'The Advanced Authentication tab of the WebAuthn developer platform, with registration settings beside a JSON editor for the credential creation options',
-        width: 1600,
-        height: 800,
       },
       stack: [
         'Python',
@@ -320,8 +316,6 @@ export const en: Copy = {
       image: {
         src: '/projects/security-demo.webp',
         alt: 'The Info page of the authentication demo platform, with a Password section and an Add Security Key button',
-        width: 1600,
-        height: 800,
       },
       stack: ['React', 'JavaScript', 'Python', 'Flask', 'WebAuthn / FIDO2', 'ML-DSA', 'liboqs'],
       status: 'Live at demo.ftsafe.com. The source code belongs to FEITIAN and is not public.',
@@ -400,8 +394,6 @@ export const en: Copy = {
       image: {
         src: '/projects/travel-advisor.webp',
         alt: 'The Travel Advisor start page, with a short description and a Start Your Journey button',
-        width: 1600,
-        height: 800,
       },
       stack: [
         'React',
@@ -431,8 +423,8 @@ export const en: Copy = {
     school: 'Simon Fraser University',
     mark: {
       src: '/logos/sfu.png',
-      width: 2560,
-      height: 1280,
+      width: 288,
+      height: 144,
     },
     meta: 'BSc, Computer Science · Vancouver, BC, Canada · Expected to graduate in December 2027',
     detail: 'CGPA 3.44 / 4.33. Dean’s Honour Roll in Fall 2024 and Summer 2025.',

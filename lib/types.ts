@@ -40,11 +40,14 @@ export interface ProjectSection {
   text: string;
 }
 
+/**
+ * A project screenshot. No dimensions: it is drawn with `fill` inside a frame
+ * of a fixed ratio (see WorkSection), so nothing ever read them — and the
+ * figures that were here matched none of the files.
+ */
 export interface ProjectImage {
   src: string;
   alt: string;
-  width: number;
-  height: number;
 }
 
 export interface Project {
