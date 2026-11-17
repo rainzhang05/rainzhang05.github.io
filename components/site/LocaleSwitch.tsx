@@ -120,7 +120,7 @@ export function LocaleSwitch({
             onNavigate?.();
           }}
           className={
-            'relative inline-flex h-[22px] w-full items-center justify-center rounded-pill px-2 font-jp text-[12.5px] font-medium no-underline transition-colors duration-base ease-out hover:no-underline ' +
+            'hit-y relative inline-flex h-[22px] w-full items-center justify-center rounded-pill px-2 font-jp text-[12.5px] font-medium no-underline transition-colors duration-base ease-out hover:no-underline ' +
             (target === locale ? 'text-ink' : 'text-ink-2 hover:text-ink')
           }
         >

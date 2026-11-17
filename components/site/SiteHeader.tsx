@@ -176,7 +176,7 @@ export function SiteHeader({
             aria-controls={dialogId}
             aria-expanded={open}
             onClick={() => setOpen(true)}
-            className="no-copy inline-flex h-8 w-8 items-center justify-center rounded-pill text-ink-2 transition-colors duration-fast ease-out hover:bg-surface hover:text-ink md:hidden"
+            className="no-copy hit-y inline-flex h-8 w-8 items-center justify-center rounded-pill text-ink-2 transition-colors duration-fast ease-out hover:bg-surface hover:text-ink md:hidden"
           >
             <Icon name="menu" size={20} />
           </button>
@@ -218,7 +218,7 @@ export function SiteHeader({
               type="button"
               aria-label={navigationLabels.closeMenu}
               onClick={closeMenu}
-              className="no-copy inline-flex h-8 w-8 items-center justify-center rounded-pill text-ink-2 transition-colors duration-fast ease-out hover:bg-surface hover:text-ink"
+              className="no-copy hit-y inline-flex h-8 w-8 items-center justify-center rounded-pill text-ink-2 transition-colors duration-fast ease-out hover:bg-surface hover:text-ink"
             >
               <Icon name="x" size={20} />
             </button>

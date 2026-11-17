@@ -97,7 +97,7 @@ export function ThemeSwitch({ labels }: { labels: Copy['labels']['theme'] }) {
           title={labels[option]}
           data-theme-option={option}
           onClick={() => choose(option)}
-          className="theme-option relative inline-flex h-[22px] w-[26px] items-center justify-center rounded-pill transition-colors duration-base ease-out"
+          className="theme-option hit-y relative inline-flex h-[22px] w-[26px] items-center justify-center rounded-pill transition-colors duration-base ease-out"
         >
           <Icon name={ICONS[option]} size={14} />
         </button>
